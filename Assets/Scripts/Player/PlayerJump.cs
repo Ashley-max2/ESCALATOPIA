@@ -87,24 +87,28 @@ public class PlayerJump : MonoBehaviour
 
     void Saltar()
     {
+        // Consumir resistencia al saltar
+        ResistenceController resistencia = GetComponent<ResistenceController>();
+        if (resistencia != null)
+        {
+            //Last Jump
+            if (!resistencia.TieneResistencia(1f))
+            {
+                Debug.Log("No hay suficiente resistencia para saltar.");
+                return;
+            }
+
+            // Consumir resistencia antes de saltar
+            resistencia.ConsumirResistencia(5f);
+        }
+
         // Resetear velocidad Y para salto consistente
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
         // Aplicar fuerza de salto (VelocityChange para respuesta inmediata)
         rb.AddForce(Vector3.up * fuerzaSalto, ForceMode.VelocityChange);
 
-        // Consumir resistencia al saltar
-        ResistenceController resistencia = GetComponent<ResistenceController>();
-        if (resistencia != null)
-        {
-            if (!resistencia.TieneResistencia(2f))
-            {
-                Debug.Log("No hay suficiente resistencia para saltar.");
-                return;
-            }
-
-            resistencia.ConsumirResistencia(2f);
-        }
+        
 
         Debug.Log("¡SALTANDO! Fuerza: " + fuerzaSalto);
     }

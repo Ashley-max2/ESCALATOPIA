@@ -13,6 +13,9 @@ public class ResistenceController : MonoBehaviour
     public TextMeshProUGUI resistenciaText;
     public Slider sliderResistencia;
 
+    private float tiempoEnSuelo = 0f;
+    private float delayRegeneracion = 2f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -37,11 +40,21 @@ public class ResistenceController : MonoBehaviour
             ConsumirResistencia(2f);
         }
 
-        // Regenerar resistencia si está en el suelo y no se está presionando R
+        // Control de temporizador para regeneración
         if (estaEnSuelo && !presionandoR)
         {
-            ResistenceBar += velocidadRegeneracion * Time.deltaTime;
-            ResistenceBar = Mathf.Clamp(ResistenceBar, 0, MaxBar);
+            tiempoEnSuelo += Time.deltaTime;
+
+            if (tiempoEnSuelo >= delayRegeneracion)
+            {
+                ResistenceBar += velocidadRegeneracion * Time.deltaTime;
+                ResistenceBar = Mathf.Clamp(ResistenceBar, 0, MaxBar);
+            }
+        }
+        else
+        {
+            // Reiniciar temporizador si no está en suelo o se presiona R
+            tiempoEnSuelo = 0f;
         }
 
         actulizarTexto();
@@ -54,7 +67,7 @@ public class ResistenceController : MonoBehaviour
 
     void actulizarTexto()
     {
-        resistenciaText.text = "Resistencia: " + ResistenceBar.ToString() + "/" + MaxBar.ToString();
+        resistenciaText.text = "Resistencia: " + ResistenceBar.ToString("F0") + "/" + MaxBar.ToString();
     }
 
     public void ConsumirResistencia(float cantidad)
