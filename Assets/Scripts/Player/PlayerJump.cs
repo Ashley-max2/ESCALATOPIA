@@ -75,6 +75,11 @@ public class PlayerJump : MonoBehaviour
 
         estaEnSuelo = sphereCastHit || checkSphereHit;
 
+        if (estaEnSuelo)
+        {
+            Debug.Log("tocando el suelo");
+        }
+
         // Debug visual en tiempo de juego
         Debug.DrawRay(origen, Vector3.down * (checkDistanciaSuelo + radioCheckSuelo),
                      estaEnSuelo ? Color.green : Color.red);
@@ -87,6 +92,19 @@ public class PlayerJump : MonoBehaviour
 
         // Aplicar fuerza de salto (VelocityChange para respuesta inmediata)
         rb.AddForce(Vector3.up * fuerzaSalto, ForceMode.VelocityChange);
+
+        // Consumir resistencia al saltar
+        ResistenceController resistencia = GetComponent<ResistenceController>();
+        if (resistencia != null)
+        {
+            if (!resistencia.TieneResistencia(2f))
+            {
+                Debug.Log("No hay suficiente resistencia para saltar.");
+                return;
+            }
+
+            resistencia.ConsumirResistencia(2f);
+        }
 
         Debug.Log("¡SALTANDO! Fuerza: " + fuerzaSalto);
     }
