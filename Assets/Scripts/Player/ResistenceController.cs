@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ResistenceController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ResistenceController : MonoBehaviour
     public PlayerJump playerJump;
     public float velocidadRegeneracion = 5f;
     public TextMeshProUGUI resistenciaText;
+    public Slider sliderResistencia;
 
 
     // Start is called before the first frame update
@@ -43,6 +45,11 @@ public class ResistenceController : MonoBehaviour
         }
 
         actulizarTexto();
+
+        if (sliderResistencia != null)
+        {
+            sliderResistencia.value = ResistenceBar;
+        }
     }
 
     void actulizarTexto()
