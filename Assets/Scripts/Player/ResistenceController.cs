@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ResistenceController : MonoBehaviour
@@ -7,7 +8,8 @@ public class ResistenceController : MonoBehaviour
     float MaxBar = 100;
     float ResistenceBar;
     public PlayerJump playerJump;
-    public float velocidadRegeneracion = 2f;    
+    public float velocidadRegeneracion = 5f;
+    public TextMeshProUGUI resistenciaText;
 
 
     // Start is called before the first frame update
@@ -39,16 +41,13 @@ public class ResistenceController : MonoBehaviour
             ResistenceBar += velocidadRegeneracion * Time.deltaTime;
             ResistenceBar = Mathf.Clamp(ResistenceBar, 0, MaxBar);
         }
+
+        actulizarTexto();
     }
 
-    private void OnGUI()
+    void actulizarTexto()
     {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 20;
-        style.normal.textColor = Color.yellow;
-
-        string estado = $"RESISTENCIA: {ResistenceBar:F1}/{MaxBar}";
-        GUI.Label(new Rect(10, 160, 300, 100), estado, style);
+        resistenciaText.text = "Resistencia: " + ResistenceBar.ToString() + "/" + MaxBar.ToString();
     }
 
     public void ConsumirResistencia(float cantidad)
