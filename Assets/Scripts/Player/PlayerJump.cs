@@ -74,11 +74,12 @@ public class PlayerJump : MonoBehaviour
         bool checkSphereHit = Physics.CheckSphere(origen, radioCheckSuelo, capaSuelo);
 
         estaEnSuelo = sphereCastHit || checkSphereHit;
-
+        /*
         if (estaEnSuelo)
         {
             Debug.Log("tocando el suelo");
         }
+        */
 
         // Debug visual en tiempo de juego
         Debug.DrawRay(origen, Vector3.down * (checkDistanciaSuelo + radioCheckSuelo),

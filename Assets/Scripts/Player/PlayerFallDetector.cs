@@ -8,9 +8,12 @@ public class PlayerFallDetector : MonoBehaviour
     public float startY;
     public float maxFall = 10f;
 
+    private PlayerRespawn respawnSystem;
+
     void Start()
     {
         startY = transform.position.y;
+        respawnSystem = GetComponent<PlayerRespawn>();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -21,8 +24,13 @@ public class PlayerFallDetector : MonoBehaviour
         {
             //Si cae más de 10 metros
             playerLive = false;
-            Object.Destroy(gameObject);
             Debug.Log("El jugador ha caído más de 10 metros, muerte.");
+
+            // Avisamos al sistema de respawn
+            if (respawnSystem != null)
+            {
+                respawnSystem.Respawn();
+            }
         }
         else
         {
@@ -30,6 +38,11 @@ public class PlayerFallDetector : MonoBehaviour
             startY = transform.position.y;
             Debug.Log("Caída segura, jugador sigue vivo.");
         }
+    }
+
+    public void ResetStartY()
+    {
+        startY = transform.position.y;
     }
 
 }
