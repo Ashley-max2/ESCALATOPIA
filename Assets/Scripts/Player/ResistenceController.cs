@@ -9,6 +9,7 @@ public class ResistenceController : MonoBehaviour
     float MaxBar = 100;
     float ResistenceBar;
     public PlayerJump playerJump;
+    public Escalada escalada;
     public float velocidadRegeneracion = 5f;
     public TextMeshProUGUI resistenciaText;
     public Slider sliderResistencia;
@@ -25,6 +26,11 @@ public class ResistenceController : MonoBehaviour
         if (playerJump == null)
         {
             playerJump = GetComponent<PlayerJump>();
+        }
+
+        if (escalada == null)
+        {
+            escalada = GetComponent<Escalada>();
         }
     }
 

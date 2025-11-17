@@ -6,17 +6,21 @@ public class Escalada : MonoBehaviour
     private bool puedeEscalar = false;
     private bool escalando = false;
 
+    private ResistenceController resistenceController;
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        // Obtener referencia al controlador de resistencia
+        resistenceController = GetComponent<ResistenceController>();
     }
 
     void Update()
     {
-        // Si puede escalar y el jugador pulsa una tecla
-        if (puedeEscalar && Input.GetKey(KeyCode.E))
+        // Si puede escalar y el jugador pulsa E y tiene resistencia
+        if (puedeEscalar && Input.GetKey(KeyCode.E) && resistenceController.TieneResistencia(1f))
         {
             IniciarEscalada();
         }
@@ -24,9 +28,16 @@ public class Escalada : MonoBehaviour
         // Mientras escala
         if (escalando)
         {
+            // Si se queda sin resistencia se para
+            if (!resistenceController.TieneResistencia(1f))
+            {
+                PararEscalada();
+                return;
+            }
+
             Escalar();
 
-            // Si suelta la tecla, deja de escalar
+            // Dejar de escalar si suelta la tecla
             if (!Input.GetKey(KeyCode.E))
             {
                 PararEscalada();
@@ -54,19 +65,22 @@ public class Escalada : MonoBehaviour
     void IniciarEscalada()
     {
         escalando = true;
-        rb.useGravity = false;   // desactivamos gravedad
+        rb.useGravity = false;
         rb.velocity = Vector3.zero;
     }
 
     void Escalar()
     {
-        // Movimiento vertical hacia arriba
+        // Subir
         transform.Translate(Vector3.up * velocidadEscalada * Time.deltaTime);
+
+        // Consumir resistencia cada frame
+        resistenceController.ConsumirResistencia(8f * Time.deltaTime);
     }
 
     void PararEscalada()
     {
         escalando = false;
-        rb.useGravity = true;    // recuperar gravedad
+        rb.useGravity = true;
     }
 }

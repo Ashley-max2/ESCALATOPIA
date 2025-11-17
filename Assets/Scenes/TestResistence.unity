@@ -471,6 +471,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1383191128}
+    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1383191129}
   m_SourcePrefab: {fileID: 100100000, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
 --- !u!1 &546241235
 GameObject:
@@ -723,6 +726,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerJump: {fileID: 1383191120}
+  escalada: {fileID: 1383191129}
   velocidadRegeneracion: 10
   resistenciaText: {fileID: 2089333421}
   sliderResistencia: {fileID: 95439105}
@@ -752,6 +756,19 @@ MonoBehaviour:
   playerLive: 1
   startY: 0
   maxFall: 25
+--- !u!114 &1383191129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383191117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd65beadf565be408d230bac3302769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidadEscalada: 3
 --- !u!1 &1384534761
 GameObject:
   m_ObjectHideFlags: 0
