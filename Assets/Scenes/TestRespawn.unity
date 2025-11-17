@@ -135,12 +135,16 @@ PrefabInstance:
       value: Pared
       objectReference: {fileID: 0}
     - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 34.626694
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_LocalPosition.x
       value: 104.8434
       objectReference: {fileID: 0}
     - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.9999943
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_LocalPosition.z
@@ -936,6 +940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerJump: {fileID: 1383191120}
+  escalada: {fileID: 0}
   velocidadRegeneracion: 10
   resistenciaText: {fileID: 2089333421}
   sliderResistencia: {fileID: 95439105}
@@ -1288,7 +1293,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
