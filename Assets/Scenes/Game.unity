@@ -136,9 +136,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 370595195}
+  - component: {fileID: 370595196}
   m_Layer: 3
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: escalable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,6 +159,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 251946652}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &370595196
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370595194}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &401943743
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -341,11 +363,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5652859170736892958, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_TagString
-      value: escalable
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6355985250936469259, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_LocalPosition.x
