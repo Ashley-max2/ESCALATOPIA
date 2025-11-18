@@ -179,6 +179,39 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e8c10e45a0f7e14494397a1841025a7, type: 3}
+--- !u!1 &1716544454 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+  m_PrefabInstance: {fileID: 7643001952376783440}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1716544455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716544454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd65beadf565be408d230bac3302769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidadEscalada: 3
+--- !u!114 &1716544456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716544454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c5392020855b84b916ecb84a3d7f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuerzaSalto: 16
+  fuerzaLateral: 14
+  bloqueoMovimientoTiempo: 0.15
 --- !u!1 &1883712019
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,6 +327,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 17.347975
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 25.695
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2279
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278883759115656933, guid: f4f1f2b490ea2dc4bbc05438d2783590, type: 3}
       propertyPath: m_LocalPosition.x
       value: 502.79828
       objectReference: {fileID: 0}
@@ -397,6 +442,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1716544455}
+    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1716544456}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
 --- !u!1660057539 &9223372036854775807
