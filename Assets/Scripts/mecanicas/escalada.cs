@@ -69,4 +69,15 @@ public class Escalada : MonoBehaviour
         escalando = false;
         rb.useGravity = true;    // recuperar gravedad
     }
+
+public bool EstaEscalando()
+{
+    return escalando;
+}
+
+public void ForzarFinEscalada()
+{
+    escalando = false;
+    rb.useGravity = true;
+}
 }
