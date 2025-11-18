@@ -12,6 +12,8 @@ public class SaltoEscalado : MonoBehaviour
     private Rigidbody rb;
     private PlayerMovement movimiento;
 
+    private ResistenceController resistenceController;
+
     private bool saltandoDesdePared = false;
     private float temporizadorBloqueo = 0f;
 
@@ -20,6 +22,7 @@ public class SaltoEscalado : MonoBehaviour
         escalada = GetComponent<Escalada>();
         rb = GetComponent<Rigidbody>();
         movimiento = GetComponent<PlayerMovement>();
+        resistenceController = GetComponent<ResistenceController>();
     }
 
     void Update()
@@ -46,8 +49,22 @@ public class SaltoEscalado : MonoBehaviour
 
     void HacerWallJump()
     {
+    if (resistenceController != null && !resistenceController.TieneResistencia(10f))
+    {
+        Debug.Log("No hay resistencia para salto de pared");
+        return;
+    }
+
+    // 2) Gastar resistencia
+    if (resistenceController != null)
+    {
+        resistenceController.ConsumirResistencia(10f);
+    }
+
     // Detener escalada
     escalada.ForzarFinEscalada();
+
+
 
     // Bloquear PlayerMovement un momento
     movimiento.enabled = false;
@@ -67,6 +84,7 @@ public class SaltoEscalado : MonoBehaviour
     // Aplicar fuerza instantánea y rápida
     rb.AddForce(velocidadExtra, ForceMode.VelocityChange);
 
-    Debug.Log("WALL JUMP DIAGONAL RÁPIDO!");    
+    Debug.Log("WALL JUMP DIAGONAL RÁPIDO!");
+    
     }
 }   

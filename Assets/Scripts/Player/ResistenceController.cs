@@ -46,7 +46,7 @@ public class ResistenceController : MonoBehaviour
             ConsumirResistencia(2f);
         }
 
-        // Control de temporizador para regeneración
+        // Control de temporizador para regeneraciï¿½n
         if (estaEnSuelo && !presionandoR)
         {
             tiempoEnSuelo += Time.deltaTime;
@@ -59,7 +59,7 @@ public class ResistenceController : MonoBehaviour
         }
         else
         {
-            // Reiniciar temporizador si no está en suelo o se presiona R
+            // Reiniciar temporizador si no estï¿½ en suelo o se presiona R
             tiempoEnSuelo = 0f;
         }
 
