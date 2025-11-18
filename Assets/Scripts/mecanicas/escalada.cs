@@ -8,6 +8,7 @@ public class Escalada : MonoBehaviour
 
     private ResistenceController resistenceController;
     private Rigidbody rb;
+    internal Vector3 normalPared;
 
     void Start()
     {
@@ -31,10 +32,12 @@ public class Escalada : MonoBehaviour
             // Si se queda sin resistencia se para
             if (!resistenceController.TieneResistencia(1f))
             {
+                
                 PararEscalada();
                 return;
             }
 
+            DetectarNormalPared();
             Escalar();
 
             // Dejar de escalar si suelta la tecla
@@ -93,5 +96,18 @@ public void ForzarFinEscalada()
 {
     escalando = false;
     rb.useGravity = true;
+}
+
+void DetectarNormalPared()
+{
+    RaycastHit hit;
+    // Lanza un raycast desde el centro del jugador hacia adelante
+    if (Physics.Raycast(transform.position, transform.forward, out hit, 1f))
+    {
+        if (hit.collider.CompareTag("escalable"))
+        {
+            normalPared = hit.normal;  // Guardamos la normal de la pared
+        }
+    }
 }
 }

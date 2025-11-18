@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SaltoEscalado : MonoBehaviour
-{
-      public float fuerzaSalto = 12f;        // Fuerza vertical
+{      public float fuerzaSalto = 12f;        // Fuerza vertical
     public float fuerzaLateral = 8f;       // Fuerza hacia el lado
     public float bloqueoMovimientoTiempo = 0.15f; // Para que el movimiento no cancele el salto
 
@@ -47,44 +46,32 @@ public class SaltoEscalado : MonoBehaviour
         }
     }
 
-    void HacerWallJump()
-    {
+void HacerWallJump()
+{
     if (resistenceController != null && !resistenceController.TieneResistencia(10f))
     {
         Debug.Log("No hay resistencia para salto de pared");
         return;
     }
 
-    // 2) Gastar resistencia
     if (resistenceController != null)
-    {
         resistenceController.ConsumirResistencia(10f);
-    }
 
-    // Detener escalada
     escalada.ForzarFinEscalada();
 
-
-
-    // Bloquear PlayerMovement un momento
     movimiento.enabled = false;
     saltandoDesdePared = true;
     temporizadorBloqueo = bloqueoMovimientoTiempo;
 
-    // Reset velocidad para que el salto sea limpio
-    rb.velocity = Vector3.zero;
+    // Mantener velocidad horizontal y resetear solo la vertical
+    rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-    // ⚡ SALTO DIAGONAL RÁPIDO
-    // Hacia arriba + hacia atrás (o hacia el lado opuesto de la pared)
-    Vector3 direccionDiagonal = (-transform.forward * fuerzaLateral + Vector3.up * fuerzaSalto);
+    // SALTO DIAGONAL: hacia arriba y hacia fuera de la pared
+    Vector3 direccionDiagonal = escalada.normalPared * fuerzaLateral + Vector3.up * fuerzaSalto;
 
-    // AÑADIMOS VELOCIDAD EXTRA PARA QUE SEA MÁS RÁPIDO
-    Vector3 velocidadExtra = direccionDiagonal * 1.5f; 
-
-    // Aplicar fuerza instantánea y rápida
-    rb.AddForce(velocidadExtra, ForceMode.VelocityChange);
+    // Aplicar fuerza instantánea
+    rb.AddForce(direccionDiagonal, ForceMode.VelocityChange);
 
     Debug.Log("WALL JUMP DIAGONAL RÁPIDO!");
-    
-    }
+}
 }   
