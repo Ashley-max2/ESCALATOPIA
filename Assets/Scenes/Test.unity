@@ -299,10 +299,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.562
       objectReference: {fileID: 0}
-    - target: {fileID: 4517546486072571424, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-      propertyPath: capaSuelo.m_Bits
-      value: 64
-      objectReference: {fileID: 0}
+    - target: {fileID: 8800413219798239268, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+      propertyPath: resistenciaText
+      value: 
+      objectReference: {fileID: 2089333421}
+    - target: {fileID: 8800413219798239268, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+      propertyPath: sliderResistencia
+      value: 
+      objectReference: {fileID: 95439105}
     - target: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
       propertyPath: m_Name
       value: Player
@@ -310,19 +314,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383191118}
-    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383191128}
-    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383191129}
-    - targetCorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1383191130}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
 --- !u!1 &599540843
 GameObject:
@@ -372,7 +364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -525,82 +517,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &1383191117 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8842105036784770844, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-  m_PrefabInstance: {fileID: 434270425}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1383191118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383191117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3ebdace3a762c1459dbf5b4469c152f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerJump: {fileID: 1383191120}
-  escalada: {fileID: 1383191129}
-  velocidadRegeneracion: 10
-  resistenciaText: {fileID: 2089333421}
-  sliderResistencia: {fileID: 95439105}
---- !u!114 &1383191120 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4517546486072571424, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
-  m_PrefabInstance: {fileID: 434270425}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383191117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d545391abb1863418f063f455b035a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1383191128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383191117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87efaaba400909345be5db68946bc38e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerLive: 1
-  startY: 0
-  maxFall: 25
---- !u!114 &1383191129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383191117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdd65beadf565be408d230bac3302769, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocidadEscalada: 3
---- !u!114 &1383191130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383191117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73c5392020855b84b916ecb84a3d7f3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fuerzaSalto: 12
-  fuerzaLateral: 8
-  bloqueoMovimientoTiempo: 0.15
 --- !u!1 &1629171756
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,7 +606,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 650451032938528978, guid: 3dcdc23b67fce3941b970880a2eae48e, type: 3}
       propertyPath: m_Name
-      value: ResistenceController
+      value: UI_Resistence
       objectReference: {fileID: 0}
     - target: {fileID: 3882781798326495172, guid: 3dcdc23b67fce3941b970880a2eae48e, type: 3}
       propertyPath: m_Pivot.x

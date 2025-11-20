@@ -140,7 +140,7 @@ public class PlayerJump : MonoBehaviour
     }
 
     // Método para debug visual en el Editor
-    void OnDrawGizmosSelected()
+    /*void OnDrawGizmosSelected()
     {
         if (puntoCheckSuelo == null) return;
 
@@ -152,9 +152,11 @@ public class PlayerJump : MonoBehaviour
         Gizmos.DrawLine(origen, destino);
         Gizmos.DrawWireSphere(destino, 0.1f);
     }
+    */
 
     // Debug en pantalla
-    void OnGUI()
+    
+    /*void OnGUI()
     {
         GUIStyle style = new GUIStyle();
         style.fontSize = 20;
@@ -165,4 +167,5 @@ public class PlayerJump : MonoBehaviour
 
         GUI.Label(new Rect(10, 60, 300, 100), estado, style);
     }
+    */
 }
