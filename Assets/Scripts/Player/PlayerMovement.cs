@@ -15,9 +15,6 @@ public class PlayerMovement : MonoBehaviour
     public Camera camaraPrimeraPersona;
 
     // Componentes
-    public float velocidadRotacion = 10f;
-
-    // Componentes
     private Transform camaraTransform;
     private Rigidbody rb;
 
@@ -102,9 +99,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // Calcular direcci�n de movimiento relativa a la c�mara
-        Vector3 direccionMovimiento = (camaraTransform.right * inputHorizontal +
-                                     camaraTransform.forward * inputVertical).normalized;
         direccionMovimiento.y = 0;
 
         // Calcular velocidad
@@ -120,74 +114,77 @@ public class PlayerMovement : MonoBehaviour
         {
             // Detener movimiento horizontal pero mantener gravedad
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
-        // Aplicar movimiento en XZ
-        Vector3 velocidadObjetivo = direccionMovimiento * velocidadActual;
-        Vector3 velocidadActualXZ = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            // Aplicar movimiento en XZ
+            Vector3 velocidadObjetivo = direccionMovimiento * velocidadActual;
+            Vector3 velocidadActualXZ = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 
-        // Suavizar el movimiento
-        Vector3 nuevaVelocidadXZ = Vector3.Lerp(velocidadActualXZ, velocidadObjetivo, 10f * Time.fixedDeltaTime);
+            // Suavizar el movimiento
+            Vector3 nuevaVelocidadXZ = Vector3.Lerp(velocidadActualXZ, velocidadObjetivo, 10f * Time.fixedDeltaTime);
 
-        rb.velocity = new Vector3(nuevaVelocidadXZ.x, rb.velocity.y, nuevaVelocidadXZ.z);
+            rb.velocity = new Vector3(nuevaVelocidadXZ.x, rb.velocity.y, nuevaVelocidadXZ.z);
 
-        // Rotar el personaje hacia la direcci�n del movimiento
-        if (direccionMovimiento != Vector3.zero)
-        {
-            RotarHaciaDireccion(direccionMovimiento);
+            // Rotar el personaje hacia la direcci�n del movimiento
+            if (direccionMovimiento != Vector3.zero)
+            {
+                RotarHaciaDireccion(direccionMovimiento);
+            }
         }
-    }
 
-    void RotarHaciaDireccion(Vector3 direccion)
-    {
-        Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
-                                            velocidadRotacion * Time.fixedDeltaTime);
-    }
-
-    void RotarPersonajeHaciaCamara(Transform camaraTransform)
-    {
-        // En 1ra persona, el personaje rota para seguir la direcci�n horizontal de la c�mara
-        Vector3 direccionCamara = camaraTransform.forward;
-        direccionCamara.y = 0;
-
-        if (direccionCamara != Vector3.zero)
+        void RotarHaciaDireccion(Vector3 direccion)
         {
-            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionCamara);
+            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
                                                 velocidadRotacion * Time.fixedDeltaTime);
         }
-    }
-    public bool EstaMoviendose()
-    {
-        return (inputHorizontal != 0 || inputVertical != 0);
-    }
 
-    public float GetVelocidadActual()
-    {
-        return inputCorrer ? velocidadCorrer : velocidadCaminar;
-    }
-
-    public string GetEstadoMovimiento()
-    {
-        string estado = "Quieto";
-        if (EstaMoviendose())
+        void RotarPersonajeHaciaCamara(Transform camaraTransform)
         {
-            estado = inputCorrer ? "Corriendo" : "Caminando";
+            // En 1ra persona, el personaje rota para seguir la direcci�n horizontal de la c�mara
+            Vector3 direccionCamara = camaraTransform.forward;
+            direccionCamara.y = 0;
+
+            if (direccionCamara != Vector3.zero)
+            {
+                Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionCamara);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
+                                                    velocidadRotacion * Time.fixedDeltaTime);
+            }
         }
-        return estado;
+
+        /* Debug en pantalla
+        bool EstaMoviendose()
+        {
+            return (inputHorizontal != 0 || inputVertical != 0);
+        }
+
+        
+        float GetVelocidadActual()
+        {
+            return inputCorrer ? velocidadCorrer : velocidadCaminar;
+        }
+
+        string GetEstadoMovimiento()
+        {
+            string estado = "Quieto";
+            if (EstaMoviendose())
+            {
+                estado = inputCorrer ? "Corriendo" : "Caminando";
+            }
+            return estado;
+        }
+
+        void OnGUI()
+        {
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 20;
+            style.normal.textColor = Color.white;
+
+            string estado = $"MOVIMIENTO: {GetEstadoMovimiento()}\n";
+            estado += $"Velocidad: {GetVelocidadActual()}\n";
+            estado += $"Input: ({inputHorizontal:F1}, {inputVertical:F1})";
+
+            GUI.Label(new Rect(10, 10, 300, 100), estado, style);
+        }
+        */
     }
-
-    /* Debug en pantalla
-    void OnGUI()
-    {
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 20;
-        style.normal.textColor = Color.white;
-
-        string estado = $"MOVIMIENTO: {GetEstadoMovimiento()}\n";
-        estado += $"Velocidad: {GetVelocidadActual()}\n";
-        estado += $"Input: ({inputHorizontal:F1}, {inputVertical:F1})";
-
-        GUI.Label(new Rect(10, 10, 300, 100), estado, style);
-    }
-    */
 }

@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{A9126FB1-79A6-8328-FB3F-2C3B755ABDF1}</ProjectGuid>
+    <ProjectGuid>{E85CCFFD-1E1C-68BF-A69F-5DA2DE0F447A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -56,28 +56,33 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-    <Analyzer Include="C:\Users\Tarda\ESCALATOPIA\Library\PackageCache\com.unity.collab-proxy@2.10.2\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll" />
-    <Analyzer Include="C:\Users\Tarda\ESCALATOPIA\Library\PackageCache\com.unity.collab-proxy@2.10.2\Lib\Editor\log4netPlastic.dll" />
-    <Analyzer Include="C:\Users\Tarda\ESCALATOPIA\Library\PackageCache\com.unity.collab-proxy@2.10.2\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Player\PlayerFallDetector.cs" />
     <Compile Include="Assets\Scripts\Camaras\CamaraManager.cs" />
+    <Compile Include="Assets\Scripts\mecanicas\SaltoEscalado.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookMovementController.cs" />
+    <Compile Include="Assets\Scripts\Player\Cam.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookPoint.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookTargetFinder.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookVisualController.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookSystem.cs" />
+    <Compile Include="Assets\Scripts\mecanicas\escalada.cs" />
+    <Compile Include="Assets\Scripts\Player\ResistenceController.cs" />
     <Compile Include="Assets\Scripts\Camaras\TerceraPersona.cs" />
     <Compile Include="Assets\Scripts\Camaras\PrimeraPersona.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Gancho\MiraGancho.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookInputController.cs" />
     <Compile Include="Assets\Scripts\MainMenu\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Gancho\IHookable.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerJump.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerRespawn.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

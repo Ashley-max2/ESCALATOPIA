@@ -140,7 +140,7 @@ public class PlayerJump : MonoBehaviour
     }
 
     // Método para debug visual en el Editor
-    void OnDrawGizmosSelected()
+    
     /*void OnDrawGizmosSelected()
     {
         if (puntoCheckSuelo == null) return;
