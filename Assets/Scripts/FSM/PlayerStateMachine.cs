@@ -36,12 +36,10 @@ public class PlayerStateMachine : MonoBehaviour
 
     }
 
-    private void Update()
+    void Update()
     {
-        if(estadoActual != null)
-        {
-            estadoActual.Update(this);
-        }
+        if (estadoActual != null)
+            estadoActual.Decide(this); 
     }
 
     public void CambiarEstado (PlayerStateSO nuevoEstado)

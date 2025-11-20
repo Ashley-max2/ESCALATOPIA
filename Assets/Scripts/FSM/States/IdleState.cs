@@ -11,7 +11,8 @@ public class IdleState : PlayerStateSO
         fsm.movimiento.enabled = true;
         fsm.salto.enabled = true;
     }
-    public override void Update(PlayerStateMachine fsm)
+
+    public override void Decide(PlayerStateMachine fsm)
     {
         if (fsm.movimiento.EstaMoviendose())
         {
@@ -30,7 +31,7 @@ public class IdleState : PlayerStateSO
         }
         else if (!fsm.fallDetector.playerLive)
         {
-
+            fsm.CambiarEstado(fsm.deadState);
         }
     }
     public override void Exit(PlayerStateMachine fsm)
