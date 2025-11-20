@@ -157,6 +157,10 @@ GameObject:
   - component: {fileID: 4517546486072571424}
   - component: {fileID: 7370054465211058452}
   - component: {fileID: 4424440587904516058}
+  - component: {fileID: 8800413219798239268}
+  - component: {fileID: 3943468470548533974}
+  - component: {fileID: 5325423075497590242}
+  - component: {fileID: 248372571880173075}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -321,7 +325,7 @@ MonoBehaviour:
   radioCheckSuelo: 0.3
   capaSuelo:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   puntoCheckSuelo: {fileID: 2587755343478456452}
 --- !u!114 &7370054465211058452
 MonoBehaviour:
@@ -351,3 +355,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocidadEscalada: 3
+--- !u!114 &8800413219798239268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8842105036784770844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ebdace3a762c1459dbf5b4469c152f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerJump: {fileID: 4517546486072571424}
+  escalada: {fileID: 5325423075497590242}
+  velocidadRegeneracion: 20
+  resistenciaText: {fileID: 0}
+  sliderResistencia: {fileID: 0}
+--- !u!114 &3943468470548533974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8842105036784770844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87efaaba400909345be5db68946bc38e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLive: 1
+  startY: 0
+  maxFall: 10
+--- !u!114 &5325423075497590242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8842105036784770844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd65beadf565be408d230bac3302769, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidadEscalada: 3
+--- !u!114 &248372571880173075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8842105036784770844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73c5392020855b84b916ecb84a3d7f3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuerzaSalto: 18
+  fuerzaLateral: 12
+  bloqueoMovimientoTiempo: 0.1
