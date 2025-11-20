@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -14,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     public Camera camaraPrimeraPersona;
 
     // Componentes
+    public float velocidadRotacion = 10f;
+
+    // Componentes
+    private Transform camaraTransform;
     private Rigidbody rb;
 
     // Input
@@ -23,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        camaraTransform = Camera.main.transform;
     }
 
     void Update()
@@ -49,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direccionMovimiento = Vector3.zero;
         bool enPrimeraPersona = cameraManager != null && cameraManager.EstaEnPrimeraPersona();
 
-        // Obtener la transform de la cámara activa
+        // Obtener la transform de la cï¿½mara activa
         Transform camaraTransform = null;
         if (enPrimeraPersona && camaraPrimeraPersona != null)
         {
@@ -64,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (enPrimeraPersona)
         {
-            // **MOVIMIENTO EN 1RA PERSONA**: Usar la dirección de la CÁMARA
+            // **MOVIMIENTO EN 1RA PERSONA**: Usar la direcciï¿½n de la Cï¿½MARA
             Vector3 direccionCamara = camaraTransform.forward;
             direccionCamara.y = 0;
             direccionCamara.Normalize();
@@ -74,12 +80,12 @@ public class PlayerMovement : MonoBehaviour
             direccionMovimiento = (derechaCamara * inputHorizontal +
                                  direccionCamara * inputVertical).normalized;
 
-            // En 1ra persona, el personaje debe rotar para mirar donde mira la cámara
+            // En 1ra persona, el personaje debe rotar para mirar donde mira la cï¿½mara
             RotarPersonajeHaciaCamara(camaraTransform);
         }
         else
         {
-            // **MOVIMIENTO EN 3RA PERSONA**: Usar dirección relativa a la cámara
+            // **MOVIMIENTO EN 3RA PERSONA**: Usar direcciï¿½n relativa a la cï¿½mara
             Vector3 direccionCamara = camaraTransform.forward;
             direccionCamara.y = 0;
             direccionCamara.Normalize();
@@ -89,13 +95,16 @@ public class PlayerMovement : MonoBehaviour
             direccionMovimiento = (derechaCamara * inputHorizontal +
                                  direccionCamara * inputVertical).normalized;
 
-            // Rotación solo en 3ra persona cuando hay movimiento
+            // Rotaciï¿½n solo en 3ra persona cuando hay movimiento
             if (direccionMovimiento != Vector3.zero)
             {
                 RotarHaciaDireccion(direccionMovimiento);
             }
         }
 
+        // Calcular direcciï¿½n de movimiento relativa a la cï¿½mara
+        Vector3 direccionMovimiento = (camaraTransform.right * inputHorizontal +
+                                     camaraTransform.forward * inputVertical).normalized;
         direccionMovimiento.y = 0;
 
         // Calcular velocidad
@@ -111,6 +120,19 @@ public class PlayerMovement : MonoBehaviour
         {
             // Detener movimiento horizontal pero mantener gravedad
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
+        // Aplicar movimiento en XZ
+        Vector3 velocidadObjetivo = direccionMovimiento * velocidadActual;
+        Vector3 velocidadActualXZ = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+
+        // Suavizar el movimiento
+        Vector3 nuevaVelocidadXZ = Vector3.Lerp(velocidadActualXZ, velocidadObjetivo, 10f * Time.fixedDeltaTime);
+
+        rb.velocity = new Vector3(nuevaVelocidadXZ.x, rb.velocity.y, nuevaVelocidadXZ.z);
+
+        // Rotar el personaje hacia la direcciï¿½n del movimiento
+        if (direccionMovimiento != Vector3.zero)
+        {
+            RotarHaciaDireccion(direccionMovimiento);
         }
     }
 
@@ -123,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
 
     void RotarPersonajeHaciaCamara(Transform camaraTransform)
     {
-        // En 1ra persona, el personaje rota para seguir la dirección horizontal de la cámara
+        // En 1ra persona, el personaje rota para seguir la direcciï¿½n horizontal de la cï¿½mara
         Vector3 direccionCamara = camaraTransform.forward;
         direccionCamara.y = 0;
 
@@ -134,4 +156,38 @@ public class PlayerMovement : MonoBehaviour
                                                 velocidadRotacion * Time.fixedDeltaTime);
         }
     }
+    public bool EstaMoviendose()
+    {
+        return (inputHorizontal != 0 || inputVertical != 0);
+    }
+
+    public float GetVelocidadActual()
+    {
+        return inputCorrer ? velocidadCorrer : velocidadCaminar;
+    }
+
+    public string GetEstadoMovimiento()
+    {
+        string estado = "Quieto";
+        if (EstaMoviendose())
+        {
+            estado = inputCorrer ? "Corriendo" : "Caminando";
+        }
+        return estado;
+    }
+
+    /* Debug en pantalla
+    void OnGUI()
+    {
+        GUIStyle style = new GUIStyle();
+        style.fontSize = 20;
+        style.normal.textColor = Color.white;
+
+        string estado = $"MOVIMIENTO: {GetEstadoMovimiento()}\n";
+        estado += $"Velocidad: {GetVelocidadActual()}\n";
+        estado += $"Input: ({inputHorizontal:F1}, {inputVertical:F1})";
+
+        GUI.Label(new Rect(10, 10, 300, 100), estado, style);
+    }
+    */
 }
