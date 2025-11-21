@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClimbingState : MonoBehaviour
+[CreateAssetMenu(menuName = "Player States/Climbing")]
+public class ClimbingState : PlayerStateSO
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Enter(PlayerStateMachine fsm)
     {
-        
+        fsm.escalada.enabled = true;
+        fsm.movimiento.enabled = false;
+        fsm.salto.enabled = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Decide(PlayerStateMachine fsm)
     {
-        
+        if (!fsm.escalada.EstaEscalando())
+        {
+            fsm.CambiarEstado(fsm.idleState);
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            fsm.CambiarEstado(fsm.wallJumpingState);
+        }
     }
+
+    public override void Exit(PlayerStateMachine fsm)
+    {
+        fsm.escalada.ForzarFinEscalada();
+    }
+
 }

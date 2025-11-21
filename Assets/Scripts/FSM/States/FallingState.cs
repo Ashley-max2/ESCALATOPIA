@@ -2,17 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingState : MonoBehaviour
+[CreateAssetMenu(menuName ="Player States/Falling")]
+public class FallingState : PlayerStateSO
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Enter(PlayerStateMachine fsm)
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Decide(PlayerStateMachine fsm)
     {
-        
+        if (fsm.salto.EstaEnSuelo())
+        {
+            fsm.CambiarEstado(fsm.idleState);
+        }
+        else if (!fsm.fallDetector.playerLive)
+        {
+            fsm.CambiarEstado(fsm.deadState);
+        }
     }
+
+    public override void Exit(PlayerStateMachine fsm)
+    {
+
+    }
+
 }

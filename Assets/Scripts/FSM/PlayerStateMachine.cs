@@ -13,7 +13,7 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerStateSO jumpingState;
     public PlayerStateSO fallingState;
     public PlayerStateSO climbingState;
-    public PlayerStateSO wallJumpState;
+    public PlayerStateSO wallJumpingState;
     public PlayerStateSO deadState;
 
     [HideInInspector] public PlayerMovement movimiento;

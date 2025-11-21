@@ -7,7 +7,15 @@ public class JumpingState : PlayerStateSO
 {
     public override void Enter(PlayerStateMachine fsm)
     {
+        fsm.salto.enabled = true;
+    }
 
+    public override void Decide(PlayerStateMachine fsm)
+    {
+        if (fsm.salto.EstaCayendo())
+        {
+            fsm.CambiarEstado(fsm.fallingState);
+        }
     }
 
     public override void Exit(PlayerStateMachine fsm)
@@ -15,8 +23,5 @@ public class JumpingState : PlayerStateSO
 
     }
 
-    public override void Decide(PlayerStateMachine fsm)
-    {
-
-    }
+    
 }
