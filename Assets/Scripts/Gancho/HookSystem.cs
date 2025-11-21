@@ -6,6 +6,8 @@ public class HookSystem : MonoBehaviour
 {
     [Header("Dependencies")]
     public HookTargetFinder targetFinder;
+    public Camera playerCamera;
+
     public HookMovementController hookMovement;
     public HookVisualController hookVisual;
     public HookInputController hookInput;
@@ -19,7 +21,7 @@ public class HookSystem : MonoBehaviour
     public Vector3 HookOrigin => hookVisual.hookOrigin.position;
     public Vector3 PlayerPosition => playerTransform.position;
 
-    // Propiedades públicas
+    // Propiedades pï¿½blicas
     public HookTargetFinder TargetFinder => targetFinder;
     public HookMovementController HookMovement => hookMovement;
     public HookVisualController HookVisual => hookVisual;
@@ -39,7 +41,7 @@ public class HookSystem : MonoBehaviour
 
     private void InitializeComponents()
     {
-        // Buscar componentes en el padre (Player) si no están asignados
+        // Buscar componentes en el padre (Player) si no estï¿½n asignados
         if (playerTransform == null)
             playerTransform = transform.parent;
 

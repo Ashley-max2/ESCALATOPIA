@@ -16,7 +16,11 @@ public class HookIdleState : HookState
 {
     public HookIdleState(HookSystem system) : base(system) { }
 
-    public override void Enter() => hookSystem.HookVisual.SetLineVisible(false);
+    public override void Enter()
+{
+    hookSystem.HookVisual.SetLineVisible(false);
+    hookSystem.PlayerRigidbody.useGravity = true;
+}
     public override void Update() => hookSystem.TargetFinder.FindTarget();
     public override void Exit() { }
 }
@@ -25,14 +29,20 @@ public class HookAimingState : HookState
 {
     public HookAimingState(HookSystem system) : base(system) { }
 
-    public override void Enter() => hookSystem.HookVisual.SetLineVisible(true);
+    public override void Enter()
+    {
+        hookSystem.HookVisual.SetLineVisible(true);
+    }
+
     public override void Update()
     {
-        hookSystem.TargetFinder.FindTarget();
         hookSystem.HookVisual.UpdateAimLine();
+        hookSystem.TargetFinder.FindTarget();
     }
+
     public override void Exit() { }
 }
+
 
 public class HookThrownState : HookState
 {
@@ -66,14 +76,19 @@ public class HookAttachedState : HookState
         hookSystem.CurrentHookPoint?.OnHookAttach();
     }
 
-    public override void Update()
-    {
-        hookSystem.HookMovement.ApplyHookMovement();
-        hookSystem.HookVisual.UpdateHookLine();
-    }
+public override void Update()
+{
+    hookSystem.HookVisual.UpdateHookLine();
+
+    // Si está impulsando, solo tirón rápido, si no, arrastra normal al punto
+    hookSystem.HookMovement.UpdateImpulsePull();
+    if (!hookSystem.HookMovement.IsImpulsing)
+        hookSystem.HookMovement.PullPlayerToHook();
+}
 
     public override void Exit()
     {
         hookSystem.CurrentHookPoint?.OnHookDetach();
+        hookSystem.PlayerRigidbody.useGravity = true;
     }
 }

@@ -8,12 +8,22 @@ public class HookMovementController : MonoBehaviour
     public float hookSpeed = 15f;
     public float swingForce = 10f;
     public float playerSpeedDuringHook = 5f;
+    public float autoPullSpeed = 20f;
+    public float aimPullSpeed = 8f;
+
+    [Header("Impulse Settings")]
+    public float attachImpulseSpeed = 30f;     // Velocidad alta inicial (ajústalo a tu gusto)
+    public float impulseDuration = 0.25f;      // Duración en segundos del tirón (ajusta también)
 
     private Rigidbody playerRb;
     private Vector3 hookTarget;
     private bool isTraveling;
     private HookSystem hookSystem;
     private Transform playerTransform;
+
+    // Impulso variables
+    private bool isImpulsing = false;
+    private float impulseTimer = 0f;
 
     void Start()
     {
@@ -56,8 +66,41 @@ public class HookMovementController : MonoBehaviour
     public void OnHookAttached()
     {
         if (playerRb != null)
+        {
             playerRb.velocity = Vector3.zero;
+            playerRb.useGravity = false; // parar caída mientras es arrastrado
+        }
+        // INICIA EL IMPULSO al enganchar
+        StartImpulsePull();
     }
+
+    // IMPULSE/TIRÓN: inicia el impulso
+    public void StartImpulsePull()
+    {
+        isImpulsing = true;
+        impulseTimer = impulseDuration;
+    }
+
+    // Actualiza el impulso si está activo
+    public void UpdateImpulsePull()
+    {
+        if (!isImpulsing || playerRb == null || hookSystem.CurrentHookPoint == null) return;
+
+        Vector3 dir = (hookSystem.CurrentHookPoint.HookPoint - playerTransform.position).normalized;
+
+        playerRb.useGravity = false;
+        playerRb.velocity = dir * attachImpulseSpeed;
+
+        impulseTimer -= Time.deltaTime;
+        // Si termina el tiempo o el jugador llega cerca del punto del gancho, detén el impulso.
+        if (impulseTimer <= 0f || Vector3.Distance(playerTransform.position, hookSystem.CurrentHookPoint.HookPoint) < 1.5f)
+        {
+            isImpulsing = false;
+        }
+    }
+
+    // ¿Está en tirón/impulso?
+    public bool IsImpulsing => isImpulsing;
 
     public void ApplyHookMovement()
     {
@@ -75,5 +118,39 @@ public class HookMovementController : MonoBehaviour
     {
         isTraveling = false;
         hookSystem.CurrentHookPoint = null;
+        isImpulsing = false;
+
+        // Recuperar físicas normales
+        if (playerRb != null)
+        {
+            playerRb.useGravity = true;
+            playerRb.velocity = Vector3.zero;
+        }
+    }
+
+    public void PullPlayerToHook()
+    {
+        if (hookSystem.CurrentHookPoint == null || playerRb == null) return;
+
+        Vector3 hookPoint = hookSystem.CurrentHookPoint.HookPoint;
+        Vector3 dir = (hookPoint - playerTransform.position).normalized;
+
+        playerRb.useGravity = false;
+        playerRb.velocity = dir * autoPullSpeed;
+
+        if (Vector3.Distance(playerTransform.position, hookPoint) < 2f)
+        {
+            hookSystem.CancelHook();
+        }
+    }
+
+    public void PullPlayerTowardsAim()
+    {
+        if (playerRb == null) return;
+
+        // Dirección exacta de tu mira (desde el transform de la cámara)
+        Vector3 aimDirection = hookSystem.playerCamera.transform.forward;
+        playerRb.useGravity = false;
+        playerRb.velocity = aimDirection * aimPullSpeed;
     }
 }
