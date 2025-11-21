@@ -179,6 +179,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1e8c10e45a0f7e14494397a1841025a7, type: 3}
+--- !u!20 &785895142 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 864437557132507429, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+  m_PrefabInstance: {fileID: 6697088496061935950}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &807774710 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4126777374925335097, guid: a05b500eede36d340b85c155f4ead05d, type: 3}
@@ -607,17 +612,45 @@ PrefabInstance:
       value: Player 6
       objectReference: {fileID: 0}
     - target: {fileID: 4542402753766774801, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4542402753766774801, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4542402753766774801, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4542402753766774801, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: m_Parameters.colorGradient.m_ColorSpace
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4542402753766774801, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4542402753766774801, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
       propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
-      value: 1
+      value: 0.9938278
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689241775035304167, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: aimPullSpeed
+      value: 58
+      objectReference: {fileID: 0}
+    - target: {fileID: 5689241775035304167, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: autoPullSpeed
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 8402599326866145746, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
       propertyPath: reticle
       value: 
       objectReference: {fileID: 1321225831}
+    - target: {fileID: 8768018585062917141, guid: 9d4ce526b820bf44c8c694a4fded2575, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 785895142}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
