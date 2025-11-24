@@ -242,6 +242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terreno
       objectReference: {fileID: 0}
+    - target: {fileID: 3538649025215286029, guid: 1e8c10e45a0f7e14494397a1841025a7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -613,6 +617,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb55a07f5cd085d49b67cded33374950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velocidadCaminar: 5
+  velocidadCorrer: 8
+  velocidadRotacion: 10
+  fuerzaSalto: 12
+  radioCheckSuelo: 0.4
+  capaSuelo:
+    serializedVersion: 2
+    m_Bits: 64
+  puntoCheckSuelo: {fileID: 1920839967}
+  rb: {fileID: 0}
+  camaraTransform: {fileID: 0}
+  inputHorizontal: 0
+  inputVertical: 0
+  inputCorrer: 0
+  inputSalto: 0
+--- !u!4 &1920839967 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2587755343478456452, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
+  m_PrefabInstance: {fileID: 434270425}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2089333421 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1937411189393782980, guid: 3dcdc23b67fce3941b970880a2eae48e, type: 3}

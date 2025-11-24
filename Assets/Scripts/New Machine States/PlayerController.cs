@@ -5,34 +5,68 @@ public class PlayerController : MonoBehaviour
     [Header("Movimiento")]
     public float velocidadCaminar = 5f;
     public float velocidadCorrer = 8f;
-    public float velocidadRotacion = 10f;
+    public float rotacionSuavidad = 10f;
 
-    [HideInInspector] public float inputHorizontal;
-    [HideInInspector] public float inputVertical;
+    [Header("Salto")]
+    public float fuerzaSalto = 12f;
+    public float radioCheckSuelo = 0.3f;
+    public LayerMask capaSuelo;
+    public Transform puntoCheckSuelo;
+
+    [HideInInspector] public float inputH;
+    [HideInInspector] public float inputV;
     [HideInInspector] public bool inputCorrer;
+    [HideInInspector] public bool inputSalto;
 
     [HideInInspector] public Rigidbody rb;
-    [HideInInspector] public Transform camaraTransform;
+    [HideInInspector] public Transform cam;
 
-    private IState _currentState;
+    private IState estadoActual;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        cam = Camera.main.transform;
+
+        if (puntoCheckSuelo == null)
+        {
+            GameObject gc = new GameObject("GroundCheck");
+            gc.transform.parent = transform;
+            gc.transform.localPosition = new Vector3(0, -0.9f, 0);
+            puntoCheckSuelo = gc.transform;
+        }
+    }
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        camaraTransform = Camera.main.transform;
-
-        SetState(new IdleState());
+        CambiarEstado(new IdleState());
     }
 
     private void Update()
     {
-        _currentState?.Update(this);
+        LeerInputs();
+        estadoActual.Update(this);
     }
 
-    public void SetState(IState newState)
+    public void CambiarEstado(IState nuevo)
     {
-        _currentState?.Exit(this);
-        _currentState = newState;
-        _currentState.Enter(this);
+        if (estadoActual != null)
+            estadoActual.Exit(this);
+
+        estadoActual = nuevo;
+        estadoActual.Enter(this);
+    }
+
+    void LeerInputs()
+    {
+        inputH = Input.GetAxisRaw("Horizontal");
+        inputV = Input.GetAxisRaw("Vertical");
+        inputCorrer = Input.GetKey(KeyCode.LeftShift);
+        inputSalto = Input.GetButtonDown("Jump");
+    }
+
+    public bool EstaEnSuelo()
+    {
+        return Physics.CheckSphere(puntoCheckSuelo.position, radioCheckSuelo, capaSuelo);
     }
 }

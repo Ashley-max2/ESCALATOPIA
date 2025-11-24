@@ -2,22 +2,24 @@ using UnityEngine;
 
 public class IdleState : IState
 {
-    public void Enter(PlayerController player)
+    public void Enter(PlayerController p)
     {
-        Debug.Log("Entrando en Idle");
+        // Debug.Log("IDLE");
     }
 
-    public void Exit(PlayerController player) { }
+    public void Exit(PlayerController p) { }
 
-    public void Update(PlayerController player)
+    public void Update(PlayerController p)
     {
-        // Leer el input básico para detectar si hay movimiento
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        if (h != 0 || v != 0)
+        if (p.inputSalto && p.EstaEnSuelo())
         {
-            player.SetState(new MovementState());
+            p.CambiarEstado(new JumpState());
+            return;
+        }
+
+        if (p.inputH != 0 || p.inputV != 0)
+        {
+            p.CambiarEstado(new MovementState());
         }
     }
 }
