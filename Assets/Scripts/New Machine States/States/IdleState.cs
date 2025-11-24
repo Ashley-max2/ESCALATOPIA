@@ -7,13 +7,17 @@ public class IdleState : IState
         Debug.Log("Entrando en Idle");
     }
 
-    public void Exit(PlayerController player)
-    {
-        Debug.Log("Saliendo de Idle");
-    }
+    public void Exit(PlayerController player) { }
 
     public void Update(PlayerController player)
     {
-        Debug.Log("Idle...");
+        // Leer el input básico para detectar si hay movimiento
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        if (h != 0 || v != 0)
+        {
+            player.SetState(new MovementState());
+        }
     }
 }
