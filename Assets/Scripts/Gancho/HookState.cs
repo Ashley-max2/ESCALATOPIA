@@ -76,15 +76,19 @@ public class HookAttachedState : HookState
         hookSystem.CurrentHookPoint?.OnHookAttach();
     }
 
-public override void Update()
-{
-    hookSystem.HookVisual.UpdateHookLine();
+    public override void Update()
+    {
+        hookSystem.HookVisual.UpdateHookLine();
 
-    // Si está impulsando, solo tirón rápido, si no, arrastra normal al punto
-    hookSystem.HookMovement.UpdateImpulsePull();
-    if (!hookSystem.HookMovement.IsImpulsing)
-        hookSystem.HookMovement.PullPlayerToHook();
-}
+        // 1) Actualizar el impulso (tirón rápido)
+        hookSystem.HookMovement.UpdateImpulsePull();
+
+        // 2) Si ya no hay impulso, arrastrar hacia el hook (si está activado en el SO)
+        if (!hookSystem.HookMovement.IsImpulsing)
+        {
+            hookSystem.HookMovement.PullPlayerToHook();
+        }
+    }
 
     public override void Exit()
     {

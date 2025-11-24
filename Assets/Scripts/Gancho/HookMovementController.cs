@@ -8,12 +8,10 @@ public class HookMovementController : MonoBehaviour
     public float hookSpeed = 15f;
     public float swingForce = 10f;
     public float playerSpeedDuringHook = 5f;
-    public float autoPullSpeed = 20f;
     public float aimPullSpeed = 8f;
 
-    [Header("Impulse Settings")]
-    public float attachImpulseSpeed = 30f;     // Velocidad alta inicial (ajústalo a tu gusto)
-    public float impulseDuration = 0.25f;      // Duración en segundos del tirón (ajusta también)
+    [Header("Impulse Config (ScriptableObject)")]
+    public HookImpulseConfig impulseConfig;
 
     private Rigidbody playerRb;
     private Vector3 hookTarget;
@@ -68,38 +66,60 @@ public class HookMovementController : MonoBehaviour
         if (playerRb != null)
         {
             playerRb.velocity = Vector3.zero;
-            playerRb.useGravity = false; // parar caída mientras es arrastrado
+            playerRb.useGravity = false;
         }
-        // INICIA EL IMPULSO al enganchar
+
         StartImpulsePull();
     }
 
-    // IMPULSE/TIRÓN: inicia el impulso
     public void StartImpulsePull()
     {
+        if (impulseConfig == null)
+        {
+            Debug.LogWarning("HookImpulseConfig no asignado en HookMovementController.");
+            return;
+        }
+
         isImpulsing = true;
-        impulseTimer = impulseDuration;
+        impulseTimer = impulseConfig.impulseDuration;
     }
 
-    // Actualiza el impulso si está activo
     public void UpdateImpulsePull()
     {
-        if (!isImpulsing || playerRb == null || hookSystem.CurrentHookPoint == null) return;
+        if (!isImpulsing || playerRb == null || hookSystem.CurrentHookPoint == null || impulseConfig == null)
+            return;
 
-        Vector3 dir = (hookSystem.CurrentHookPoint.HookPoint - playerTransform.position).normalized;
+        Vector3 targetPos = hookSystem.CurrentHookPoint.HookPoint;
+        Vector3 currentPos = playerTransform.position;
+
+        Vector3 dir = (targetPos - currentPos).normalized;
+        float dist = Vector3.Distance(currentPos, targetPos);
+
+        if (dist <= impulseConfig.stopDistance)
+        {
+            StopAllHookMotion();
+            hookSystem.CancelHook();
+            return;
+        }
 
         playerRb.useGravity = false;
-        playerRb.velocity = dir * attachImpulseSpeed;
+
+        if (impulseConfig.useVelocity)
+        {
+            playerRb.velocity = dir * impulseConfig.initialImpulseSpeed;
+        }
+        else
+        {
+            playerRb.AddForce(dir * impulseConfig.forceMultiplier, ForceMode.Acceleration);
+        }
 
         impulseTimer -= Time.deltaTime;
-        // Si termina el tiempo o el jugador llega cerca del punto del gancho, detén el impulso.
-        if (impulseTimer <= 0f || Vector3.Distance(playerTransform.position, hookSystem.CurrentHookPoint.HookPoint) < 1.5f)
+        if (impulseTimer <= 0f)
         {
             isImpulsing = false;
         }
     }
 
-    // ¿Está en tirón/impulso?
     public bool IsImpulsing => isImpulsing;
 
     public void ApplyHookMovement()
@@ -110,8 +130,8 @@ public class HookMovementController : MonoBehaviour
         Vector3 perpendicular = Vector3.Cross(hookDirection, Vector3.up);
 
         float horizontalInput = Input.GetAxis("Horizontal");
-        playerRb.AddForce(perpendicular * horizontalInput * swingForce);
-        playerRb.AddForce(hookDirection * swingForce * 0.5f);
+        playerRb.AddForce(perpendicular * horizontalInput * swingForce, ForceMode.Acceleration);
+        playerRb.AddForce(hookDirection * swingForce * 0.5f, ForceMode.Acceleration);
     }
 
     public void CancelHook()
@@ -120,35 +140,47 @@ public class HookMovementController : MonoBehaviour
         hookSystem.CurrentHookPoint = null;
         isImpulsing = false;
 
-        // Recuperar físicas normales
+        StopAllHookMotion();
+    }
+
+    private void StopAllHookMotion()
+    {
         if (playerRb != null)
         {
-            playerRb.useGravity = true;
-            playerRb.velocity = Vector3.zero;
+            if (impulseConfig != null && impulseConfig.enableGravityOnStop)
+                playerRb.useGravity = true;
+            else
+                playerRb.useGravity = false;
         }
     }
 
     public void PullPlayerToHook()
     {
-        if (hookSystem.CurrentHookPoint == null || playerRb == null) return;
+        if (hookSystem.CurrentHookPoint == null || playerRb == null || impulseConfig == null) return;
+        if (!impulseConfig.continuePullAfterImpulse) return;
+        if (isImpulsing) return;
 
-        Vector3 hookPoint = hookSystem.CurrentHookPoint.HookPoint;
-        Vector3 dir = (hookPoint - playerTransform.position).normalized;
+        Vector3 targetPos = hookSystem.CurrentHookPoint.HookPoint;
+        Vector3 currentPos = playerTransform.position;
+
+        Vector3 dir = (targetPos - currentPos).normalized;
+        float dist = Vector3.Distance(currentPos, targetPos);
+
+        if (dist <= impulseConfig.stopDistance)
+        {
+            StopAllHookMotion();
+            hookSystem.CancelHook();
+            return;
+        }
 
         playerRb.useGravity = false;
-        playerRb.velocity = dir * autoPullSpeed;
-
-        if (Vector3.Distance(playerTransform.position, hookPoint) < 2f)
-        {
-            hookSystem.CancelHook();
-        }
+        playerRb.velocity = dir * impulseConfig.pullSpeed;
     }
 
     public void PullPlayerTowardsAim()
     {
         if (playerRb == null) return;
 
-        // Dirección exacta de tu mira (desde el transform de la cámara)
         Vector3 aimDirection = hookSystem.playerCamera.transform.forward;
         playerRb.useGravity = false;
         playerRb.velocity = aimDirection * aimPullSpeed;
