@@ -42,16 +42,23 @@ public class PlayerJump : MonoBehaviour
         puntoCheckSuelo = groundCheck.transform;
     }
 
-    void Update()
+void Update()
+{
+    // Si hay HookSystem y está hookeando, no dejar saltar
+    HookSystem hook = GetComponentInChildren<HookSystem>();
+    if (hook != null && hook.IsHooking)
     {
-        ObtenerInputSalto();
-        VerificarSuelo();
-
-        if (inputSalto && estaEnSuelo && rb != null)
-        {
-            Saltar();
-        }
+        return;
     }
+
+    ObtenerInputSalto();
+    VerificarSuelo();
+
+    if (inputSalto && estaEnSuelo && rb != null)
+    {
+        Saltar();
+    }
+}
 
     void ObtenerInputSalto()
     {

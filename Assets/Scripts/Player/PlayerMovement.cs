@@ -14,6 +14,10 @@ public class PlayerMovement : MonoBehaviour
     public Camera camaraTerceraPersona;
     public Camera camaraPrimeraPersona;
 
+    // NUEVO: referencia al HookSystem
+    [Header("Gancho")]
+    public HookSystem hookSystem;
+
     // Componentes
     private Transform camaraTransform;
     private Rigidbody rb;
@@ -26,6 +30,12 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         camaraTransform = Camera.main.transform;
+
+        // Si no lo has asignado en el inspector, intenta encontrarlo en hijos
+        if (hookSystem == null)
+        {
+            hookSystem = GetComponentInChildren<HookSystem>();
+        }
     }
 
     void Update()
@@ -35,6 +45,10 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        // SI EL GANCHO ESTÁ ACTIVO → NO TOCAR VELOCITY
+        if (hookSystem != null && hookSystem.IsHooking)
+            return;
+
         Mover();
     }
 
@@ -52,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direccionMovimiento = Vector3.zero;
         bool enPrimeraPersona = cameraManager != null && cameraManager.EstaEnPrimeraPersona();
 
-        // Obtener la transform de la c�mara activa
+        // Obtener la transform de la cámara activa
         Transform camaraTransform = null;
         if (enPrimeraPersona && camaraPrimeraPersona != null)
         {
@@ -67,7 +81,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (enPrimeraPersona)
         {
-            // **MOVIMIENTO EN 1RA PERSONA**: Usar la direcci�n de la C�MARA
             Vector3 direccionCamara = camaraTransform.forward;
             direccionCamara.y = 0;
             direccionCamara.Normalize();
@@ -77,12 +90,10 @@ public class PlayerMovement : MonoBehaviour
             direccionMovimiento = (derechaCamara * inputHorizontal +
                                  direccionCamara * inputVertical).normalized;
 
-            // En 1ra persona, el personaje debe rotar para mirar donde mira la c�mara
             RotarPersonajeHaciaCamara(camaraTransform);
         }
         else
         {
-            // **MOVIMIENTO EN 3RA PERSONA**: Usar direcci�n relativa a la c�mara
             Vector3 direccionCamara = camaraTransform.forward;
             direccionCamara.y = 0;
             direccionCamara.Normalize();
@@ -92,7 +103,6 @@ public class PlayerMovement : MonoBehaviour
             direccionMovimiento = (derechaCamara * inputHorizontal +
                                  direccionCamara * inputVertical).normalized;
 
-            // Rotaci�n solo en 3ra persona cuando hay movimiento
             if (direccionMovimiento != Vector3.zero)
             {
                 RotarHaciaDireccion(direccionMovimiento);
@@ -101,10 +111,8 @@ public class PlayerMovement : MonoBehaviour
 
         direccionMovimiento.y = 0;
 
-        // Calcular velocidad
         float velocidadActual = inputCorrer ? velocidadCorrer : velocidadCaminar;
 
-        // Aplicar movimiento
         if (direccionMovimiento != Vector3.zero)
         {
             Vector3 movimiento = direccionMovimiento * velocidadActual;
@@ -112,45 +120,41 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // Detener movimiento horizontal pero mantener gravedad
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
-            // Aplicar movimiento en XZ
+
             Vector3 velocidadObjetivo = direccionMovimiento * velocidadActual;
             Vector3 velocidadActualXZ = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-
-            // Suavizar el movimiento
             Vector3 nuevaVelocidadXZ = Vector3.Lerp(velocidadActualXZ, velocidadObjetivo, 10f * Time.fixedDeltaTime);
 
             rb.velocity = new Vector3(nuevaVelocidadXZ.x, rb.velocity.y, nuevaVelocidadXZ.z);
 
-            // Rotar el personaje hacia la direcci�n del movimiento
             if (direccionMovimiento != Vector3.zero)
             {
                 RotarHaciaDireccion(direccionMovimiento);
             }
         }
+    }
 
-        void RotarHaciaDireccion(Vector3 direccion)
+    void RotarHaciaDireccion(Vector3 direccion)
+    {
+        Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
+                                            velocidadRotacion * Time.fixedDeltaTime);
+    }
+
+    void RotarPersonajeHaciaCamara(Transform camaraTransform)
+    {
+        Vector3 direccionCamara = camaraTransform.forward;
+        direccionCamara.y = 0;
+
+        if (direccionCamara != Vector3.zero)
         {
-            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
+            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionCamara);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
                                                 velocidadRotacion * Time.fixedDeltaTime);
         }
-
-        void RotarPersonajeHaciaCamara(Transform camaraTransform)
-        {
-            // En 1ra persona, el personaje rota para seguir la direcci�n horizontal de la c�mara
-            Vector3 direccionCamara = camaraTransform.forward;
-            direccionCamara.y = 0;
-
-            if (direccionCamara != Vector3.zero)
-            {
-                Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionCamara);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
-                                                    velocidadRotacion * Time.fixedDeltaTime);
-            }
-        }
-
+    }
+}
         /* Debug en pantalla
         bool EstaMoviendose()
         {
@@ -186,5 +190,3 @@ public class PlayerMovement : MonoBehaviour
             GUI.Label(new Rect(10, 10, 300, 100), estado, style);
         }
         */
-    }
-}

@@ -301,6 +301,7 @@ MonoBehaviour:
   cameraManager: {fileID: 465462793861170021}
   camaraTerceraPersona: {fileID: 831254673129144722}
   camaraPrimeraPersona: {fileID: 864437557132507429}
+  hookSystem: {fileID: 8768018585062917141}
 --- !u!1 &1956570458021914260
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,6 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetFinder: {fileID: 6474455789477185624}
+  playerCamera: {fileID: 864437557132507429}
   hookMovement: {fileID: 5689241775035304167}
   hookVisual: {fileID: 8402599326866145746}
   hookInput: {fileID: 5488239590870601798}
@@ -392,6 +394,8 @@ MonoBehaviour:
   hookSpeed: 15
   swingForce: 10
   playerSpeedDuringHook: 5
+  aimPullSpeed: 58
+  impulseConfig: {fileID: 11400000, guid: 84d5010db838e44468bf559489623209, type: 2}
 --- !u!114 &8402599326866145746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -717,8 +721,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.05
+        time: 0.27671233
+        value: 0.28395104
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -730,7 +734,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 0, b: 0, a: 1}
       key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -755,7 +759,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
