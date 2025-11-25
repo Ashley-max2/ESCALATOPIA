@@ -29,14 +29,14 @@ public class PlayerController : MonoBehaviour
 
     private IState estadoActual;
     private bool enZonaEscalada = false;
-    private SphereCollider triggerEscalada; // Referencia al collider trigger
+    private SphereCollider triggerEscalada;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         cam = Camera.main.transform;
 
-        // Configurar punto check suelo (tu código original)
+        // Configurar punto check suelo
         if (puntoCheckSuelo == null)
         {
             GameObject gc = new GameObject("GroundCheck");
@@ -57,7 +57,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         LeerInputs();
-        estadoActual.Update(this);
+
+        if (estadoActual != null)
+            estadoActual.Update(this);
+    }
+
+    private void FixedUpdate()
+    {
+        // Física y movimiento en FixedUpdate si es necesario
     }
 
     private void ConfigurarTriggerEscalada()
@@ -66,12 +73,12 @@ public class PlayerController : MonoBehaviour
         GameObject triggerObj = new GameObject("ClimbingTrigger");
         triggerObj.transform.SetParent(transform);
         triggerObj.transform.localPosition = offsetTriggerEscalada;
-        triggerObj.tag = "Player"; // O el tag que uses para el jugador
+        triggerObj.tag = "Player";
 
         // Añadir collider esférico como trigger
         triggerEscalada = triggerObj.AddComponent<SphereCollider>();
         triggerEscalada.isTrigger = true;
-        triggerEscalada.radius = 0.8f; // Radio ajustable
+        triggerEscalada.radius = 0.8f;
 
         // Añadir rigidbody (requerido para triggers)
         Rigidbody triggerRb = triggerObj.AddComponent<Rigidbody>();
@@ -96,7 +103,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void LeerInputs()
+    private void LeerInputs()
     {
         inputH = Input.GetAxisRaw("Horizontal");
         inputV = Input.GetAxisRaw("Vertical");
@@ -116,13 +123,15 @@ public class PlayerController : MonoBehaviour
         return enSuelo;
     }
 
-    public void CambiarEstado(IState nuevo)
+    public void CambiarEstado(IState nuevoEstado)
     {
         if (estadoActual != null)
             estadoActual.Exit(this);
 
-        estadoActual = nuevo;
-        estadoActual.Enter(this);
+        estadoActual = nuevoEstado;
+
+        if (estadoActual != null)
+            estadoActual.Enter(this);
     }
 
     // MÉTODOS PARA ESCALADA
@@ -138,7 +147,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Salió de zona escalable");
 
         // Si está escalando, forzar salida
-        if (estadoActual is ClimbingState)
+        if (EstaEnEstado<ClimbingState>())
         {
             CambiarEstado(new IdleState());
         }
@@ -146,8 +155,24 @@ public class PlayerController : MonoBehaviour
 
     public bool PuedeIniciarEscalada()
     {
-        return enZonaEscalada && inputEscalar &&
-               GetComponent<ResistenceController>().TieneResistencia(1f);
+        ResistenceController rc = GetComponent<ResistenceController>();
+        return enZonaEscalada && inputEscalar && rc != null && rc.TieneResistencia(1f);
+    }
+
+    // MÉTODOS PARA ACCEDER AL ESTADO ACTUAL
+    public IState GetEstadoActual()
+    {
+        return estadoActual;
+    }
+
+    public bool EstaEnEstado<T>() where T : IState
+    {
+        return estadoActual is T;
+    }
+
+    public string GetNombreEstadoActual()
+    {
+        return estadoActual?.GetType().Name ?? "Null";
     }
 
     // Para debug visual
@@ -160,11 +185,28 @@ public class PlayerController : MonoBehaviour
             Gizmos.DrawWireSphere(triggerEscalada.transform.position, triggerEscalada.radius);
         }
 
-        // Dibujar check de suelo (tu código original)
+        // Dibujar check de suelo
         if (puntoCheckSuelo != null)
         {
             Gizmos.color = EstaEnSuelo() ? Color.green : Color.red;
             Gizmos.DrawWireSphere(puntoCheckSuelo.position, radioCheckSuelo);
+        }
+    }
+
+    // Método para debug en pantalla
+    private void OnGUI()
+    {
+        if (Application.isPlaying)
+        {
+            GUI.Label(new Rect(10, 30, 300, 20), $"Estado: {GetNombreEstadoActual()}");
+            GUI.Label(new Rect(10, 50, 300, 20), $"En suelo: {EstaEnSuelo()}");
+            GUI.Label(new Rect(10, 70, 300, 20), $"En zona escalada: {enZonaEscalada}");
+
+            ResistenceController rc = GetComponent<ResistenceController>();
+            if (rc != null)
+            {
+                GUI.Label(new Rect(10, 90, 300, 20), $"Resistencia: {rc.GetResistenciaActual():F1}");
+            }
         }
     }
 }

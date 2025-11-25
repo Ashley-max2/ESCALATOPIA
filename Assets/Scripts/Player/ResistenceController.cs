@@ -6,86 +6,144 @@ using UnityEngine.UI;
 
 public class ResistenceController : MonoBehaviour
 {
-    float MaxBar = 100;
-    float ResistenceBar;
-    public PlayerJump playerJump;
-    public Escalada escalada;
-    public float velocidadRegeneracion = 5f;
+    [Header("Configuración Resistencia")]
+    [SerializeField] private float maxResistencia = 100f;
+    [SerializeField] private float resistenciaActual;
+    [SerializeField] private float velocidadRegeneracion = 5f;
+    [SerializeField] private float delayRegeneracion = 2f;
+
+    [Header("Referencias UI")]
     public TextMeshProUGUI resistenciaText;
     public Slider sliderResistencia;
 
-    private float tiempoEnSuelo = 0f;
-    private float delayRegeneracion = 2f;
+    private PlayerController playerController;
+    private float tiempoSinConsumir = 0f;
+    private bool estaRegenerando = false;
 
+    // Eventos para notificar cambios (opcional)
+    public System.Action<float> OnResistenciaCambiada;
+    public System.Action OnResistenciaAgotada;
 
-    // Start is called before the first frame update
     void Start()
     {
-        ResistenceBar = MaxBar;
+        playerController = GetComponent<PlayerController>();
+        resistenciaActual = maxResistencia;
 
-        if (playerJump == null)
-        {
-            playerJump = GetComponent<PlayerJump>();
-        }
-
-        if (escalada == null)
-        {
-            escalada = GetComponent<Escalada>();
-        }
+        ActualizarUI();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        bool estaEnSuelo = playerJump != null && playerJump.EstaEnSuelo();
-        bool presionandoR = Input.GetKey(KeyCode.R);
+        ManejarRegeneracion();
+    }
 
-        // Consumir resistencia si se presiona R
-        if (Input.GetKeyDown(KeyCode.R))
+    private void ManejarRegeneracion()
+    {
+        bool puedeRegenerar = PuedeRegenerar();
+
+        if (puedeRegenerar)
         {
-            ConsumirResistencia(2f);
-        }
+            tiempoSinConsumir += Time.deltaTime;
 
-        // Control de temporizador para regeneraci�n
-        if (estaEnSuelo && !presionandoR)
-        {
-            tiempoEnSuelo += Time.deltaTime;
-
-            if (tiempoEnSuelo >= delayRegeneracion)
+            if (tiempoSinConsumir >= delayRegeneracion && resistenciaActual < maxResistencia)
             {
-                ResistenceBar += velocidadRegeneracion * Time.deltaTime;
-                ResistenceBar = Mathf.Clamp(ResistenceBar, 0, MaxBar);
+                RegenerarResistencia();
             }
         }
         else
         {
-            // Reiniciar temporizador si no est� en suelo o se presiona R
-            tiempoEnSuelo = 0f;
-        }
-
-        actulizarTexto();
-
-        if (sliderResistencia != null)
-        {
-            sliderResistencia.value = ResistenceBar;
+            tiempoSinConsumir = 0f;
+            estaRegenerando = false;
         }
     }
 
-    void actulizarTexto()
+    private bool PuedeRegenerar()
     {
-        resistenciaText.text = "Resistencia: " + ResistenceBar.ToString("F0") + "/" + MaxBar.ToString();
+        if (playerController == null) return false;
+
+        // No regenerar si está en estados que consumen resistencia
+        bool estaConsumiendoResistencia =
+            playerController.EstaEnEstado<ClimbingState>() ||
+            Input.GetKey(KeyCode.R); // Mantengo tu funcionalidad de R
+
+        return !estaConsumiendoResistencia && playerController.EstaEnSuelo();
+    }
+
+    private void RegenerarResistencia()
+    {
+        estaRegenerando = true;
+        float regeneracion = velocidadRegeneracion * Time.deltaTime;
+        resistenciaActual = Mathf.Clamp(resistenciaActual + regeneracion, 0, maxResistencia);
+
+        ActualizarUI();
     }
 
     public void ConsumirResistencia(float cantidad)
     {
-        ResistenceBar -= cantidad;
-        ResistenceBar = Mathf.Clamp(ResistenceBar, 0, MaxBar);
+        if (cantidad <= 0) return;
+
+        resistenciaActual = Mathf.Clamp(resistenciaActual - cantidad, 0, maxResistencia);
+        tiempoSinConsumir = 0f;
+        estaRegenerando = false;
+
+        ActualizarUI();
+
+        // Notificar si se agotó la resistencia
+        if (resistenciaActual <= 0)
+        {
+            OnResistenciaAgotada?.Invoke();
+        }
     }
 
     public bool TieneResistencia(float cantidad)
     {
-        return ResistenceBar >= cantidad;
-
+        return resistenciaActual >= cantidad;
     }
 
+    public bool TieneResistenciaSuficiente()
+    {
+        return resistenciaActual > 0;
+    }
+
+    public float GetResistenciaActual()
+    {
+        return resistenciaActual;
+    }
+
+    public float GetResistenciaPorcentaje()
+    {
+        return resistenciaActual / maxResistencia;
+    }
+
+    private void ActualizarUI()
+    {
+        // Actualizar texto
+        if (resistenciaText != null)
+        {
+            resistenciaText.text = $"Resistencia: {resistenciaActual:F0}/{maxResistencia}";
+        }
+
+        // Actualizar slider
+        if (sliderResistencia != null)
+        {
+            sliderResistencia.value = resistenciaActual;
+            sliderResistencia.maxValue = maxResistencia;
+        }
+
+        // Notificar cambio
+        OnResistenciaCambiada?.Invoke(resistenciaActual);
+    }
+
+    // Métodos para debug
+    public void DebugLlenarResistencia()
+    {
+        resistenciaActual = maxResistencia;
+        ActualizarUI();
+    }
+
+    public void DebugVaciarResistencia()
+    {
+        resistenciaActual = 0;
+        ActualizarUI();
+    }
 }
