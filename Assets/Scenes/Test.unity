@@ -301,7 +301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2587755343478456452, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.562
+      value: -0.6
       objectReference: {fileID: 0}
     - target: {fileID: 8800413219798239268, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}
       propertyPath: escalada
@@ -619,19 +619,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocidadCaminar: 5
   velocidadCorrer: 8
-  velocidadRotacion: 10
+  rotacionSuavidad: 10
   fuerzaSalto: 12
   radioCheckSuelo: 0.4
-  capaSuelo:
+  suelo:
     serializedVersion: 2
     m_Bits: 64
   puntoCheckSuelo: {fileID: 1920839967}
-  rb: {fileID: 0}
-  camaraTransform: {fileID: 0}
-  inputHorizontal: 0
-  inputVertical: 0
+  inputH: 0
+  inputV: 0
   inputCorrer: 0
   inputSalto: 0
+  rb: {fileID: 0}
+  cam: {fileID: 0}
 --- !u!4 &1920839967 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2587755343478456452, guid: fd8c4b9126de24c46aa56788c17b622f, type: 3}

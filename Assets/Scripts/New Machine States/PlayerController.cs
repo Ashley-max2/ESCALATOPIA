@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [Header("Salto")]
     public float fuerzaSalto = 12f;
     public float radioCheckSuelo = 0.3f;
-    public LayerMask capaSuelo;
+    public LayerMask suelo;
     public Transform puntoCheckSuelo;
 
     [HideInInspector] public float inputH;
@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour
     {
         LeerInputs();
         estadoActual.Update(this);
+
+        // Debug en pantalla
+        Debug.Log($"En suelo: {EstaEnSuelo()} | Velocidad Y: {rb.velocity.y}");
     }
 
     public void CambiarEstado(IState nuevo)
@@ -67,6 +70,15 @@ public class PlayerController : MonoBehaviour
 
     public bool EstaEnSuelo()
     {
-        return Physics.CheckSphere(puntoCheckSuelo.position, radioCheckSuelo, capaSuelo);
+        return Physics.CheckSphere(puntoCheckSuelo.position, radioCheckSuelo, suelo);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (puntoCheckSuelo != null)
+        {
+            Gizmos.color = EstaEnSuelo() ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(puntoCheckSuelo.position, radioCheckSuelo);
+        }
     }
 }
