@@ -43,14 +43,17 @@ public class PlayerMovement : MonoBehaviour
         ObtenerInputMovimiento();
     }
 
-    void FixedUpdate()
+void FixedUpdate()
+{
+    if (hookSystem != null)
     {
-        // SI EL GANCHO ESTÁ ACTIVO → NO TOCAR VELOCITY
-        if (hookSystem != null && hookSystem.IsHooking)
+        // Solo bloqueamos movimiento cuando el gancho está lanzado o enganchado
+        if (hookSystem.IsThrown || hookSystem.IsAttached)
             return;
-
-        Mover();
     }
+
+    Mover();
+}
 
     void ObtenerInputMovimiento()
     {

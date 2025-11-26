@@ -44,10 +44,10 @@ public class PlayerJump : MonoBehaviour
 
 void Update()
 {
-    // Si hay HookSystem y está hookeando, no dejar saltar
     HookSystem hook = GetComponentInChildren<HookSystem>();
-    if (hook != null && hook.IsHooking)
+    if (hook != null && (hook.IsThrown || hook.IsAttached))
     {
+        // Si el gancho está en vuelo o enganchado, no permitir salto
         return;
     }
 
@@ -59,7 +59,6 @@ void Update()
         Saltar();
     }
 }
-
     void ObtenerInputSalto()
     {
         inputSalto = Input.GetButtonDown("Jump");

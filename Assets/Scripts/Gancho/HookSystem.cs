@@ -21,7 +21,7 @@ public class HookSystem : MonoBehaviour
     public Vector3 HookOrigin => hookVisual.hookOrigin.position;
     public Vector3 PlayerPosition => playerTransform.position;
 
-    // Propiedades p�blicas
+    // Propiedades públicas
     public HookTargetFinder TargetFinder => targetFinder;
     public HookMovementController HookMovement => hookMovement;
     public HookVisualController HookVisual => hookVisual;
@@ -41,14 +41,12 @@ public class HookSystem : MonoBehaviour
 
     private void InitializeComponents()
     {
-        // Buscar componentes en el padre (Player) si no est�n asignados
         if (playerTransform == null)
             playerTransform = transform.parent;
 
         if (playerRigidbody == null && playerTransform != null)
             playerRigidbody = playerTransform.GetComponent<Rigidbody>();
 
-        // Auto-referenciar componentes del gancho
         targetFinder ??= GetComponent<HookTargetFinder>();
         hookMovement ??= GetComponent<HookMovementController>();
         hookVisual ??= GetComponent<HookVisualController>();
@@ -64,5 +62,12 @@ public class HookSystem : MonoBehaviour
 
     public void LaunchHook() => ChangeState(new HookThrownState(this));
     public void CancelHook() => ChangeState(new HookIdleState(this));
+
+    // Antes:
+    // public bool IsHooking => !(currentState is HookIdleState);
+
     public bool IsHooking => !(currentState is HookIdleState);
+    public bool IsAiming => currentState is HookAimingState;
+    public bool IsThrown => currentState is HookThrownState;
+    public bool IsAttached => currentState is HookAttachedState;
 }
