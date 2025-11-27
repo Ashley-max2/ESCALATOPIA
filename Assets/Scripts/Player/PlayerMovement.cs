@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,6 +11,13 @@ public class PlayerMovement : MonoBehaviour
     public float velocidadCorrer = 8f;
     public float velocidadRotacion = 10f;
 
+    [Header ("SonidosPasos")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] caminarClips;
+    [SerializeField] private AudioClip[] correrClips;
+    [SerializeField] private float intervaloCaminar = 0.5f;
+    [SerializeField] private float intervaloCorrer = 0.3f;
+
     // Componentes
     private Transform camaraTransform;
     private Rigidbody rb;
@@ -16,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     // Input
     private float inputHorizontal, inputVertical;
     private bool inputCorrer;
+
+    private float tiempoUltimoPaso;
 
     void Start()
     {
@@ -26,6 +37,28 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         ObtenerInputMovimiento();
+        ReproducirSonidoPasos();
+    }
+
+    private void ReproducirSonidoPasos()
+    {
+        // Referencia al script de salto
+        PlayerJump jump = GetComponent<PlayerJump>();
+        if (jump == null) return;
+
+        // Solo reproducir pasos si está moviéndose Y en el suelo
+        if (!EstaMoviendose() || !jump.EstaEnSuelo()) return;
+
+        float intervalo = inputCorrer ? intervaloCorrer : intervaloCaminar;
+        AudioClip[] clips = inputCorrer ? correrClips : caminarClips;
+
+        if (Time.time - tiempoUltimoPaso >= intervalo)
+        {
+            AudioClip clip = clips[Random.Range(0, clips.Length)];
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+            audioSource.PlayOneShot(clip);
+            tiempoUltimoPaso = Time.time;
+        }
     }
 
     void FixedUpdate()
