@@ -31,18 +31,23 @@ public class HookAimingState : HookState
 
     public override void Enter()
     {
-        hookSystem.HookVisual.SetLineVisible(true);
+        // YA NO encendemos la línea aquí
+        hookSystem.HookVisual.SetLineVisible(false);
     }
 
     public override void Update()
     {
+        // Solo usamos la retícula (HookReticle) para mostrar si hay target
         hookSystem.HookVisual.UpdateAimLine();
         hookSystem.TargetFinder.FindTarget();
     }
 
-    public override void Exit() { }
+    public override void Exit()
+    {
+        // Al salir del aiming, ocultamos la retícula
+        hookSystem.HookVisual.reticle.HideReticle();
+    }
 }
-
 
 public class HookThrownState : HookState
 {

@@ -32,7 +32,7 @@ public class HookTargetFinder : MonoBehaviour
         Ray ray = firstPersonCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, maxDistance, hookPointsLayer))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, hookPointsLayer))
         {
             IHookable hookable = hit.collider.GetComponent<IHookable>();
 

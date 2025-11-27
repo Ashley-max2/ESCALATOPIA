@@ -18,12 +18,11 @@ public class HookVisualController : MonoBehaviour
         SetLineVisible(false);
     }
 
+    // Solo maneja la retícula durante el apuntado
     public void UpdateAimLine()
     {
         if (hookSystem.TargetFinder.HasValidTarget)
         {
-            hookLine.SetPosition(0, hookOrigin.position);
-            hookLine.SetPosition(1, hookSystem.TargetFinder.CurrentTarget.HookPoint);
             reticle.ShowValidTarget();
         }
         else
@@ -31,15 +30,35 @@ public class HookVisualController : MonoBehaviour
             reticle.HideReticle();
         }
     }
-
-    public void UpdateHookLine()
+       /* public void UpdateHookLine()
     {
         if (hookSystem.CurrentHookPoint != null)
         {
             hookLine.SetPosition(0, hookOrigin.position);
             hookLine.SetPosition(1, hookSystem.CurrentHookPoint.HookPoint);
         }
+    }*/
+
+    // Dibuja la línea del gancho cuando está lanzado o enganchado
+    public void UpdateHookLine()
+    {
+        if (!hookLine.enabled) return;
+
+        hookLine.SetPosition(0, hookOrigin.position);
+
+        if (hookSystem.CurrentHookPoint != null)
+        {
+            hookLine.SetPosition(1, hookSystem.CurrentHookPoint.HookPoint);
+        }
+        else
+        {
+            // Mientras viaja y aún no hay CurrentHookPoint, usa el target del movimiento
+            hookLine.SetPosition(1, hookSystem.HookMovement.GetCurrentTargetPosition());
+        }
     }
 
-    public void SetLineVisible(bool visible) => hookLine.enabled = visible;
+    public void SetLineVisible(bool visible)
+    {
+        hookLine.enabled = visible;
+    }
 }

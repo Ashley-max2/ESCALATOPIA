@@ -185,4 +185,8 @@ public class HookMovementController : MonoBehaviour
         playerRb.useGravity = false;
         playerRb.velocity = aimDirection * aimPullSpeed;
     }
+    public Vector3 GetCurrentTargetPosition()
+{
+    return hookTarget;
+}
 }
