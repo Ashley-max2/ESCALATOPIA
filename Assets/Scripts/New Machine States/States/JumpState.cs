@@ -24,11 +24,7 @@ public class JumpState : IState
         tiempoEnAire += Time.deltaTime;
         MoverEnAire(p);
 
-        // Solo permitir transición después de un tiempo mínimo en el aire
-        if (tiempoEnAire > 0.2f && p.EstaEnSuelo() && p.rb.velocity.y <= 0.1f)
-        {
-            TransicionarAlSuelo(p);
-        }
+        TransicionarAlSuelo(p);
     }
 
     void AplicarSalto(PlayerController p)
@@ -56,6 +52,13 @@ public class JumpState : IState
                 p.CambiarEstado(new MovementState());
             else
                 p.CambiarEstado(new IdleState());
+        }
+
+        // Para cambiar al estado escalada y seguir escalando
+        if (p.PuedeIniciarEscalada())
+        {
+            p.CambiarEstado(new ClimbingState());
+            return;
         }
     }
 

@@ -28,7 +28,10 @@ public class WallJumpState : IState
         CalcularDireccionSalto(p);
         AplicarSaltoDePared(p);
 
-        Debug.Log("Entrando en WallJumpState");
+        // PREVENIR REENTRADA INMEDIATA A ESCALADA
+        p.IniciarTemporizadorReentradaEscalada();
+
+        Debug.Log("Entrando en WallJumpState - Resistencia consumida: 10");
     }
 
     public void Update(PlayerController p)
@@ -46,14 +49,22 @@ public class WallJumpState : IState
             MoverEnAire(p);
         }
 
-        // Verificar transiciones
+        // VERIFICAR SI PUEDE VOLVER A ESCALAR (NUEVA LÓGICA)
+        if (temporizadorBloqueo <= 0 && p.PuedeIniciarEscalada())
+        {
+            p.CambiarEstado(new ClimbingState());
+            return;
+        }
+
+        // Verificar transiciones al suelo
         if (p.EstaEnSuelo() && p.rb.velocity.y <= 0.1f)
         {
             TransicionarAlSuelo(p);
+            return;
         }
 
-        // Si el temporizador termina y estamos cayendo
-        if (temporizadorBloqueo <= 0 && p.rb.velocity.y < 0)
+        // Si el temporizador termina y estamos cayendo, ir a JumpState normal
+        if (temporizadorBloqueo <= 0 && p.rb.velocity.y < 0 && !p.PuedeIniciarEscalada())
         {
             p.CambiarEstado(new JumpState());
         }
@@ -61,9 +72,8 @@ public class WallJumpState : IState
 
     public void Exit(PlayerController p)
     {
-        // Reactivar el control completo al salir del estado
         saltoAplicado = false;
-        Debug.Log("Saliendo de WallJumpState");
+        Debug.Log("Saliendo de WallJumpState - Resistencia restante: " + resistenceController.GetResistenciaActual());
     }
 
     private void CalcularDireccionSalto(PlayerController p)

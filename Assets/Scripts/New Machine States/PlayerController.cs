@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("Escalada")]
     public float distanciaDeteccionPared = 1.5f;
     public Vector3 offsetTriggerEscalada = new Vector3(0, 0.5f, 0);
+    public float tiempoReentradaEscalada = 0.5f;
 
     [Header("Wall Jump")]
     public float fuerzaWallJump = 12f;
@@ -32,9 +33,13 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public Transform cam;
 
+    // CAMBIO: Cambiar de private a public o añadir propiedad pública
+    [HideInInspector] public bool enZonaEscalada = false;
+
     private IState estadoActual;
-    private bool enZonaEscalada = false;
     private SphereCollider triggerEscalada;
+    private float temporizadorReentradaEscalada = 0f;
+    private bool permitirReentradaEscalada = true;
 
     private void Awake()
     {
@@ -63,8 +68,29 @@ public class PlayerController : MonoBehaviour
     {
         LeerInputs();
 
+        // Actualizar temporizador de reentrada de escalada
+        if (temporizadorReentradaEscalada > 0f)
+        {
+            temporizadorReentradaEscalada -= Time.deltaTime;
+            permitirReentradaEscalada = false;
+        }
+        else
+        {
+            permitirReentradaEscalada = true;
+        }
+
         if (estadoActual != null)
             estadoActual.Update(this);
+
+        // DEBUG TEMPORAL
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ResistenceController rc = GetComponent<ResistenceController>();
+            if (rc != null)
+            {
+                rc.DebugEstadoResistencia();
+            }
+        }
     }
 
     private void ConfigurarTriggerEscalada()
@@ -156,7 +182,14 @@ public class PlayerController : MonoBehaviour
     public bool PuedeIniciarEscalada()
     {
         ResistenceController rc = GetComponent<ResistenceController>();
-        return enZonaEscalada && inputEscalar && rc != null && rc.TieneResistencia(1f);
+        return enZonaEscalada && inputEscalar && rc != null && rc.TieneResistencia(1f) && permitirReentradaEscalada;
+    }
+
+    // NUEVO MÉTODO: Llamado desde WallJumpState para prevenir reentrada inmediata
+    public void IniciarTemporizadorReentradaEscalada()
+    {
+        temporizadorReentradaEscalada = tiempoReentradaEscalada;
+        permitirReentradaEscalada = false;
     }
 
     // MÉTODOS PARA ACCEDER AL ESTADO ACTUAL
@@ -201,11 +234,12 @@ public class PlayerController : MonoBehaviour
             GUI.Label(new Rect(10, 30, 300, 20), $"Estado: {GetNombreEstadoActual()}");
             GUI.Label(new Rect(10, 50, 300, 20), $"En suelo: {EstaEnSuelo()}");
             GUI.Label(new Rect(10, 70, 300, 20), $"En zona escalada: {enZonaEscalada}");
+            GUI.Label(new Rect(10, 90, 300, 20), $"Puede re-escalar: {permitirReentradaEscalada}");
 
             ResistenceController rc = GetComponent<ResistenceController>();
             if (rc != null)
             {
-                GUI.Label(new Rect(10, 90, 300, 20), $"Resistencia: {rc.GetResistenciaActual():F1}");
+                GUI.Label(new Rect(10, 110, 300, 20), $"Resistencia: {rc.GetResistenciaActual():F1}");
             }
         }
     }

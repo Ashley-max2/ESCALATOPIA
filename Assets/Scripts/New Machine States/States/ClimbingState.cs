@@ -4,6 +4,7 @@ public class ClimbingState : IState
 {
     private ResistenceController resistenceController;
     private float consumoResistencia = 8f;
+    private Vector3 ultimaPosicionPared;
 
     public void Enter(PlayerController p)
     {
@@ -12,24 +13,28 @@ public class ClimbingState : IState
         // Verificar si tiene resistencia al entrar
         if (!resistenceController.TieneResistencia(1f))
         {
+            Debug.Log("No tiene suficiente resistencia para escalar");
             p.CambiarEstado(new IdleState());
             return;
         }
 
+        // Guardar posición inicial para referencia
+        ultimaPosicionPared = p.transform.position;
+
         IniciarEscalada(p);
-        Debug.Log("Entrando en ClimbingState");
+        Debug.Log("Entrando en ClimbingState - Resistencia: " + resistenceController.GetResistenciaActual());
     }
 
     public void Exit(PlayerController p)
     {
         PararEscalada(p);
-        Debug.Log("Saliendo de ClimbingState");
+        Debug.Log("Saliendo de ClimbingState - Resistencia restante: " + resistenceController.GetResistenciaActual());
     }
 
     public void Update(PlayerController p)
     {
         // Verificar salto de pared
-        if (p.inputSalto)
+        if (p.inputSalto && resistenceController.TieneResistencia(10f))
         {
             p.CambiarEstado(new WallJumpState());
             return;
@@ -38,6 +43,7 @@ public class ClimbingState : IState
         // Verificar resistencia continuamente
         if (!resistenceController.TieneResistenciaSuficiente())
         {
+            Debug.Log("Se agotó la resistencia durante la escalada");
             p.CambiarEstado(new IdleState());
             return;
         }
@@ -45,6 +51,15 @@ public class ClimbingState : IState
         // Si suelta la tecla E, salir
         if (!p.inputEscalar)
         {
+            Debug.Log("Soltó la tecla E, saliendo de escalada");
+            p.CambiarEstado(new IdleState());
+            return;
+        }
+
+        // Verificar que sigue en zona escalable - ¡AHORA FUNCIONA!
+        if (!p.enZonaEscalada)
+        {
+            Debug.Log("Perdió contacto con la pared escalable");
             p.CambiarEstado(new IdleState());
             return;
         }
@@ -65,20 +80,24 @@ public class ClimbingState : IState
         // Movimiento vertical
         float inputVertical = Input.GetAxisRaw("Vertical");
         Vector3 movimiento = Vector3.up * inputVertical * p.velocidadEscalada * Time.deltaTime;
-        p.transform.Translate(movimiento);
 
         // Movimiento horizontal limitado
         float inputHorizontal = Input.GetAxisRaw("Horizontal");
-        if (Mathf.Abs(inputHorizontal) > 0.1f)
-        {
-            Vector3 movHorizontal = p.transform.right * inputHorizontal * p.velocidadEscalada * 0.5f * Time.deltaTime;
-            p.transform.Translate(movHorizontal);
-        }
+        Vector3 movHorizontal = p.transform.right * inputHorizontal * p.velocidadEscalada * 0.5f * Time.deltaTime;
+
+        // Aplicar movimiento combinado
+        p.transform.Translate(movimiento + movHorizontal);
 
         // Consumir resistencia proporcional al movimiento
         float consumo = consumoResistencia * Time.deltaTime *
                        (Mathf.Abs(inputVertical) + Mathf.Abs(inputHorizontal) * 0.5f);
         resistenceController.ConsumirResistencia(consumo);
+
+        // Debug para ver consumo de resistencia
+        if (inputVertical != 0 || inputHorizontal != 0)
+        {
+            Debug.Log($"Escalando - Resistencia: {resistenceController.GetResistenciaActual():F1}, Consumo: {consumo:F2}");
+        }
     }
 
     private void PararEscalada(PlayerController p)

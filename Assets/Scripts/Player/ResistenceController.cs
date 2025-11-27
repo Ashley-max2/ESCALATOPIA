@@ -154,4 +154,11 @@ public class ResistenceController : MonoBehaviour
         ActualizarUI();
         Debug.Log("Resistencia vaciada");
     }
+
+    public void DebugEstadoResistencia()
+    {
+        Debug.Log($"Resistencia: {resistenciaActual:F1}/{maxResistencia} | " +
+                  $"Puede escalar: {TieneResistencia(1f)} | " +
+                  $"Puede WallJump: {TieneResistencia(10f)}");
+    }
 }
