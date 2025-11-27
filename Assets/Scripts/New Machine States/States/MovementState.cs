@@ -52,4 +52,6 @@ public class MovementState : IState
             p.transform.rotation = Quaternion.Slerp(p.transform.rotation, rotacionObjetivo, p.rotacionSuavidad * Time.deltaTime);
         }
     }
+
+    public void Exit(PlayerController p) { }
 }
