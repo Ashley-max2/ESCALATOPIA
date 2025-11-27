@@ -642,8 +642,9 @@ MonoBehaviour:
   puntoCheckSuelo: {fileID: 1920839967}
   distanciaDeteccionPared: 1.5
   offsetTriggerEscalada: {x: 0, y: 0.5, z: 0}
-  fuerzaWallJump: 12
-  fuerzaWallJumpLateral: 8
+  tiempoReentradaEscalada: 0.5
+  fuerzaWallJump: 6
+  fuerzaWallJumpLateral: 4
   tiempoBloqueoWallJump: 0.15
   inputH: 0
   inputV: 0
@@ -652,6 +653,7 @@ MonoBehaviour:
   inputEscalar: 0
   rb: {fileID: 0}
   cam: {fileID: 0}
+  enZonaEscalada: 0
 --- !u!114 &1851186078
 MonoBehaviour:
   m_ObjectHideFlags: 0

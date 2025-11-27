@@ -63,11 +63,7 @@ public class WallJumpState : IState
             return;
         }
 
-        // Si el temporizador termina y estamos cayendo, ir a JumpState normal
-        if (temporizadorBloqueo <= 0 && p.rb.velocity.y < 0 && !p.PuedeIniciarEscalada())
-        {
-            p.CambiarEstado(new JumpState());
-        }
+        
     }
 
     public void Exit(PlayerController p)
