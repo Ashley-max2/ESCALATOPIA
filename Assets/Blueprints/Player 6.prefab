@@ -637,6 +637,15 @@ MonoBehaviour:
   distancia: 4
   altura: 1.5
   sensibilidad: 2
+  suavizadoPosicion: 666
+  suavizadoRotacion: 666
+  capasColision:
+    serializedVersion: 2
+    m_Bits: 8
+  radioColision: 0.3
+  distanciaMinima: 1
+  fadeCanvasGroup: {fileID: 0}
+  duracionFade: 0.5
 --- !u!1 &7793461949913217437
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,6 +828,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camaraTerceraPersona: {fileID: 831254673129144722}
   camaraPrimeraPersona: {fileID: 864437557132507429}
+  fadeCanvasGroup: {fileID: 0}
+  duracionFade: 0.3
 --- !u!1 &8022694881634971683
 GameObject:
   m_ObjectHideFlags: 0

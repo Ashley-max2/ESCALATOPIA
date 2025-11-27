@@ -140,6 +140,8 @@ void FixedUpdate()
 
     void RotarHaciaDireccion(Vector3 direccion)
     {
+        if (direccion.sqrMagnitude < 0.01f) return; // Evitar rotaciones erráticas
+        
         Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
                                             velocidadRotacion * Time.fixedDeltaTime);
@@ -150,8 +152,9 @@ void FixedUpdate()
         Vector3 direccionCamara = camaraTransform.forward;
         direccionCamara.y = 0;
 
-        if (direccionCamara != Vector3.zero)
+        if (direccionCamara.sqrMagnitude > 0.01f) // Evitar rotaciones cuando no hay dirección
         {
+            direccionCamara.Normalize();
             Quaternion rotacionObjetivo = Quaternion.LookRotation(direccionCamara);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionObjetivo,
                                                 velocidadRotacion * Time.fixedDeltaTime);
