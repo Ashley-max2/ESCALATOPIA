@@ -20,7 +20,7 @@ public class ResistenceController : MonoBehaviour
     private float tiempoSinConsumir = 0f;
     private bool estaRegenerando = false;
 
-    // Eventos para notificar cambios (opcional)
+    // Eventos para notificar cambios
     public System.Action<float> OnResistenciaCambiada;
     public System.Action OnResistenciaAgotada;
 
@@ -35,6 +35,12 @@ public class ResistenceController : MonoBehaviour
     void Update()
     {
         ManejarRegeneracion();
+
+        // Consumir resistencia si se presiona R (funcionalidad original)
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ConsumirResistencia(2f);
+        }
     }
 
     private void ManejarRegeneracion()
@@ -64,7 +70,7 @@ public class ResistenceController : MonoBehaviour
         // No regenerar si está en estados que consumen resistencia
         bool estaConsumiendoResistencia =
             playerController.EstaEnEstado<ClimbingState>() ||
-            Input.GetKey(KeyCode.R); // Mantengo tu funcionalidad de R
+            Input.GetKey(KeyCode.R);
 
         return !estaConsumiendoResistencia && playerController.EstaEnSuelo();
     }
@@ -139,11 +145,13 @@ public class ResistenceController : MonoBehaviour
     {
         resistenciaActual = maxResistencia;
         ActualizarUI();
+        Debug.Log("Resistencia llenada");
     }
 
     public void DebugVaciarResistencia()
     {
         resistenciaActual = 0;
         ActualizarUI();
+        Debug.Log("Resistencia vaciada");
     }
 }

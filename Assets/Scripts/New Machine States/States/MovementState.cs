@@ -4,7 +4,7 @@ public class MovementState : IState
 {
     public void Enter(PlayerController p)
     {
-        // Opcional: sonido de pasos, etc.
+        Debug.Log("Entrando en MovementState");
     }
 
     public void Update(PlayerController p)
@@ -53,5 +53,8 @@ public class MovementState : IState
         }
     }
 
-    public void Exit(PlayerController p) { }
+    public void Exit(PlayerController p)
+    {
+        Debug.Log("Saliendo de MovementState");
+    }
 }

@@ -17,15 +17,24 @@ public class ClimbingState : IState
         }
 
         IniciarEscalada(p);
+        Debug.Log("Entrando en ClimbingState");
     }
 
     public void Exit(PlayerController p)
     {
         PararEscalada(p);
+        Debug.Log("Saliendo de ClimbingState");
     }
 
     public void Update(PlayerController p)
     {
+        // Verificar salto de pared
+        if (p.inputSalto)
+        {
+            p.CambiarEstado(new WallJumpState());
+            return;
+        }
+
         // Verificar resistencia continuamente
         if (!resistenceController.TieneResistenciaSuficiente())
         {
@@ -58,8 +67,17 @@ public class ClimbingState : IState
         Vector3 movimiento = Vector3.up * inputVertical * p.velocidadEscalada * Time.deltaTime;
         p.transform.Translate(movimiento);
 
+        // Movimiento horizontal limitado
+        float inputHorizontal = Input.GetAxisRaw("Horizontal");
+        if (Mathf.Abs(inputHorizontal) > 0.1f)
+        {
+            Vector3 movHorizontal = p.transform.right * inputHorizontal * p.velocidadEscalada * 0.5f * Time.deltaTime;
+            p.transform.Translate(movHorizontal);
+        }
+
         // Consumir resistencia proporcional al movimiento
-        float consumo = consumoResistencia * Time.deltaTime * Mathf.Abs(inputVertical);
+        float consumo = consumoResistencia * Time.deltaTime *
+                       (Mathf.Abs(inputVertical) + Mathf.Abs(inputHorizontal) * 0.5f);
         resistenceController.ConsumirResistencia(consumo);
     }
 

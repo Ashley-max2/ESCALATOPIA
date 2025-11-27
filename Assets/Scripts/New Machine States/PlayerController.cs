@@ -18,6 +18,11 @@ public class PlayerController : MonoBehaviour
     public float distanciaDeteccionPared = 1.5f;
     public Vector3 offsetTriggerEscalada = new Vector3(0, 0.5f, 0);
 
+    [Header("Wall Jump")]
+    public float fuerzaWallJump = 12f;
+    public float fuerzaWallJumpLateral = 8f;
+    public float tiempoBloqueoWallJump = 0.15f;
+
     [HideInInspector] public float inputH;
     [HideInInspector] public float inputV;
     [HideInInspector] public bool inputCorrer;
@@ -60,11 +65,6 @@ public class PlayerController : MonoBehaviour
 
         if (estadoActual != null)
             estadoActual.Update(this);
-    }
-
-    private void FixedUpdate()
-    {
-        // Física y movimiento en FixedUpdate si es necesario
     }
 
     private void ConfigurarTriggerEscalada()

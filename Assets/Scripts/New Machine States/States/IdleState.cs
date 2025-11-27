@@ -5,6 +5,7 @@ public class IdleState : IState
     public void Enter(PlayerController p)
     {
         // Opcional: animación de idle
+        Debug.Log("Entrando en IdleState");
     }
 
     public void Update(PlayerController p)
@@ -33,6 +34,6 @@ public class IdleState : IState
 
     public void Exit(PlayerController p)
     {
-        // Limpieza si es necesaria
+        Debug.Log("Saliendo de IdleState");
     }
 }

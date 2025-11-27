@@ -10,11 +10,13 @@ public class JumpState : IState
         saltoAplicado = false;
         tiempoEnAire = 0f;
         AplicarSalto(p);
+        Debug.Log("Entrando en JumpState");
     }
 
     public void Exit(PlayerController p)
     {
         saltoAplicado = false;
+        Debug.Log("Saliendo de JumpState");
     }
 
     public void Update(PlayerController p)
@@ -59,7 +61,6 @@ public class JumpState : IState
 
     void MoverEnAire(PlayerController p)
     {
-        // Tu código actual está bien, mantenerlo
         Vector3 dir = (p.cam.right * p.inputH + p.cam.forward * p.inputV).normalized;
         dir.y = 0;
 

@@ -1,6 +1,6 @@
 public interface IState
 {
-    void Enter(PlayerController p);
-    void Update(PlayerController p);
-    void Exit(PlayerController p);
+    void Enter(PlayerController player);
+    void Update(PlayerController player);
+    void Exit(PlayerController player);
 }
