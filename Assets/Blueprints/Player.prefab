@@ -154,8 +154,6 @@ GameObject:
   - component: {fileID: 965935573817198569}
   - component: {fileID: 13137382984370081}
   - component: {fileID: 7373195030741744700}
-  - component: {fileID: 4517546486072571424}
-  - component: {fileID: 7370054465211058452}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -303,37 +301,3 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4517546486072571424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8842105036784770844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d545391abb1863418f063f455b035a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fuerzaSalto: 7
-  checkDistanciaSuelo: 0.2
-  radioCheckSuelo: 0.3
-  capaSuelo:
-    serializedVersion: 2
-    m_Bits: 64
-  puntoCheckSuelo: {fileID: 2587755343478456452}
---- !u!114 &7370054465211058452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8842105036784770844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e315f823653ae94090022bce2f10ad1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocidadCaminar: 5
-  velocidadCorrer: 8
-  velocidadRotacion: 10
