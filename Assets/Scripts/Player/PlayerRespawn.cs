@@ -6,6 +6,10 @@ public class PlayerRespawn : MonoBehaviour
 {
     private Transform lastRespawnPoint;
 
+    // Audios
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip respawnSound;
+
     void OnTriggerEnter(Collider other)
     {
         // Si el jugador entra en un collider con tag "respawn"
@@ -34,5 +38,13 @@ public class PlayerRespawn : MonoBehaviour
         GetComponent<PlayerFallDetector>().ResetStartY();
 
         Debug.Log("Jugador reapareció en: " + lastRespawnPoint.name);
+
+        //Efecto de sonido al respawnear
+
+        if (audioSource != null && respawnSound != null)
+        {
+            audioSource.PlayOneShot(respawnSound);
+        }
+
     }
 }
