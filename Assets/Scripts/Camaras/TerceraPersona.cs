@@ -56,11 +56,19 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (objetivo == null) return;
+    if (objetivo == null) return;
 
-        // Input del mouse - independiente del movimiento del jugador
-        float mouseX = Input.GetAxis("Mouse X") * sensibilidad;
-        float mouseY = Input.GetAxis("Mouse Y") * sensibilidad;
+    // BLOQUEAR INPUT si el jugador está en gancho
+    PlayerController player = objetivo.GetComponent<PlayerController>();
+    if (player != null && player.EstaGanchoActivo())
+    {
+        // Mantener la posición actual de la cámara, no procesar input
+        return;
+    }
+
+    // Input del mouse - independiente del movimiento del jugador
+    float mouseX = Input.GetAxis("Mouse X") * sensibilidad;
+    float mouseY = Input.GetAxis("Mouse Y") * sensibilidad;
         
         rotacionX += mouseX;
         rotacionY -= mouseY;
@@ -192,6 +200,19 @@ public class ThirdPersonCameraController : MonoBehaviour
     }
 
     #endregion
+
+    // Método para sincronizar con la cámara de primera persona
+    public void SincronizarConPrimeraPersona(FirstPersonCameraController firstPerson)
+    {
+        if (firstPerson == null) return;
+        
+        // Obtener la rotación de primera persona y aplicarla a tercera persona
+        Vector3 firstPersonRotation = firstPerson.transform.eulerAngles;
+        rotacionX = firstPersonRotation.y;
+        rotacionY = firstPersonRotation.x;
+        
+        Debug.Log($"[CAMERA] Sincronizada tercera persona con primera: X={rotacionY}, Y={rotacionX}");
+    }
 
     // Debug visual
     void OnDrawGizmos()

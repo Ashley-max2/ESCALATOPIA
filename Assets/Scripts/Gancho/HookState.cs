@@ -73,10 +73,14 @@ public class HookThrownState : HookState
 
 public class HookAttachedState : HookState
 {
+    private float maxAttachmentTime = 3f; // Máximo 3 segundos enganchado
+    private float attachmentTimer;
+    
     public HookAttachedState(HookSystem system) : base(system) { }
 
     public override void Enter()
     {
+        attachmentTimer = maxAttachmentTime;
         hookSystem.HookMovement.OnHookAttached();
         hookSystem.CurrentHookPoint?.OnHookAttach();
     }
@@ -87,11 +91,21 @@ public class HookAttachedState : HookState
 
         // 1) Actualizar el impulso (tirón rápido)
         hookSystem.HookMovement.UpdateImpulsePull();
+        
+        // 2) Timer de seguridad para prevenir enganche permanente
+        attachmentTimer -= Time.deltaTime;
+        if (attachmentTimer <= 0f)
+        {
+            Debug.Log("[HOOK] Timer de seguridad agotado, cancelando gancho");
+            hookSystem.CancelHook();
+            return;
+        }
 
-        // 2) Si ya no hay impulso, arrastrar hacia el hook (si está activado en el SO)
+        // 3) Si ya no hay impulso, cancelar el gancho
         if (!hookSystem.HookMovement.IsImpulsing)
         {
-            hookSystem.HookMovement.PullPlayerToHook();
+            Debug.Log("[HOOK] IsImpulsing = false, cancelando gancho desde HookAttachedState");
+            hookSystem.CancelHook();
         }
     }
 
@@ -99,5 +113,6 @@ public class HookAttachedState : HookState
     {
         hookSystem.CurrentHookPoint?.OnHookDetach();
         hookSystem.PlayerRigidbody.useGravity = true;
+        hookSystem.PlayerRigidbody.freezeRotation = true;
     }
 }

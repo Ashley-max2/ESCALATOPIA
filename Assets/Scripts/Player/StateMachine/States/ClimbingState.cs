@@ -18,7 +18,7 @@ public class ClimbingState : IState
             return;
         }
 
-        // Guardar posición inicial para referencia
+        // Guardar posicion inicial para referencia
         ultimaPosicionPared = p.transform.position;
 
         IniciarEscalada(p);
@@ -40,27 +40,27 @@ public class ClimbingState : IState
             return;
         }
 
+        // Verificar si salio de la zona escalable PRIMERO
+        if (!p.enZonaEscalada)
+        {
+            Debug.Log("Salio de zona escalable");
+            p.CambiarEstado(new JumpState());
+            return;
+        }
+
         // Verificar resistencia continuamente
         if (!resistenceController.TieneResistenciaSuficiente())
         {
-            Debug.Log("Se agotó la resistencia durante la escalada");
-            p.CambiarEstado(new IdleState());
+            Debug.Log("Resistencia agotada durante escalada");
+            p.CambiarEstado(new JumpState());
             return;
         }
 
         // Si suelta la tecla E, salir
         if (!p.inputEscalar)
         {
-            Debug.Log("Soltó la tecla E, saliendo de escalada");
-            p.CambiarEstado(new IdleState());
-            return;
-        }
-
-        // Verificar que sigue en zona escalable - ¡AHORA FUNCIONA!
-        if (!p.enZonaEscalada)
-        {
-            Debug.Log("Perdió contacto con la pared escalable");
-            p.CambiarEstado(new IdleState());
+            Debug.Log("Dejo de presionar E");
+            p.CambiarEstado(new JumpState());
             return;
         }
 

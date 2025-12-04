@@ -66,6 +66,36 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+        // Método para sincronizar rotación entre cámaras
+    public void SincronizarRotacionCamaras()
+    {
+        if (camaraTerceraPersona == null || camaraPrimeraPersona == null) return;
+
+        if (enPrimeraPersona)
+        {
+            // Sincronizar tercera persona con primera persona
+            FirstPersonCameraController firstPerson = camaraPrimeraPersona.GetComponent<FirstPersonCameraController>();
+            ThirdPersonCameraController thirdPerson = camaraTerceraPersona.GetComponent<ThirdPersonCameraController>();
+            
+            if (firstPerson != null && thirdPerson != null)
+            {
+                // Obtener rotación de primera persona y aplicar a tercera persona
+                firstPerson.SincronizarConTerceraPersona(thirdPerson);
+            }
+        }
+        else
+        {
+            // Sincronizar primera persona con tercera persona
+            FirstPersonCameraController firstPerson = camaraPrimeraPersona.GetComponent<FirstPersonCameraController>();
+            ThirdPersonCameraController thirdPerson = camaraTerceraPersona.GetComponent<ThirdPersonCameraController>();
+            
+            if (firstPerson != null && thirdPerson != null)
+            {
+                // Obtener rotación de tercera persona y aplicar a primera persona
+                thirdPerson.SincronizarConPrimeraPersona(firstPerson);
+            }
+        }
+    }
     private void CambiarAPrimeraPersona()
     {
         if (enPrimeraPersona) return;
@@ -88,12 +118,15 @@ public class CameraManager : MonoBehaviour
             yield return StartCoroutine(FadeCoroutine(1f, duracionFade));
         }
 
-        // Cambiar c�mara
+        // Sincronizar rotación ANTES de cambiar cámara
+        SincronizarRotacionCamaras();
+
+        // Cambiar cámara
         enPrimeraPersona = aPrimeraPersona;
         camaraPrimeraPersona.enabled = aPrimeraPersona;
         camaraTerceraPersona.enabled = !aPrimeraPersona;
 
-        // Peque�a pausa
+        // Pequeña pausa
         yield return new WaitForSeconds(0.1f);
 
         // Fade out (transparente)

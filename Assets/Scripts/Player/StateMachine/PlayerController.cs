@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     // CAMBIO: Cambiar de private a public o añadir propiedad pública
     [HideInInspector] public bool enZonaEscalada = false;
 
+    // Referencia al sistema de gancho
+    private HookSystem hookSystem;
+
     private IState estadoActual;
     private SphereCollider triggerEscalada;
     private float temporizadorReentradaEscalada = 0f;
@@ -45,6 +48,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         cam = Camera.main.transform;
+        hookSystem = GetComponentInChildren<HookSystem>();
 
         // Configurar punto check suelo
         if (puntoCheckSuelo == null)
@@ -67,6 +71,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         LeerInputs();
+
+        // Detectar si el gancho empieza a impulsar y cambiar al estado del gancho
+        if (EstaGanchoActivo() && !(estadoActual is HookImpulseState))
+        {
+            Debug.Log("[PLAYER] Gancho activo detectado - Cambiando a HookImpulseState");
+            CambiarEstado(new HookImpulseState());
+        }
 
         // Actualizar temporizador de reentrada de escalada
         if (temporizadorReentradaEscalada > 0f)
@@ -136,6 +147,16 @@ public class PlayerController : MonoBehaviour
         inputCorrer = Input.GetKey(KeyCode.LeftShift);
         inputSalto = Input.GetButtonDown("Jump");
         inputEscalar = Input.GetKey(KeyCode.E);
+
+        // Bloquear TODO movimiento del player mientras el gancho impulse
+        if (EstaGanchoActivo())
+        {
+            inputH = 0f;
+            inputV = 0f;
+            inputCorrer = false;
+            inputSalto = false;   // desactivar salto
+            inputEscalar = false; // desactivar escalada
+        }
     }
 
     public bool EstaEnSuelo()
@@ -151,6 +172,15 @@ public class PlayerController : MonoBehaviour
 
     public void CambiarEstado(IState nuevoEstado)
     {
+        // Bloquear cambios de estado durante impulso, EXCEPTO a HookImpulseState
+        if (EstaGanchoActivo() && !(nuevoEstado is HookImpulseState))
+        {
+            Debug.Log($"[PLAYER] Cambio de estado bloqueado: {nuevoEstado.GetType().Name} durante impulso");
+            return;
+        }
+        
+        Debug.Log($"[PLAYER] Cambiando de {GetNombreEstadoActual()} a {nuevoEstado.GetType().Name}");
+
         if (estadoActual != null)
             estadoActual.Exit(this);
 
@@ -158,6 +188,13 @@ public class PlayerController : MonoBehaviour
 
         if (estadoActual != null)
             estadoActual.Enter(this);
+    }
+
+    // Método público para que HookSystem cambie al estado del gancho
+    public void EntrarEnEstadoGancho()
+    {
+        Debug.Log("[PLAYER] Forzando cambio a HookImpulseState");
+        CambiarEstado(new HookImpulseState());
     }
 
     // MÉTODOS PARA ESCALADA
@@ -206,6 +243,29 @@ public class PlayerController : MonoBehaviour
     public string GetNombreEstadoActual()
     {
         return estadoActual?.GetType().Name ?? "Null";
+    }
+
+    // Método para verificar si el gancho está impulsando al player
+    // Método para verificar si el gancho está impulsando al player
+    public bool EstaGanchoActivo()
+    {
+        if (hookSystem == null) return false;
+        
+        // Verificar múltiples condiciones
+        bool hookSystemActive = hookSystem.IsHooking;
+        bool isImpulsing = hookSystem.HookMovement != null && hookSystem.HookMovement.IsImpulsing;
+        bool hasHookPoint = hookSystem.CurrentHookPoint != null;
+        
+        // Está activo si el sistema de gancho está en cualquier estado excepto Idle
+        // Y específicamente si está impulsando
+        bool activo = (hookSystemActive && (hookSystem.IsThrown || hookSystem.IsAttached)) || isImpulsing;
+        
+        if (activo)
+        {
+            Debug.Log($"[PLAYER] EstaGanchoActivo = true (HookSystem: {hookSystemActive}, Impulsing: {isImpulsing})");
+        }
+        
+        return activo;
     }
 
     // Para debug visual

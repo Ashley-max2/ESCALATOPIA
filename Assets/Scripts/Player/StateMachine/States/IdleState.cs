@@ -16,7 +16,14 @@ public class IdleState : IState
             return;
         }
 
-        // Verificar movimiento
+        // Si no está en el suelo, pasar a JumpState (está cayendo)
+        if (!p.EstaEnSuelo())
+        {
+            p.CambiarEstado(new JumpState());
+            return;
+        }
+
+        // Verificar movimiento (solo si está en el suelo)
         if (Mathf.Abs(p.inputH) > 0.1f || Mathf.Abs(p.inputV) > 0.1f)
         {
             p.CambiarEstado(new MovementState());
@@ -24,7 +31,7 @@ public class IdleState : IState
         }
 
         // Verificar salto
-        if (p.inputSalto && p.EstaEnSuelo())
+        if (p.inputSalto)
         {
             p.CambiarEstado(new JumpState());
             return;
