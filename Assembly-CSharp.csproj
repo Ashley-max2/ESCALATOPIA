@@ -17,7 +17,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{B87977AE-FC10-26C3-FCFF-54A8B2639543}</ProjectGuid>
+    <ProjectGuid>{1D04FB1D-99C3-8266-DD08-1EFFACBAABCC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -64,12 +64,16 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Bosses\Boss1Novice.cs" />
+    <Compile Include="Assets\Scripts\Bosses\GOAPPlanner.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerFallDetector.cs" />
+    <Compile Include="Assets\Scripts\Bosses\BossAIBase.cs" />
     <Compile Include="Assets\Scripts\Camaras\CamaraManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\WallJumpState.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Boss3Learner.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\MovementState.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookMovementController.cs" />
-    <Compile Include="Assets\Scripts\Menus\PauseMenu\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Bosses\GOAPAction.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookPoint.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookTargetFinder.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookVisualController.cs" />
@@ -79,17 +83,23 @@
     <Compile Include="Assets\Scripts\Player\ResistenceController.cs" />
     <Compile Include="Assets\Scripts\Camaras\TerceraPersona.cs" />
     <Compile Include="Assets\Scripts\Camaras\PrimeraPersona.cs" />
-    <Compile Include="Assets\Scripts\Menus\PauseMenu\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\Bosses\ClimbingPathfinder.cs" />
+    <Compile Include="Assets\Scripts\PauseMenu\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Boss2Tactical.cs" />
     <Compile Include="Assets\Scripts\Gancho\MiraGancho.cs" />
+    <Compile Include="Assets\Scripts\Bosses\BossDebugger.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookInputController.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Bosses\BossRaceManager.cs" />
     <Compile Include="Assets\Scripts\Gancho\IHookable.cs" />
     <Compile Include="Assets\Scripts\Menus\MainMenu\MainMenu.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\IState.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\HookImpulseState.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Boss4Professional.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\ClimbingState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerRespawn.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Boss4SequenceGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\JumpState.cs" />
   </ItemGroup>
   <ItemGroup>
