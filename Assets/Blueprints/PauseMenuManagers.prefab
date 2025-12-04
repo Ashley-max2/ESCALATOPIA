@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ab617d165ccc5b40a0df2f19973607a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMenu: {fileID: 0}
   musicSource: {fileID: 2708426125259471606}
   sfxSource: {fileID: 8874886599858713834}
   musicSlider: {fileID: 0}
@@ -94,7 +95,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9ad5590c4222b2043bdeae37a8e6f996, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 31e911ab332e6a944ae17bdf0caf99df, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -205,7 +206,7 @@ Transform:
   m_GameObject: {fileID: 3700776495556297168}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 566.4498, y: 239.63954, z: 3.0477488}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -257,7 +258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1e629a956b9f344391902d12f0e3f1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuDePausa: {fileID: 0}
   pauseMenuUI: {fileID: 0}
+  songMenuUI: {fileID: 0}
+  screenMenuUI: {fileID: 0}
 --- !u!1 &6796730731711532174
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +304,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ab10bfebe8fd7284eaa392de25af4a77, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 6d78df56f122d104daf51173fa4fd3e2, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
