@@ -5,10 +5,14 @@ public class HookImpulseState : IState
     private ThirdPersonCameraController thirdPersonCam;
     private FirstPersonCameraController firstPersonCam;
     private CameraManager cameraManager;
+    private Quaternion rotacionInicial;
     
     public void Enter(PlayerController player)
     {
         Debug.Log("Entrando en HookImpulseState - Bloqueando todos los movimientos");
+        
+        // Guardar rotación inicial para mantenerla durante el impulso
+        rotacionInicial = player.transform.rotation;
         
         // Buscar los controladores de cámara
         cameraManager = Object.FindObjectOfType<CameraManager>();
@@ -29,23 +33,26 @@ public class HookImpulseState : IState
             }
         }
         
-        // Congelar rotación del Rigidbody durante el impulso para evitar que el personaje se voltee
+        // NO congelar rotación para evitar que se caiga
+        // En su lugar, mantendremos la rotación manualmente
         if (player.rb != null)
         {
-            player.rb.freezeRotation = true;
             player.rb.angularVelocity = Vector3.zero;
         }
     }
 
     public void Update(PlayerController player)
     {
+        // Mantener la rotación del jugador durante el impulso
+        if (player != null && player.EstaGanchoActivo())
+        {
+            player.transform.rotation = rotacionInicial;
+        }
+        
         // Verificar si el gancho ya no está impulsando
         if (!player.EstaGanchoActivo())
         {
             Debug.Log("Gancho terminó de impulsar - Saliendo de HookImpulseState");
-            
-            // IMPORTANTE: Asegurar que las cámaras se reactiven antes de cambiar de estado
-            ReactivarCamaras();
             
             // Transicionar según la situación
             if (player.PuedeIniciarEscalada())
@@ -66,38 +73,30 @@ public class HookImpulseState : IState
         }
         
         // Durante el impulso, NO hacer nada más
-        // La rotación está congelada en el Rigidbody y los inputs bloqueados en PlayerController.LeerInputs()
+        // Los inputs ya están bloqueados en PlayerController.LeerInputs()
     }
 
     public void Exit(PlayerController player)
     {
         Debug.Log("Saliendo de HookImpulseState");
         
-        // Asegurar que las cámaras estén reactivadas
-        ReactivarCamaras();
-        
-        // Restaurar rotación normal y limpiar velocidad angular
-        if (player.rb != null)
-        {
-            player.rb.freezeRotation = false;
-            player.rb.angularVelocity = Vector3.zero;
-        }
-    }
-    
-    private void ReactivarCamaras()
-    {
+        // Reactivar los controladores de cámara
         if (cameraManager != null)
         {
-            if (thirdPersonCam != null && !thirdPersonCam.enabled)
+            if (thirdPersonCam != null)
             {
                 thirdPersonCam.enabled = true;
-                Debug.Log("Cámara tercera persona reactivada");
             }
-            if (firstPersonCam != null && !firstPersonCam.enabled)
+            if (firstPersonCam != null)
             {
                 firstPersonCam.enabled = true;
-                Debug.Log("Cámara primera persona reactivada");
             }
+        }
+        
+        // Restaurar velocidad angular normal
+        if (player.rb != null)
+        {
+            player.rb.angularVelocity = Vector3.zero;
         }
     }
 }
