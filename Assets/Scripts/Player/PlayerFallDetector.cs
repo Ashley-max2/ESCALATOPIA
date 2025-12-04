@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class PlayerFallDetector : MonoBehaviour
@@ -11,11 +12,17 @@ public class PlayerFallDetector : MonoBehaviour
     private float maxY;
     private PlayerRespawn respawnSystem;
 
+    [Header("UI")]
+    public GameObject deadMenu;
+
     void Start()
     {
         startY = transform.position.y;
         maxY = startY;
         respawnSystem = GetComponent<PlayerRespawn>();
+
+        if (deadMenu != null)
+            deadMenu.SetActive(false);
     }
 
     void Update()
@@ -25,6 +32,9 @@ public class PlayerFallDetector : MonoBehaviour
         {
             maxY = transform.position.y;
         }
+
+        if (playerLive == true)
+            deadMenu.SetActive(false);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -37,10 +47,8 @@ public class PlayerFallDetector : MonoBehaviour
             playerLive = false;
             Debug.Log("El jugador ha caído más de " + maxFall + " metros desde su altura máxima, muerte.");
 
-            if (respawnSystem != null)
-            {
-                respawnSystem.Respawn();
-            }
+            if (deadMenu != null)
+                deadMenu.SetActive(true);
         }
         else
         {
