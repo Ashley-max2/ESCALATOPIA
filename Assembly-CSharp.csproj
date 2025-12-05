@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{41FFCC61-0922-17CA-7202-2ED6A64D03B5}</ProjectGuid>
+    <ProjectGuid>{B87977AE-FC10-26C3-FCFF-54A8B2639543}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\PauseMenu\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\IState.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerJump.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\ClimbingState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerRespawn.cs" />
@@ -1053,6 +1054,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="FMODUnity.csproj">
+      <Project>{059400F5-B1F8-129B-ECE6-D49134123781}</Project>
+      <Name>FMODUnity</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnityResonanceEditor.csproj">
+      <Project>{A2F849E7-B01E-72B1-E715-A87A2828B9AE}</Project>
+      <Name>FMODUnityResonanceEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnityResonance.csproj">
+      <Project>{F71879ED-06D7-6BDB-9D94-5EEACCDA1B36}</Project>
+      <Name>FMODUnityResonance</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnityEditor.csproj">
+      <Project>{1FFD1DE2-8B53-3612-E1C1-B6F5EF8DAD84}</Project>
+      <Name>FMODUnityEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
