@@ -4,6 +4,8 @@ using TMPro;
 
 public class AudioManager : MonoBehaviour
 {
+    public MainMenu mainMenu;
+
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
@@ -84,6 +86,8 @@ public class AudioManager : MonoBehaviour
         ApplyResolutionByIndex(index);
         PlayerPrefs.SetInt("Resolution", index);
         PlayerPrefs.Save(); // Guardar todos los cambios actuales juntos
+
+        mainMenu.SFX_Button_UI();
     }
 
     private void ApplyResolutionByIndex(int index)
@@ -115,6 +119,8 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat("MusicVol", 0.5f);
         PlayerPrefs.SetFloat("SFXVol", 0.5f);
         PlayerPrefs.Save();
+
+        mainMenu.SFX_Button_UI();
     }
 
     public void OnFullscreenToggleChanged(bool isFullscreen)
@@ -123,5 +129,12 @@ public class AudioManager : MonoBehaviour
         Screen.fullScreen = isFullscreen;
         PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
         PlayerPrefs.Save(); // Guarda solo al cambiar modo pantalla
+
+        mainMenu.SFX_Button_UI();
+    }
+
+    private void Update()
+    {
+        Debug.Log(sfxSource.volume);
     }
 }

@@ -36,14 +36,24 @@ public class MovementState : IState
 
     private void MoverJugador(PlayerController p)
     {
+        // Solo mover en el suelo
+        if (!p.EstaEnSuelo())
+        {
+            return;
+        }
+
         Vector3 direccion = (p.cam.right * p.inputH + p.cam.forward * p.inputV).normalized;
         direccion.y = 0;
 
         float velocidad = p.inputCorrer ? p.velocidadCorrer : p.velocidadCaminar;
-        Vector3 movimiento = direccion * velocidad;
+        Vector3 movimientoObjetivo = direccion * velocidad;
 
-        // Aplicar movimiento
-        p.rb.velocity = new Vector3(movimiento.x, p.rb.velocity.y, movimiento.z);
+        // Usar velocidad directa solo en XZ, mantener Y de la física
+        Vector3 velocidadActual = new Vector3(p.rb.velocity.x, 0, p.rb.velocity.z);
+        Vector3 cambioVelocidad = movimientoObjetivo - velocidadActual;
+        
+        // Aplicar cambio de velocidad suavemente
+        p.rb.AddForce(cambioVelocidad * 10f, ForceMode.Acceleration);
 
         // Rotación suave
         if (direccion != Vector3.zero)

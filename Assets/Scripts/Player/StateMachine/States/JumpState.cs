@@ -31,6 +31,15 @@ public class JumpState : IState
     {
         if (saltoAplicado) return;
 
+        // Si ya está en el aire (velocidad Y significativa), NO aplicar salto
+        // Esto previene saltos dobles cuando viene del gancho
+        if (Mathf.Abs(p.rb.velocity.y) > 0.5f)
+        {
+            saltoAplicado = true;
+            Debug.Log("JumpState: Ya en el aire, salto no aplicado");
+            return;
+        }
+
         // Resetear velocidad Y para salto consistente
         Vector3 velocity = p.rb.velocity;
         velocity.y = 0;
@@ -45,20 +54,20 @@ public class JumpState : IState
 
     void TransicionarAlSuelo(PlayerController p)
     {
-        // Peque�a tolerancia para detectar suelo estable
-        if (Mathf.Abs(p.rb.velocity.y) < 2f)
+        // SOLO transicionar si realmente está en el suelo
+        if (!p.EstaEnSuelo())
         {
-            if (Mathf.Abs(p.inputH) > 0.1f || Mathf.Abs(p.inputV) > 0.1f)
-                p.CambiarEstado(new MovementState());
-            else
-                p.CambiarEstado(new IdleState());
+            return;
         }
 
-        // Para cambiar al estado escalada y seguir escalando
-        if (p.PuedeIniciarEscalada())
+        // Ya está en el suelo, cambiar estado según input
+        if (Mathf.Abs(p.inputH) > 0.1f || Mathf.Abs(p.inputV) > 0.1f)
         {
-            p.CambiarEstado(new ClimbingState());
-            return;
+            p.CambiarEstado(new MovementState());
+        }
+        else
+        {
+            p.CambiarEstado(new IdleState());
         }
     }
 

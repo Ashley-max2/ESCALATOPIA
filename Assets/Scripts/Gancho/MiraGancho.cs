@@ -9,7 +9,7 @@ public class HookReticle : MonoBehaviour
     public Color validTargetColor = Color.green;
     public Color aimingColor = Color.yellow;
 
-    [Header("Configuraci�n")]
+    [Header("Configuración")]
     public float animationScale = 1.2f;
     public float animationSpeed = 2f;
 
@@ -52,55 +52,44 @@ public class HookReticle : MonoBehaviour
 
     void UpdateReticleState()
     {
-        if (hookSystem == null) return;
+        if (hookSystem == null || reticleImage == null) return;
 
-        if (hookSystem.IsHooking)
+        // SOLO parpadea cuando el raycast está sobre un HookPoint válido
+        if (hookSystem.TargetFinder != null && hookSystem.TargetFinder.HasValidTarget)
         {
-            ShowAiming();
+            ShowValidTarget(); // verde + parpadeo
+            return;
         }
-        else if (hookSystem.TargetFinder.HasValidTarget)
-        {
-            ShowValidTarget();
-        }
-        else
-        {
-            HideReticle();
-        }
+
+        // Si quieres mostrar amarillo fijo cuando estás en aiming pero sin target, descomenta:
+        // if (hookSystem.IsAiming) { ShowAimingNoBlink(); return; }
+
+        // En cualquier otro caso: blanco sin parpadeo
+        HideReticle();
     }
 
     public void ShowValidTarget()
     {
-        if (reticleImage != null)
-        {
-            reticleImage.color = validTargetColor;
-            AnimateReticle();
-        }
+        reticleImage.color = validTargetColor;
+        AnimateReticle();
     }
 
-    public void ShowAiming()
+    // Opción: mostrar amarillo sin parpadeo cuando apuntas pero no hay target
+    public void ShowAimingNoBlink()
     {
-        if (reticleImage != null)
-        {
-            reticleImage.color = aimingColor;
-            AnimateReticle();
-        }
+        reticleImage.color = aimingColor;
+        reticleImage.transform.localScale = originalScale;
     }
 
     public void HideReticle()
     {
-        if (reticleImage != null)
-        {
-            reticleImage.color = normalColor;
-            reticleImage.transform.localScale = originalScale;
-        }
+        reticleImage.color = normalColor;
+        reticleImage.transform.localScale = originalScale;
     }
 
     private void AnimateReticle()
     {
-        if (reticleImage != null)
-        {
-            float scale = originalScale.x + Mathf.PingPong(Time.time * animationSpeed, animationScale - 1f);
-            reticleImage.transform.localScale = new Vector3(scale, scale, scale);
-        }
+        float scale = originalScale.x + Mathf.PingPong(Time.time * animationSpeed, animationScale - 1f);
+        reticleImage.transform.localScale = new Vector3(scale, scale, scale);
     }
 }
