@@ -604,7 +604,6 @@ Transform:
   - {fileID: 836658715}
   - {fileID: 1215065478}
   - {fileID: 116153462}
-  - {fileID: 1565344173}
   m_Father: {fileID: 2016897591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &104014500 stripped
@@ -919,6 +918,7 @@ MonoBehaviour:
   playerLive: 1
   startY: 0
   maxFall: 10
+  deadMenu: {fileID: 0}
 --- !u!114 &275878892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1355,7 +1355,7 @@ MonoBehaviour:
   countdownText: {fileID: 42961114}
   raceStatusText: {fileID: 650884301}
   playerProgressText: {fileID: 650884301}
-  bossProgressText: {fileID: 1518809082}
+  bossProgressText: {fileID: 0}
   raceResultsPanel: {fileID: 0}
   resultsText: {fileID: 1065331490}
   checkpointRadius: 3
@@ -3440,7 +3440,6 @@ RectTransform:
   - {fileID: 42961113}
   - {fileID: 1089146191}
   - {fileID: 650884300}
-  - {fileID: 1518809081}
   - {fileID: 1065331489}
   m_Father: {fileID: 1628741535}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4205,6 +4204,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1403536432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1403536433}
+  - component: {fileID: 1403536434}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1403536433
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403536432}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 588.7079, y: 237.4399, z: 3.0415819}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1403536434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1403536432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2be2e3a661bc6d44ca94aec80a0dc88b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 275878880}
+  maxFall: 10
 --- !u!1001 &1433438730
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5473,7 +5518,6 @@ Transform:
   - {fileID: 656950970}
   - {fileID: 700832977}
   - {fileID: 757833445}
-  - {fileID: 1562800838}
   m_Father: {fileID: 945537960}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1883712019
@@ -6330,3 +6374,7 @@ SceneRoots:
   - {fileID: 1798059055}
   - {fileID: 1836948147}
   - {fileID: 1536773758}
+  - {fileID: 432637618}
+  - {fileID: 678140784}
+  - {fileID: 945537960}
+  - {fileID: 1403536433}

@@ -569,55 +569,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &720267014
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 720267016}
-  - component: {fileID: 720267015}
-  m_Layer: 0
-  m_Name: MainMenuManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &720267015
+--- !u!114 &720267015 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3263037881022254087, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+  m_PrefabInstance: {fileID: 4978174092993987702}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720267014}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6613f2e23d3f01f4e8b0c79ab4f3ff9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainMenuPanel: {fileID: 290605856}
-  ConfigPanel: {fileID: 5126903129018537777}
-  SongPanel: {fileID: 6720149582502220410}
-  ScreenPanel: {fileID: 9186148851535136909}
-  SFX_TouchButton: {fileID: 1157357920803924736}
---- !u!4 &720267016
+--- !u!4 &720267016 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+  m_PrefabInstance: {fileID: 4978174092993987702}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720267014}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -51.864075, y: 34.594406, z: -16.074743}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7185290713143854712}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -4680,6 +4647,83 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1001 &4978174092993987702
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7185290713143854712}
+    m_Modifications:
+    - target: {fileID: 3263037881022254087, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: SongPanel
+      value: 
+      objectReference: {fileID: 6720149582502220410}
+    - target: {fileID: 3263037881022254087, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: ConfigPanel
+      value: 
+      objectReference: {fileID: 5126903129018537777}
+    - target: {fileID: 3263037881022254087, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: ScreenPanel
+      value: 
+      objectReference: {fileID: 9186148851535136909}
+    - target: {fileID: 3263037881022254087, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: MainMenuPanel
+      value: 
+      objectReference: {fileID: 290605856}
+    - target: {fileID: 3263037881022254087, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: SFX_TouchButton
+      value: 
+      objectReference: {fileID: 1157357920803924736}
+    - target: {fileID: 6390003210859838520, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_Name
+      value: MainMenuManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -51.864075
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 34.594406
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -16.074743
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9057717845949122448, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 75e2e361dbd54e7469b7d20f0c2bd2b0, type: 3}
 --- !u!224 &4979611858160888353
 RectTransform:
   m_ObjectHideFlags: 0

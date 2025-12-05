@@ -87,7 +87,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("Resolution", index);
         PlayerPrefs.Save(); // Guardar todos los cambios actuales juntos
 
-        mainMenu.SFX_Button_UI();
+        sfxSource.PlayOneShot(sfxSource.clip);
     }
 
     private void ApplyResolutionByIndex(int index)
@@ -120,7 +120,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetFloat("SFXVol", 0.5f);
         PlayerPrefs.Save();
 
-        mainMenu.SFX_Button_UI();
+        sfxSource.PlayOneShot(sfxSource.clip);
     }
 
     public void OnFullscreenToggleChanged(bool isFullscreen)
@@ -130,7 +130,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
         PlayerPrefs.Save(); // Guarda solo al cambiar modo pantalla
 
-        mainMenu.SFX_Button_UI();
+        sfxSource.PlayOneShot(sfxSource.clip);
     }
 
     private void Update()

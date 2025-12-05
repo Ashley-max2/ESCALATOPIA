@@ -31,20 +31,19 @@ public class PlayerRespawn : MonoBehaviour
         // Movemos al jugador al último respawn
         transform.position = lastRespawnPoint.position;
 
-        // Revivimos al jugador
-        GetComponent<PlayerFallDetector>().playerLive = true;
-
-        // Reiniciamos la altura inicial
-        GetComponent<PlayerFallDetector>().ResetStartY();
+        // Opcional: restablecer lógica de caída/muerte desde DeadManager si lo tienes
+        DeadManager dm = GetComponent<DeadManager>();
+        if (dm != null)
+        {
+            dm.RespawnPlayer(); // Esto reinicia playerAlive y maxY
+        }
 
         Debug.Log("Jugador reapareció en: " + lastRespawnPoint.name);
-
-        //Efecto de sonido al respawnear
 
         if (audioSource != null && respawnSound != null)
         {
             audioSource.PlayOneShot(respawnSound);
         }
-
     }
+
 }
