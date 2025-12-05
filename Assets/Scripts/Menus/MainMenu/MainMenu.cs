@@ -23,7 +23,7 @@ public class MainMenu : MonoBehaviour
     {
         SFX_TouchButton.Play();
 
-        Debug.Log("Subtitulos: Sonido de botón presionado" + SFX_TouchButton.volume);
+        Debug.Log("Subtitulos: Sonido de botï¿½n presionado" + SFX_TouchButton.volume);
     }
 
     public void ChangeScene(string newScene)
@@ -37,7 +37,9 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Saliste");
         
         Application.Quit();
+        #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+        #endif
 
         SFX_Button_UI();
     }
