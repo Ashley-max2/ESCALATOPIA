@@ -78,6 +78,17 @@ public class FirstPersonCameraController : MonoBehaviour
         transform.rotation = Quaternion.Euler(rotacionY, rotacionX, 0f);
     }
 
+    // Método para aplicar input de gamepad
+    public void RotateByInput(Vector2 lookInput)
+    {
+        rotacionX += lookInput.x;
+        rotacionY -= lookInput.y;
+        rotacionY = Mathf.Clamp(rotacionY, -limiteVertical, limiteVertical);
+
+        // Aplicar rotación
+        transform.rotation = Quaternion.Euler(rotacionY, rotacionX, 0f);
+    }
+
     // Método para sincronizar con la cámara de tercera persona
     public void SincronizarConTerceraPersona(ThirdPersonCameraController thirdPerson)
     {

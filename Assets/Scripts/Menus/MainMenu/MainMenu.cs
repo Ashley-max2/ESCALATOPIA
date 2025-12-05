@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject SongPanel;
     [SerializeField] GameObject ScreenPanel;
 
+    [SerializeField] GameObject GamepadPanel;
+
     public AudioSource SFX_TouchButton;
 
     GameObject panelAbierto;
@@ -23,7 +25,7 @@ public class MainMenu : MonoBehaviour
     {
         SFX_TouchButton.Play();
 
-        Debug.Log("Subtitulos: Sonido de botón presionado" + SFX_TouchButton.volume);
+        Debug.Log("Subtitulos: Sonido de botï¿½n presionado" + SFX_TouchButton.volume);
     }
 
     public void ChangeScene(string newScene)
@@ -52,6 +54,8 @@ public class MainMenu : MonoBehaviour
             panelAbierto = SongPanel;
         if (ScreenPanel.activeSelf)
             panelAbierto = ScreenPanel;
+        if (GamepadPanel.activeSelf)
+            panelAbierto = GamepadPanel;
     }
 
     public void MenuReturn()
@@ -78,6 +82,14 @@ public class MainMenu : MonoBehaviour
     {
         panelAbierto.SetActive(false);
         SongPanel.SetActive(true);
+
+        SFX_Button_UI();
+    }
+
+    public void OpenGamepadMenu()
+    {
+        panelAbierto.SetActive(false);
+        GamepadPanel.SetActive(true);
 
         SFX_Button_UI();
     }

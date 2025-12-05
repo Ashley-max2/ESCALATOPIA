@@ -201,6 +201,14 @@ public class ThirdPersonCameraController : MonoBehaviour
 
     #endregion
 
+    // Método para aplicar input de gamepad
+    public void RotateByInput(Vector2 lookInput)
+    {
+        rotacionX += lookInput.x;
+        rotacionY -= lookInput.y;
+        rotacionY = Mathf.Clamp(rotacionY, -80f, 80f);
+    }
+
     // Método para sincronizar con la cámara de primera persona
     public void SincronizarConPrimeraPersona(FirstPersonCameraController firstPerson)
     {

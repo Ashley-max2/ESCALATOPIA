@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject menuDePausa;   // PADRE de todos los menús
-    public GameObject pauseMenuUI;   // Menú base
-    public GameObject songMenuUI;    // Menú sonido
-    public GameObject screenMenuUI;  // Menú pantalla
+    public GameObject menuDePausa;   // PADRE de todos los menï¿½s
+    public GameObject pauseMenuUI;   // Menï¿½ base
+    public GameObject songMenuUI;    // Menï¿½ sonido
+    public GameObject screenMenuUI;  // Menï¿½ pantalla
 
     private bool isPaused = false;
 
@@ -23,7 +23,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         songMenuUI.SetActive(false);
         screenMenuUI.SetActive(false);
-        menuDePausa.SetActive(false);  // Cerrar menú padre
+        menuDePausa.SetActive(false);  // Cerrar menï¿½ padre
 
         Time.timeScale = 1f;
         isPaused = false;
@@ -31,10 +31,10 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
-        // Activar menú padre
+        // Activar menï¿½ padre
         menuDePausa.SetActive(true);
 
-        // Abrir menú base
+        // Abrir menï¿½ base
         pauseMenuUI.SetActive(true);
         songMenuUI.SetActive(false);
         screenMenuUI.SetActive(false);
@@ -49,6 +49,12 @@ public class PauseMenu : MonoBehaviour
             Resume();
         else
             Pause();
+    }
+
+    // MÃ©todo pÃºblico para el gamepad
+    public void TogglePauseMenu()
+    {
+        Menu();
     }
 
     public void OpenSongMenu()

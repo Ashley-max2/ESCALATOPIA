@@ -96,18 +96,26 @@ public class CameraManager : MonoBehaviour
             }
         }
     }
-    private void CambiarAPrimeraPersona()
+    public void CambiarAPrimeraPersona()
     {
         if (enPrimeraPersona) return;
 
         StartCoroutine(CambiarCamaraConFade(true));
     }
 
-    private void CambiarATerceraPersona()
+    public void CambiarATerceraPersona()
     {
         if (!enPrimeraPersona) return;
 
         StartCoroutine(CambiarCamaraConFade(false));
+    }
+
+    public void AlternarCamara()
+    {
+        if (enPrimeraPersona)
+            CambiarATerceraPersona();
+        else
+            CambiarAPrimeraPersona();
     }
 
     private IEnumerator CambiarCamaraConFade(bool aPrimeraPersona)
