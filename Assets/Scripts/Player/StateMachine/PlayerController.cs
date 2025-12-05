@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     public float fuerzaWallJumpLateral = 8f;
     public float tiempoBloqueoWallJump = 0.15f;
 
+    [Header("Sonido salto")]
+    public AudioClip sonidoSalto;
+    private AudioSource audioSource;
+
     [HideInInspector] public float inputH;
     [HideInInspector] public float inputV;
     [HideInInspector] public bool inputCorrer;
@@ -57,6 +61,13 @@ public class PlayerController : MonoBehaviour
             gc.transform.parent = transform;
             gc.transform.localPosition = new Vector3(0, -0.9f, 0);
             puntoCheckSuelo = gc.transform;
+        }
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
         }
 
         // Crear y configurar trigger de escalada

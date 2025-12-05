@@ -14,10 +14,6 @@ public class PlayerJump : MonoBehaviour
     // Componentes
     private Rigidbody rb;
 
-    [Header("Sonido")]
-    public AudioClip sonidoSalto; // Clip asignado desde el Inspector
-    private AudioSource audioSource;
-
     // Estado
     private bool estaEnSuelo;
     private bool inputSalto;
@@ -114,10 +110,7 @@ public class PlayerJump : MonoBehaviour
         rb.AddForce(Vector3.up * fuerzaSalto, ForceMode.VelocityChange);
 
         // 🎵 Reproducir sonido de salto
-        if (audioSource != null && sonidoSalto != null)
-        {
-            audioSource.PlayOneShot(sonidoSalto);
-        }
+        
 
         Debug.Log("¡SALTANDO! Fuerza: " + fuerzaSalto);
 

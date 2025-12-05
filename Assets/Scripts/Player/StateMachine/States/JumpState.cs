@@ -11,6 +11,11 @@ public class JumpState : IState
         tiempoEnAire = 0f;
         AplicarSalto(p);
         Debug.Log("Entrando en JumpState");
+
+        if (audioSource != null && sonidoSalto != null)
+        {
+            audioSource.PlayOneShot(sonidoSalto);
+        }
     }
 
     public void Exit(PlayerController p)
