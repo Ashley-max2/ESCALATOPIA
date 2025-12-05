@@ -590,12 +590,12 @@ GameObject:
   m_Component:
   - component: {fileID: 103354797}
   m_Layer: 0
-  m_Name: ClimbPoints
+  m_Name: ClimbPoints (Inutiles)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &103354797
 Transform:
   m_ObjectHideFlags: 0
@@ -671,7 +671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &200684446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,8 +865,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fab17a922cea1b843a592fd1cb5328fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxClimbDistance: 2
-  pointSpacing: 1.5
+  maxClimbDistance: 2.5
+  pointSpacing: 3
   debugMode: 1
   agarreLayer:
     serializedVersion: 2
@@ -991,7 +991,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &337931875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2137,7 +2137,7 @@ Transform:
   m_GameObject: {fileID: 861146624}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 50}
+  m_LocalPosition: {x: 0, y: 2.11, z: 46.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2194,7 +2194,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &870157845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2903,8 +2903,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raceStartPoint: {fileID: 861146625}
   raceGoalPoint: {fileID: 1192248687}
-  raceStartDelay: 3
-  autoStartRace: 0
+  raceStartDelay: 5
+  autoStartRace: 1
   activeBoss: {fileID: 1838830309}
   availableBosses:
   - {fileID: 1838830309}
