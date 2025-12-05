@@ -14,12 +14,14 @@ public class HookMovementController : MonoBehaviour
     private bool isTraveling;
     private HookSystem hookSystem;
     private Transform playerTransform;
+    private HookedFreeAnimController animController;
 
     void Start()
     {
         hookSystem = GetComponent<HookSystem>();
         playerTransform = hookSystem.playerTransform;
         playerRb = hookSystem.PlayerRigidbody;
+        animController = GetComponent<HookedFreeAnimController>();
     }
 
     public void LaunchHook()
@@ -28,6 +30,12 @@ public class HookMovementController : MonoBehaviour
         {
             hookTarget = hookSystem.TargetFinder.CurrentTarget.HookPoint;
             isTraveling = true;
+            
+            // Activar animación de gancho conectado
+            if (animController != null)
+            {
+                animController.OnHookConnected();
+            }
         }
     }
 
@@ -75,5 +83,11 @@ public class HookMovementController : MonoBehaviour
     {
         isTraveling = false;
         hookSystem.CurrentHookPoint = null;
+        
+        // Desactivar animación de gancho
+        if (animController != null)
+        {
+            animController.OnHookReleased();
+        }
     }
 }
