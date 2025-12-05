@@ -3,12 +3,14 @@ using UnityEngine;
 public class ClimbingState : IState
 {
     private ResistenceController resistenceController;
+    private ClimbingHangingAnimController animController;
     private float consumoResistencia = 8f;
     private Vector3 ultimaPosicionPared;
 
     public void Enter(PlayerController p)
     {
         resistenceController = p.GetComponent<ResistenceController>();
+        animController = p.GetComponent<ClimbingHangingAnimController>();
 
         // Verificar si tiene resistencia al entrar
         if (!resistenceController.TieneResistencia(1f))
@@ -22,12 +24,26 @@ public class ClimbingState : IState
         ultimaPosicionPared = p.transform.position;
 
         IniciarEscalada(p);
+        
+        // Activar animación de escalada
+        if (animController != null)
+        {
+            animController.StartClimbing();
+        }
+        
         Debug.Log("Entrando en ClimbingState - Resistencia: " + resistenceController.GetResistenciaActual());
     }
 
     public void Exit(PlayerController p)
     {
         PararEscalada(p);
+        
+        // Detener animación de escalada
+        if (animController != null)
+        {
+            animController.StopClimbing();
+        }
+        
         Debug.Log("Saliendo de ClimbingState - Resistencia restante: " + resistenceController.GetResistenciaActual());
     }
 
@@ -87,6 +103,13 @@ public class ClimbingState : IState
 
         // Aplicar movimiento combinado
         p.transform.Translate(movimiento + movHorizontal);
+
+        // Actualizar velocidad de escalada en el animator
+        if (animController != null)
+        {
+            float climbSpeed = inputVertical + (inputHorizontal * 0.5f);
+            animController.SetClimbingSpeed(climbSpeed);
+        }
 
         // Consumir resistencia proporcional al movimiento
         float consumo = consumoResistencia * Time.deltaTime *

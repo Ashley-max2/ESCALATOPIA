@@ -18,6 +18,7 @@ public class HookMovementController : MonoBehaviour
     private bool isTraveling;
     private HookSystem hookSystem;
     private Transform playerTransform;
+    private HookedFreeAnimController animController;
 
     // Impulso variables
     private bool isImpulsing = false;
@@ -32,6 +33,7 @@ public class HookMovementController : MonoBehaviour
         hookSystem = GetComponent<HookSystem>();
         playerTransform = hookSystem.playerTransform;
         playerRb = hookSystem.PlayerRigidbody;
+        animController = GetComponent<HookedFreeAnimController>();
     }
 
     public void LaunchHook()
