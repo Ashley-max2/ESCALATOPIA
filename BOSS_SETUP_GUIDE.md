@@ -317,7 +317,88 @@ UI References:
 
 ## 🧗 PUNTOS DE ESCALADA
 
-### Método 1: Puntos Manuales (Recomendado)
+### Sistema Automático Basado en Layers (RECOMENDADO)
+
+El sistema ahora detecta automáticamente las superficies escalables basándose en **Layers** y **Tags**. ¡No necesitas crear marcadores manuales!
+
+#### Paso 1: Configurar tus objetos de escena
+
+**Para puntos de gancho:**
+```
+1. Seleccionar objetos donde el boss puede usar el gancho
+2. Inspector → Layer → "agarre"
+```
+
+**Para paredes escalables:**
+```
+Opción A - Por Layer:
+1. Seleccionar paredes
+2. Inspector → Layer → "pared"
+
+Opción B - Por Tag:
+1. Seleccionar paredes
+2. Inspector → Tag → "escalable"
+```
+
+**Para superficies caminables:**
+```
+1. Seleccionar suelos/plataformas
+2. Inspector → Layer → "suelo"
+```
+
+#### Paso 2: Configurar el ClimbingPathfinder
+
+```
+1. Seleccionar ClimbingPathfinder en Hierarchy
+2. Configurar Layer Detection:
+   - Agarre Layer: marcar "agarre"
+   - Pared Layer: marcar "pared"
+   - Suelo Layer: marcar "suelo"
+3. Tag Detection:
+   - Escalable Tag: "escalable"
+```
+
+#### Paso 3: Inicializar
+
+```
+1. Play
+2. El sistema se inicializa automáticamente
+3. O usar Context Menu: ClimbingPathfinder → Initialize Climb Points
+```
+
+### Ventajas del Sistema Automático
+
+✅ **No requiere marcadores manuales** - Detecta automáticamente las superficies
+✅ **Adaptativo** - Se ajusta a cambios en el nivel
+✅ **Inteligente** - Distingue entre suelo, paredes y puntos de gancho
+✅ **Eficiente** - Genera solo los puntos necesarios
+✅ **Visual** - Debug mode muestra todos los puntos detectados
+
+### Comportamiento del Boss según Superficie
+
+El boss adaptará su movimiento automáticamente:
+
+```
+📍 Foothold (Layer "suelo"):
+   → Camina o corre
+   → Velocidad normal
+   → No consume tanta resistencia
+
+📍 Handhold (Tag "escalable" o Layer "pared"):
+   → Escala la superficie
+   → Velocidad reducida (70%)
+   → Consume resistencia media
+
+📍 HookPoint (Layer "agarre"):
+   → Usa el gancho para impulsarse
+   → Velocidad aumentada (150%)
+   → Consume resistencia alta
+   → Alcance extendido (2.5x)
+```
+
+### Método Manual (Opcional - Para control preciso)
+
+Si prefieres control total sobre cada punto:
 
 #### Paso 1: Crear GameObject para puntos
 ```
@@ -334,6 +415,7 @@ Para cada punto de agarre en la pared:
    - "Handhold_01" (agarre de mano)
    - "HookPoint_01" (punto de gancho)
    - "LedgeRest_01" (repisa para descansar)
+   - "Foothold_01" (punto de suelo)
    - "Checkpoint_01" (checkpoint)
 
 3. Add Component → ClimbPointMarker
@@ -349,56 +431,22 @@ Para cada punto de agarre en la pared:
 - Colocar más puntos en áreas complejas
 - Colocar HookPoints en áreas con saltos grandes
 - Colocar LedgeRest en zonas de descanso estratégicas
+- Colocar Footholds en superficies planas
 ```
 
-#### Ejemplo de distribución:
+#### Ejemplo de distribución manual:
 ```
 Ruta de 30 metros de altura:
 
-Altura 0m:   Checkpoint_Start
-Altura 5m:   Handhold_01, Handhold_02
+Altura 0m:   Foothold_Start (suelo inicial)
+Altura 2m:   Handhold_01, Handhold_02 (inicio escalada)
+Altura 5m:   Handhold_03, Handhold_04
 Altura 10m:  LedgeRest_01 (descanso)
-Altura 15m:  HookPoint_01 (salto grande)
-Altura 20m:  Handhold_03, Handhold_04
-Altura 25m:  LedgeRest_02
-Altura 30m:  Checkpoint_Goal
-```
-
-### Método 2: Generación Automática
-
-```csharp
-// Script opcional para generar puntos automáticamente
-// Añadir a ClimbingPathfinder y llamar en Start() o desde botón custom
-
-public void GenerateClimbPointsAuto()
-{
-    // Buscar todas las paredes con tag "escalable"
-    GameObject[] walls = GameObject.FindGameObjectsWithTag("escalable");
-    
-    foreach (GameObject wall in walls)
-    {
-        Renderer renderer = wall.GetComponent<Renderer>();
-        if (renderer == null) continue;
-        
-        Bounds bounds = renderer.bounds;
-        
-        // Generar grid de puntos
-        for (float y = bounds.min.y; y < bounds.max.y; y += 2f)
-        {
-            for (float x = bounds.min.x; x < bounds.max.x; x += 1.5f)
-            {
-                Vector3 position = new Vector3(x, y, bounds.center.z);
-                
-                // Crear punto
-                GameObject point = new GameObject("AutoPoint");
-                point.transform.position = position;
-                ClimbPointMarker marker = point.AddComponent<ClimbPointMarker>();
-                marker.pointType = ClimbPointType.Handhold;
-                marker.difficulty = Random.Range(0.3f, 0.7f);
-            }
-        }
-    }
-}
+Altura 15m:  HookPoint_01 (salto grande con gancho)
+Altura 20m:  Handhold_05, Handhold_06
+Altura 25m:  LedgeRest_02 (descanso final)
+Altura 28m:  Handhold_07
+Altura 30m:  Foothold_Goal (suelo final)
 ```
 
 ---
@@ -414,29 +462,173 @@ Pathfinding Settings:
 - Max Climb Distance: 2 
   (distancia máxima entre puntos conectables)
   
-- Climbable Layer: Default
-  (o tu layer personalizada para paredes)
+- Point Spacing: 1.5
+  (espaciado entre puntos generados automáticamente)
   
 - Debug Mode: ☑
   (activar para ver conexiones en Scene view)
+
+Layer Detection:
+- Agarre Layer: (seleccionar layer de puntos de gancho)
+- Pared Layer: (seleccionar layer de paredes escalables)
+- Suelo Layer: (seleccionar layer de suelo/ground)
+
+Tag Detection:
+- Escalable Tag: "escalable"
+  (tag para objetos escalables)
+```
+
+### Sistema Automático de Detección
+
+**¡NUEVO!** El pathfinder ahora detecta automáticamente las superficies según layers y tags:
+
+#### Layer "agarre" → HookPoints (Puntos de Gancho)
+- El boss detecta automáticamente estos puntos para usar su gancho
+- Conexiones a mayor distancia (2.5x maxClimbDistance)
+- Color en Scene View: **Cyan**
+
+#### Tag "escalable" o Layer "pared" → Handholds (Puntos de Escalada)
+- El boss puede escalar estas superficies
+- Se generan automáticamente puntos en toda la superficie
+- Color en Scene View: **Verde**
+
+#### Layer "suelo" → Footholds (Puntos de Camino)
+- El boss puede caminar y correr sobre estas superficies
+- Conexiones a mayor distancia (3x maxClimbDistance)
+- Color en Scene View: **Azul**
+
+### Configuración de Layers en Unity
+
+**Paso 1: Crear las Layers necesarias**
+```
+Edit → Project Settings → Tags and Layers
+
+Layers:
+- User Layer 8: "agarre"
+- User Layer 9: "pared"
+- User Layer 10: "suelo"
+```
+
+**Paso 2: Asignar Layers a tus objetos**
+```
+Puntos de gancho:
+- Seleccionar objeto
+- Inspector → Layer → "agarre"
+
+Paredes escalables:
+- Seleccionar pared
+- Inspector → Layer → "pared"
+- O usar Tag: "escalable"
+
+Suelos/plataformas:
+- Seleccionar suelo
+- Inspector → Layer → "suelo"
+```
+
+**Paso 3: Configurar Layer Masks en ClimbingPathfinder**
+```
+Seleccionar ClimbingPathfinder:
+- Agarre Layer: marcar solo "agarre"
+- Pared Layer: marcar solo "pared"
+- Suelo Layer: marcar solo "suelo"
 ```
 
 ### Inicialización
-El pathfinder se inicializa automáticamente cuando comienza la carrera, pero puedes forzar la inicialización:
+El pathfinder se inicializa automáticamente cuando comienza la carrera. Para forzar la inicialización manualmente:
 
-```csharp
-// En el Inspector del ClimbingPathfinder, crear botón custom:
-[Button("Initialize Climb Points")]
-public void InitializeClimbPoints() { ... }
+```
+Método 1 - Context Menu:
+1. Seleccionar ClimbingPathfinder en Hierarchy
+2. Inspector → Botón derecho en el componente
+3. Click en "Initialize Climb Points"
+
+Método 2 - Código:
+ClimbingPathfinder pathfinder = GetComponent<ClimbingPathfinder>();
+pathfinder.InitializeClimbPoints();
 ```
 
 ### Visualización en Scene View
 Con Debug Mode activado verás:
-- **Esferas verdes**: Puntos de agarre (Handhold)
-- **Esferas cyan**: Puntos de gancho (HookPoint)
-- **Esferas amarillas**: Repisas (LedgeRest)
+- **Esferas azules**: Puntos de suelo (Foothold) - para caminar/correr
+- **Esferas verdes**: Puntos de agarre (Handhold) - para escalar
+- **Esferas cyan**: Puntos de gancho (HookPoint) - para usar gancho
+- **Esferas amarillas**: Repisas (LedgeRest) - para descansar
 - **Esferas magenta**: Checkpoints
-- **Líneas grises**: Conexiones entre puntos
+- **Líneas grises semi-transparentes**: Conexiones entre puntos
+
+### Tipos de Movimiento del Boss
+
+El boss detecta automáticamente qué tipo de acción realizar según el punto:
+
+```csharp
+// Foothold (suelo) → Caminar/Correr
+if (surfaceType == SurfaceType.Ground) {
+    // El boss camina o corre normalmente
+    // Velocidad: baseSpeed
+}
+
+// Handhold (pared) → Escalar
+if (surfaceType == SurfaceType.Climbable) {
+    // El boss escala la pared
+    // Velocidad: baseSpeed * 0.7
+}
+
+// HookPoint (agarre) → Usar Gancho
+if (surfaceType == SurfaceType.Hookable) {
+    // El boss usa el gancho para impulsarse
+    // Velocidad: baseSpeed * 1.5
+}
+```
+
+### Ajuste Fino de la Generación
+
+Si hay demasiados o muy pocos puntos:
+
+```
+Point Spacing (en ClimbingPathfinder):
+- Valor bajo (1.5): Más puntos, más precisión, más procesamiento
+- Valor medio (2.5-3.0): Balance recomendado ✓
+- Valor alto (4.0-5.0): Menos puntos, mejor rendimiento
+
+Max Climb Distance:
+- Aumentar si el boss "no encuentra caminos"
+- Reducir si el boss "toma atajos imposibles"
+```
+
+### ⚠️ IMPORTANTE: Prevenir Lag al Inicializar
+
+**ANTES de inicializar, configura:**
+```
+Point Spacing: 3.0 (para empezar)
+Max Climb Distance: 2.5
+```
+
+**El sistema tiene límites automáticos:**
+- Máximo 100 puntos por pared
+- Máximo 50 puntos por suelo
+- Advertencia si detecta >500 puntos totales
+
+**Si Unity se congela al inicializar:**
+1. Para Unity (Stop)
+2. Aumenta Point Spacing a 4.0 o 5.0
+3. Divide objetos grandes en partes más pequeñas
+4. Reinicia Unity y prueba de nuevo
+
+### Console Output (con Debug Mode)
+
+Cuando se inicializa correctamente verás:
+```
+=== Iniciando detección automática de puntos de escalada ===
+→ Detectados 5 puntos de gancho (HookPoints)
+→ Generados 127 puntos de escalada (Handholds)
+→ Generados 45 puntos de camino (Ground)
+→ Creadas 324 conexiones entre puntos
+✓ ClimbingPathfinder inicializado: 177 puntos detectados
+  • Handholds (escalada): 127
+  • HookPoints (gancho): 5
+  • LedgeRest (repisas): 0
+  • Footholds (suelo): 45
+```
 
 ---
 
@@ -600,11 +792,36 @@ Soluciones:
 ### Problema: Pathfinder no encuentra rutas
 ```
 Soluciones:
-1. Verificar que hay ClimbPointMarkers en la escena
-2. Ejecutar InitializeClimbPoints() manualmente
-3. Verificar Max Climb Distance (aumentar a 3-4)
-4. Activar Debug Mode y verificar conexiones
-5. Verificar que los puntos estén dentro del rango
+1. Verificar que las layers están configuradas correctamente:
+   - Edit → Project Settings → Tags and Layers
+   - Crear layers: "agarre", "pared", "suelo"
+   
+2. Verificar que los objetos tienen las layers asignadas:
+   - Puntos de gancho → Layer "agarre"
+   - Paredes → Layer "pared" o Tag "escalable"
+   - Suelos → Layer "suelo"
+   
+3. Verificar Layer Masks en ClimbingPathfinder:
+   - Agarre Layer debe estar marcado
+   - Pared Layer debe estar marcado
+   - Suelo Layer debe estar marcado
+   
+4. Ejecutar InitializeClimbPoints() manualmente:
+   - ClimbingPathfinder → Context Menu → Initialize Climb Points
+   
+5. Verificar Max Climb Distance (aumentar a 3-4)
+
+6. Verificar Point Spacing:
+   - Reducir si hay muy pocos puntos (1.0)
+   - Aumentar si hay demasiados puntos (2.5)
+   
+7. Activar Debug Mode y verificar en Scene View:
+   - Deben aparecer esferas de colores
+   - Deben haber líneas grises conectándolas
+   
+8. Console: verificar el log de inicialización:
+   - Debe mostrar puntos detectados
+   - Debe mostrar conexiones creadas
 ```
 
 ### Problema: Boss atraviesa paredes
