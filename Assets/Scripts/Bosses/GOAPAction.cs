@@ -10,7 +10,7 @@ public abstract class GOAPAction
     public float cost = 1f;
     public bool isInterruptible = true;
 
-    // Precondiciones y efectos
+    // Precondiciones y efectos (protected backing fields)
     protected Dictionary<string, object> preconditions = new Dictionary<string, object>();
     protected Dictionary<string, object> effects = new Dictionary<string, object>();
 
@@ -23,7 +23,31 @@ public abstract class GOAPAction
     public Dictionary<string, object> Effects => effects;
 
     /// <summary>
-    /// Verifica si la acción puede ejecutarse en el contexto actual
+    /// Verifica si la acción puede ejecutarse dado el estado del mundo
+    /// </summary>
+    public bool CheckPreconditions(Dictionary<string, bool> state)
+    {
+        foreach (KeyValuePair<string, object> pre in preconditions)
+        {
+            // Si el estado no contiene la clave, no se cumple
+            if (!state.ContainsKey(pre.Key)) 
+                return false;
+
+            // Verificar valor (asumiendo booleanos para simplificar integración)
+            bool stateVal = state[pre.Key];
+            bool preVal = false;
+             
+            if (pre.Value is bool)
+                preVal = (bool)pre.Value;
+            
+            if (stateVal != preVal)
+                return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Verifica si la acción puede ejecutarse en el contexto actual (chequeos de juego)
     /// </summary>
     public abstract bool CheckProceduralPrecondition(BossAIBase agent);
 

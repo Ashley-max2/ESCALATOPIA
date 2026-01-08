@@ -1,49 +1,71 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    private Transform lastRespawnPoint;
+    private Vector3 lastRespawnPosition;
+    private bool hasCheckpoint = false;
+    
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip respawnSound;
 
-    // Audios
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip respawnSound;
-
-    void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        // Si el jugador entra en un collider con tag "respawn"
+        // Default to starting position
+        lastRespawnPosition = transform.position;
+        hasCheckpoint = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
         if (other.CompareTag("respawn"))
         {
-            lastRespawnPoint = other.transform;
-            Debug.Log("Nuevo punto de respawn guardado: " + other.name);
+            SetCheckpoint(other.transform.position);
         }
+    }
+
+    public void SetCheckpoint(Vector3 position)
+    {
+        lastRespawnPosition = position;
+        hasCheckpoint = true;
+        Debug.Log($"Checkpoint actualizado a: {position}");
     }
 
     public void Respawn()
     {
-        if (lastRespawnPoint == null)
+        if (!hasCheckpoint) return;
+
+        // Reset positions
+        transform.position = lastRespawnPosition;
+        
+        // Reset Physics
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            Debug.LogWarning("No se ha tocado ningún respawn todavía.");
-            return;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
 
-        // Movemos al jugador al último respawn
-        transform.position = lastRespawnPoint.position;
-
-        // Opcional: restablecer lógica de caída/muerte desde DeadManager si lo tienes
+        // Notify DeadManager if exists (compatibility with legacy)
         DeadManager dm = GetComponent<DeadManager>();
         if (dm != null)
         {
-            dm.RespawnPlayer(); // Esto reinicia playerAlive y maxY
+            dm.RespawnPlayer();
         }
 
-        Debug.Log("Jugador reapareció en: " + lastRespawnPoint.name);
-
+        // Reset Hook if needed
+        HookSystem hs = GetComponentInChildren<HookSystem>();
+        if (hs != null)
+        {
+            hs.CancelHook();
+        }
+        
+        // Play Sound
         if (audioSource != null && respawnSound != null)
         {
             audioSource.PlayOneShot(respawnSound);
         }
-    }
 
+        Debug.Log("Jugador reapareciÃ³");
+    }
 }

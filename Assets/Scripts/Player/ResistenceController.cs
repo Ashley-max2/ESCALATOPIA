@@ -17,6 +17,7 @@ public class ResistenceController : MonoBehaviour
     public Slider sliderResistencia;
 
     private PlayerController playerController;
+    private PlayerStateMachine playerStateMachine;
     private float tiempoSinConsumir = 0f;
     private bool estaRegenerando = false;
 
@@ -24,9 +25,13 @@ public class ResistenceController : MonoBehaviour
     public System.Action<float> OnResistenciaCambiada;
     public System.Action OnResistenciaAgotada;
 
+    // Public property for Max Resistence
+    public float MaxResistencia => maxResistencia;
+
     void Start()
     {
         playerController = GetComponent<PlayerController>();
+        playerStateMachine = GetComponent<PlayerStateMachine>();
         resistenciaActual = maxResistencia;
 
         ActualizarUI();
@@ -36,7 +41,7 @@ public class ResistenceController : MonoBehaviour
     {
         ManejarRegeneracion();
 
-        // Consumir resistencia si se presiona R (funcionalidad original)
+        // Testing input
         if (Input.GetKeyDown(KeyCode.R))
         {
             ConsumirResistencia(2f);
@@ -65,14 +70,27 @@ public class ResistenceController : MonoBehaviour
 
     private bool PuedeRegenerar()
     {
-        if (playerController == null) return false;
+        // Support for new State Machine
+        if (playerStateMachine != null)
+        {
+            return !playerStateMachine.isClimbing && playerStateMachine.isGrounded;
+        }
 
-        // No regenerar si está en estados que consumen resistencia
-        bool estaConsumiendoResistencia =
-            playerController.EstaEnEstado<ClimbingState>() ||
-            Input.GetKey(KeyCode.R);
+        // Support for old Controller (if present)
+        if (playerController != null)
+        {
+            bool estaConsumiendoResistencia =
+                playerController.EstaEnEstado<ClimbingState>() ||
+                Input.GetKey(KeyCode.R);
+            return !estaConsumiendoResistencia && playerController.EstaEnSuelo();
+        }
 
-        return !estaConsumiendoResistencia && playerController.EstaEnSuelo();
+        return true;
+    }
+
+    public void ForceRegenerate()
+    {
+        RegenerarResistencia();
     }
 
     private void RegenerarResistencia()
@@ -94,7 +112,6 @@ public class ResistenceController : MonoBehaviour
 
         ActualizarUI();
 
-        // Notificar si se agotó la resistencia
         if (resistenciaActual <= 0)
         {
             OnResistenciaAgotada?.Invoke();
@@ -123,24 +140,21 @@ public class ResistenceController : MonoBehaviour
 
     private void ActualizarUI()
     {
-        // Actualizar texto
         if (resistenciaText != null)
         {
             resistenciaText.text = $"Resistencia: {resistenciaActual:F0}/{maxResistencia}";
         }
 
-        // Actualizar slider
         if (sliderResistencia != null)
         {
             sliderResistencia.value = resistenciaActual;
             sliderResistencia.maxValue = maxResistencia;
         }
 
-        // Notificar cambio
         OnResistenciaCambiada?.Invoke(resistenciaActual);
     }
 
-    // Métodos para debug
+    // Debug methods
     public void DebugLlenarResistencia()
     {
         resistenciaActual = maxResistencia;

@@ -1,0 +1,54 @@
+GUÍA DE CONFIGURACIÓN - ESCENA TUTORIAL ESCALATOPIA
+===================================================
+
+Esta guía explica cómo generar y configurar la escena del tutorial utilizando las nuevas herramientas automatizadas.
+
+1. ABRIR EL GENERADOR
+---------------------
+En la barra de menú superior de Unity, ve a:
+Tools > Escalatopia > Tutorial Builder
+
+Aparecerá una ventana flotante con 4 pasos secuenciales.
+
+2. GENERACIÓN AUTOMÁTICA (PASO A PASO)
+--------------------------------------
+Ejecuta los botones en orden:
+
+[1. Crear Escena Básica]
+   - Genera una nueva escena llamada "Tutorial_Generado" en Assets/Scenes.
+   - Configura la luz direccional y un suelo base.
+   - Crea automáticamente los materiales necesarios en Assets/Materials/Generated.
+
+[2. Configurar Managers & UI]
+   - Crea el "GameManager" (control del ciclo de juego).
+   - Instala el sistema de UI completo (Canvas, UIManager).
+   - Configura la "DialogueView" para mostrar los mensajes del tutorial estilo Zelda.
+
+[3. Generar Montaña Tutorial]
+   - Construye el nivel físico siguiendo el diseño del GDD:
+     * Plataformas de salto.
+     * Pared Azul: Zona escalable (Tag: "escalable").
+     * Esfera Cian: Punto de gancho (HookPoint).
+     * Hoguera Roja: Checkpoint final.
+   - Coloca automáticamente los triggers con textos de ayuda.
+
+[4. Spawneado Player]
+   - Crea el jugador desde cero con la nueva arquitectura (State Machine).
+   - Le asigna la cámara, el sistema de gancho y el detector de suelo.
+
+3. VERIFICACIÓN FINAL
+---------------------
+Una vez generado, verifica lo siguiente en el Inspector:
+
+- CAPAS (LAYERS): Asegúrate de que el suelo y las paredes tienen la capa "Default" o la que use tu "GroundMask" en el script PlayerStateMachine (por defecto busca Default).
+- TAGS: La pared azul debe tener el tag "escalable". Si no existe, créalo en Unity y asígnaselo.
+- UI: Comprueba que dentro del Canvas (UI_Manager) existe el objeto "Dialogue_View".
+
+4. JUGAR
+--------
+Dale al Play. Deberías poder:
+1. Moverte con WASD y saltar con ESPACIO.
+2. Leer el cartel de tutorial al acercarte.
+3. Escalar la pared azul manteniendo 'E'.
+4. Usar el gancho (Click Derecho) en la esfera cian.
+5. Activar la hoguera final.

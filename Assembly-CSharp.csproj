@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{981A01C3-CDB4-871E-A84A-B94C61837847}</ProjectGuid>
+    <ProjectGuid>{BC06932B-51D7-E649-A384-B833398B4164}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -60,12 +60,18 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Core\Interfaces\IStaminaUser.cs" />
     <Compile Include="Assets\Scripts\Bosses\Boss1Novice.cs" />
     <Compile Include="Assets\Scripts\Bosses\GOAPPlanner.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerFallDetector.cs" />
+    <Compile Include="Assets\Scripts\Core\Services\AudioService.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossAIBase.cs" />
+    <Compile Include="Assets\Scripts\Core\Input\InputRemappingSystem.cs" />
     <Compile Include="Assets\Scripts\Camaras\CamaraManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\WallJumpState.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Components\BossMovementComponent.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
+    <Compile Include="Assets\Scripts\Core\Services\SceneService.cs" />
     <Compile Include="Assets\Scripts\Bosses\Boss3Learner.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\MovementState.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookMovementController.cs" />
@@ -75,31 +81,74 @@
     <Compile Include="Assets\Scripts\Gancho\HookTargetFinder.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookVisualController.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookSystem.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateFactory.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookImpulseConfigHookImpulseConfig.cs" />
+    <Compile Include="Assets\Scripts\AnimationControllers\ClimbingHangingAnimController.cs" />
+    <Compile Include="Assets\Scripts\Gancho\HookEventArgs.cs" />
+    <Compile Include="Assets\Scripts\Managers\BonfireCheckpoint.cs" />
+    <Compile Include="Assets\Scripts\Camera\CameraEffects.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\IdleState.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirState.cs" />
     <Compile Include="Assets\Scripts\Player\ResistenceController.cs" />
+    <Compile Include="Assets\Scripts\Core\Interfaces\IClimbingController.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerClimbState.cs" />
     <Compile Include="Assets\Scripts\Camaras\TerceraPersona.cs" />
+    <Compile Include="Assets\Scripts\AnimationControllers\HookedFreeAnimController.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\Menus\DeadMenu\DeadManager.cs" />
+    <Compile Include="Assets\Scripts\Menus\DeadMenuRefactored.cs" />
     <Compile Include="Assets\Scripts\Camaras\PrimeraPersona.cs" />
     <Compile Include="Assets\Scripts\Bosses\ClimbingPathfinder.cs" />
+    <Compile Include="Assets\Scripts\Core\Interfaces\IHookUser.cs" />
+    <Compile Include="Assets\Scripts\Core\Interfaces\IStateMachine.cs" />
+    <Compile Include="Assets\Scripts\UI\InputRemappingUI.cs" />
     <Compile Include="Assets\Scripts\Menus\PauseMenu\PauseMenu.cs" />
+    <Compile Include="Assets\Scripts\UI\UIViewBase.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Menus\MainMenuRefactored.cs" />
     <Compile Include="Assets\Scripts\Bosses\Boss2Tactical.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Interfaces\IGOAPService.cs" />
     <Compile Include="Assets\Scripts\Gancho\MiraGancho.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossDebugger.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookInputController.cs" />
+    <Compile Include="Assets\Scripts\Gancho\Interfaces\IHookPhysicsService.cs" />
+    <Compile Include="Assets\Scripts\UI\Core\BasicView.cs" />
+    <Compile Include="Assets\Scripts\UI\Core\UIView.cs" />
+    <Compile Include="Assets\Scripts\Core\Interfaces\IMovementController.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossRaceManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Core\UIManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Core\DialogueView.cs" />
+    <Compile Include="Assets\Scripts\Shop\ShopManager.cs" />
+    <Compile Include="Assets\Scripts\Core\StateMachine\StateMachineBase.cs" />
+    <Compile Include="Assets\Scripts\Core\StateMachine\StateBase.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Core\Interfaces\IState.cs" />
+    <Compile Include="Assets\Scripts\Managers\TutorialTrigger.cs" />
     <Compile Include="Assets\Scripts\Gancho\IHookable.cs" />
+    <Compile Include="Assets\Scripts\Player\Components\PlayerInputHandler.cs" />
+    <Compile Include="Assets\Scripts\Shop\Gadget.cs" />
+    <Compile Include="Assets\Scripts\AnimationControllers\IdleWalkAnimController.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Interfaces\IBossMovement.cs" />
     <Compile Include="Assets\Scripts\Menus\MainMenu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Gancho\Interfaces\IHookTargetingService.cs" />
     <Compile Include="Assets\Scripts\Gancho\HookState.cs" />
+    <Compile Include="Assets\Scripts\Core\Accessibility\AccessibilityManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\HookImpulseState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\IState.cs" />
+    <Compile Include="Assets\Scripts\Core\Accessibility\SubtitleSystem.cs" />
     <Compile Include="Assets\Scripts\Bosses\Boss4Professional.cs" />
     <Compile Include="Assets\Scripts\Menus\DeadMenu\DeadMenu.cs" />
+    <Compile Include="Assets\Scripts\Core\Accessibility\AccessibleText.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\ClimbingState.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateMachine.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerRespawn.cs" />
     <Compile Include="Assets\Scripts\Bosses\Boss4SequenceGenerator.cs" />
+    <Compile Include="Assets\Scripts\Core\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\JumpState.cs" />
+    <Compile Include="Assets\Scripts\Menus\PauseMenuRefactored.cs" />
+    <Compile Include="Assets\Scripts\Bosses\Services\GOAPService.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

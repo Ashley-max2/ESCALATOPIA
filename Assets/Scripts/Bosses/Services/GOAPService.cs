@@ -118,9 +118,12 @@ public class GOAPService : IGOAPService
                 Dictionary<string, bool> currentState = new Dictionary<string, bool>(parent.state);
                 
                 // Apply action effects
-                foreach (var effect in action.effects)
+                foreach (var effect in action.Effects)
                 {
-                    currentState[effect.Key] = effect.Value;
+                    if (effect.Value is bool val)
+                    {
+                        currentState[effect.Key] = val;
+                    }
                 }
 
                 Node node = new Node(parent, parent.cost + action.cost, currentState, action);
