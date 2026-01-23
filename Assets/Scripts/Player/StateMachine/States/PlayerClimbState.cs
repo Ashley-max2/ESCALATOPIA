@@ -1,66 +1,182 @@
 using UnityEngine;
 
-public class PlayerClimbState : PlayerState
+/// <summary>
+/// Estado de escalada inspirado en Jusant.
+/// El jugador se adhiere a superficies escalables y se mueve en cualquier dirección.
+/// Consume estamina mientras escala y puede saltar de la pared.
+/// </summary>
+public class PlayerClimbState : PlayerBaseState
 {
-    public PlayerClimbState(PlayerStateMachine ctx, PlayerStateFactory factory) : base(ctx, factory) { }
-
-    public override void EnterState()
+    private Vector3 _climbSurfaceNormal;
+    private Vector3 _climbSurfaceRight;
+    private Vector3 _climbSurfaceUp;
+    private float _staminaConsumeTimer;
+    
+    public PlayerClimbState(PlayerStateMachine context, PlayerStateFactory factory) 
+        : base(context, factory) { }
+    
+    public override void Enter()
     {
-        // Debug.Log("Enter Climb");
-        _ctx.isClimbing = true;
-        _ctx.Rb.useGravity = false;
-        _ctx.Rb.velocity = Vector3.zero;
-    }
-
-    public override void UpdateState()
-    {
-        float v = _ctx.InputHandler.MoveZ;
-        float h = _ctx.InputHandler.MoveX;
-
-        Vector3 climbDir = new Vector3(0, v, 0); // Vertical climbing
-        // Optional: Horizontal climbing on wall? For now just vertical.
+        ctx.IsClimbing = true;
         
-        // Face the wall
-        _ctx.transform.forward = -_ctx.wallNormal;
+        // Stop all movement and disable gravity
+        ctx.Rb.velocity = Vector3.zero;
+        ctx.Rb.useGravity = false;
         
-        _ctx.Rb.velocity = transform.up * v * _ctx.climbSpeed + transform.right * h * _ctx.climbSpeed;
-
-        // Drain Stamina if implementing
-        if (_ctx.Stamina != null)
+        // Calculate climbing axes based on wall normal
+        _climbSurfaceNormal = ctx.WallNormal;
+        _climbSurfaceRight = Vector3.Cross(Vector3.up, _climbSurfaceNormal).normalized;
+        _climbSurfaceUp = Vector3.up;
+        
+        // Rotate to face away from wall
+        Quaternion targetRotation = Quaternion.LookRotation(-_climbSurfaceNormal, Vector3.up);
+        ctx.transform.rotation = targetRotation;
+        
+        // Reset fall height (climbing is safe position)
+        ctx.FallStartHeight = 0;
+        ctx.LastGroundedPosition = ctx.transform.position;
+        
+        _staminaConsumeTimer = 0;
+        
+        GameEvents.ClimbStart();
+        Debug.Log("Started climbing");
+    }
+    
+    public override void Execute()
+    {
+        // Consume stamina over time
+        _staminaConsumeTimer += Time.deltaTime;
+        if (_staminaConsumeTimer >= 0.5f) // Every 0.5 seconds
         {
-            // _ctx.Stamina.Drain...
+            if (ctx.Stamina != null)
+            {
+                ctx.Stamina.ConsumeStamina(ctx.ClimbStaminaCost * 0.5f);
+            }
+            _staminaConsumeTimer = 0;
+        }
+        
+        CheckTransitions();
+    }
+    
+    public override void FixedExecute()
+    {
+        HandleClimbingMovement();
+        MaintainWallContact();
+    }
+    
+    public override void Exit()
+    {
+        ctx.IsClimbing = false;
+        ctx.Rb.useGravity = true;
+        
+        GameEvents.ClimbEnd();
+    }
+    
+    private void HandleClimbingMovement()
+    {
+        // Get input
+        float horizontal = ctx.Input.MoveX;
+        float vertical = ctx.Input.MoveZ;
+        
+        // Calculate movement along the wall surface
+        Vector3 climbMovement = (_climbSurfaceRight * horizontal + _climbSurfaceUp * vertical).normalized;
+        
+        // Apply climbing speed
+        Vector3 targetVelocity = climbMovement * ctx.ClimbSpeed;
+        ctx.Rb.velocity = Vector3.Lerp(ctx.Rb.velocity, targetVelocity, Time.fixedDeltaTime * 10f);
+        
+        // Consume extra stamina while moving
+        if (climbMovement.magnitude > 0.1f && ctx.Stamina != null)
+        {
+            ctx.Stamina.ConsumeStamina(ctx.ClimbStaminaCost * Time.fixedDeltaTime);
         }
     }
-
-    public override void ExitState()
+    
+    private void MaintainWallContact()
     {
-        _ctx.isClimbing = false;
-        _ctx.Rb.useGravity = true;
-    }
-
-    public override void CheckSwitchStates()
-    {
-        if (_ctx.InputHandler.JumpTriggered)
+        // Raycast to keep attached to wall
+        RaycastHit hit;
+        Vector3 rayOrigin = ctx.transform.position + Vector3.up * 0.5f;
+        
+        if (Physics.Raycast(rayOrigin, ctx.transform.forward, out hit, ctx.ClimbCheckDistance * 1.5f, ctx.ClimbableMask))
         {
-            // Wall Jump?
-            WallJump();
-        }
-        else if (!_ctx.InputHandler.ClimbHeld) // Stop climbing if released? OR if grounded
-        {
-             // Check if we hit ground or top?
-             // For now, exit to air if requested
-             SwitchState(_factory.Air());
+            // Update surface normal
+            _climbSurfaceNormal = hit.normal;
+            _climbSurfaceRight = Vector3.Cross(Vector3.up, _climbSurfaceNormal).normalized;
+            
+            // Rotate to face away from wall
+            Quaternion targetRotation = Quaternion.LookRotation(-_climbSurfaceNormal, Vector3.up);
+            ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRotation, Time.fixedDeltaTime * 10f);
+            
+            // Move slightly towards wall to maintain contact
+            ctx.Rb.AddForce(ctx.transform.forward * 2f, ForceMode.Acceleration);
+            
+            // Update wall normal in context
+            ctx.WallNormal = _climbSurfaceNormal;
+            
+            // Update safe position
+            ctx.LastGroundedPosition = ctx.transform.position;
         }
     }
-
-    private Transform transform => _ctx.transform;
-
-    private void WallJump()
+    
+    private void CheckTransitions()
     {
-        // Jump away from wall
-        Vector3 jumpDir = _ctx.wallNormal + Vector3.up; 
-        _ctx.Rb.velocity = Vector3.zero;
-        _ctx.Rb.AddForce(jumpDir.normalized * _ctx.wallJumpForce, ForceMode.Impulse);
-        SwitchState(_factory.Air()); // Or specialized WallJumpState
+        // Jump off wall (estilo Jusant)
+        if (ctx.Input.JumpPressed)
+        {
+            SwitchState(factory.WallJump());
+            return;
+        }
+        
+        // Release climb key
+        if (!ctx.Input.ClimbHeld)
+        {
+            SwitchState(factory.Airborne());
+            return;
+        }
+        
+        // Out of stamina
+        if (ctx.Stamina != null && !ctx.Stamina.HasStamina())
+        {
+            Debug.Log("Out of stamina! Falling...");
+            SwitchState(factory.Airborne());
+            return;
+        }
+        
+        // Lost wall contact
+        if (!ctx.CheckClimbableSurface(out _))
+        {
+            // Check if we reached the top (can mantle)
+            RaycastHit groundHit;
+            Vector3 mantleCheckPos = ctx.transform.position + Vector3.up * 1.5f - ctx.transform.forward * 0.5f;
+            if (Physics.Raycast(mantleCheckPos, Vector3.down, out groundHit, 2f, ctx.GroundMask))
+            {
+                // Mantle up
+                ctx.transform.position = groundHit.point + Vector3.up * 0.1f;
+                ctx.Rb.velocity = Vector3.zero;
+                SwitchState(factory.Grounded());
+                Debug.Log("Mantled up!");
+            }
+            else
+            {
+                // Lost wall contact, fall
+                SwitchState(factory.Airborne());
+            }
+            return;
+        }
+        
+        // Landed on ground while climbing
+        if (ctx.IsGrounded)
+        {
+            SwitchState(factory.Grounded());
+            return;
+        }
+        
+        // Use hook while climbing
+        if (ctx.Input.HookPressed && ctx.GrapplingHook != null && ctx.GrapplingHook.CanFire())
+        {
+            SwitchState(factory.Hook());
+            return;
+        }
     }
 }

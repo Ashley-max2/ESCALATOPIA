@@ -1,54 +1,80 @@
-GUÍA DE CONFIGURACIÓN - ESCENA TUTORIAL ESCALATOPIA
-===================================================
+================================================================================
+                        GUÍA RÁPIDA - ESCALATOPIA
+================================================================================
 
-Esta guía explica cómo generar y configurar la escena del tutorial utilizando las nuevas herramientas automatizadas.
+BIENVENIDO AL PROYECTO ESCALATOPIA
+----------------------------------
 
-1. ABRIR EL GENERADOR
----------------------
-En la barra de menú superior de Unity, ve a:
-Tools > Escalatopia > Tutorial Builder
+Este proyecto es un juego 3D con mecánicas de escalada y gancho, inspirado en:
+- Zelda: Breath of the Wild (movimiento y cámara)
+- Jusant (sistema de escalada)
 
-Aparecerá una ventana flotante con 4 pasos secuenciales.
+================================================================================
+                          PRIMEROS PASOS
+================================================================================
 
-2. GENERACIÓN AUTOMÁTICA (PASO A PASO)
---------------------------------------
-Ejecuta los botones en orden:
+1. ABRIR EL SETUP WIZARD:
+   En Unity, ve a: Tools > Escalatopia > Player Setup Wizard
 
-[1. Crear Escena Básica]
-   - Genera una nueva escena llamada "Tutorial_Generado" en Assets/Scenes.
-   - Configura la luz direccional y un suelo base.
-   - Crea automáticamente los materiales necesarios en Assets/Materials/Generated.
+2. CONFIGURAR LAYERS:
+   Antes de usar el wizard, ve a Edit > Project Settings > Tags and Layers
+   y crea los siguientes layers:
+   - Player (Layer 8)
+   - Ground (Layer 9)
+   - Climbable (Layer 10)
+   - HookPoint (Layer 11)
 
-[2. Configurar Managers & UI]
-   - Crea el "GameManager" (control del ciclo de juego).
-   - Instala el sistema de UI completo (Canvas, UIManager).
-   - Configura la "DialogueView" para mostrar los mensajes del tutorial estilo Zelda.
+3. EJECUTAR WIZARD:
+   Click en "=== CREAR TODO ===" para generar automáticamente:
+   - Player con todos los componentes
+   - Cámara orbital configurada
+   - Entorno de prueba con paredes y puntos de gancho
+   - UI de estamina
+   - Game Manager
 
-[3. Generar Montaña Tutorial]
-   - Construye el nivel físico siguiendo el diseño del GDD:
-     * Plataformas de salto.
-     * Pared Azul: Zona escalable (Tag: "escalable").
-     * Esfera Cian: Punto de gancho (HookPoint).
-     * Hoguera Roja: Checkpoint final.
-   - Coloca automáticamente los triggers con textos de ayuda.
+4. DALE A PLAY!
 
-[4. Spawneado Player]
-   - Crea el jugador desde cero con la nueva arquitectura (State Machine).
-   - Le asigna la cámara, el sistema de gancho y el detector de suelo.
+================================================================================
+                            CONTROLES
+================================================================================
 
-3. VERIFICACIÓN FINAL
----------------------
-Una vez generado, verifica lo siguiente en el Inspector:
+MOVIMIENTO:
+  W/A/S/D    → Mover
+  Shift      → Sprint
+  Espacio    → Saltar
 
-- CAPAS (LAYERS): Asegúrate de que el suelo y las paredes tienen la capa "Default" o la que use tu "GroundMask" en el script PlayerStateMachine (por defecto busca Default).
-- TAGS: La pared azul debe tener el tag "escalable". Si no existe, créalo en Unity y asígnaselo.
-- UI: Comprueba que dentro del Canvas (UI_Manager) existe el objeto "Dialogue_View".
+ESCALADA:
+  E          → Escalar (mantener mientras miras una pared escalable)
+  Espacio    → Salto de pared (mientras escalas)
 
-4. JUGAR
---------
-Dale al Play. Deberías poder:
-1. Moverte con WASD y saltar con ESPACIO.
-2. Leer el cartel de tutorial al acercarte.
-3. Escalar la pared azul manteniendo 'E'.
-4. Usar el gancho (Click Derecho) en la esfera cian.
-5. Activar la hoguera final.
+GANCHO:
+  Click Der  → Disparar gancho
+  Click Izq  → Soltar gancho
+
+SISTEMA:
+  ESC        → Pausar
+
+================================================================================
+                       DOCUMENTACIÓN COMPLETA
+================================================================================
+
+Para una guía más detallada de configuración manual, consulta:
+→ GUIA_CONFIGURACION_PLAYER.txt
+
+================================================================================
+                         ARCHIVOS DEL PROYECTO
+================================================================================
+
+Scripts/
+├── Camera/OrbitCamera.cs         → Cámara estilo Zelda BotW
+├── Core/                         → Sistema de eventos y managers
+├── Editor/PlayerSetupWizard.cs   → Herramienta de setup automático
+├── Player/StateMachine/          → Máquina de estados del jugador
+└── Systems/                      → Gancho, estamina, puntos de hook
+
+Documentación/
+├── GDD proyecto.docx/pdf         → Game Design Document
+├── GUIA_CONFIGURACION_PLAYER.txt → Guía detallada de configuración
+└── Rúbriques...                  → Rúbricas de evaluación
+
+================================================================================

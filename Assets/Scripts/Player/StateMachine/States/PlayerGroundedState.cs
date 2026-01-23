@@ -1,71 +1,104 @@
 using UnityEngine;
 
-public class PlayerGroundedState : PlayerState
+/// <summary>
+/// Estado cuando el jugador está en el suelo.
+/// Gestiona movimiento, salto, y transiciones a escalada/gancho.
+/// Movimiento estilo Zelda BotW con rotación suave hacia la dirección del movimiento.
+/// </summary>
+public class PlayerGroundedState : PlayerBaseState
 {
-    public PlayerGroundedState(PlayerStateMachine ctx, PlayerStateFactory factory) : base(ctx, factory) { }
-
-    public override void EnterState()
+    public PlayerGroundedState(PlayerStateMachine context, PlayerStateFactory factory) 
+        : base(context, factory) { }
+    
+    public override void Enter()
     {
-        // Debug.Log("Enter Grounded");
-    }
-
-    public override void UpdateState()
-    {
-        // Movement
-        float x = _ctx.InputHandler.MoveX;
-        float z = _ctx.InputHandler.MoveZ;
-        bool isRunning = _ctx.InputHandler.SprintHeld;
-
-        Vector3 move = _ctx.CameraTransform.right * x + _ctx.CameraTransform.forward * z;
-        move.y = 0;
-        move.Normalize();
-
-        float speed = isRunning ? _ctx.runSpeed : _ctx.walkSpeed;
+        ctx.IsClimbing = false;
+        ctx.CurrentVelocity = new Vector3(ctx.Rb.velocity.x, 0, ctx.Rb.velocity.z);
         
-        Vector3 targetVelocity = move * speed;
-        // Preserve Y velocity
-        targetVelocity.y = _ctx.Rb.velocity.y;
+        // Check for fall damage
+        if (ctx.FallStartHeight > 0)
+        {
+            float fallDistance = ctx.FallStartHeight - ctx.transform.position.y;
+            HandleLanding(fallDistance);
+            ctx.FallStartHeight = 0;
+        }
+    }
+    
+    public override void Execute()
+    {
+        CheckTransitions();
+    }
+    
+    public override void FixedExecute()
+    {
+        HandleMovement();
+    }
+    
+    public override void Exit()
+    {
+    }
+    
+    private void HandleMovement()
+    {
+        // Get input
+        Vector3 inputDir = new Vector3(ctx.Input.MoveX, 0, ctx.Input.MoveZ).normalized;
         
-        // Simple movement application (can be smoothed)
-        _ctx.Rb.velocity = Vector3.Lerp(_ctx.Rb.velocity, targetVelocity, Time.deltaTime * 10f);
-
-        // Rotation
-        if (move.magnitude > 0.1f)
+        // Determine speed based on sprint
+        float targetSpeed = ctx.Input.SprintHeld ? ctx.RunSpeed : ctx.WalkSpeed;
+        
+        // Apply movement relative to camera (estilo Zelda BotW)
+        ctx.MoveRelativeToCamera(inputDir, targetSpeed);
+    }
+    
+    private void CheckTransitions()
+    {
+        // Jump
+        if (ctx.Input.JumpPressed || IsJumpBuffered())
         {
-            Quaternion toRotation = Quaternion.LookRotation(move, Vector3.up);
-            _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, toRotation, _ctx.rotationSmoothTime);
+            SwitchState(factory.Jump());
+            return;
+        }
+        
+        // Not grounded - fall
+        if (!ctx.IsGrounded)
+        {
+            SwitchState(factory.Airborne());
+            return;
+        }
+        
+        // Climbing
+        if (ctx.Input.ClimbHeld)
+        {
+            RaycastHit hit;
+            if (ctx.CheckClimbableSurface(out hit))
+            {
+                ctx.WallNormal = hit.normal;
+                SwitchState(factory.Climb());
+                return;
+            }
+        }
+        
+        // Hook
+        if (ctx.Input.HookPressed && ctx.GrapplingHook != null && ctx.GrapplingHook.CanFire())
+        {
+            SwitchState(factory.Hook());
+            return;
         }
     }
-
-    public override void ExitState()
+    
+    private void HandleLanding(float fallDistance)
     {
-    }
-
-    public override void CheckSwitchStates()
-    {
-        if (_ctx.InputHandler.JumpTriggered && _ctx.isGrounded)
+        GameEvents.PlayerLanded(fallDistance);
+        
+        // Check for lethal fall
+        if (fallDistance >= ctx.LethalFallHeight)
         {
-            SwitchState(_factory.Jump());
+            ctx.Die();
         }
-        else if (!_ctx.isGrounded)
+        else if (fallDistance >= ctx.SafeFallHeight)
         {
-            SwitchState(_factory.Air());
+            // Could add stagger/damage effects here
+            Debug.Log($"Hard landing from {fallDistance:F1}m");
         }
-        else if (_ctx.InputHandler.ClimbHeld && CheckClimb())
-        {
-            SwitchState(_factory.Climb());
-        }
-    }
-
-    private bool CheckClimb()
-    {
-        // Raycast forward to check for climbable
-         RaycastHit hit;
-         if (Physics.Raycast(_ctx.transform.position + Vector3.up * 0.5f, _ctx.transform.forward, out hit, _ctx.climbCheckDistance, _ctx.climbableMask))
-         {
-             _ctx.wallNormal = hit.normal;
-             return true;
-         }
-         return false;
     }
 }

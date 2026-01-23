@@ -1,28 +1,55 @@
 using UnityEngine;
 
-public class PlayerJumpState : PlayerState
+/// <summary>
+/// Estado de salto del jugador.
+/// Aplica fuerza de salto y transiciona a estado de aire.
+/// Incluye jump buffering y coyote time.
+/// </summary>
+public class PlayerJumpState : PlayerBaseState
 {
-    public PlayerJumpState(PlayerStateMachine ctx, PlayerStateFactory factory) : base(ctx, factory) { }
-
-    public override void EnterState()
+    private bool _jumpApplied;
+    
+    public PlayerJumpState(PlayerStateMachine context, PlayerStateFactory factory) 
+        : base(context, factory) { }
+    
+    public override void Enter()
     {
-        // Debug.Log("Enter Jump");
-        _ctx.Rb.velocity = new Vector3(_ctx.Rb.velocity.x, 0, _ctx.Rb.velocity.z); // Reset Y
-        _ctx.Rb.AddForce(Vector3.up * _ctx.jumpForce, ForceMode.Impulse);
+        _jumpApplied = false;
+        ctx.LastJumpPressTime = 0; // Consume the buffered jump
     }
-
-    public override void UpdateState()
+    
+    public override void Execute()
     {
-        // Allow some air control?
-        SwitchState(_factory.Air());
+        // Short state - just applies jump and transitions
     }
-
-    public override void ExitState()
+    
+    public override void FixedExecute()
+    {
+        if (!_jumpApplied)
+        {
+            ApplyJump();
+            _jumpApplied = true;
+            SwitchState(factory.Airborne());
+        }
+    }
+    
+    public override void Exit()
     {
     }
-
-    public override void CheckSwitchStates()
+    
+    private void ApplyJump()
     {
-         // Handled in Update
+        // Reset vertical velocity before jump
+        Vector3 vel = ctx.Rb.velocity;
+        vel.y = 0;
+        ctx.Rb.velocity = vel;
+        
+        // Apply jump force
+        ctx.Rb.AddForce(Vector3.up * ctx.JumpForce, ForceMode.Impulse);
+        
+        // Set fall start height for tracking
+        ctx.FallStartHeight = ctx.transform.position.y;
+        
+        Debug.Log("Jump!");
     }
 }
