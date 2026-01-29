@@ -164,13 +164,14 @@ MonoBehaviour:
   - {fileID: -4294189459538344706}
   - {fileID: -4305119701487264652}
   - {fileID: 2359732923272865652}
+  - {fileID: 2514462810565858806}
   EditorParameters: []
   MasterBanks:
   - {fileID: 6119426123732319430}
   StringsBanks:
   - {fileID: 8104347469432640565}
   cacheVersion: 131858
-  cacheTime: 639053082089513747
+  cacheTime: 639053096157306524
   SerializableEventsDict:
   - key: event:/Ambient/ForestMusic
     index: 0
@@ -279,6 +280,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &2514462810565858806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: snapshot:/PauseMenu
+  m_EditorClassIdentifier: 
+  Path: snapshot:/PauseMenu
+  Guid:
+    Data1: -1061878033
+    Data2: 1090119841
+    Data3: -164473964
+    Data4: 171408743
+  Banks:
+  - {fileID: 6119426123732319430}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 0
 --- !u!114 &3090278689092587134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,10 +376,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639053082089504712
+  lastModified: 639053096157296511
   FileSizes:
   - Name: Desktop
-    Value: 8326
+    Value: 9284
   Exists: 1
 --- !u!114 &7102929771672938483
 MonoBehaviour:
@@ -449,8 +477,8 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639053082089513747
+  lastModified: 639053096157306524
   FileSizes:
   - Name: Desktop
-    Value: 1548
+    Value: 1598
   Exists: 1
