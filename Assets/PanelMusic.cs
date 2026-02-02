@@ -7,20 +7,19 @@ using UnityEngine;
 public class NewBehaviourScript : MonoBehaviour
 {
     [Header("Referencias UI")]
-    [SerializeField] private GameObject pausePanel;          // El panel de pausa que se muestra/oculta
+    [SerializeField] private GameObject pausePanel;
 
     [Header("FMOD Snapshot")]
-    [SerializeField] private string snapshotPath = "snapshot:/PauseMenu";  // ← CAMBIA ESTO al path exacto de tu snapshot
+    [SerializeField] private string snapshotPath = "snapshot:/PauseMenu";
 
     [Header("Opcional: Parámetro global Pause (si lo usas)")]
-    [SerializeField] private bool useGlobalPauseParameter = true;  // Si tienes un parámetro "Pause" en FMOD para pausar sonidos
+    [SerializeField] private bool useGlobalPauseParameter = true;
 
     private EventInstance snapshotInstance;
     private bool isPaused = false;
 
     void Awake()
     {
-        // Pre-cargamos el snapshot (buena práctica para evitar lags)
         snapshotInstance = RuntimeManager.CreateInstance(snapshotPath);
 
         // Opcional: si el snapshot necesita attach a un objeto (raro, pero por si acaso)

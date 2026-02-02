@@ -26,6 +26,10 @@
 			<destination>{f18639c2-4c32-4daa-bb5d-5c0553b8799e}</destination>
 			<destination>{20797373-3f09-466b-967d-e0227c526d77}</destination>
 			<destination>{2e4d7f5a-4558-46fc-9764-1926e262ffc7}</destination>
+			<destination>{52a80017-c523-45e3-8312-025762c176ab}</destination>
+			<destination>{95d2d6c2-7172-43ff-96ce-14f3736f47c2}</destination>
+			<destination>{42a5d275-b99f-41c0-8a78-b72dc721274f}</destination>
+			<destination>{b8b1a8fb-42d1-458a-8c0c-288def2d40ed}</destination>
 		</relationship>
 		<relationship name="snapshotTracks">
 			<destination>{fe15adab-4569-4a6a-b83a-7c713ceaff22}</destination>
@@ -51,7 +55,7 @@
 			<value>volume</value>
 		</property>
 		<property name="value">
-			<value>-55</value>
+			<value>0</value>
 		</property>
 		<relationship name="automatableObject">
 			<destination>{b82808c6-72a1-4fe4-ae38-74131f5a8b8f}</destination>
@@ -99,6 +103,50 @@
 		</property>
 		<relationship name="automatableObject">
 			<destination>{c4ce0dc6-3e3a-47e9-8022-fc200eb80979}</destination>
+		</relationship>
+	</object>
+	<object class="SnapshotProperty" id="{52a80017-c523-45e3-8312-025762c176ab}">
+		<property name="propertyName">
+			<value>lowCrossover</value>
+		</property>
+		<property name="value">
+			<value>400</value>
+		</property>
+		<relationship name="automatableObject">
+			<destination>{907cbb09-d230-4e9f-85c0-c2cd893e0029}</destination>
+		</relationship>
+	</object>
+	<object class="SnapshotProperty" id="{95d2d6c2-7172-43ff-96ce-14f3736f47c2}">
+		<property name="propertyName">
+			<value>highCrossover</value>
+		</property>
+		<property name="value">
+			<value>4000</value>
+		</property>
+		<relationship name="automatableObject">
+			<destination>{907cbb09-d230-4e9f-85c0-c2cd893e0029}</destination>
+		</relationship>
+	</object>
+	<object class="SnapshotProperty" id="{42a5d275-b99f-41c0-8a78-b72dc721274f}">
+		<property name="propertyName">
+			<value>stereoPan</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+		<relationship name="automatableObject">
+			<destination>{7413ebff-d0ba-44ce-97fa-93895b5f94e8}</destination>
+		</relationship>
+	</object>
+	<object class="SnapshotProperty" id="{b8b1a8fb-42d1-458a-8c0c-288def2d40ed}">
+		<property name="propertyName">
+			<value>pitch</value>
+		</property>
+		<property name="value">
+			<value>0</value>
+		</property>
+		<relationship name="automatableObject">
+			<destination>{b82808c6-72a1-4fe4-ae38-74131f5a8b8f}</destination>
 		</relationship>
 	</object>
 	<object class="SnapshotTrack" id="{fe15adab-4569-4a6a-b83a-7c713ceaff22}">
