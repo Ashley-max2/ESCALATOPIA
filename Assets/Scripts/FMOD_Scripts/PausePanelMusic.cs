@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PausePanelMusic: MonoBehaviour
 {
     [Header("Referencias UI")]
     [SerializeField] private GameObject pausePanel;
@@ -21,9 +21,6 @@ public class NewBehaviourScript : MonoBehaviour
     void Awake()
     {
         snapshotInstance = RuntimeManager.CreateInstance(snapshotPath);
-
-        // Opcional: si el snapshot necesita attach a un objeto (raro, pero por si acaso)
-        // RuntimeManager.AttachInstanceToGameObject(snapshotInstance, transform);
     }
 
     void Update()
@@ -46,7 +43,7 @@ public class NewBehaviourScript : MonoBehaviour
             // Pausar física y scripts del juego
             Time.timeScale = 0f;
 
-            // Activar efecto "sumergido" (bajo el agua + graves)
+            // Activar efecto de graves
             snapshotInstance.start();
 
             // Opcional: si usas parámetro global "Pause" para ducking/pausa de sonidos
@@ -87,7 +84,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    // Método público por si quieres llamarlo desde botones (ej: botón Resume)
+    // Método para llamar desde botones
     public void ResumeGame()
     {
         if (isPaused) TogglePause();
