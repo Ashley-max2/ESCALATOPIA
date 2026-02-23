@@ -6,35 +6,35 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
-    [SerializeField] private string forestMusicPath = "event:/AmbientMusic/MenuMusic";
+    [SerializeField] private string menuMusicPath = "event:/Ambient/MenuMusic";
 
-    private EventInstance forestInstance;
+    private EventInstance menuMusicInstance;
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
 
-        forestInstance = RuntimeManager.CreateInstance(forestMusicPath);
-        forestInstance.start();
+        menuMusicInstance = RuntimeManager.CreateInstance(menuMusicPath);
+        menuMusicInstance.start();
     }
 
     void OnDestroy()
     {
-        if (forestInstance.isValid())
+        if (menuMusicInstance.isValid())
         {
-            forestInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-            forestInstance.release();
+            menuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            menuMusicInstance.release();
         }
     }
 
     // Opcional: métodos para controlar desde otros scripts
     public void StopForestMusic()
     {
-        forestInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        menuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public void PlayForestMusic()
     {
-        forestInstance.start();
+        menuMusicInstance.start();
     }
 }

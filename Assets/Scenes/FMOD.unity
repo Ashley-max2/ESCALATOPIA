@@ -199,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 204117448}
-  - component: {fileID: 204117447}
+  - component: {fileID: 204117450}
   - component: {fileID: 204117449}
   m_Layer: 0
   m_Name: SoundManager
@@ -208,21 +208,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &204117447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204117446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68d60b4c44b710c4da710b43325d5e12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pausePanel: {fileID: 430258112}
-  snapshotPath: snapshot:/PauseMenu
-  useGlobalPauseParameter: 1
 --- !u!4 &204117448
 Transform:
   m_ObjectHideFlags: 0
@@ -247,10 +232,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 204117446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac40abde515f18f40be5857288990367, type: 3}
+  m_Script: {fileID: 11500000, guid: 04f9a4aec4b04484583dded79729ea42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forestMusicPath: event:/AmbientMusic/MenuMusic
+  pausePanel: {fileID: 430258112}
+  snapshotPath: snapshot:/PauseMenu
+  useGlobalPauseParameter: 1
+--- !u!114 &204117450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204117446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c2fb6966138d54c9187bc500ff01c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuMusicPath: event:/Ambient/MenuMusic
 --- !u!1 &430258112
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,7 +591,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1884901785}
   - component: {fileID: 1884901784}
-  - component: {fileID: 1884901783}
+  - component: {fileID: 1884901786}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -599,14 +599,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1884901783
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1884901782}
-  m_Enabled: 1
 --- !u!20 &1884901784
 Camera:
   m_ObjectHideFlags: 0
@@ -673,6 +665,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1884901786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1884901782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &1899531332
 GameObject:
   m_ObjectHideFlags: 0
