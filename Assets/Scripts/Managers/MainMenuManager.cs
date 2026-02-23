@@ -9,6 +9,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject ConfigPanel;
     [SerializeField] private GameObject SongPanel;
     [SerializeField] private GameObject ScreenPanel;
+    
 
     private GameObject currentActivePanel;
 
