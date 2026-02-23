@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicManager : MonoBehaviour
+public class MainMenuMusic : MonoBehaviour
 {
     [SerializeField] private string menuMusicPath = "event:/Ambient/MenuMusic";
 
@@ -27,14 +27,4 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    // Opcional: métodos para controlar desde otros scripts
-    public void StopForestMusic()
-    {
-        menuMusicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-    }
-
-    public void PlayForestMusic()
-    {
-        menuMusicInstance.start();
-    }
 }
