@@ -40,6 +40,7 @@ public class MainMenuManager : MonoBehaviour
     public void OpenConfigPanel()
     {
         ChangePanel(ConfigPanel);
+        Debug.Log("Menu conf abierto");
     }
 
     /// <summary>
