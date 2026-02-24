@@ -579,6 +579,7 @@ GameObject:
   m_Component:
   - component: {fileID: 720267016}
   - component: {fileID: 720267015}
+  - component: {fileID: 720267017}
   m_Layer: 0
   m_Name: MainMenuManager
   m_TagString: Untagged
@@ -617,6 +618,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7185290713143854712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &720267017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720267014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c0ede0eb0bb3f4eab2b4a98f765722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resolutionDropdown: {fileID: 4905805902723573766}
+  fullscreenToggle: {fileID: 2887196214772267035}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
