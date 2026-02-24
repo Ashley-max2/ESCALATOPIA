@@ -6,9 +6,9 @@ using FMOD.Studio;
 public class AudioVCASettings : MonoBehaviour
 {
     [Header("Sliders (rango 0 a 1)")]
-    [SerializeField] private Slider sliderGeneralMusic;    // Afecta música + SFX
-    [SerializeField] private Slider sliderMusic;           // Solo música (control fino)
-    [SerializeField] private Slider sliderSFX;             // Solo SFX (control fino)
+    [SerializeField] private Slider sliderGeneralMusic;    // Música + SFX
+    [SerializeField] private Slider sliderMusic;           // Música
+    [SerializeField] private Slider sliderSFX;             // SFX
 
     // Referencias a VCAs y Bus Master
     private VCA vcaGeneralMusic;
@@ -17,7 +17,6 @@ public class AudioVCASettings : MonoBehaviour
 
     void Awake()
     {
-        // VCAs – copia los paths EXACTOS desde FMOD (VCAs Browser → clic derecho → Copy Path)
         vcaGeneralMusic = GetVCA("vca:/GeneralMusic");
         vcaMusic        = GetVCA("vca:/Music");
         vcaSFX          = GetVCA("vca:/SFX");
@@ -63,10 +62,9 @@ public class AudioVCASettings : MonoBehaviour
 
     private void LoadAndApplyVolumes()
     {
-        float masterVol       = PlayerPrefs.GetFloat("Vol_Master",       1f);
-        float generalVol      = PlayerPrefs.GetFloat("Vol_GeneralMusic", 1f);
-        float musicVol        = PlayerPrefs.GetFloat("Vol_Music",        1f);
-        float sfxVol          = PlayerPrefs.GetFloat("Vol_SFX",          1f);
+        float generalVol      = PlayerPrefs.GetFloat("Vol_GeneralMusic", 0.5f);
+        float musicVol        = PlayerPrefs.GetFloat("Vol_Music",        0.5f);
+        float sfxVol          = PlayerPrefs.GetFloat("Vol_SFX",          0.5f);
 
         if (sliderGeneralMusic)   sliderGeneralMusic.value   = generalVol;
         if (sliderMusic)          sliderMusic.value          = musicVol;
