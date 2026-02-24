@@ -263,6 +263,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-4323740589701103034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/Buttons
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/Buttons
+  Guid:
+    Data1: 70972473
+    Data2: 1124116280
+    Data3: 1558247073
+    Data4: 907025183
+  Banks:
+  - {fileID: 4732723612483674742}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
 --- !u!114 &-4271569660148003781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +471,6 @@ MonoBehaviour:
   - {fileID: -2241521972702350244}
   - {fileID: -4518307931671410291}
   - {fileID: 5180041604017003891}
-  - {fileID: 8788323317745682757}
   - {fileID: -4271569660148003781}
   - {fileID: 6566789496128029147}
   - {fileID: 7196205414737163936}
@@ -455,14 +481,15 @@ MonoBehaviour:
   - {fileID: 4362503267478006013}
   - {fileID: -9069211597259985533}
   - {fileID: -8695601192305282099}
-  - {fileID: 2022484829528472767}
+  - {fileID: -4323740589701103034}
+  - {fileID: 227465460310551048}
   EditorParameters: []
   MasterBanks:
   - {fileID: 4732723612483674742}
   StringsBanks:
   - {fileID: 2488696871203426322}
   cacheVersion: 131858
-  cacheTime: 639075611011964525
+  cacheTime: 639075602242256771
   SerializableEventsDict:
   - key: event:/Ambient/ForestMusic
     index: 0
@@ -470,31 +497,31 @@ MonoBehaviour:
     index: 1
   - key: event:/SFX/Player/Dead
     index: 2
-  - key: event:/SFX/Buttons
-    index: 3
   - key: event:/SFX/Player/Jumping
-    index: 4
+    index: 3
   - key: event:/SFX/Gancho/SacarGancho
-    index: 5
+    index: 4
   - key: event:/SFX/Player/Walking
-    index: 6
+    index: 5
   - key: event:/SFX/Player/Running
-    index: 7
+    index: 6
   - key: event:/Ambient/MountainMusic
-    index: 8
+    index: 7
   - key: event:/Ambient/MenuMusic
-    index: 9
+    index: 8
   - key: event:/SFX/Gancho/RecogerGancho
-    index: 10
+    index: 9
   - key: event:/SFX/Gancho/UsarGancho
-    index: 11
+    index: 10
   - key: event:/SFX/Player/Falling
-    index: 12
+    index: 11
   - key: snapshot:/PauseMenu
+    index: 12
+  - key: event:/SFX/UI/Buttons
     index: 13
-  - key: event:/SFX/Fogata
+  - key: event:/SFX/Environment/Fogata
     index: 14
---- !u!114 &2022484829528472767
+--- !u!114 &227465460310551048
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -504,9 +531,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Fogata
+  m_Name: event:/SFX/Environment/Fogata
   m_EditorClassIdentifier: 
-  Path: event:/SFX/Fogata
+  Path: event:/SFX/Environment/Fogata
   Guid:
     Data1: -1757606658
     Data2: 1194289721
@@ -590,10 +617,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639074679448637311
+  lastModified: 639075602242256771
   FileSizes:
   - Name: Desktop
-    Value: 1650
+    Value: 1826
   Exists: 1
 --- !u!114 &3552722089132531287
 MonoBehaviour:
@@ -718,10 +745,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639075611011964525
+  lastModified: 639075602242243627
   FileSizes:
   - Name: Desktop
-    Value: 2139296
+    Value: 2140192
   Exists: 1
 --- !u!114 &4903404101893247723
 MonoBehaviour:
@@ -932,30 +959,3 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 148845
---- !u!114 &8788323317745682757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Buttons
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Buttons
-  Guid:
-    Data1: 70972473
-    Data2: 1124116280
-    Data3: 1558247073
-    Data4: 907025183
-  Banks:
-  - {fileID: 4732723612483674742}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
