@@ -62,20 +62,21 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
     <Compile Include="Assets\Scripts\FMOD_Scripts\PausePanelMusic.cs" />
+    <Compile Include="Assets\Scripts\FMOD_Scripts\AudioSettings.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateFactory.cs" />
     <Compile Include="Assets\Scripts\Core\IState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerWallJumpState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerClimbState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaUI.cs" />
-    <Compile Include="Assets\Scripts\FMOD_Scripts\ButtonsSFX.cs" />
     <Compile Include="Assets\Scripts\Core\GameManager.cs" />
     <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
+    <Compile Include="Assets\Scripts\FMOD_Scripts\UI_Scripts\ButtonsSFX.cs" />
+    <Compile Include="Assets\Scripts\FMOD_Scripts\MainMenu\MainMenuMusic.cs" />
     <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
-    <Compile Include="Assets\Scripts\FMOD_Scripts\MainMenuMusic.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
     <Compile Include="Assets\Scripts\Systems\GrapplingHook.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateMachine.cs" />
