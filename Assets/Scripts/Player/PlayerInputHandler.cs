@@ -1,9 +1,12 @@
 using UnityEngine;
 
 /// <summary>
-/// Gestiona todas las entradas del jugador de forma centralizada.
-/// Separa la lógica de entrada del resto del sistema (Single Responsibility Principle).
+/// Gestiona todas las entradas del jugador.
+/// Ignora input cuando el cursor esta desbloqueado (menu ESC).
+/// Se ejecuta antes que todos los demas scripts para que el input
+/// este listo cuando lo lean.
 /// </summary>
+[DefaultExecutionOrder(-100)]
 public class PlayerInputHandler : MonoBehaviour
 {
     // Movement Input
@@ -39,11 +42,41 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Sensitivity")]
     [SerializeField] private float mouseSensitivity = 2f;
     
+    // Tracking para que JumpPressed no se pierda entre frames
+    private bool _jumpPressedThisFrame;
+    private bool _hookPressedThisFrame;
+    private bool _hookReleasePressedThisFrame;
+    
     private void Update()
     {
+        // Si el cursor esta desbloqueado no procesamos input de juego
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            ClearAllInput();
+            return;
+        }
+        
         ProcessMovementInput();
         ProcessActionInput();
         ProcessCameraInput();
+    }
+    
+    private void ClearAllInput()
+    {
+        MoveX = 0;
+        MoveZ = 0;
+        JumpPressed = false;
+        JumpHeld = false;
+        SprintHeld = false;
+        ClimbHeld = false;
+        ClimbJumpPressed = false;
+        HookPressed = false;
+        HookReleasePressed = false;
+        CameraX = 0;
+        CameraY = 0;
+        _jumpPressedThisFrame = false;
+        _hookPressedThisFrame = false;
+        _hookReleasePressedThisFrame = false;
     }
     
     private void ProcessMovementInput()
@@ -54,15 +87,24 @@ public class PlayerInputHandler : MonoBehaviour
     
     private void ProcessActionInput()
     {
-        JumpPressed = Input.GetKeyDown(jumpKey);
+        // GetKeyDown solo es true un frame, lo guardamos para que no se pierda
+        if (Input.GetKeyDown(jumpKey))
+            _jumpPressedThisFrame = true;
+        
+        JumpPressed = _jumpPressedThisFrame;
         JumpHeld = Input.GetKey(jumpKey);
         SprintHeld = Input.GetKey(sprintKey);
         
         ClimbHeld = Input.GetKey(climbKey);
         ClimbJumpPressed = ClimbHeld && JumpPressed;
         
-        HookPressed = Input.GetKeyDown(hookKey);
-        HookReleasePressed = Input.GetKeyDown(hookReleaseKey);
+        if (Input.GetKeyDown(hookKey))
+            _hookPressedThisFrame = true;
+        if (Input.GetKeyDown(hookReleaseKey))
+            _hookReleasePressedThisFrame = true;
+        
+        HookPressed = _hookPressedThisFrame;
+        HookReleasePressed = _hookReleasePressedThisFrame;
     }
     
     private void ProcessCameraInput()
@@ -73,7 +115,11 @@ public class PlayerInputHandler : MonoBehaviour
     
     private void LateUpdate()
     {
-        // Reset per-frame inputs
+        // Reset inputs de un solo frame al final del frame
+        // Asi todos los scripts que lean en Update ya los habran visto
+        _jumpPressedThisFrame = false;
+        _hookPressedThisFrame = false;
+        _hookReleasePressedThisFrame = false;
         JumpPressed = false;
         HookPressed = false;
         HookReleasePressed = false;

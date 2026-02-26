@@ -12,12 +12,24 @@ public class PlayerClimbState : PlayerBaseState
     private Vector3 _climbSurfaceUp;
     private float _staminaConsumeTimer;
     
+    // Mantle settings
+    private const float MANTLE_CHECK_HEIGHT = 1.2f;  // altura desde el player para buscar el borde
+    private const float MANTLE_FORWARD_DIST = 0.8f;  // distancia forward para buscar suelo encima
+    private const float MANTLE_DOWN_DIST = 2.5f;     // raycast hacia abajo para encontrar suelo
+    private const float MANTLE_MOVE_SPEED = 8f;      // velocidad del mantle
+    
+    private bool _isMantling;
+    private Vector3 _mantleTarget;
+    private float _mantleTimer;
+    
     public PlayerClimbState(PlayerStateMachine context, PlayerStateFactory factory) 
         : base(context, factory) { }
     
     public override void Enter()
     {
         ctx.IsClimbing = true;
+        _isMantling = false;
+        _mantleTimer = 0;
         
         // Stop all movement and disable gravity
         ctx.Rb.velocity = Vector3.zero;
@@ -44,6 +56,13 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void Execute()
     {
+        // Si esta haciendo mantle, solo actualizar eso
+        if (_isMantling)
+        {
+            UpdateMantle();
+            return;
+        }
+        
         // Consume stamina over time
         _staminaConsumeTimer += Time.deltaTime;
         if (_staminaConsumeTimer >= 0.5f) // Every 0.5 seconds
@@ -60,6 +79,8 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void FixedExecute()
     {
+        if (_isMantling) return;
+        
         HandleClimbingMovement();
         MaintainWallContact();
     }
@@ -68,6 +89,7 @@ public class PlayerClimbState : PlayerBaseState
     {
         ctx.IsClimbing = false;
         ctx.Rb.useGravity = true;
+        _isMantling = false;
         
         GameEvents.ClimbEnd();
     }
@@ -119,6 +141,91 @@ public class PlayerClimbState : PlayerBaseState
         }
     }
     
+    /// <summary>
+    /// Check proactivo de borde: detecta si el player esta cerca del borde superior
+    /// mientras aun tiene contacto con la pared
+    /// </summary>
+    private bool TryDetectLedge(out Vector3 ledgePoint)
+    {
+        ledgePoint = Vector3.zero;
+        
+        // 1. Comprobar si NO hay pared a la altura de la cabeza (borde detectado)
+        Vector3 headCheckOrigin = ctx.transform.position + Vector3.up * MANTLE_CHECK_HEIGHT;
+        bool wallAtHead = Physics.Raycast(headCheckOrigin, ctx.transform.forward, 
+            ctx.ClimbCheckDistance * 1.5f, ctx.ClimbableMask);
+        
+        if (wallAtHead) return false; // aun hay pared arriba, no estamos en el borde
+        
+        // 2. Si no hay pared arriba, buscar suelo encima con raycast adelante+arriba
+        Vector3 forwardDir = -_climbSurfaceNormal; // hacia la pared
+        Vector3 overLedgeOrigin = headCheckOrigin + forwardDir * MANTLE_FORWARD_DIST;
+        
+        RaycastHit groundHit;
+        if (Physics.Raycast(overLedgeOrigin, Vector3.down, out groundHit, MANTLE_DOWN_DIST, ctx.GroundMask))
+        {
+            // Encontramos suelo encima, verificar que sea pisable (no muy inclinado)
+            if (groundHit.normal.y > 0.7f)
+            {
+                ledgePoint = groundHit.point + Vector3.up * 0.05f;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /// <summary>
+    /// Inicia el mantle: mueve al player suavemente encima del borde
+    /// </summary>
+    private void StartMantle(Vector3 target)
+    {
+        _isMantling = true;
+        _mantleTarget = target;
+        _mantleTimer = 0;
+        
+        // Parar velocidad y desactivar gravedad durante mantle
+        ctx.Rb.velocity = Vector3.zero;
+        ctx.Rb.useGravity = false;
+        
+        Debug.Log("Mantling up!");
+    }
+    
+    /// <summary>
+    /// Actualiza el movimiento de mantle frame a frame
+    /// </summary>
+    private void UpdateMantle()
+    {
+        _mantleTimer += Time.deltaTime;
+        
+        // Mover suave hacia el punto de mantle
+        Vector3 currentPos = ctx.transform.position;
+        float step = MANTLE_MOVE_SPEED * Time.deltaTime;
+        
+        // Primero subir, luego avanzar
+        Vector3 intermediatePos = new Vector3(currentPos.x, _mantleTarget.y, currentPos.z);
+        
+        if (currentPos.y < _mantleTarget.y - 0.1f)
+        {
+            // Fase 1: subir
+            ctx.transform.position = Vector3.MoveTowards(currentPos, intermediatePos, step);
+        }
+        else
+        {
+            // Fase 2: avanzar al punto final
+            ctx.transform.position = Vector3.MoveTowards(ctx.transform.position, _mantleTarget, step);
+        }
+        
+        // Completar mantle cuando lleguemos o si tarda demasiado
+        float dist = Vector3.Distance(ctx.transform.position, _mantleTarget);
+        if (dist < 0.1f || _mantleTimer > 1.5f)
+        {
+            ctx.transform.position = _mantleTarget;
+            ctx.Rb.velocity = Vector3.zero;
+            SwitchState(factory.Grounded());
+            Debug.Log("Mantle complete!");
+        }
+    }
+    
     private void CheckTransitions()
     {
         // Jump off wall (estilo Jusant)
@@ -143,25 +250,30 @@ public class PlayerClimbState : PlayerBaseState
             return;
         }
         
+        // Check proactivo de borde mientras escalamos hacia arriba
+        if (ctx.Input.MoveZ > 0.1f) // escalando hacia arriba
+        {
+            Vector3 ledgePoint;
+            if (TryDetectLedge(out ledgePoint))
+            {
+                StartMantle(ledgePoint);
+                return;
+            }
+        }
+        
         // Lost wall contact
         if (!ctx.CheckClimbableSurface(out _))
         {
-            // Check if we reached the top (can mantle)
-            RaycastHit groundHit;
-            Vector3 mantleCheckPos = ctx.transform.position + Vector3.up * 1.5f - ctx.transform.forward * 0.5f;
-            if (Physics.Raycast(mantleCheckPos, Vector3.down, out groundHit, 2f, ctx.GroundMask))
+            // Check fallback: buscar suelo encima aunque no estemos subiendo activamente
+            Vector3 fallbackLedge;
+            if (TryDetectLedge(out fallbackLedge))
             {
-                // Mantle up
-                ctx.transform.position = groundHit.point + Vector3.up * 0.1f;
-                ctx.Rb.velocity = Vector3.zero;
-                SwitchState(factory.Grounded());
-                Debug.Log("Mantled up!");
+                StartMantle(fallbackLedge);
+                return;
             }
-            else
-            {
-                // Lost wall contact, fall
-                SwitchState(factory.Airborne());
-            }
+            
+            // No hay borde, caer
+            SwitchState(factory.Airborne());
             return;
         }
         

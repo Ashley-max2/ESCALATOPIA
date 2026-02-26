@@ -27,7 +27,7 @@ public class PlayerStateMachine : MonoBehaviour
     #endregion
     
     #region Movement Settings
-    [Header("=== MOVEMENT (Estilo Zelda BotW) ===")]
+    [Header("=== MOVEMENT ===")]
     [SerializeField] private float walkSpeed = 4f;
     [SerializeField] private float runSpeed = 8f;
     [SerializeField] private float rotationSpeed = 12f;
@@ -58,8 +58,8 @@ public class PlayerStateMachine : MonoBehaviour
     public float JumpBufferTime => jumpBufferTime;
     #endregion
     
-    #region Climbing Settings (Estilo Jusant)
-    [Header("=== CLIMBING (Estilo Jusant) ===")]
+    #region Climbing Settings
+    [Header("=== CLIMBING ===")]
     [SerializeField] private float climbSpeed = 3f;
     [SerializeField] private float climbStaminaCost = 10f;
     [SerializeField] private float wallJumpForce = 8f;
@@ -103,7 +103,7 @@ public class PlayerStateMachine : MonoBehaviour
     [HideInInspector] public Vector3 LastGroundedPosition;
     [HideInInspector] public float FallStartHeight;
     [HideInInspector] public float LastGroundedTime;
-    [HideInInspector] public float LastJumpPressTime;
+    [HideInInspector] public float LastJumpPressTime = -999f;
     
     // Velocity tracking for smooth movement
     [HideInInspector] public Vector3 CurrentVelocity;
@@ -146,30 +146,42 @@ public class PlayerStateMachine : MonoBehaviour
     
     private void Start()
     {
-        // Initialize with grounded state
+        // Iniciar en grounded
         TransitionToState(States.Grounded());
         LastGroundedPosition = transform.position;
         
-        // Lock cursor
+        // Bloquear cursor al empezar
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
     
+    /// <summary>
+    /// Comprueba si el juego esta pausado (via GameManager)
+    /// </summary>
+    private bool IsGamePaused()
+    {
+        return GameManager.Instance != null && GameManager.Instance.IsPaused;
+    }
+    
     private void Update()
     {
+        // No procesar nada si estamos en pausa
+        if (IsGamePaused()) return;
+        
+        // Track jump buffer ANTES de ejecutar el estado
+        if (Cursor.lockState == CursorLockMode.Locked && Input.JumpPressed)
+            LastJumpPressTime = Time.time;
+        
         // Update ground check
         UpdateGroundCheck();
         
-        // Update state
+        // Update state (aqui se lee JumpPressed y IsJumpBuffered)
         CurrentState?.Execute();
-        
-        // Track jump buffer
-        if (Input.JumpPressed)
-            LastJumpPressTime = Time.time;
     }
     
     private void FixedUpdate()
     {
+        if (IsGamePaused()) return;
         CurrentState?.FixedExecute();
     }
     

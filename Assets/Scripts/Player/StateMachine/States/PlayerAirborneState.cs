@@ -6,20 +6,15 @@ using UnityEngine;
 /// </summary>
 public class PlayerAirborneState : PlayerBaseState
 {
-    private bool _hasRecordedFallStart;
-    
     public PlayerAirborneState(PlayerStateMachine context, PlayerStateFactory factory) 
         : base(context, factory) { }
     
     public override void Enter()
     {
-        _hasRecordedFallStart = false;
-        
         // Record fall start if not already set
         if (ctx.FallStartHeight <= 0)
         {
             ctx.FallStartHeight = ctx.transform.position.y;
-            _hasRecordedFallStart = true;
         }
     }
     
