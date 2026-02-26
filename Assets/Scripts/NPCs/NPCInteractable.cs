@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
@@ -117,6 +117,120 @@ public class NPCInteractable : MonoBehaviour
     /// <summary>
     /// Oculta el panel de subtítulos y vuelve a mostrar el {E}
     /// </summary>
+    private void HideSubtitle()
+    {
+        subtitlePanel.SetActive(false);
+        promptE.SetActive(true);
+        showingSubtitle = false;
+        subtitleTimer = 0f;
+    }
+}*/
+
+using UnityEngine;
+using TMPro;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+
+public class NPCInteractable : MonoBehaviour
+{
+    [Header("UI References")]
+    [SerializeField] private GameObject promptE;
+    [SerializeField] private TextMeshProUGUI subtitleText;
+    [SerializeField] private GameObject subtitlePanel;
+    [SerializeField] private float subtitleDuration = 3f;
+
+    [Header("Dialogue")]
+    [SerializeField] private List<string> subtitles = new List<string>();
+
+    private int currentSubtitleIndex = 0;
+    public bool isPlayerNear = false;
+    private float subtitleTimer = 0f;
+    private bool showingSubtitle = false;
+    
+    void Start()
+    {
+        promptE.SetActive(false);
+        subtitlePanel.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isPlayerNear = true;
+            promptE.SetActive(true);
+            currentSubtitleIndex = 0;
+            subtitleTimer = 0f;
+            showingSubtitle = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isPlayerNear = false;
+            promptE.SetActive(false);
+            subtitlePanel.SetActive(false);
+            currentSubtitleIndex = 0;
+            showingSubtitle = false;
+        }
+    }
+
+    public void Update()
+    {
+        if (!isPlayerNear) return;
+
+        // Escuchar tecla E
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (!showingSubtitle && currentSubtitleIndex < subtitles.Count)
+            {
+                ShowSubtitle();
+            }
+            else if (showingSubtitle && subtitleTimer > 0.5f) // Permite skip después de 0.5s
+            {
+                NextSubtitle();
+            }
+        }
+
+        // Actualizar timer
+        if (showingSubtitle)
+        {
+            subtitleTimer += Time.deltaTime;
+            if (subtitleTimer >= subtitleDuration)
+            {
+                HideSubtitle();
+            }
+        }
+    }
+
+    private void ShowSubtitle()
+    {
+        if (currentSubtitleIndex >= subtitles.Count)
+            return;
+
+        promptE.SetActive(false);
+        subtitlePanel.SetActive(true);
+        subtitleText.text = subtitles[currentSubtitleIndex];
+        subtitleTimer = 0f;
+        showingSubtitle = true;
+    }
+
+    private void NextSubtitle()
+    {
+        currentSubtitleIndex++;
+        if (currentSubtitleIndex < subtitles.Count)
+        {
+            subtitleText.text = subtitles[currentSubtitleIndex];
+            subtitleTimer = 0f;
+        }
+        else
+        {
+            HideSubtitle();
+        }
+    }
+
     private void HideSubtitle()
     {
         subtitlePanel.SetActive(false);
