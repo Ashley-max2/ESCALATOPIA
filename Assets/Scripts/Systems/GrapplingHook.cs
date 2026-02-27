@@ -8,7 +8,9 @@ public class GrapplingHook : MonoBehaviour
 {
     [Header("=== DETECTION ===")]
     [SerializeField] private float maxRange = 25f;
+    #pragma warning disable CS0414
     [SerializeField] private float detectionRadius = 3f;
+    #pragma warning restore CS0414
     [SerializeField] private LayerMask hookableMask;
     [SerializeField] private string hookPointTag = "HookPoint";
     
@@ -75,6 +77,10 @@ public class GrapplingHook : MonoBehaviour
         Transform bestTarget = null;
         float bestScore = float.MaxValue;
         
+        // Usar la direccion de la camara para apuntar (hay que mirar al hook point)
+        Transform cam = Camera.main != null ? Camera.main.transform : null;
+        Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
+        
         // Find all potential hook points
         Collider[] colliders = Physics.OverlapSphere(_playerTransform.position, maxRange, hookableMask);
         
@@ -87,9 +93,9 @@ public class GrapplingHook : MonoBehaviour
             Vector3 targetPos = col.transform.position;
             Vector3 directionToTarget = targetPos - _playerTransform.position;
             
-            // Must be in front of player (within 120 degree cone)
-            float angle = Vector3.Angle(_playerTransform.forward, directionToTarget);
-            if (angle > 60f) continue;
+            // Must be where the camera is looking (within 30 degree cone)
+            float angle = Vector3.Angle(aimForward, directionToTarget);
+            if (angle > 15f) continue;
             
             // Line of sight check
             if (Physics.Raycast(_playerTransform.position + Vector3.up, directionToTarget.normalized, 
@@ -159,22 +165,25 @@ public class GrapplingHook : MonoBehaviour
     
     private void OnDrawGizmosSelected()
     {
-        Transform origin = _playerTransform ?? transform;
+        // En edit mode _playerTransform aun no existe, usamos transform
+        Transform origin = Application.isPlaying ? (_playerTransform ?? transform) : transform;
         
-        // Draw detection range
+        if (origin == null) return;
+        
+        // Rango de deteccion
         Gizmos.color = new Color(0, 1, 1, 0.1f);
         Gizmos.DrawWireSphere(origin.position, maxRange);
         
-        // Draw detection cone
+        // Cono de deteccion
         Gizmos.color = Color.cyan;
         Vector3 forward = origin.forward * maxRange;
-        Vector3 leftEdge = Quaternion.Euler(0, -60, 0) * forward;
-        Vector3 rightEdge = Quaternion.Euler(0, 60, 0) * forward;
+        Vector3 leftEdge = Quaternion.Euler(0, -15, 0) * forward;
+        Vector3 rightEdge = Quaternion.Euler(0, 15, 0) * forward;
         
         Gizmos.DrawRay(origin.position + Vector3.up, leftEdge);
         Gizmos.DrawRay(origin.position + Vector3.up, rightEdge);
         
-        // Draw current target
+        // Target actual
         if (IsActive)
         {
             Gizmos.color = Color.green;

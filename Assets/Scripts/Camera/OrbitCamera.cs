@@ -1,9 +1,10 @@
 using UnityEngine;
 
 /// <summary>
-/// Cámara orbital estilo Zelda Breath of the Wild.
-/// Sigue al jugador con suavizado y permite rotación con el ratón.
-/// Incluye colisión con el entorno para evitar atravesar paredes.
+/// Camara 3D clasica estilo third-person.
+/// Sigue al player de forma rigida (sin lag lateral).
+/// Solo rota cuando mueves el raton.
+/// Colisiona con las capas que indiques para no atravesar paredes.
 /// </summary>
 public class OrbitCamera : MonoBehaviour
 {
@@ -21,27 +22,22 @@ public class OrbitCamera : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 3f;
     [SerializeField] private float minVerticalAngle = -30f;
     [SerializeField] private float maxVerticalAngle = 70f;
-    [SerializeField] private float rotationSmoothTime = 0.1f;
-    
-    [Header("=== FOLLOW ===")]
-    [SerializeField] private float followSmoothTime = 0.15f;
     
     [Header("=== COLLISION ===")]
     [SerializeField] private LayerMask collisionMask = ~0;
     [SerializeField] private float collisionBuffer = 0.3f;
+    [SerializeField] private float collisionRecoverSpeed = 10f;
     
     // Runtime
     private float _currentDistance;
     private float _targetDistance;
     private float _horizontalAngle;
     private float _verticalAngle;
-    private Vector3 _currentVelocity;
-    private Vector2 _rotationVelocity;
-    private Vector2 _currentRotation;
+    private Vector3 _smoothedTargetPos;
     
     private void Awake()
     {
-        // Find player if not assigned
+        // Buscar player si no esta asignado
         if (target == null)
         {
             var player = FindObjectOfType<PlayerStateMachine>();
@@ -54,15 +50,15 @@ public class OrbitCamera : MonoBehaviour
         _currentDistance = defaultDistance;
         _targetDistance = defaultDistance;
         
-        // Initialize rotation based on current position
+        // Iniciar rotacion basandose en la posicion actual
         if (target != null)
         {
-            Vector3 direction = transform.position - GetTargetPosition();
+            _smoothedTargetPos = GetTargetPosition();
+            Vector3 direction = transform.position - _smoothedTargetPos;
             _horizontalAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             _verticalAngle = Mathf.Asin(direction.normalized.y) * Mathf.Rad2Deg;
+            _verticalAngle = Mathf.Clamp(_verticalAngle, minVerticalAngle, maxVerticalAngle);
         }
-        
-        _currentRotation = new Vector2(_verticalAngle, _horizontalAngle);
     }
     
     private void LateUpdate()
@@ -75,7 +71,10 @@ public class OrbitCamera : MonoBehaviour
     
     private void HandleInput()
     {
-        // Rotation input
+        // No mover la camara si el cursor esta desbloqueado (menu ESC)
+        if (Cursor.lockState != CursorLockMode.Locked) return;
+        
+        // Rotar con el raton
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
         
@@ -83,34 +82,37 @@ public class OrbitCamera : MonoBehaviour
         _verticalAngle -= mouseY;
         _verticalAngle = Mathf.Clamp(_verticalAngle, minVerticalAngle, maxVerticalAngle);
         
-        // Zoom input
+        // Zoom con la rueda
         float scroll = Input.GetAxis("Mouse ScrollWheel") * scrollSensitivity;
         _targetDistance = Mathf.Clamp(_targetDistance - scroll, minDistance, maxDistance);
     }
     
     private void UpdateCameraPosition()
     {
-        // Smooth rotation
-        Vector2 targetRotation = new Vector2(_verticalAngle, _horizontalAngle);
-        _currentRotation = Vector2.SmoothDamp(_currentRotation, targetRotation, ref _rotationVelocity, rotationSmoothTime);
+        // Calcular rotacion directa (sin smooth para que no haga lag lateral)
+        Quaternion rotation = Quaternion.Euler(_verticalAngle, _horizontalAngle, 0);
         
-        // Smooth distance
-        _currentDistance = Mathf.Lerp(_currentDistance, _targetDistance, Time.deltaTime * 10f);
+        // Posicion del target (player + offset) con suavizado para evitar tirones al saltar
+        Vector3 rawTargetPos = GetTargetPosition();
+        float smoothSpeed = 25f; // rapido pero suave, evita tirones
+        float dt = Time.unscaledDeltaTime;
+        _smoothedTargetPos = Vector3.Lerp(_smoothedTargetPos, rawTargetPos, smoothSpeed * dt);
         
-        // Calculate desired position
-        Quaternion rotation = Quaternion.Euler(_currentRotation.x, _currentRotation.y, 0);
-        Vector3 targetPosition = GetTargetPosition();
-        Vector3 desiredPosition = targetPosition - (rotation * Vector3.forward * _currentDistance);
+        // Distancia con smooth solo para el zoom
+        _currentDistance = Mathf.Lerp(_currentDistance, _targetDistance, dt * collisionRecoverSpeed);
         
-        // Collision check
-        float actualDistance = CheckCollision(targetPosition, desiredPosition);
-        Vector3 finalPosition = targetPosition - (rotation * Vector3.forward * actualDistance);
+        // Posicion deseada de la camara
+        Vector3 desiredPosition = _smoothedTargetPos - (rotation * Vector3.forward * _currentDistance);
         
-        // Smooth follow
-        transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref _currentVelocity, followSmoothTime);
+        // Check colision para que no atraviese paredes
+        float actualDistance = CheckCollision(_smoothedTargetPos, desiredPosition);
+        Vector3 finalPosition = _smoothedTargetPos - (rotation * Vector3.forward * actualDistance);
         
-        // Look at target
-        transform.LookAt(targetPosition);
+        // Posicion directa, sin SmoothDamp = camara rigida que no se mueve sola
+        transform.position = finalPosition;
+        
+        // Mirar al target
+        transform.LookAt(_smoothedTargetPos);
     }
     
     private Vector3 GetTargetPosition()
@@ -121,19 +123,20 @@ public class OrbitCamera : MonoBehaviour
     private float CheckCollision(Vector3 targetPos, Vector3 desiredPos)
     {
         Vector3 direction = desiredPos - targetPos;
-        float maxDistance = direction.magnitude;
+        float maxDist = direction.magnitude;
         
         RaycastHit hit;
-        if (Physics.SphereCast(targetPos, collisionBuffer, direction.normalized, out hit, maxDistance, collisionMask))
+        if (Physics.SphereCast(targetPos, collisionBuffer, direction.normalized, out hit, maxDist, collisionMask))
         {
-            return hit.distance - collisionBuffer;
+            // Si choca, acercar la camara
+            return Mathf.Max(hit.distance - collisionBuffer, 0.5f);
         }
         
-        return maxDistance;
+        return maxDist;
     }
     
     /// <summary>
-    /// Establece el objetivo de la cámara (llamar desde PlayerStateMachine)
+    /// Para asignar target desde otro script
     /// </summary>
     public void SetTarget(Transform newTarget)
     {
@@ -141,7 +144,7 @@ public class OrbitCamera : MonoBehaviour
     }
     
     /// <summary>
-    /// Obtiene la dirección forward de la cámara (sin componente Y)
+    /// Forward de la camara sin componente Y (para movimiento relativo)
     /// </summary>
     public Vector3 GetFlatForward()
     {
@@ -151,7 +154,7 @@ public class OrbitCamera : MonoBehaviour
     }
     
     /// <summary>
-    /// Obtiene la dirección right de la cámara (sin componente Y)
+    /// Right de la camara sin componente Y
     /// </summary>
     public Vector3 GetFlatRight()
     {
