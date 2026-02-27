@@ -66,6 +66,8 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private float wallJumpUpwardForce = 6f;
     [SerializeField] private float climbCheckDistance = 0.6f;
     [SerializeField] private LayerMask climbableMask;
+    [Tooltip("Altura extra al hacer mantle para que el player suba bien encima")]
+    [SerializeField] private float mantleExtraHeight = 0.5f;
     
     public float ClimbSpeed => climbSpeed;
     public float ClimbStaminaCost => climbStaminaCost;
@@ -73,6 +75,7 @@ public class PlayerStateMachine : MonoBehaviour
     public float WallJumpUpwardForce => wallJumpUpwardForce;
     public float ClimbCheckDistance => climbCheckDistance;
     public LayerMask ClimbableMask => climbableMask;
+    public float MantleExtraHeight => mantleExtraHeight;
     #endregion
     
     #region Ground Check

@@ -1,22 +1,24 @@
 using UnityEngine;
 
 /// <summary>
-/// Estado de escalada inspirado en Jusant.
-/// El jugador se adhiere a superficies escalables y se mueve en cualquier dirección.
-/// Consume estamina mientras escala y puede saltar de la pared.
+/// Estado de escalada renovado.
+/// Se activa automaticamente al colisionar con Climbable mientras estas en el aire.
+/// Movimiento absoluto en la pared: W=arriba, S=abajo, A=izquierda, D=derecha.
+/// El player SIEMPRE mira hacia la pared, asi WASD siempre funciona igual.
 /// </summary>
 public class PlayerClimbState : PlayerBaseState
 {
-    private Vector3 _climbSurfaceNormal;
-    private Vector3 _climbSurfaceRight;
-    private Vector3 _climbSurfaceUp;
+    // Ejes de la superficie (se recalculan al cambiar de pared)
+    private Vector3 _wallNormal;
+    private Vector3 _wallRight;  // derecha en la superficie (A/D)
+    private Vector3 _wallUp;     // arriba en la superficie (W/S)
+    
     private float _staminaConsumeTimer;
     
-    // Mantle settings
-    private const float MANTLE_CHECK_HEIGHT = 1.2f;  // altura desde el player para buscar el borde
-    private const float MANTLE_FORWARD_DIST = 0.8f;  // distancia forward para buscar suelo encima
-    private const float MANTLE_DOWN_DIST = 2.5f;     // raycast hacia abajo para encontrar suelo
-    private const float MANTLE_MOVE_SPEED = 8f;      // velocidad del mantle
+    // Mantle
+    private const float MANTLE_FORWARD_DIST = 1.0f;
+    private const float MANTLE_DOWN_DIST = 3f;
+    private const float MANTLE_MOVE_SPEED = 8f;
     
     private bool _isMantling;
     private Vector3 _mantleTarget;
@@ -31,20 +33,17 @@ public class PlayerClimbState : PlayerBaseState
         _isMantling = false;
         _mantleTimer = 0;
         
-        // Stop all movement and disable gravity
+        // Parar movimiento y quitar gravedad
         ctx.Rb.velocity = Vector3.zero;
         ctx.Rb.useGravity = false;
         
-        // Calculate climbing axes based on wall normal
-        _climbSurfaceNormal = ctx.WallNormal;
-        _climbSurfaceRight = Vector3.Cross(Vector3.up, _climbSurfaceNormal).normalized;
-        _climbSurfaceUp = Vector3.up;
+        // Calcular ejes de la pared
+        UpdateWallAxes(ctx.WallNormal);
         
-        // Rotate to face away from wall
-        Quaternion targetRotation = Quaternion.LookRotation(-_climbSurfaceNormal, Vector3.up);
-        ctx.transform.rotation = targetRotation;
+        // Rotar el player para que MIRE HACIA la pared (forward = -wallNormal)
+        SnapRotationToWall();
         
-        // Reset fall height (climbing is safe position)
+        // Reset caida
         ctx.FallStartHeight = 0;
         ctx.LastGroundedPosition = ctx.transform.position;
         
@@ -56,16 +55,16 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void Execute()
     {
-        // Si esta haciendo mantle, solo actualizar eso
+        // Mantle en progreso
         if (_isMantling)
         {
             UpdateMantle();
             return;
         }
         
-        // Consume stamina over time
+        // Consumir stamina pasiva
         _staminaConsumeTimer += Time.deltaTime;
-        if (_staminaConsumeTimer >= 0.5f) // Every 0.5 seconds
+        if (_staminaConsumeTimer >= 0.5f)
         {
             if (ctx.Stamina != null)
             {
@@ -94,79 +93,129 @@ public class PlayerClimbState : PlayerBaseState
         GameEvents.ClimbEnd();
     }
     
+    /// <summary>
+    /// Calcula los ejes de movimiento en la pared
+    /// </summary>
+    private void UpdateWallAxes(Vector3 normal)
+    {
+        _wallNormal = normal.normalized;
+        
+        // Right desde la perspectiva del player mirando la pared
+        // Cross(Normal, Up) da la derecha correcta del jugador
+        _wallRight = Vector3.Cross(_wallNormal, Vector3.up).normalized;
+        
+        // Up = siempre Vector3.up para escalar verticalmente
+        _wallUp = Vector3.up;
+    }
+    
+    /// <summary>
+    /// Rota el player para que mire HACIA la pared (forward apunta a la pared)
+    /// </summary>
+    private void SnapRotationToWall()
+    {
+        // El player mira en la direccion opuesta a la normal (hacia la pared)
+        Vector3 lookDir = -_wallNormal;
+        lookDir.y = 0; // mantener rotacion horizontal
+        if (lookDir.sqrMagnitude > 0.01f)
+        {
+            ctx.transform.rotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        }
+    }
+    
+    /// <summary>
+    /// Movimiento en la pared: WASD absolute
+    /// W = arriba, S = abajo, A = izquierda, D = derecha
+    /// No depende de la camara, siempre es relativo a la pared
+    /// </summary>
     private void HandleClimbingMovement()
     {
-        // Get input
-        float horizontal = ctx.Input.MoveX;
-        float vertical = ctx.Input.MoveZ;
+        // Input crudo: MoveX = A(-1)/D(+1), MoveZ = S(-1)/W(+1)
+        float horizontal = ctx.Input.MoveX; // A/D = izquierda/derecha en la pared
+        float vertical = ctx.Input.MoveZ;   // S/W = abajo/arriba en la pared
         
-        // Calculate movement along the wall surface
-        Vector3 climbMovement = (_climbSurfaceRight * horizontal + _climbSurfaceUp * vertical).normalized;
+        // Calcular direccion de movimiento en la pared
+        Vector3 climbDir = (_wallRight * horizontal + _wallUp * vertical).normalized;
         
-        // Apply climbing speed
-        Vector3 targetVelocity = climbMovement * ctx.ClimbSpeed;
-        ctx.Rb.velocity = Vector3.Lerp(ctx.Rb.velocity, targetVelocity, Time.fixedDeltaTime * 10f);
+        // Aplicar velocidad de escalada
+        Vector3 targetVel = climbDir * ctx.ClimbSpeed;
+        ctx.Rb.velocity = Vector3.Lerp(ctx.Rb.velocity, targetVel, Time.fixedDeltaTime * 10f);
         
-        // Consume extra stamina while moving
-        if (climbMovement.magnitude > 0.1f && ctx.Stamina != null)
+        // Consumir stamina extra al moverse
+        if (climbDir.magnitude > 0.1f && ctx.Stamina != null)
         {
             ctx.Stamina.ConsumeStamina(ctx.ClimbStaminaCost * Time.fixedDeltaTime);
         }
     }
     
+    /// <summary>
+    /// Mantiene al player pegado a la pared con raycast continuo
+    /// </summary>
     private void MaintainWallContact()
     {
-        // Raycast to keep attached to wall
         RaycastHit hit;
         Vector3 rayOrigin = ctx.transform.position + Vector3.up * 0.5f;
         
         if (Physics.Raycast(rayOrigin, ctx.transform.forward, out hit, ctx.ClimbCheckDistance * 1.5f, ctx.ClimbableMask))
         {
-            // Update surface normal
-            _climbSurfaceNormal = hit.normal;
-            _climbSurfaceRight = Vector3.Cross(Vector3.up, _climbSurfaceNormal).normalized;
+            // Actualizar ejes de la pared
+            UpdateWallAxes(hit.normal);
             
-            // Rotate to face away from wall
-            Quaternion targetRotation = Quaternion.LookRotation(-_climbSurfaceNormal, Vector3.up);
-            ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRotation, Time.fixedDeltaTime * 10f);
+            // Rotar suavemente hacia la pared
+            Vector3 lookDir = -hit.normal;
+            lookDir.y = 0;
+            if (lookDir.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRot = Quaternion.LookRotation(lookDir, Vector3.up);
+                ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRot, Time.fixedDeltaTime * 10f);
+            }
             
-            // Move slightly towards wall to maintain contact
+            // Empujar levemente hacia la pared para mantener contacto
             ctx.Rb.AddForce(ctx.transform.forward * 2f, ForceMode.Acceleration);
             
-            // Update wall normal in context
-            ctx.WallNormal = _climbSurfaceNormal;
+            // Actualizar normal en el contexto
+            ctx.WallNormal = _wallNormal;
             
-            // Update safe position
+            // Posicion segura
             ctx.LastGroundedPosition = ctx.transform.position;
         }
     }
     
+    #region Mantle
+    
     /// <summary>
-    /// Check proactivo de borde: detecta si el player esta cerca del borde superior
-    /// mientras aun tiene contacto con la pared
+    /// Detecta si el player esta cerca del borde superior de la pared
     /// </summary>
     private bool TryDetectLedge(out Vector3 ledgePoint)
     {
         ledgePoint = Vector3.zero;
         
-        // 1. Comprobar si NO hay pared a la altura de la cabeza (borde detectado)
-        Vector3 headCheckOrigin = ctx.transform.position + Vector3.up * MANTLE_CHECK_HEIGHT;
-        bool wallAtHead = Physics.Raycast(headCheckOrigin, ctx.transform.forward, 
-            ctx.ClimbCheckDistance * 1.5f, ctx.ClimbableMask);
+        // Altura real del collider del player
+        float playerHeight = ctx.Collider != null ? ctx.Collider.height : 2f;
         
-        if (wallAtHead) return false; // aun hay pared arriba, no estamos en el borde
+        // 1. Comprobar a varias alturas si aun hay pared
+        // Si no hay pared a la altura del pecho o cabeza = estamos en el borde
+        float checkHeight = playerHeight * 0.85f; // cerca de la cabeza
+        Vector3 headOrigin = ctx.transform.position + Vector3.up * checkHeight;
+        float checkDist = ctx.ClimbCheckDistance * 2f;
         
-        // 2. Si no hay pared arriba, buscar suelo encima con raycast adelante+arriba
-        Vector3 forwardDir = -_climbSurfaceNormal; // hacia la pared
-        Vector3 overLedgeOrigin = headCheckOrigin + forwardDir * MANTLE_FORWARD_DIST;
+        bool wallAtHead = Physics.Raycast(headOrigin, ctx.transform.forward,
+            checkDist, ctx.ClimbableMask);
+        
+        if (wallAtHead) return false; // aun hay pared arriba, seguir escalando
+        
+        // 2. Buscar suelo encima para poner al player ahi
+        // Usar tanto GroundMask como ClimbableMask para detectar la superficie
+        LayerMask combinedMask = ctx.GroundMask | ctx.ClimbableMask;
+        
+        Vector3 forwardDir = -_wallNormal;
+        Vector3 overLedge = headOrigin + forwardDir * MANTLE_FORWARD_DIST;
         
         RaycastHit groundHit;
-        if (Physics.Raycast(overLedgeOrigin, Vector3.down, out groundHit, MANTLE_DOWN_DIST, ctx.GroundMask))
+        if (Physics.Raycast(overLedge, Vector3.down, out groundHit, MANTLE_DOWN_DIST, combinedMask))
         {
-            // Encontramos suelo encima, verificar que sea pisable (no muy inclinado)
-            if (groundHit.normal.y > 0.7f)
+            if (groundHit.normal.y > 0.5f) // mas permisivo con la inclinacion
             {
-                ledgePoint = groundHit.point + Vector3.up * 0.05f;
+                ledgePoint = groundHit.point + Vector3.up * ctx.MantleExtraHeight;
                 return true;
             }
         }
@@ -174,48 +223,37 @@ public class PlayerClimbState : PlayerBaseState
         return false;
     }
     
-    /// <summary>
-    /// Inicia el mantle: mueve al player suavemente encima del borde
-    /// </summary>
     private void StartMantle(Vector3 target)
     {
         _isMantling = true;
         _mantleTarget = target;
         _mantleTimer = 0;
         
-        // Parar velocidad y desactivar gravedad durante mantle
         ctx.Rb.velocity = Vector3.zero;
         ctx.Rb.useGravity = false;
         
         Debug.Log("Mantling up!");
     }
     
-    /// <summary>
-    /// Actualiza el movimiento de mantle frame a frame
-    /// </summary>
     private void UpdateMantle()
     {
         _mantleTimer += Time.deltaTime;
         
-        // Mover suave hacia el punto de mantle
         Vector3 currentPos = ctx.transform.position;
         float step = MANTLE_MOVE_SPEED * Time.deltaTime;
         
-        // Primero subir, luego avanzar
-        Vector3 intermediatePos = new Vector3(currentPos.x, _mantleTarget.y, currentPos.z);
-        
+        // Fase 1: subir, Fase 2: avanzar
         if (currentPos.y < _mantleTarget.y - 0.1f)
         {
-            // Fase 1: subir
-            ctx.transform.position = Vector3.MoveTowards(currentPos, intermediatePos, step);
+            Vector3 upPos = new Vector3(currentPos.x, _mantleTarget.y, currentPos.z);
+            ctx.transform.position = Vector3.MoveTowards(currentPos, upPos, step);
         }
         else
         {
-            // Fase 2: avanzar al punto final
             ctx.transform.position = Vector3.MoveTowards(ctx.transform.position, _mantleTarget, step);
         }
         
-        // Completar mantle cuando lleguemos o si tarda demasiado
+        // Completar
         float dist = Vector3.Distance(ctx.transform.position, _mantleTarget);
         if (dist < 0.1f || _mantleTimer > 1.5f)
         {
@@ -226,23 +264,18 @@ public class PlayerClimbState : PlayerBaseState
         }
     }
     
+    #endregion
+    
     private void CheckTransitions()
     {
-        // Jump off wall (estilo Jusant)
+        // Saltar desde la pared
         if (ctx.Input.JumpPressed)
         {
             SwitchState(factory.WallJump());
             return;
         }
         
-        // Release climb key
-        if (!ctx.Input.ClimbHeld)
-        {
-            SwitchState(factory.Airborne());
-            return;
-        }
-        
-        // Out of stamina
+        // Sin stamina -> caer
         if (ctx.Stamina != null && !ctx.Stamina.HasStamina())
         {
             Debug.Log("Out of stamina! Falling...");
@@ -250,8 +283,7 @@ public class PlayerClimbState : PlayerBaseState
             return;
         }
         
-        // Check proactivo de borde mientras escalamos hacia arriba
-        if (ctx.Input.MoveZ > 0.1f) // escalando hacia arriba
+        // Check mantle siempre (no solo al subir, tambien si ya estamos arriba)
         {
             Vector3 ledgePoint;
             if (TryDetectLedge(out ledgePoint))
@@ -261,10 +293,10 @@ public class PlayerClimbState : PlayerBaseState
             }
         }
         
-        // Lost wall contact
+        // Perder contacto con la pared
         if (!ctx.CheckClimbableSurface(out _))
         {
-            // Check fallback: buscar suelo encima aunque no estemos subiendo activamente
+            // Intentar mantle antes de caer
             Vector3 fallbackLedge;
             if (TryDetectLedge(out fallbackLedge))
             {
@@ -272,19 +304,19 @@ public class PlayerClimbState : PlayerBaseState
                 return;
             }
             
-            // No hay borde, caer
+            // Caer
             SwitchState(factory.Airborne());
             return;
         }
         
-        // Landed on ground while climbing
+        // Si toca el suelo escalando -> grounded
         if (ctx.IsGrounded)
         {
             SwitchState(factory.Grounded());
             return;
         }
         
-        // Use hook while climbing
+        // Hook mientras escala
         if (ctx.Input.HookPressed && ctx.GrapplingHook != null && ctx.GrapplingHook.CanFire())
         {
             SwitchState(factory.Hook());

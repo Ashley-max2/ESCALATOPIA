@@ -20,10 +20,6 @@ public class PlayerInputHandler : MonoBehaviour
     public bool JumpHeld { get; private set; }
     public bool SprintHeld { get; private set; }
     
-    // Climbing
-    public bool ClimbHeld { get; private set; }
-    public bool ClimbJumpPressed { get; private set; }
-    
     // Hook
     public bool HookPressed { get; private set; }
     public bool HookReleasePressed { get; private set; }
@@ -35,7 +31,6 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Input Settings")]
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode climbKey = KeyCode.E;
     [SerializeField] private KeyCode hookKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode hookReleaseKey = KeyCode.Mouse0;
     
@@ -68,8 +63,6 @@ public class PlayerInputHandler : MonoBehaviour
         JumpPressed = false;
         JumpHeld = false;
         SprintHeld = false;
-        ClimbHeld = false;
-        ClimbJumpPressed = false;
         HookPressed = false;
         HookReleasePressed = false;
         CameraX = 0;
@@ -94,9 +87,6 @@ public class PlayerInputHandler : MonoBehaviour
         JumpPressed = _jumpPressedThisFrame;
         JumpHeld = Input.GetKey(jumpKey);
         SprintHeld = Input.GetKey(sprintKey);
-        
-        ClimbHeld = Input.GetKey(climbKey);
-        ClimbJumpPressed = ClimbHeld && JumpPressed;
         
         if (Input.GetKeyDown(hookKey))
             _hookPressedThisFrame = true;
@@ -123,6 +113,5 @@ public class PlayerInputHandler : MonoBehaviour
         JumpPressed = false;
         HookPressed = false;
         HookReleasePressed = false;
-        ClimbJumpPressed = false;
     }
 }
