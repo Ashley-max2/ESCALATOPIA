@@ -4,6 +4,10 @@
 		<property name="name">
 			<value>Music</value>
 		</property>
+		<relationship name="masters">
+			<destination>{68076387-b7b7-45ee-b913-1ff14ca82ea5}</destination>
+			<destination>{624bdd82-864b-4728-a4ec-a7f23cf70ce5}</destination>
+		</relationship>
 		<relationship name="effectChain">
 			<destination>{998bceaa-2b5e-454d-99f2-f373dbaf7d3c}</destination>
 		</relationship>
@@ -11,14 +15,22 @@
 			<destination>{da3bfd33-6793-4c1d-8f3e-c365dc25b31a}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{b82808c6-72a1-4fe4-ae38-74131f5a8b8f}</destination>
+			<destination>{8551306c-cef8-4475-8791-c01277b65488}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{998bceaa-2b5e-454d-99f2-f373dbaf7d3c}">
 		<relationship name="effects">
+			<destination>{a82765d4-ff3f-4a7b-9c07-a428d009aab0}</destination>
 			<destination>{a98605f5-1294-418d-8e54-c992f29ce639}</destination>
+			<destination>{bb47fc6f-83b3-46be-a9df-fc469388331a}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{da3bfd33-6793-4c1d-8f3e-c365dc25b31a}" />
+	<object class="LowpassEffect" id="{a82765d4-ff3f-4a7b-9c07-a428d009aab0}">
+		<property name="cutoff">
+			<value>6500</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{a98605f5-1294-418d-8e54-c992f29ce639}" />
+	<object class="ThreeEQEffect" id="{bb47fc6f-83b3-46be-a9df-fc469388331a}" />
 </objects>
