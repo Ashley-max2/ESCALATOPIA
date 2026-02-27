@@ -476,6 +476,7 @@ MonoBehaviour:
   TargetAssetPath: FMODBanks
   TargetBankFolder: 
   EventLinkage: 0
+  SerializeGUIDsOnly: 0
   LoggingLevel: 2
   SpeakerModeSettings: []
   SampleRateSettings: []
@@ -485,7 +486,8 @@ MonoBehaviour:
   VirtualChannelSettings: []
   RealChannelSettings: []
   Plugins: []
-  MasterBanks: []
+  MasterBanks:
+  - Master
   Banks: []
   BanksToLoad: []
   LiveUpdatePort: 9264
