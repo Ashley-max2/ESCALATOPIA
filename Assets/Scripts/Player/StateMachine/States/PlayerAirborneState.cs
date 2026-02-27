@@ -3,23 +3,19 @@ using UnityEngine;
 /// <summary>
 /// Estado cuando el jugador está en el aire (cayendo o saltando).
 /// Gestiona control aéreo limitado, física de caída mejorada, y transiciones.
+/// Si colisiona con una superficie Climbable, transiciona automaticamente a escalada.
 /// </summary>
 public class PlayerAirborneState : PlayerBaseState
 {
-    private bool _hasRecordedFallStart;
-    
     public PlayerAirborneState(PlayerStateMachine context, PlayerStateFactory factory) 
         : base(context, factory) { }
     
     public override void Enter()
     {
-        _hasRecordedFallStart = false;
-        
         // Record fall start if not already set
         if (ctx.FallStartHeight <= 0)
         {
             ctx.FallStartHeight = ctx.transform.position.y;
-            _hasRecordedFallStart = true;
         }
     }
     
@@ -84,16 +80,13 @@ public class PlayerAirborneState : PlayerBaseState
             return;
         }
         
-        // Start climbing while in air
-        if (ctx.Input.ClimbHeld)
+        // Auto-climb: si chocamos con una superficie escalable, empezar a escalar
+        RaycastHit hit;
+        if (ctx.CheckClimbableSurface(out hit))
         {
-            RaycastHit hit;
-            if (ctx.CheckClimbableSurface(out hit))
-            {
-                ctx.WallNormal = hit.normal;
-                SwitchState(factory.Climb());
-                return;
-            }
+            ctx.WallNormal = hit.normal;
+            SwitchState(factory.Climb());
+            return;
         }
         
         // Hook while in air

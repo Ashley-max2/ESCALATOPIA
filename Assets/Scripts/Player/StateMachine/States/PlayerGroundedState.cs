@@ -2,8 +2,9 @@ using UnityEngine;
 
 /// <summary>
 /// Estado cuando el jugador está en el suelo.
-/// Gestiona movimiento, salto, y transiciones a escalada/gancho.
+/// Gestiona movimiento, salto, y transiciones a gancho.
 /// Movimiento estilo Zelda BotW con rotación suave hacia la dirección del movimiento.
+/// Ya no transiciona a escalada desde el suelo (solo se escala al saltar contra una pared).
 /// </summary>
 public class PlayerGroundedState : PlayerBaseState
 {
@@ -66,18 +67,6 @@ public class PlayerGroundedState : PlayerBaseState
             return;
         }
         
-        // Climbing
-        if (ctx.Input.ClimbHeld)
-        {
-            RaycastHit hit;
-            if (ctx.CheckClimbableSurface(out hit))
-            {
-                ctx.WallNormal = hit.normal;
-                SwitchState(factory.Climb());
-                return;
-            }
-        }
-        
         // Hook
         if (ctx.Input.HookPressed && ctx.GrapplingHook != null && ctx.GrapplingHook.CanFire())
         {
@@ -97,7 +86,6 @@ public class PlayerGroundedState : PlayerBaseState
         }
         else if (fallDistance >= ctx.SafeFallHeight)
         {
-            // Could add stagger/damage effects here
             Debug.Log($"Hard landing from {fallDistance:F1}m");
         }
     }
