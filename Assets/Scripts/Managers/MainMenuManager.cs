@@ -9,7 +9,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject ConfigPanel;
     [SerializeField] private GameObject SongPanel;
     [SerializeField] private GameObject ScreenPanel;
-    
+
+    public List<GameObject> Screens;
 
     private GameObject currentActivePanel;
 
@@ -21,9 +22,10 @@ public class MainMenuManager : MonoBehaviour
             MainMenuPanel.SetActive(true);
             currentActivePanel = MainMenuPanel;
         }
-        
-        DeactivatePanels();
-        MainMenuPanel.SetActive(true);
+
+        DesactivatePanels(1);
+        DesactivatePanels(2);
+        DesactivatePanels(3);
     }
 
     /// <summary>
@@ -41,6 +43,7 @@ public class MainMenuManager : MonoBehaviour
     public void OpenConfigPanel()
     {
         ChangePanel(ConfigPanel);
+        Debug.Log("Menu conf abierto");
     }
 
     /// <summary>
@@ -96,12 +99,9 @@ public class MainMenuManager : MonoBehaviour
     /// <summary>
     /// Desactiva todos los paneles
     /// </summary>
-    private void DeactivatePanels()
+    private void DesactivatePanels(int index)
     {
-        if (MainMenuPanel != null) MainMenuPanel.SetActive(false);
-        if (ConfigPanel != null) ConfigPanel.SetActive(false);
-        if (SongPanel != null) SongPanel.SetActive(false);
-        if (ScreenPanel != null) ScreenPanel.SetActive(false);
+        Screens[index].SetActive(false);
     }
 
     /// <summary>
@@ -110,7 +110,7 @@ public class MainMenuManager : MonoBehaviour
     public void ExitGame()
     {
         Debug.Log("Saliendo del juego...");
-        
+       
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else
