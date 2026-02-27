@@ -25,6 +25,12 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
+    public void Creditos(string sceneName)
+    {
+        Debug.Log("Cargando escena: " + sceneName);
+        SceneManager.LoadScene(sceneName);
+    }
+
     public void ChangeScene(string newScene)
     {
         Debug.Log("Cargando escena: " + newScene);
