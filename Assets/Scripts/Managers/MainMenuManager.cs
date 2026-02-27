@@ -3,118 +3,81 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuManager : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject MainMenuPanel;
-    [SerializeField] private GameObject ConfigPanel;
-    [SerializeField] private GameObject SongPanel;
-    [SerializeField] private GameObject ScreenPanel;
-
-    public List<GameObject> Screens;
-
-    private GameObject currentActivePanel;
+    [SerializeField] GameObject MainMenuPanel;
+    [SerializeField] GameObject ConfigPanel;
+    [SerializeField] GameObject SongPanel;
+    [SerializeField] GameObject ScreenPanel;
 
     private void Start()
     {
-        // Asegurar que solo el panel principal está activo al inicio
-        if (MainMenuPanel != null)
-        {
-            MainMenuPanel.SetActive(true);
-            currentActivePanel = MainMenuPanel;
-        }
-
-        DesactivatePanels(1);
-        DesactivatePanels(2);
-        DesactivatePanels(3);
+        // Asegurar que solo el panel principal esté activo al inicio
+        MainMenuPanel.SetActive(true);
+        ConfigPanel.SetActive(false);
+        SongPanel.SetActive(false);
+        ScreenPanel.SetActive(false);
     }
 
-    /// <summary>
-    /// Abre la escena de juego
-    /// </summary>
-    public void PlayGame()
+    public void PlayGame(string sceneName)
     {
-        Debug.Log("Cargando escena: PlayerTesting");
-        SceneManager.LoadScene("PlayerTesting");
+        Debug.Log("Cargando escena: " + sceneName);
+        SceneManager.LoadScene(sceneName);
     }
 
-    /// <summary>
-    /// Abre el panel de configuración
-    /// </summary>
-    public void OpenConfigPanel()
+    public void ChangeScene(string newScene)
     {
-        ChangePanel(ConfigPanel);
-        Debug.Log("Menu conf abierto");
+        Debug.Log("Cargando escena: " + newScene);
+        SceneManager.LoadScene(newScene);
     }
 
-    /// <summary>
-    /// Abre el panel de sonido
-    /// </summary>
-    public void OpenSongPanel()
-    {
-        ChangePanel(SongPanel);
-    }
-
-    /// <summary>
-    /// Abre el panel de pantalla
-    /// </summary>
-    public void OpenScreenPanel()
-    {
-        ChangePanel(ScreenPanel);
-    }
-
-    /// <summary>
-    /// Vuelve al panel anterior según el contexto
-    /// </summary>
-    public void ReturnToPreviousPanel()
-    {
-        // Si estamos en el panel de sonido o pantalla, volver a configuración
-        if (currentActivePanel == SongPanel || currentActivePanel == ScreenPanel)
-        {
-            ChangePanel(ConfigPanel);
-        }
-        // Si estamos en configuración, volver al menú principal
-        else if (currentActivePanel == ConfigPanel)
-        {
-            ChangePanel(MainMenuPanel);
-        }
-    }
-
-    /// <summary>
-    /// Cambia de panel desactivando el actual y activando el nuevo
-    /// </summary>
-    private void ChangePanel(GameObject newPanel)
-    {
-        if (currentActivePanel != null)
-        {
-            currentActivePanel.SetActive(false);
-        }
-
-        if (newPanel != null)
-        {
-            newPanel.SetActive(true);
-            currentActivePanel = newPanel;
-        }
-    }
-
-    /// <summary>
-    /// Desactiva todos los paneles
-    /// </summary>
-    private void DesactivatePanels(int index)
-    {
-        Screens[index].SetActive(false);
-    }
-
-    /// <summary>
-    /// Sale del juego
-    /// </summary>
     public void ExitGame()
     {
-        Debug.Log("Saliendo del juego...");
-       
+        Debug.Log("Saliste");
+        Application.Quit();
+        
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #else
-        Application.Quit();
         #endif
+    }
+
+    public void OpenConfig()
+    {
+        MainMenuPanel.SetActive(false);
+        ConfigPanel.SetActive(true);
+        SongPanel.SetActive(false);
+        ScreenPanel.SetActive(false);
+    }
+
+    public void OpenSongMenu()
+    {
+        MainMenuPanel.SetActive(false);
+        ConfigPanel.SetActive(false);
+        SongPanel.SetActive(true);
+        ScreenPanel.SetActive(false);
+    }
+
+    public void OpenScreenMenu()
+    {
+        MainMenuPanel.SetActive(false);
+        ConfigPanel.SetActive(false);
+        SongPanel.SetActive(false);
+        ScreenPanel.SetActive(true);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        MainMenuPanel.SetActive(true);
+        ConfigPanel.SetActive(false);
+        SongPanel.SetActive(false);
+        ScreenPanel.SetActive(false);
+    }
+
+    public void ReturnToConfig()
+    {
+        MainMenuPanel.SetActive(false);
+        ConfigPanel.SetActive(true);
+        SongPanel.SetActive(false);
+        ScreenPanel.SetActive(false);
     }
 }
