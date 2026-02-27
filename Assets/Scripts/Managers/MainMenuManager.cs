@@ -9,7 +9,6 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject ConfigPanel;
     [SerializeField] private GameObject SongPanel;
     [SerializeField] private GameObject ScreenPanel;
-    
 
     private GameObject currentActivePanel;
 
@@ -41,7 +40,6 @@ public class MainMenuManager : MonoBehaviour
     public void OpenConfigPanel()
     {
         ChangePanel(ConfigPanel);
-        Debug.Log("Menu conf abierto");
     }
 
     /// <summary>
