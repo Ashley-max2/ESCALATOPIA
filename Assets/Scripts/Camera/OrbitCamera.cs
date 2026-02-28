@@ -3,7 +3,8 @@ using UnityEngine;
 /// <summary>
 /// Camara 3D clasica estilo third-person.
 /// Sigue al player de forma rigida (sin lag lateral).
-/// Solo rota cuando mueves el raton.
+/// Rota con raton + stick derecho del mando (Xbox o PlayStation).
+/// Auto-detecta el tipo de mando via PlayerInputHandler.
 /// Colisiona con las capas que indiques para no atravesar paredes.
 /// </summary>
 public class OrbitCamera : MonoBehaviour
@@ -21,6 +22,7 @@ public class OrbitCamera : MonoBehaviour
     [Header("=== ROTATION ===")]
     [SerializeField] private float mouseSensitivity = 3f;
     [SerializeField] private float gamepadSensitivity = 3f;
+    [SerializeField] private float gamepadDeadzone = 0.25f;
     [SerializeField] private float minVerticalAngle = -30f;
     [SerializeField] private float maxVerticalAngle = 70f;
 
@@ -36,6 +38,9 @@ public class OrbitCamera : MonoBehaviour
     private float _verticalAngle;
     private Vector3 _smoothedTargetPos;
 
+    // Referencia al input handler para saber tipo de mando
+    private PlayerInputHandler _inputHandler;
+
     private void Awake()
     {
         // Buscar player si no esta asignado
@@ -47,6 +52,9 @@ public class OrbitCamera : MonoBehaviour
                 target = player.transform;
             }
         }
+
+        // Buscar input handler
+        _inputHandler = FindObjectOfType<PlayerInputHandler>();
 
         _currentDistance = defaultDistance;
         _targetDistance = defaultDistance;
@@ -80,8 +88,38 @@ public class OrbitCamera : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         // Rotar con el stick derecho del mando
-        float padX = Input.GetAxis("GamepadCameraX") * gamepadSensitivity;
-        float padY = Input.GetAxis("GamepadCameraY") * gamepadSensitivity;
+        float padX = 0f;
+        float padY = 0f;
+
+        if (_inputHandler != null && _inputHandler.DetectedGamepad != PlayerInputHandler.GamepadType.None)
+        {
+            // Elegir ejes segun tipo de mando detectado
+            string axisX, axisY;
+            if (_inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
+            {
+                axisX = "PSCameraX";
+                axisY = "PSCameraY";
+            }
+            else
+            {
+                axisX = "GamepadCameraX";
+                axisY = "GamepadCameraY";
+            }
+
+            try
+            {
+                float rawX = Input.GetAxisRaw(axisX);
+                float rawY = Input.GetAxisRaw(axisY);
+
+                // Deadzone manual para evitar drift del stick
+                if (Mathf.Abs(rawX) > gamepadDeadzone) padX = rawX * gamepadSensitivity;
+                if (Mathf.Abs(rawY) > gamepadDeadzone) padY = rawY * gamepadSensitivity;
+            }
+            catch (System.Exception)
+            {
+                // Eje no existe en InputManager todavia, ignorar
+            }
+        }
 
         _horizontalAngle += mouseX + padX;
         _verticalAngle -= (mouseY + padY);

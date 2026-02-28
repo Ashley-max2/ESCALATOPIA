@@ -66,13 +66,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Referencia al input handler para saber tipo de mando
+    private PlayerInputHandler _inputHandler;
+
     // Referencia al primer boton del panel de pausa para auto-seleccion con mando
     private GameObject _resumeButtonObj;
 
     private void Update()
     {
-        // ESC o Start del mando para pausar/reanudar
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7))
+        // Buscar input handler si no lo tenemos
+        if (_inputHandler == null && player != null)
+            _inputHandler = player.GetComponent<PlayerInputHandler>();
+
+        // Detectar boton de pausa segun tipo de mando
+        // ESC siempre funciona
+        bool pausePressed = Input.GetKeyDown(KeyCode.Escape);
+
+        if (_inputHandler != null)
+        {
+            var gp = _inputHandler.DetectedGamepad;
+            // Xbox: Start = Button7 | PS: Options = Button9
+            // IMPORTANTE: En PS4, Button7 = R2 (gancho), NO es Start!
+            if (gp == PlayerInputHandler.GamepadType.Xbox)
+                pausePressed |= Input.GetKeyDown(KeyCode.JoystickButton7);
+            else if (gp == PlayerInputHandler.GamepadType.PlayStation)
+                pausePressed |= Input.GetKeyDown(KeyCode.JoystickButton9);
+        }
+
+        if (pausePressed)
         {
             if (isPaused)
                 ResumeGame();
@@ -80,10 +101,16 @@ public class GameManager : MonoBehaviour
                 PauseGame();
         }
 
-        // B del mando (Cancel) para reanudar si esta pausado
-        if (isPaused && Input.GetKeyDown(KeyCode.JoystickButton1))
+        // Reanudar con B (Xbox) o Circle (PS) solo si esta pausado
+        if (isPaused)
         {
-            ResumeGame();
+            bool resumePressed = Input.GetKeyDown(KeyCode.JoystickButton1); // Xbox B (seguro)
+
+            if (_inputHandler != null && _inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
+                resumePressed |= Input.GetKeyDown(KeyCode.JoystickButton2); // PS Circle
+
+            if (resumePressed)
+                ResumeGame();
         }
     }
 
