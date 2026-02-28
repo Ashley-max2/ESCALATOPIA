@@ -286,7 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55c2fb6966138d54c9187bc500ff01c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuMusicPath: event:/Ambient/MenuMusic
+  forestMusicPath: event:/Ambient/MenuMusic
 --- !u!4 &112667683
 Transform:
   m_ObjectHideFlags: 0
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 112667681}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6616542b038fac147a340133ec7a6f97, type: 3}
+  m_Script: {fileID: 11500000, guid: 7449af216596723409c56217ea74b974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sliderGeneralMusic: {fileID: 3420931454561885654}
@@ -347,7 +347,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1533490613}
-  - {fileID: 1051533872}
   - {fileID: 231434002}
   - {fileID: 1251172779}
   m_Father: {fileID: 2040462260}
@@ -880,8 +879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5c0ede0eb0bb3f4eab2b4a98f765722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resolutionDropdown: {fileID: 4905805902723573766}
-  fullscreenToggle: {fileID: 2887196214772267035}
 --- !u!1 &728582489
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,7 +1088,7 @@ GameObject:
   m_Component:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
-  - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1099,14 +1096,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &963194226
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
 --- !u!20 &963194227
 Camera:
   m_ObjectHideFlags: 0
@@ -1173,6 +1162,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &986368376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1333,9 +1336,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1575135633430479470}
-  - {fileID: 564810864}
+  m_Children: []
   m_Father: {fileID: 1761128591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
@@ -2338,6 +2339,7 @@ RectTransform:
   - {fileID: 1575135633430479470}
   - {fileID: 2101658207785269147}
   - {fileID: 7023007240215316263}
+  - {fileID: 1080427897}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2546,7 +2548,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1051533872}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -2695,7 +2697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Music Volume
+  m_text: General Music
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6467,7 +6469,7 @@ GameObject:
   - component: {fileID: 5190279460313569558}
   - component: {fileID: 3420931454561885654}
   m_Layer: 5
-  m_Name: MusicSlider
+  m_Name: GeneralMusic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7169,3 +7171,5 @@ SceneRoots:
   - {fileID: 1761128591}
   - {fileID: 1232228063}
   - {fileID: 7185290713143854712}
+  - {fileID: 112667683}
+  - {fileID: 1868730457}
