@@ -68,6 +68,8 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private LayerMask climbableMask;
     [Tooltip("Altura extra al hacer mantle para que el player suba bien encima")]
     [SerializeField] private float mantleExtraHeight = 0.5f;
+    [SerializeField] private float minClimbAngle = 45f;
+    [SerializeField] private float maxClimbAngle = 135f;
     
     public float ClimbSpeed => climbSpeed;
     public float ClimbStaminaCost => climbStaminaCost;
@@ -76,6 +78,8 @@ public class PlayerStateMachine : MonoBehaviour
     public float ClimbCheckDistance => climbCheckDistance;
     public LayerMask ClimbableMask => climbableMask;
     public float MantleExtraHeight => mantleExtraHeight;
+    public float MinClimbAngle => minClimbAngle;
+    public float MaxClimbAngle => maxClimbAngle;
     #endregion
     
     #region Ground Check
@@ -83,10 +87,12 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.3f;
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private float maxWalkableSlope = 45f;
     
     public Transform GroundCheck => groundCheck;
     public float GroundCheckRadius => groundCheckRadius;
     public LayerMask GroundMask => groundMask;
+    public float MaxWalkableSlope => maxWalkableSlope;
     #endregion
     
     #region Fall Death Settings
@@ -191,7 +197,29 @@ public class PlayerStateMachine : MonoBehaviour
     private void UpdateGroundCheck()
     {
         bool wasGrounded = IsGrounded;
-        IsGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
+        
+        // Initial broad check
+        bool physicsHit = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundMask);
+        IsGrounded = false;
+        
+        if (physicsHit)
+        {
+            // Verify slope angle using raycast
+            Vector3 origin = groundCheck.position + Vector3.up * groundCheckRadius;
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, groundCheckRadius * 2.5f, groundMask))
+            {
+                float slopeAngle = Vector3.Angle(Vector3.up, hit.normal);
+                if (slopeAngle <= maxWalkableSlope)
+                {
+                    IsGrounded = true;
+                }
+            }
+            else
+            {
+                // Fallback if raycast misses but sphere hits (e.g. edge of platform)
+                IsGrounded = true; 
+            }
+        }
         
         if (IsGrounded)
         {
@@ -281,7 +309,30 @@ public class PlayerStateMachine : MonoBehaviour
     public bool CheckClimbableSurface(out RaycastHit hit)
     {
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-        return Physics.Raycast(origin, transform.forward, out hit, climbCheckDistance, climbableMask);
+        float actualCheckDist = IsClimbing ? climbCheckDistance * 1.5f : climbCheckDistance;
+        
+        // 1. Raycast (Precisión directa)
+        if (Physics.Raycast(origin, transform.forward, out hit, actualCheckDist, climbableMask))
+        {
+            float surfaceAngle = Vector3.Angle(Vector3.up, hit.normal);
+            if (surfaceAngle >= minClimbAngle && surfaceAngle <= maxClimbAngle)
+            {
+                return true;
+            }
+        }
+        
+        // 2. SphereCast (Cobertura y bordes)
+        if (Physics.SphereCast(origin, 0.25f, transform.forward, out hit, actualCheckDist, climbableMask))
+        {
+            float surfaceAngle = Vector3.Angle(Vector3.up, hit.normal);
+            if (surfaceAngle >= minClimbAngle && surfaceAngle <= maxClimbAngle)
+            {
+                return true;
+            }
+        }
+        
+        hit = default;
+        return false;
     }
     #endregion
     

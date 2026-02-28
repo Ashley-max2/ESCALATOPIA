@@ -104,8 +104,8 @@ public class PlayerClimbState : PlayerBaseState
         // Cross(Normal, Up) da la derecha correcta del jugador
         _wallRight = Vector3.Cross(_wallNormal, Vector3.up).normalized;
         
-        // Up = siempre Vector3.up para escalar verticalmente
-        _wallUp = Vector3.up;
+        // Up real alineado a la pendiente (evita separarse al escalar hacia arriba)
+        _wallUp = Vector3.Cross(_wallRight, _wallNormal).normalized;
     }
     
     /// <summary>
@@ -153,9 +153,7 @@ public class PlayerClimbState : PlayerBaseState
     private void MaintainWallContact()
     {
         RaycastHit hit;
-        Vector3 rayOrigin = ctx.transform.position + Vector3.up * 0.5f;
-        
-        if (Physics.Raycast(rayOrigin, ctx.transform.forward, out hit, ctx.ClimbCheckDistance * 1.5f, ctx.ClimbableMask))
+        if (ctx.CheckClimbableSurface(out hit))
         {
             // Actualizar ejes de la pared
             UpdateWallAxes(hit.normal);
@@ -169,8 +167,8 @@ public class PlayerClimbState : PlayerBaseState
                 ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRot, Time.fixedDeltaTime * 10f);
             }
             
-            // Empujar levemente hacia la pared para mantener contacto
-            ctx.Rb.AddForce(ctx.transform.forward * 2f, ForceMode.Acceleration);
+            // Empujar levemente hacia la pared para mantener contacto usando la normal real
+            ctx.Rb.AddForce(-hit.normal * 2f, ForceMode.Acceleration);
             
             // Actualizar normal en el contexto
             ctx.WallNormal = _wallNormal;
