@@ -63,6 +63,14 @@ public class HazardTeleporter : MonoBehaviour
         }
     }
 
+    public void ForceTeleport(Collider entityCollider)
+    {
+        if (!isHandlingTeleport)
+        {
+            StartCoroutine(TeleportRoutine(entityCollider));
+        }
+    }
+
     private IEnumerator TeleportRoutine(Collider playerCollider)
     {
         isHandlingTeleport = true;
