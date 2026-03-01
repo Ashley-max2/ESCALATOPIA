@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject ConfigPanel;
     [SerializeField] GameObject SongPanel;
     [SerializeField] GameObject ScreenPanel;
+    [SerializeField] GameObject ControlsPanel;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class MainMenu : MonoBehaviour
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(false);
         ScreenPanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 
     public void PlayGame(string sceneName)
@@ -41,7 +43,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Saliste");
         Application.Quit();
-        
+
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #endif
@@ -53,6 +55,7 @@ public class MainMenu : MonoBehaviour
         ConfigPanel.SetActive(true);
         SongPanel.SetActive(false);
         ScreenPanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 
     public void OpenSongMenu()
@@ -61,6 +64,7 @@ public class MainMenu : MonoBehaviour
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(true);
         ScreenPanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 
     public void OpenScreenMenu()
@@ -69,6 +73,16 @@ public class MainMenu : MonoBehaviour
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(false);
         ScreenPanel.SetActive(true);
+        ControlsPanel.SetActive(false);
+    }
+
+    public void OpenControlsMenu()
+    {
+        MainMenuPanel.SetActive(false);
+        ConfigPanel.SetActive(false);
+        SongPanel.SetActive(false);
+        ScreenPanel.SetActive(false);
+        ControlsPanel.SetActive(true);
     }
 
     public void ReturnToMainMenu()
@@ -77,6 +91,7 @@ public class MainMenu : MonoBehaviour
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(false);
         ScreenPanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 
     public void ReturnToConfig()
@@ -85,5 +100,6 @@ public class MainMenu : MonoBehaviour
         ConfigPanel.SetActive(true);
         SongPanel.SetActive(false);
         ScreenPanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 }

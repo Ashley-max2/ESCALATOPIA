@@ -43,6 +43,9 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("Key Bindings (se auto-rellena con defaults)")]
     [SerializeField] private List<KeyBinding> bindings = new List<KeyBinding>();
 
+    /// <summary>Acceso de lectura a los bindings para la UI de controles</summary>
+    public List<KeyBinding> Bindings => bindings;
+
     // ==================== TIPO DE MANDO ====================
 
     public enum GamepadType { None, Xbox, PlayStation }
@@ -137,6 +140,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void Update()
     {
+        // Rebinding funciona siempre, incluso con cursor desbloqueado (en menus)
+        if (IsRebinding)
+        {
+            ProcessRebindInput();
+            return;
+        }
+
         // Si el cursor esta desbloqueado no procesamos input de juego
         if (Cursor.lockState != CursorLockMode.Locked)
         {
@@ -151,16 +161,9 @@ public class PlayerInputHandler : MonoBehaviour
             _nextGamepadCheck = Time.unscaledTime + 2f;
         }
 
-        if (!IsRebinding)
-        {
-            ProcessMovementInput();
-            ProcessActionInput();
-            ProcessCameraInput();
-        }
-        else
-        {
-            ProcessRebindInput();
-        }
+        ProcessMovementInput();
+        ProcessActionInput();
+        ProcessCameraInput();
     }
 
     private void LateUpdate()
