@@ -146,6 +146,7 @@ public class NPCInteractable : MonoBehaviour
     public bool isPlayerNear = false;
     private float subtitleTimer = 0f;
     private bool showingSubtitle = false;
+    public bool hasFinishedDialogue = false;
     
     void Start()
     {
@@ -177,6 +178,14 @@ public class NPCInteractable : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        isPlayerNear = false;
+        if (promptE != null) promptE.SetActive(false);
+        if (subtitlePanel != null) subtitlePanel.SetActive(false);
+        showingSubtitle = false;
+    }
+
     public void Update()
     {
         if (!isPlayerNear) return;
@@ -184,6 +193,14 @@ public class NPCInteractable : MonoBehaviour
         // Escuchar tecla E
         if (Input.GetKeyDown(KeyCode.E))
         {
+            if (subtitles == null || subtitles.Count == 0)
+            {
+                // Si no hay subtítulos, consideramos que la charla termina nada más darle a E
+                hasFinishedDialogue = true;
+                HideSubtitle();
+                return;
+            }
+
             if (!showingSubtitle && currentSubtitleIndex < subtitles.Count)
             {
                 ShowSubtitle();
@@ -227,6 +244,7 @@ public class NPCInteractable : MonoBehaviour
         }
         else
         {
+            hasFinishedDialogue = true;
             HideSubtitle();
         }
     }

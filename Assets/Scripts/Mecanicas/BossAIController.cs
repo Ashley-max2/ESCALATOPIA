@@ -60,9 +60,25 @@ public class BossAIController : MonoBehaviour
     // Para evitar que la IA oscile entre puntos que ya ha visitado (hacia adelante y hacia atrás)
     private HashSet<Transform> visitedDynamicNodes = new HashSet<Transform>();
 
-    private void Start()
+    private Coroutine aiCoroutine;
+
+    private void OnEnable()
     {
-        StartCoroutine(AILogicLoop());
+        professionalIndex = 0;
+        isThinking = false;
+        currentState = ActionState.Idle;
+        visitedDynamicNodes.Clear();
+        aiCoroutine = StartCoroutine(AILogicLoop());
+    }
+
+    private void OnDisable()
+    {
+        if (aiCoroutine != null)
+        {
+            StopCoroutine(aiCoroutine);
+            aiCoroutine = null;
+        }
+        StopAllCoroutines();
     }
 
     private IEnumerator AILogicLoop()
@@ -216,8 +232,15 @@ public class BossAIController : MonoBehaviour
             SetState(ActionState.Idle);
             yield return new WaitForSeconds(professionalWaitTimes[professionalIndex]);
 
-            // Avanzar al siguiente punto
-            professionalIndex = (professionalIndex + 1) % professionalFixedRoute.Count;
+            // Avanzar al siguiente punto o detenerse si es el último
+            if (professionalIndex < professionalFixedRoute.Count - 1)
+            {
+                professionalIndex++;
+            }
+            else
+            {
+                yield break; // Termina la rutina en el último punto
+            }
         }
     }
 
