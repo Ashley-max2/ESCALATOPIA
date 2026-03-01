@@ -153,10 +153,20 @@ public class ControlsMenu : MonoBehaviour
             HideRebindPanel();
         }
 
-        gameObject.SetActive(false);
-
+        // Intentar volver al config del Main Menu
         var mainMenu = FindObjectOfType<MainMenu>();
         if (mainMenu != null)
+        {
             mainMenu.ReturnToConfig();
+            return;
+        }
+
+        // Intentar volver al config del Pause Menu
+        var pauseMenu = FindObjectOfType<PauseMenuManager>();
+        if (pauseMenu != null)
+        {
+            pauseMenu.ReturnToConfig();
+            return;
+        }
     }
 }

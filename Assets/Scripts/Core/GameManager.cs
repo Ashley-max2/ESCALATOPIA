@@ -93,24 +93,11 @@ public class GameManager : MonoBehaviour
                 pausePressed |= Input.GetKeyDown(KeyCode.JoystickButton9);
         }
 
-        if (pausePressed)
+        // Solo pausar si NO estamos pausados ya
+        // Para reanudar, el jugador DEBE usar el boton "Reanudar" del menu
+        if (pausePressed && !isPaused)
         {
-            if (isPaused)
-                ResumeGame();
-            else
-                PauseGame();
-        }
-
-        // Reanudar con B (Xbox) o Circle (PS) solo si esta pausado
-        if (isPaused)
-        {
-            bool resumePressed = Input.GetKeyDown(KeyCode.JoystickButton1); // Xbox B (seguro)
-
-            if (_inputHandler != null && _inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
-                resumePressed |= Input.GetKeyDown(KeyCode.JoystickButton2); // PS Circle
-
-            if (resumePressed)
-                ResumeGame();
+            PauseGame();
         }
     }
 
