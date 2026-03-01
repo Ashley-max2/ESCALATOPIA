@@ -1172,7 +1172,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 566.5, y: 27.8, z: 258.74}
+  m_LocalPosition: {x: 556.3, y: 31.07, z: 250.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4445,6 +4445,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
   m_PrefabInstance: {fileID: 1327776269}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1365123267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1365123268}
+  - component: {fileID: 1365123269}
+  m_Layer: 0
+  m_Name: FMOD_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1365123268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365123267}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 705.8785, y: -115.03934, z: 23.12201}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1365123269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365123267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c2fb6966138d54c9187bc500ff01c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forestMusicPath: event:/Ambient/MountainMusic
 --- !u!1001 &1371896985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7465,3 +7510,4 @@ SceneRoots:
   - {fileID: 2042169479}
   - {fileID: 1104140634}
   - {fileID: 1585681810}
+  - {fileID: 1365123268}
