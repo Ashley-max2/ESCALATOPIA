@@ -21160,7 +21160,7 @@ MonoBehaviour:
   canUseHook: 0
   intelligenceLevel: 1
   reactionTimeMultiplier: 0.1
-  baseMoveSpeed: 24
+  baseMoveSpeed: 6
   dynamicWaypoints: []
   professionalFixedRoute:
   - {fileID: 436585725}
@@ -24112,7 +24112,7 @@ GameObject:
   - component: {fileID: 1745301678}
   m_Layer: 0
   m_Name: Boss1
-  m_TagString: Untagged
+  m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25140,6 +25140,10 @@ PrefabInstance:
     - target: {fileID: 3690487399966190797, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: climbSpeed
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7706877111800329777, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_Materials.Array.data[0]
