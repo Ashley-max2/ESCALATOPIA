@@ -6,12 +6,22 @@ using UnityEngine;
 
 public class MusicManager : MonoBehaviour
 {
+    public static MusicManager Instance { get; private set; }
+
     [SerializeField] private string forestMusicPath = "event:/AmbientMusic/MenuMusic";
 
     private EventInstance forestInstance;
 
     void Awake()
     {
+        // Singleton: si ya existe uno, destruir el duplicado
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
         DontDestroyOnLoad(gameObject);
 
         forestInstance = RuntimeManager.CreateInstance(forestMusicPath);

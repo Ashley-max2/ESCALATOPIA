@@ -23,9 +23,20 @@ public class GameManager : MonoBehaviour
     [Tooltip("Si lo dejas vacio se crea uno automaticamente")]
     [SerializeField] private GameObject pausePanel;
 
+    // Referencia al PauseMenuManager (se registra automaticamente)
+    private PauseMenuManager _pauseMenuManager;
+
     public bool IsPaused => isPaused;
     public bool IsGameOver => gameOver;
     public PlayerStateMachine Player => player;
+
+    /// <summary>
+    /// Llamado por PauseMenuManager al inicializarse para registrar el panel.
+    /// </summary>
+    public void RegisterPausePanel(PauseMenuManager manager)
+    {
+        _pauseMenuManager = manager;
+    }
 
     // Guardamos estado del player al pausar
     private Vector3 _savedVelocity;
@@ -70,7 +81,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Se llama cada vez que se carga una escena nueva.
-    /// Re-busca el panel de pausa y el player porque las referencias
+    /// Re-busca el player porque las referencias
     /// del DontDestroyOnLoad apuntan a objetos destruidos.
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -83,20 +94,8 @@ public class GameManager : MonoBehaviour
         player = FindObjectOfType<PlayerStateMachine>();
         _inputHandler = null; // se re-busca en Update
 
-        // Re-buscar panel de pausa en la nueva escena
-        // Buscar TODOS los PauseMenuManager (activos e inactivos)
-        PauseMenuManager[] allPauseManagers = Resources.FindObjectsOfTypeAll<PauseMenuManager>();
-        pausePanel = null;
-        foreach (var pm in allPauseManagers)
-        {
-            // Solo los que pertenecen a la escena (no prefabs en Assets)
-            if (pm.gameObject.scene == scene)
-            {
-                pausePanel = pm.gameObject;
-                pausePanel.SetActive(false);
-                break;
-            }
-        }
+        // PauseMenuManager se registrara automaticamente en su Awake()
+        // No necesitamos buscarlo aqui
     }
 
     // Referencia al input handler para saber tipo de mando
@@ -107,16 +106,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // Si no tenemos panel de pausa, intentar buscarlo
-        if (pausePanel == null)
-        {
-            var pm = FindObjectOfType<PauseMenuManager>(true);
-            if (pm != null)
-            {
-                pausePanel = pm.gameObject;
-                if (!isPaused) pausePanel.SetActive(false);
-            }
-        }
 
         // Buscar input handler si no lo tenemos
         if (_inputHandler == null && player != null)
@@ -183,14 +172,14 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Mostrar panel
-        if (pausePanel != null)
+        // Mostrar panel via PauseMenuManager
+        if (_pauseMenuManager != null)
+        {
+            _pauseMenuManager.Show();
+        }
+        else if (pausePanel != null)
         {
             pausePanel.SetActive(true);
-
-            // Auto-seleccionar primer boton para navegacion con mando
-            if (_resumeButtonObj != null && EventSystem.current != null)
-                EventSystem.current.SetSelectedGameObject(_resumeButtonObj);
         }
     }
 
@@ -219,8 +208,10 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Ocultar panel
-        if (pausePanel != null)
+        // Ocultar panel via PauseMenuManager
+        if (_pauseMenuManager != null)
+            _pauseMenuManager.Hide();
+        else if (pausePanel != null)
             pausePanel.SetActive(false);
     }
 
