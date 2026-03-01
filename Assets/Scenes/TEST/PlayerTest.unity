@@ -1861,11 +1861,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 629076208459401393, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: bindings.Array.size
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 629076208459401393, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: gamepadCameraSensitivity
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 629076208459401393, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: bindings.Array.data[0].keyCode
@@ -1935,9 +1935,17 @@ PrefabInstance:
       propertyPath: bindings.Array.data[7].defaultKeyCode
       value: 323
       objectReference: {fileID: 0}
+    - target: {fileID: 629076208459401393, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: OnBindingsChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 629076208459401393, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: OnBindingsChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1788169718465335362, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: gamepadSensitivity
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2167365225216592441, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_Name
