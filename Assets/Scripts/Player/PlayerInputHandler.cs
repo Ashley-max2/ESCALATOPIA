@@ -395,8 +395,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     // ==================== REBINDING ====================
 
+    private int rebindStartFrame;
+
     private void ProcessRebindInput()
     {
+        // Ignorar el frame en que se inicio el rebind
+        // para no capturar el Enter/clic que abrio el panel
+        if (Time.frameCount <= rebindStartFrame) return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             EndRebind();
@@ -426,6 +432,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (IsRebinding) return;
         IsRebinding = true;
         currentRebindAction = actionName;
+        rebindStartFrame = Time.frameCount; // evitar capturar la tecla que inicio el rebind
     }
 
     public void EndRebind()

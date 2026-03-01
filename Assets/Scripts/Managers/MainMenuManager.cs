@@ -13,6 +13,11 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        // Desbloquear cursor siempre al entrar al menu principal
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 1f;
+
         // Asegurar que solo el panel principal esté activo al inicio
         MainMenuPanel.SetActive(true);
         ConfigPanel.SetActive(false);

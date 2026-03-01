@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// GameManager básico para gestionar el estado del juego.
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
         // Subscribe to events
         GameEvents.OnPlayerDeath += HandlePlayerDeath;
         GameEvents.OnPlayerRespawn += HandlePlayerRespawn;
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         // Crear panel de pausa si no hay uno asignado
         if (pausePanel == null)
@@ -66,6 +68,37 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Se llama cada vez que se carga una escena nueva.
+    /// Re-busca el panel de pausa y el player porque las referencias
+    /// del DontDestroyOnLoad apuntan a objetos destruidos.
+    /// </summary>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Resetear estado de pausa
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        // Re-buscar player
+        player = FindObjectOfType<PlayerStateMachine>();
+        _inputHandler = null; // se re-busca en Update
+
+        // Re-buscar panel de pausa en la nueva escena
+        // Buscar TODOS los PauseMenuManager (activos e inactivos)
+        PauseMenuManager[] allPauseManagers = Resources.FindObjectsOfTypeAll<PauseMenuManager>();
+        pausePanel = null;
+        foreach (var pm in allPauseManagers)
+        {
+            // Solo los que pertenecen a la escena (no prefabs en Assets)
+            if (pm.gameObject.scene == scene)
+            {
+                pausePanel = pm.gameObject;
+                pausePanel.SetActive(false);
+                break;
+            }
+        }
+    }
+
     // Referencia al input handler para saber tipo de mando
     private PlayerInputHandler _inputHandler;
 
@@ -74,6 +107,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // Si no tenemos panel de pausa, intentar buscarlo
+        if (pausePanel == null)
+        {
+            var pm = FindObjectOfType<PauseMenuManager>(true);
+            if (pm != null)
+            {
+                pausePanel = pm.gameObject;
+                if (!isPaused) pausePanel.SetActive(false);
+            }
+        }
+
         // Buscar input handler si no lo tenemos
         if (_inputHandler == null && player != null)
             _inputHandler = player.GetComponent<PlayerInputHandler>();
@@ -343,5 +387,6 @@ public class GameManager : MonoBehaviour
     {
         GameEvents.OnPlayerDeath -= HandlePlayerDeath;
         GameEvents.OnPlayerRespawn -= HandlePlayerRespawn;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }
