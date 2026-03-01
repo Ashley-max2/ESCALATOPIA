@@ -30,6 +30,7 @@ public class PauseMenuManager : MonoBehaviour
     /// <summary>Reanuda el juego (boton "Reanudar")</summary>
     public void Resume()
     {
+        MusicManager.PlayButton();
         if (GameManager.Instance != null)
             GameManager.Instance.ResumeGame();
     }
@@ -37,36 +38,42 @@ public class PauseMenuManager : MonoBehaviour
     /// <summary>Abre el submenu de configuracion</summary>
     public void OpenConfig()
     {
+        MusicManager.PlayButton();
         ShowOnly(configPanel);
     }
 
     /// <summary>Abre el panel de rebind de controles</summary>
     public void OpenControls()
     {
+        MusicManager.PlayButton();
         ShowOnly(controlsPanel);
     }
 
     /// <summary>Abre el panel de sonido</summary>
     public void OpenSong()
     {
+        MusicManager.PlayButton();
         ShowOnly(songPanel);
     }
 
     /// <summary>Abre el panel de pantalla</summary>
     public void OpenScreen()
     {
+        MusicManager.PlayButton();
         ShowOnly(screenPanel);
     }
 
     /// <summary>Vuelve al panel principal de pausa (desde config/controles/etc)</summary>
     public void ReturnToPauseMenu()
     {
+        MusicManager.PlayButton();
         ShowOnly(pauseMenuPanel);
     }
 
     /// <summary>Vuelve al panel de configuracion (desde controles/sonido/pantalla)</summary>
     public void ReturnToConfig()
     {
+        MusicManager.PlayButton();
         ShowOnly(configPanel);
     }
 
@@ -75,6 +82,7 @@ public class PauseMenuManager : MonoBehaviour
     /// <summary>Vuelve al menu principal</summary>
     public void ExitToMainMenu()
     {
+        MusicManager.PlayButton();
         // Restaurar tiempo y limpiar GameManager primero
         if (GameManager.Instance != null)
             GameManager.Instance.ResumeGame();
@@ -90,6 +98,7 @@ public class PauseMenuManager : MonoBehaviour
     /// <summary>Cierra el juego</summary>
     public void QuitGame()
     {
+        MusicManager.PlayButton();
         Time.timeScale = 1f;
         Debug.Log("Saliendo del juego...");
         Application.Quit();
