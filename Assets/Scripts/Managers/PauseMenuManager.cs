@@ -19,10 +19,27 @@ public class PauseMenuManager : MonoBehaviour
     [Header("Escena del Menu Principal")]
     [SerializeField] private string mainMenuSceneName = "Main_Menu";
 
+    private void Awake()
+    {
+        // Siempre empezar DESACTIVADO.
+        // GameManager.PauseGame() lo activara cuando el jugador pulse ESC/Start.
+        gameObject.SetActive(false);
+    }
+
     private void OnEnable()
     {
         // Siempre mostrar el panel principal al abrir la pausa
         ShowOnly(pauseMenuPanel);
+    }
+
+    private void Update()
+    {
+        // Seguridad extra: si por algun motivo el panel esta activo
+        // pero el juego NO esta pausado, forzamos que se desactive.
+        if (GameManager.Instance != null && !GameManager.Instance.IsPaused)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     // ==================== NAVEGACION ====================
