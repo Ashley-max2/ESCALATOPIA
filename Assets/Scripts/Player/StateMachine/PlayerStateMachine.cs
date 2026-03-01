@@ -186,6 +186,42 @@ public class PlayerStateMachine : MonoBehaviour
         
         // Update state (aqui se lee JumpPressed y IsJumpBuffered)
         CurrentState?.Execute();
+
+        // Player animator controller
+        float horizontalSpeed = new Vector2(Rb.velocity.x, Rb.velocity.z).magnitude;
+
+        if (horizontalSpeed > 0.1f)
+            Animator.SetFloat("Speed", 1f);
+        else
+            Animator.SetFloat("Speed", 0f);
+
+
+        switch (CurrentState)
+        {
+            case PlayerClimbState:
+                // Velocidad vertical o la que uses para escalar
+                float climbSpeed = Mathf.Abs(Rb.velocity.y);
+        
+                if (climbSpeed > 0.01f)
+                {
+                    // Jugador escalando
+                    //Animator.Play("ClimbMove");
+                }
+                else
+                {
+                    // Jugador quieto en la escalera
+                    //Animator.Play("ClimbIdle");
+                }
+                break;
+
+            case PlayerJumpState:
+                Animator.Play("Jump");
+                break;
+
+            case PlayerHookState:
+                Animator.Play("Hook");
+                break;
+        }
     }
     
     private void FixedUpdate()
