@@ -23,24 +23,28 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame(string sceneName)
     {
+        MusicManager.PlayButton();
         Debug.Log("Cargando escena: " + sceneName);
         SceneManager.LoadScene(sceneName);
     }
 
     public void Creditos(string sceneName)
     {
+        MusicManager.PlayButton();
         Debug.Log("Cargando escena: " + sceneName);
         SceneManager.LoadScene(sceneName);
     }
 
     public void ChangeScene(string newScene)
     {
+        MusicManager.PlayButton();
         Debug.Log("Cargando escena: " + newScene);
         SceneManager.LoadScene(newScene);
     }
 
     public void ExitGame()
     {
+        MusicManager.PlayButton();
         Debug.Log("Saliste");
         Application.Quit();
 
@@ -51,6 +55,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenConfig()
     {
+        MusicManager.PlayButton();
         MainMenuPanel.SetActive(false);
         ConfigPanel.SetActive(true);
         SongPanel.SetActive(false);
@@ -60,6 +65,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSongMenu()
     {
+        MusicManager.PlayButton();
         MainMenuPanel.SetActive(false);
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(true);
@@ -69,6 +75,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenScreenMenu()
     {
+        MusicManager.PlayButton();
         MainMenuPanel.SetActive(false);
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(false);
@@ -78,6 +85,7 @@ public class MainMenu : MonoBehaviour
 
     public void OpenControlsMenu()
     {
+        MusicManager.PlayButton();
         MainMenuPanel.SetActive(false);
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(false);
@@ -87,6 +95,7 @@ public class MainMenu : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        MusicManager.PlayButton();
         MainMenuPanel.SetActive(true);
         ConfigPanel.SetActive(false);
         SongPanel.SetActive(false);
@@ -96,6 +105,7 @@ public class MainMenu : MonoBehaviour
 
     public void ReturnToConfig()
     {
+        MusicManager.PlayButton();
         MainMenuPanel.SetActive(false);
         ConfigPanel.SetActive(true);
         SongPanel.SetActive(false);
