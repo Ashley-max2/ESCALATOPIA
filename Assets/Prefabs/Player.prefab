@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6397048273884976069}
   - component: {fileID: 5223750590258687490}
   - component: {fileID: 6358550011126728178}
+  - component: {fileID: 4008784220886398847}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -187,7 +188,7 @@ MonoBehaviour:
   lowJumpMultiplier: 2
   coyoteTime: 0.15
   jumpBufferTime: 0.1
-  climbSpeed: 3
+  climbSpeed: 6
   climbStaminaCost: 10
   wallJumpForce: 8
   wallJumpUpwardForce: 6
@@ -256,6 +257,25 @@ MonoBehaviour:
   cooldown: 1
   ropeRenderer: {fileID: 0}
   hookOrigin: {fileID: 2313725668745862014}
+--- !u!114 &4008784220886398847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167365225216592441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoint: {fileID: 0}
+  playerTag: Player
+  timeBeforeFade: 0.5
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
+  fadeImage: {fileID: 0}
+  isPlayerDeathTeleporter: 1
 --- !u!1 &7173003493043281783
 GameObject:
   m_ObjectHideFlags: 0

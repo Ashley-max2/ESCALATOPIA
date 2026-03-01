@@ -132,12 +132,19 @@ public class PlayerHookState : PlayerBaseState
         {
             ReleaseHook();
             
-            // Check if there's a climbable surface
+            // Check if there's a climbable surface and not exhausted
             RaycastHit hit;
             if (ctx.CheckClimbableSurface(out hit))
             {
-                ctx.WallNormal = hit.normal;
-                SwitchState(factory.Climb());
+                if (ctx.Stamina == null || !ctx.Stamina.IsExhausted)
+                {
+                    ctx.WallNormal = hit.normal;
+                    SwitchState(factory.Climb());
+                }
+                else
+                {
+                    SwitchState(factory.Airborne());
+                }
             }
             else if (ctx.IsGrounded)
             {

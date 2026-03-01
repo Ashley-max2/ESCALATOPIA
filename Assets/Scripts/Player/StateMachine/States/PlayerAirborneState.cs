@@ -80,13 +80,16 @@ public class PlayerAirborneState : PlayerBaseState
             return;
         }
         
-        // Auto-climb: si chocamos con una superficie escalable, empezar a escalar
+        // Auto-climb: si chocamos con una superficie escalable y no estamos exhaustos
         RaycastHit hit;
         if (ctx.CheckClimbableSurface(out hit))
         {
-            ctx.WallNormal = hit.normal;
-            SwitchState(factory.Climb());
-            return;
+            if (ctx.Stamina == null || !ctx.Stamina.IsExhausted)
+            {
+                ctx.WallNormal = hit.normal;
+                SwitchState(factory.Climb());
+                return;
+            }
         }
         
         // Hook while in air
