@@ -83,6 +83,10 @@ public class OrbitCamera : MonoBehaviour
         // No mover la camara si el cursor esta desbloqueado (menu ESC)
         if (Cursor.lockState != CursorLockMode.Locked) return;
 
+        // Reintentar buscar input handler si no se encontro antes
+        if (_inputHandler == null)
+            _inputHandler = FindObjectOfType<PlayerInputHandler>();
+
         // Rotar con el raton
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
@@ -91,34 +95,28 @@ public class OrbitCamera : MonoBehaviour
         float padX = 0f;
         float padY = 0f;
 
-        if (_inputHandler != null && _inputHandler.DetectedGamepad != PlayerInputHandler.GamepadType.None)
+        // Determinar ejes segun tipo de mando detectado
+        string axisX = "GamepadCameraX";   // Default Xbox
+        string axisY = "GamepadCameraY";
+
+        if (_inputHandler != null && _inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
         {
-            // Elegir ejes segun tipo de mando detectado
-            string axisX, axisY;
-            if (_inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
-            {
-                axisX = "PSCameraX";
-                axisY = "PSCameraY";
-            }
-            else
-            {
-                axisX = "GamepadCameraX";
-                axisY = "GamepadCameraY";
-            }
+            axisX = "PSCameraX";
+            axisY = "PSCameraY";
+        }
 
-            try
-            {
-                float rawX = Input.GetAxisRaw(axisX);
-                float rawY = Input.GetAxisRaw(axisY);
+        try
+        {
+            float rawX = Input.GetAxisRaw(axisX);
+            float rawY = Input.GetAxisRaw(axisY);
 
-                // Deadzone manual para evitar drift del stick
-                if (Mathf.Abs(rawX) > gamepadDeadzone) padX = rawX * gamepadSensitivity;
-                if (Mathf.Abs(rawY) > gamepadDeadzone) padY = rawY * gamepadSensitivity;
-            }
-            catch (System.Exception)
-            {
-                // Eje no existe en InputManager todavia, ignorar
-            }
+            // Deadzone manual para evitar drift del stick
+            if (Mathf.Abs(rawX) > gamepadDeadzone) padX = rawX * gamepadSensitivity;
+            if (Mathf.Abs(rawY) > gamepadDeadzone) padY = rawY * gamepadSensitivity;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"[OrbitCamera] Error leyendo eje: {e.Message}");
         }
 
         _horizontalAngle += mouseX + padX;
