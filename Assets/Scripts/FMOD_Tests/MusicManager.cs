@@ -27,7 +27,6 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    // Opcional: métodos para controlar desde otros scripts
     public void StopForestMusic()
     {
         forestInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
@@ -36,5 +35,10 @@ public class MusicManager : MonoBehaviour
     public void PlayForestMusic()
     {
         forestInstance.start();
+    }
+
+    public static void PlayButton()
+    {
+        RuntimeManager.PlayOneShot("event:/SFX/Buttons");
     }
 }
