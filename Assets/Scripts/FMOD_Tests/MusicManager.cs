@@ -14,15 +14,15 @@ public class MusicManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton: si ya existe uno, destruir el duplicado
+        // Si ya existe uno de otra escena, destruir el ANTIGUO
+        // y quedarnos con el de ESTA escena (musica diferente por escena)
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
-            return;
+            Destroy(Instance); // destruir solo el componente antiguo
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        // NO usamos DontDestroyOnLoad: cada escena tiene su propia musica
 
         forestInstance = RuntimeManager.CreateInstance(forestMusicPath);
         forestInstance.start();

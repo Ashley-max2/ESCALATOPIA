@@ -53,6 +53,7 @@ public class ControlBindingRow : MonoBehaviour
 
     private void OnRebindClicked()
     {
+        MusicManager.PlayButton();
         if (inputHandler == null || inputHandler.IsRebinding) return;
 
         inputHandler.StartRebind(actionName);

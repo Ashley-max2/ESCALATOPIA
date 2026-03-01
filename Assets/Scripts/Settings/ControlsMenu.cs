@@ -141,12 +141,14 @@ public class ControlsMenu : MonoBehaviour
 
     private void OnResetClicked()
     {
+        MusicManager.PlayButton();
         if (inputHandler != null)
             inputHandler.ResetDefaults();
     }
 
     private void OnBackClicked()
     {
+        MusicManager.PlayButton();
         if (inputHandler != null && inputHandler.IsRebinding)
         {
             inputHandler.EndRebind();
