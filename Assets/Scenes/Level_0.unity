@@ -8492,9 +8492,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
-        m_MethodName: RestartValuesVolume
+      - m_Target: {fileID: 7950798545654474245}
+        m_TargetAssemblyTypeName: AudioVCASettings, Assembly-CSharp
+        m_MethodName: ResetToDefaults
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8576,7 +8576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &831819632663639834
 GameObject:
   m_ObjectHideFlags: 0
@@ -8861,7 +8861,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2082057432913529885}
   - component: {fileID: 6301171135614742691}
-  - component: {fileID: 7374772404912336337}
   m_Layer: 0
   m_Name: FMODManager
   m_TagString: Untagged
@@ -9221,6 +9220,7 @@ GameObject:
   - component: {fileID: 7950798545654474244}
   - component: {fileID: 2271344248013480991}
   - component: {fileID: 3621479346858857422}
+  - component: {fileID: 7950798545654474245}
   m_Layer: 5
   m_Name: SongPanel
   m_TagString: Untagged
@@ -17488,21 +17488,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &7374772404912336337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080630211133115877}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7449af216596723409c56217ea74b974, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sliderGeneralMusic: {fileID: 1646001980755927484}
-  sliderMusic: {fileID: 1658921838888507401}
-  sliderSFX: {fileID: 733284909022351548}
 --- !u!1 &7380089796159295579
 GameObject:
   m_ObjectHideFlags: 0
@@ -18176,6 +18161,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1820, y: 805.07}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7950798545654474245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1406695124263433510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7449af216596723409c56217ea74b974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliderGeneralMusic: {fileID: 1646001980755927484}
+  sliderMusic: {fileID: 1658921838888507401}
+  sliderSFX: {fileID: 733284909022351548}
 --- !u!222 &7992049412476057557
 CanvasRenderer:
   m_ObjectHideFlags: 0

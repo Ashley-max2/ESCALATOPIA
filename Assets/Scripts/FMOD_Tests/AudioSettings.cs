@@ -75,6 +75,23 @@ public class AudioVCASettings : MonoBehaviour
         SetSFX(sfxVol);
     }
 
+    // Llama esto desde el boton de "Restaurar valores" del panel de sonido
+    public void ResetToDefaults()
+    {
+        MusicManager.PlayButton();
+        float defaultVol = 0.5f;
+
+        if (sliderGeneralMusic) sliderGeneralMusic.value = defaultVol;
+        if (sliderMusic) sliderMusic.value = defaultVol;
+        if (sliderSFX) sliderSFX.value = defaultVol;
+
+        SetGeneralMusic(defaultVol);
+        SetMusic(defaultVol);
+        SetSFX(defaultVol);
+
+        SaveVolumes();
+    }
+
     // Llama esto cuando quieras guardar (p.ej. al cambiar cualquier slider o al salir)
     public void SaveVolumes()
     {
