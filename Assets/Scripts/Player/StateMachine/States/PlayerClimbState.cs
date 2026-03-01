@@ -14,6 +14,7 @@ public class PlayerClimbState : PlayerBaseState
     private Vector3 _wallUp;     // arriba en la superficie (W/S)
     
     private float _staminaConsumeTimer;
+    private float _offWallTimer = 0f;
     
     // Mantle
     private const float MANTLE_FORWARD_DIST = 1.0f;
@@ -51,6 +52,7 @@ public class PlayerClimbState : PlayerBaseState
         ctx.LastGroundedPosition = ctx.transform.position;
         
         _staminaConsumeTimer = 0;
+        _offWallTimer = 0f;
         
         GameEvents.ClimbStart();
         Debug.Log("Started climbing");
@@ -94,6 +96,7 @@ public class PlayerClimbState : PlayerBaseState
 
         ctx.IsClimbing = false;
         ctx.Rb.useGravity = true;
+        ctx.Rb.isKinematic = false; // Asegurar restaurar físicas
         _isMantling = false;
         
         GameEvents.ClimbEnd();
@@ -135,19 +138,24 @@ public class PlayerClimbState : PlayerBaseState
     /// </summary>
     private void HandleClimbingMovement()
     {
-        // Input crudo: MoveX = A(-1)/D(+1), MoveZ = S(-1)/W(+1)
-        float horizontal = ctx.Input.MoveX; // A/D = izquierda/derecha en la pared
-        float vertical = ctx.Input.MoveZ;   // S/W = abajo/arriba en la pared
+        // Input CRÚDO (WASD real del teclado), NUNCA de la cámara
+        float horizontal = ctx.Input.MoveX; // A (-1) / D (+1)
+        float vertical = ctx.Input.MoveZ;   // S (-1) / W (+1)
         
-        // Calcular direccion de movimiento en la pared
+        // Movimiento ABSOLUTO referenciado 100% a la pared actual. ¡Nunca a la cámara!
+        // W siempre aplica fuerza en `_wallUp`, D siempre en `_wallRight`.
         Vector3 climbDir = (_wallRight * horizontal + _wallUp * vertical).normalized;
         
         // Aplicar velocidad de escalada
         Vector3 targetVel = climbDir * ctx.ClimbSpeed;
+        
+        // Un pequeño empuje hacia la pared para mantener el contacto sin rebotar
+        targetVel += -_wallNormal * 2f;
+        
         ctx.Rb.velocity = Vector3.Lerp(ctx.Rb.velocity, targetVel, Time.fixedDeltaTime * 10f);
         
         // Consumir stamina extra al moverse
-        if (climbDir.magnitude > 0.1f && ctx.Stamina != null)
+        if (climbDir.sqrMagnitude > 0.01f && ctx.Stamina != null)
         {
             ctx.Stamina.ConsumeStamina(ctx.ClimbStaminaCost * Time.fixedDeltaTime);
         }
@@ -164,17 +172,14 @@ public class PlayerClimbState : PlayerBaseState
             // Actualizar ejes de la pared
             UpdateWallAxes(hit.normal);
             
-            // Rotar suavemente hacia la pared
+            // Rotar SUAVEMENTE pero más rápido hacia la pared
             Vector3 lookDir = -hit.normal;
             lookDir.y = 0;
             if (lookDir.sqrMagnitude > 0.01f)
             {
                 Quaternion targetRot = Quaternion.LookRotation(lookDir, Vector3.up);
-                ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRot, Time.fixedDeltaTime * 10f);
+                ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRot, Time.fixedDeltaTime * 15f);
             }
-            
-            // Empujar levemente hacia la pared para mantener contacto usando la normal real
-            ctx.Rb.AddForce(-hit.normal * 2f, ForceMode.Acceleration);
             
             // Actualizar normal en el contexto
             ctx.WallNormal = _wallNormal;
@@ -202,22 +207,20 @@ public class PlayerClimbState : PlayerBaseState
         Vector3 headOrigin = ctx.transform.position + Vector3.up * checkHeight;
         float checkDist = ctx.ClimbCheckDistance * 2f;
         
-        bool wallAtHead = Physics.Raycast(headOrigin, ctx.transform.forward,
-            checkDist, ctx.ClimbableMask);
+        bool wallAtHead = Physics.Raycast(headOrigin, -_wallNormal, ctx.ClimbCheckDistance * 2f, ctx.ClimbableMask);
         
         if (wallAtHead) return false; // aun hay pared arriba, seguir escalando
         
         // 2. Buscar suelo encima para poner al player ahi
-        // Usar tanto GroundMask como ClimbableMask para detectar la superficie
         LayerMask combinedMask = ctx.GroundMask | ctx.ClimbableMask;
         
-        Vector3 forwardDir = -_wallNormal;
-        Vector3 overLedge = headOrigin + forwardDir * MANTLE_FORWARD_DIST;
+        Vector3 overLedge = headOrigin + (-_wallNormal * 0.8f); // FORZADO MÁS HACIA ADELANTE (0.8m)
         
         RaycastHit groundHit;
         if (Physics.Raycast(overLedge, Vector3.down, out groundHit, MANTLE_DOWN_DIST, combinedMask))
         {
-            if (groundHit.normal.y > 0.5f) // mas permisivo con la inclinacion
+            float groundAngle = Vector3.Angle(Vector3.up, groundHit.normal);
+            if (groundAngle <= ctx.MaxWalkableSlope + 5f) // Si el suelo de arriba es una plataforma "pisable"
             {
                 ledgePoint = groundHit.point + Vector3.up * ctx.MantleExtraHeight;
                 return true;
@@ -227,41 +230,50 @@ public class PlayerClimbState : PlayerBaseState
         return false;
     }
     
+    private Vector3 _mantleStartPos;
+
     private void StartMantle(Vector3 target)
     {
         _isMantling = true;
         _mantleTarget = target;
+        _mantleStartPos = ctx.transform.position;
         _mantleTimer = 0;
         
         ctx.Rb.velocity = Vector3.zero;
         ctx.Rb.useGravity = false;
         
-        Debug.Log("Mantling up!");
+        // HACER KINEMATIC durante la animación de subir para que no haya rebotes con colliders
+        ctx.Rb.isKinematic = true; 
+        
+        Debug.Log("Mantling up smoothly!");
     }
     
     private void UpdateMantle()
     {
-        _mantleTimer += Time.deltaTime;
+        // Velocidad de la transición del mantle
+        _mantleTimer += Time.deltaTime * 3.5f; 
         
-        Vector3 currentPos = ctx.transform.position;
-        float step = MANTLE_MOVE_SPEED * Time.deltaTime;
+        float t = Mathf.Clamp01(_mantleTimer);
         
-        // Fase 1: subir, Fase 2: avanzar
-        if (currentPos.y < _mantleTarget.y - 0.1f)
-        {
-            Vector3 upPos = new Vector3(currentPos.x, _mantleTarget.y, currentPos.z);
-            ctx.transform.position = Vector3.MoveTowards(currentPos, upPos, step);
-        }
-        else
-        {
-            ctx.transform.position = Vector3.MoveTowards(ctx.transform.position, _mantleTarget, step);
-        }
+        // CURVAS DE ANIMACIÓN MANUAL:
+        // tY sube muy rápido al principio (Seno), para que el personaje suba su cuerpo
+        float tY = Mathf.Sin(t * Mathf.PI * 0.5f); 
+        // tXZ avanza hacia adelante linealmente para asegurar escalar e ir forzado hacia delante
+        float tXZ = t; 
+        
+        Vector3 newPos = new Vector3(
+            Mathf.Lerp(_mantleStartPos.x, _mantleTarget.x, tXZ),
+            Mathf.Lerp(_mantleStartPos.y, _mantleTarget.y, tY),
+            Mathf.Lerp(_mantleStartPos.z, _mantleTarget.z, tXZ)
+        );
+        
+        ctx.Rb.MovePosition(newPos);
         
         // Completar
-        float dist = Vector3.Distance(ctx.transform.position, _mantleTarget);
-        if (dist < 0.1f || _mantleTimer > 1.5f)
+        if (t >= 1f)
         {
             ctx.transform.position = _mantleTarget;
+            ctx.Rb.isKinematic = false; // Devolver a físicas reales
             ctx.Rb.velocity = Vector3.zero;
             SwitchState(factory.Grounded());
             Debug.Log("Mantle complete!");
@@ -287,7 +299,8 @@ public class PlayerClimbState : PlayerBaseState
             return;
         }
         
-        // Check mantle siempre (no solo al subir, tambien si ya estamos arriba)
+        // Check mantle solo si el jugador intenta ir HACIA ARRIBA o SALTAR
+        if (ctx.Input.MoveZ > 0.1f)
         {
             Vector3 ledgePoint;
             if (TryDetectLedge(out ledgePoint))
@@ -300,17 +313,29 @@ public class PlayerClimbState : PlayerBaseState
         // Perder contacto con la pared
         if (!ctx.CheckClimbableSurface(out _))
         {
-            // Intentar mantle antes de caer
-            Vector3 fallbackLedge;
-            if (TryDetectLedge(out fallbackLedge))
+            _offWallTimer += Time.deltaTime;
+            
+            // Intentar mantle antes de caer (en los primeros instantes)
+            if (_offWallTimer < 0.1f && ctx.Input.MoveZ > 0.1f)
             {
-                StartMantle(fallbackLedge);
-                return;
+                Vector3 fallbackLedge;
+                if (TryDetectLedge(out fallbackLedge))
+                {
+                    StartMantle(fallbackLedge);
+                    return;
+                }
             }
             
-            // Caer
-            SwitchState(factory.Airborne());
-            return;
+            if (_offWallTimer >= 0.5f)
+            {
+                // Caer tras perder el contacto 0.5s seguidos
+                SwitchState(factory.Airborne());
+                return;
+            }
+        }
+        else
+        {
+            _offWallTimer = 0f;
         }
         
         // Si toca el suelo escalando -> grounded

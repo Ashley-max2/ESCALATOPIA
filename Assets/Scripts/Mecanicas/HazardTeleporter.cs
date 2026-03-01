@@ -26,9 +26,14 @@ public class HazardTeleporter : MonoBehaviour
     [Tooltip("Imagen negra a pantalla completa para hacer el fundido. Si se deja en blanco, el script la buscará o creará automáticamente.")]
     public Image fadeImage;
 
+    [Header("Opción de Muerte (Player)")]
+    [Tooltip("Si se activa y el script se pone en el Player, detectará automáticamente el estado de 'Muerto' y lo teletransportará aquí.")]
+    public bool isPlayerDeathTeleporter = false;
+
     // Static flag para evitar múltiples activaciones simultáneas
     private static bool isHandlingTeleport = false;
     private static Image sharedFadeImage;
+    private PlayerStateMachine _playerStateMachine;
 
     private void Start()
     {
@@ -44,6 +49,27 @@ public class HazardTeleporter : MonoBehaviour
         {
             sharedFadeImage = fadeImage;
             SetFadeAlpha(0f);
+        }
+
+        if (isPlayerDeathTeleporter)
+        {
+            _playerStateMachine = GetComponentInParent<PlayerStateMachine>();
+            if (_playerStateMachine == null)
+            {
+                Debug.LogWarning("HazardTeleporter: La opción de muerte está activa pero no se encontró un PlayerStateMachine en el objeto o sus padres.");
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (isPlayerDeathTeleporter && _playerStateMachine != null && !isHandlingTeleport)
+        {
+            if (_playerStateMachine.CurrentState != null && 
+                _playerStateMachine.CurrentState.GetType().Name == "PlayerDeadState")
+            {
+                StartCoroutine(TeleportRoutine(_playerStateMachine.Collider));
+            }
         }
     }
 
