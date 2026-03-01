@@ -186,6 +186,38 @@ public class PlayerStateMachine : MonoBehaviour
         
         // Update state (aqui se lee JumpPressed y IsJumpBuffered)
         CurrentState?.Execute();
+
+        // Player animator controller
+        switch (CurrentState)
+        {
+            case PlayerGroundedState:
+                float horizontalSpeed = new Vector2(Rb.velocity.x, Rb.velocity.z).magnitude;
+
+                Animator.SetFloat("ClimbSpeed", 0f);
+
+                if (horizontalSpeed > 0.1f)
+                    Animator.SetFloat("Speed", 1f);
+                else
+                    Animator.SetFloat("Speed", 0f);
+                break;
+
+            case PlayerJumpState:
+                Animator.Play("Jump");
+                break;
+
+            case PlayerHookState:
+                Animator.Play("Hook");
+                break;
+
+            case PlayerClimbState:
+                float verticalSpeed = Mathf.Abs(Rb.velocity.y);
+
+                if (verticalSpeed > 0.1f)
+                    Animator.SetFloat("ClimbSpeed", 1f);
+                else
+                    Animator.SetFloat("ClimbSpeed", 0f);
+                break;
+        }
     }
     
     private void FixedUpdate()

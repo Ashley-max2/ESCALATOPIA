@@ -29,6 +29,9 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void Enter()
     {
+        //Animator
+        ctx.Animator.SetBool("Climb", true);
+
         ctx.IsClimbing = true;
         _isMantling = false;
         _mantleTimer = 0;
@@ -86,6 +89,9 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void Exit()
     {
+        //Animator
+        ctx.Animator.SetBool("Climb", false);
+
         ctx.IsClimbing = false;
         ctx.Rb.useGravity = true;
         _isMantling = false;
