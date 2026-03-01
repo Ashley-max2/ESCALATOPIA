@@ -3,12 +3,13 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Gestiona los paneles del menu de pausa durante el gameplay.
-/// Funciona igual que MainMenu.cs pero dentro del contexto de pausa.
-/// GameManager se encarga de activar/desactivar el panel raiz con ESC.
-/// Este script solo gestiona la navegacion entre subpaneles.
+/// Este script SIEMPRE esta activo. No se desactiva nunca.
+/// Solo muestra/oculta los paneles hijos segun el estado de pausa.
 /// </summary>
 public class PauseMenuManager : MonoBehaviour
 {
+    public static PauseMenuManager Instance { get; private set; }
+
     [Header("Paneles")]
     [SerializeField] private GameObject pauseMenuPanel;    // Panel principal (Reanudar, Config, Salir)
     [SerializeField] private GameObject configPanel;       // Submenu configuracion
@@ -21,25 +22,28 @@ public class PauseMenuManager : MonoBehaviour
 
     private void Awake()
     {
-        // Siempre empezar DESACTIVADO.
-        // GameManager.PauseGame() lo activara cuando el jugador pulse ESC/Start.
-        gameObject.SetActive(false);
+        Instance = this;
+
+        // Registrar con GameManager
+        if (GameManager.Instance != null)
+            GameManager.Instance.RegisterPausePanel(this);
+
+        // Ocultar todos los paneles al empezar
+        HideAll();
     }
 
-    private void OnEnable()
+    // ==================== MOSTRAR / OCULTAR ====================
+
+    /// <summary>Muestra el menu de pausa (llamado por GameManager.PauseGame)</summary>
+    public void Show()
     {
-        // Siempre mostrar el panel principal al abrir la pausa
         ShowOnly(pauseMenuPanel);
     }
 
-    private void Update()
+    /// <summary>Oculta todos los paneles (llamado por GameManager.ResumeGame)</summary>
+    public void Hide()
     {
-        // Seguridad extra: si por algun motivo el panel esta activo
-        // pero el juego NO esta pausado, forzamos que se desactive.
-        if (GameManager.Instance != null && !GameManager.Instance.IsPaused)
-        {
-            gameObject.SetActive(false);
-        }
+        HideAll();
     }
 
     // ==================== NAVEGACION ====================
@@ -100,11 +104,9 @@ public class PauseMenuManager : MonoBehaviour
     public void ExitToMainMenu()
     {
         MusicManager.PlayButton();
-        // Restaurar tiempo y limpiar GameManager primero
         if (GameManager.Instance != null)
             GameManager.Instance.ResumeGame();
 
-        // Desbloquear cursor DESPUES de ResumeGame (que lo bloquea)
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -125,11 +127,8 @@ public class PauseMenuManager : MonoBehaviour
         #endif
     }
 
-    // ==================== HELPER ====================
+    // ==================== HELPERS ====================
 
-    /// <summary>
-    /// Muestra solo el panel indicado y oculta todos los demas.
-    /// </summary>
     private void ShowOnly(GameObject panelToShow)
     {
         if (pauseMenuPanel) pauseMenuPanel.SetActive(panelToShow == pauseMenuPanel);
@@ -137,5 +136,14 @@ public class PauseMenuManager : MonoBehaviour
         if (songPanel)      songPanel.SetActive(panelToShow == songPanel);
         if (screenPanel)    screenPanel.SetActive(panelToShow == screenPanel);
         if (controlsPanel)  controlsPanel.SetActive(panelToShow == controlsPanel);
+    }
+
+    private void HideAll()
+    {
+        if (pauseMenuPanel) pauseMenuPanel.SetActive(false);
+        if (configPanel)    configPanel.SetActive(false);
+        if (songPanel)      songPanel.SetActive(false);
+        if (screenPanel)    screenPanel.SetActive(false);
+        if (controlsPanel)  controlsPanel.SetActive(false);
     }
 }
