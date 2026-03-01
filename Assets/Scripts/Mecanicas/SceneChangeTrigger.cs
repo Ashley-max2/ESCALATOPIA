@@ -12,6 +12,7 @@ public class SceneChangeTrigger : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(sceneName))
             {
+                Debug.Log("Cargando Escena");
                 SceneManager.LoadScene(sceneName);
             }
             else
