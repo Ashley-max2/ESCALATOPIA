@@ -2,7 +2,7 @@
 - Project name: EscalatopiaGit
 - Unity version: Unity 2022.3.45f1
 - Active game object:
-  - Name: Mision_1
+  - Name: Terrain
   - Tag: Untagged
-  - Layer: Default
+  - Layer: Ground
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
