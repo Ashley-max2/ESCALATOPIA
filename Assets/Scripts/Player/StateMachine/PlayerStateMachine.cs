@@ -193,6 +193,8 @@ public class PlayerStateMachine : MonoBehaviour
             case PlayerGroundedState:
                 float horizontalSpeed = new Vector2(Rb.velocity.x, Rb.velocity.z).magnitude;
 
+                Animator.SetFloat("ClimbSpeed", 0f);
+
                 if (horizontalSpeed > 0.1f)
                     Animator.SetFloat("Speed", 1f);
                 else
