@@ -42,10 +42,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639080045944571760
+  lastModified: 639080066405376918
   FileSizes:
   - Name: Desktop
-    Value: 1558816
+    Value: 1558304
   Exists: 1
 --- !u!114 &-7131808043504657163
 MonoBehaviour:
@@ -62,10 +62,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639079856569504540
+  lastModified: 639080066405388400
   FileSizes:
   - Name: Desktop
-    Value: 1670
+    Value: 1616
   Exists: 1
 --- !u!114 &-6953730273116094259
 MonoBehaviour:
@@ -175,33 +175,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-4360992384842521842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Ambient/ForestMusic
-  m_EditorClassIdentifier: 
-  Path: event:/Ambient/ForestMusic
-  Guid:
-    Data1: 1778132492
-    Data2: 1331201917
-    Data3: -76961644
-    Data4: 1999177344
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
 --- !u!114 &-962208807032002973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,7 +272,6 @@ MonoBehaviour:
   - {fileID: -7131808043504657163}
   - {fileID: -7514493059691930883}
   EditorEvents:
-  - {fileID: -4360992384842521842}
   - {fileID: 5153305628679015859}
   - {fileID: -5169400999956955992}
   - {fileID: -962208807032002973}
@@ -320,7 +292,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: -7131808043504657163}
   cacheVersion: 131858
-  cacheTime: 639080045944571760
+  cacheTime: 639080066405388400
   SerializableEventsDict:
   - key: event:/Ambient/ForestMusic
     index: 0
