@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &988767787417491290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5181109871797490380}
+  - component: {fileID: 92839238583826239}
+  - component: {fileID: 6730792690891680025}
+  m_Layer: 0
+  m_Name: ControlsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5181109871797490380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988767787417491290}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 353.8641, y: 217.77798, z: 0.51353145}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &92839238583826239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988767787417491290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8592765f3fba54695c3cf343253a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rowsParent: {fileID: 0}
+  rebindPanel: {fileID: 0}
+  rebindText: {fileID: 0}
+  conflictPanel: {fileID: 0}
+  conflictText: {fileID: 0}
+  resetButton: {fileID: 0}
+  backButton: {fileID: 0}
+--- !u!114 &6730792690891680025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 988767787417491290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfac86dd80b948e46884b538502a3acd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bindings: []
+  mouseSensitivity: 2
+  gamepadCameraSensitivity: 3
+  gamepadDeadzone: 0.25
+  triggerThreshold: 0.5
+  psTriggerThreshold: 0
+  OnBindingsChanged:
+    m_PersistentCalls:
+      m_Calls: []
