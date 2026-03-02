@@ -1,0 +1,304 @@
+================================================================================
+                    GUÍA DE CONFIGURACIÓN - PLAYER ESCALATOPIA
+================================================================================
+
+Esta guía explica cómo configurar el sistema de jugador 3D con escalada y 
+gancho. El sistema está inspirado en Zelda: Breath of the Wild (movimiento y 
+cámara) y Jusant (escalada).
+
+================================================================================
+                              ESTRUCTURA DE ARCHIVOS
+================================================================================
+
+Assets/Scripts/
+├── Camera/
+│   └── OrbitCamera.cs          → Cámara estilo Zelda BotW
+├── Core/
+│   ├── IState.cs               → Interfaz base para estados
+│   ├── GameEvents.cs           → Sistema de eventos global
+│   └── GameManager.cs          → Manager principal del juego
+├── Player/
+│   ├── PlayerInputHandler.cs   → Gestor de inputs del jugador
+│   └── StateMachine/
+│       ├── PlayerStateMachine.cs    → Máquina de estados principal
+│       ├── PlayerBaseState.cs       → Clase base para estados
+│       ├── PlayerStateFactory.cs    → Fábrica de estados
+│       └── States/
+│           ├── PlayerGroundedState.cs  → Estado en suelo
+│           ├── PlayerJumpState.cs      → Estado de salto
+│           ├── PlayerAirborneState.cs  → Estado en aire
+│           ├── PlayerClimbState.cs     → Estado de escalada
+│           ├── PlayerWallJumpState.cs  → Salto de pared
+│           ├── PlayerHookState.cs      → Estado de gancho
+│           └── PlayerDeadState.cs      → Estado de muerte
+└── Systems/
+    ├── GrapplingHook.cs        → Sistema de gancho
+    ├── HookPoint.cs            → Marcador de puntos de gancho
+    ├── StaminaSystem.cs        → Sistema de estamina
+    └── StaminaUI.cs            → UI de estamina
+
+================================================================================
+                          PASO 1: CONFIGURAR TAGS Y LAYERS
+================================================================================
+
+1. Ir a: Edit > Project Settings > Tags and Layers
+
+2. TAGS (crear si no existen):
+   - "Player"
+   - "HookPoint"
+   - "Climbable" (opcional, para debug)
+
+3. LAYERS (crear si no existen):
+   - "Player" (ej: Layer 8)
+   - "Ground" (ej: Layer 9)
+   - "Climbable" (ej: Layer 10)
+   - "HookPoint" (ej: Layer 11)
+
+================================================================================
+                          PASO 2: CREAR EL JUGADOR
+================================================================================
+
+1. CREAR OBJETO PLAYER:
+   - GameObject > 3D Object > Capsule
+   - Renombrar a "Player"
+   - Position: (0, 1, 0)
+   - Asignar Tag: "Player"
+   - Asignar Layer: "Player"
+
+2. CONFIGURAR RIGIDBODY:
+   - Ya se añade automáticamente por PlayerStateMachine
+   - Mass: 1
+   - Drag: 0
+   - Angular Drag: 0.05
+   - Freeze Rotation: X, Y, Z (se configura automáticamente)
+
+3. CONFIGURAR COLLIDER:
+   - CapsuleCollider (ya existe si usaste Capsule)
+   - Center: (0, 0, 0)
+   - Radius: 0.5
+   - Height: 2
+
+4. CREAR GROUND CHECK:
+   - Crear GameObject vacío como hijo del Player
+   - Nombrar: "GroundCheck"
+   - Position local: (0, -1, 0) (en los pies del jugador)
+
+5. CREAR HOOK ORIGIN:
+   - Crear GameObject vacío como hijo del Player
+   - Nombrar: "HookOrigin"
+   - Position local: (0, 1.2, 0.5) (delante del pecho)
+
+6. AÑADIR COMPONENTES AL PLAYER:
+   - Add Component > PlayerStateMachine
+   - Add Component > PlayerInputHandler
+   - Add Component > StaminaSystem
+   - Add Component > GrapplingHook
+
+7. CONFIGURAR PlayerStateMachine:
+   - Ground Check: Arrastrar el objeto "GroundCheck"
+   - Ground Check Radius: 0.3
+   - Ground Mask: Seleccionar "Ground"
+   - Climbable Mask: Seleccionar "Climbable"
+   - Lethal Fall Height: 15
+   - Safe Fall Height: 5
+
+8. CONFIGURAR GrapplingHook:
+   - Hook Origin: Arrastrar "HookOrigin"
+   - Max Range: 25
+   - Hookable Mask: Seleccionar "HookPoint"
+   - Travel Speed: 20
+
+================================================================================
+                          PASO 3: CONFIGURAR LA CÁMARA
+================================================================================
+
+1. SELECCIONAR Main Camera en la escena
+
+2. AÑADIR COMPONENTE:
+   - Add Component > OrbitCamera
+
+3. CONFIGURAR OrbitCamera:
+   - Target: Arrastrar el objeto Player (se auto-detecta si no se asigna)
+   - Target Offset: (0, 1.5, 0)
+   - Default Distance: 5
+   - Min Distance: 2
+   - Max Distance: 10
+   - Collision Mask: Everything excepto "Player"
+
+4. POSICIONAR CÁMARA:
+   - Position inicial: (0, 3, -5) (detrás y arriba del jugador)
+
+================================================================================
+                          PASO 4: CREAR ENTORNO DE PRUEBA
+================================================================================
+
+1. CREAR SUELO:
+   - GameObject > 3D Object > Plane
+   - Scale: (5, 1, 5)
+   - Position: (0, 0, 0)
+   - Añadir Material de color (opcional)
+   - Layer: "Ground"
+
+2. CREAR PARED ESCALABLE:
+   - GameObject > 3D Object > Cube
+   - Scale: (3, 10, 0.5)
+   - Position: (0, 5, 5)
+   - Layer: "Climbable"
+   - Añadir Material color azul (para identificar)
+
+3. CREAR PUNTO DE GANCHO:
+   - GameObject > 3D Object > Sphere
+   - Scale: (0.5, 0.5, 0.5)
+   - Position: (5, 8, 0)
+   - Tag: "HookPoint"
+   - Layer: "HookPoint"
+   - Add Component > HookPoint
+   - Añadir Material color cyan
+
+4. CREAR MÁS PLATAFORMAS (opcional):
+   - Diferentes alturas para probar caídas
+   - Más paredes escalables
+   - Más puntos de gancho
+
+================================================================================
+                          PASO 5: CREAR UI DE ESTAMINA (OPCIONAL)
+================================================================================
+
+1. CREAR CANVAS:
+   - GameObject > UI > Canvas
+   - Render Mode: Screen Space - Overlay
+
+2. CREAR BARRA DE ESTAMINA:
+   - Crear Panel como hijo del Canvas
+   - Posicionar en esquina superior izquierda
+   - Crear Image hija para el fondo (negro semi-transparente)
+   - Crear Image hija para el relleno (verde, Image Type: Filled)
+
+3. AÑADIR COMPONENTE:
+   - Add Component > StaminaUI
+   - Stamina Fill: Arrastrar la imagen de relleno
+   - Stamina Background: Arrastrar la imagen de fondo
+
+================================================================================
+                          PASO 6: CREAR GAME MANAGER
+================================================================================
+
+1. CREAR OBJETO:
+   - GameObject > Create Empty
+   - Nombrar: "GameManager"
+
+2. AÑADIR COMPONENTE:
+   - Add Component > GameManager
+   - Player: Arrastrar el objeto Player
+
+================================================================================
+                              CONTROLES DEL JUEGO
+================================================================================
+
+MOVIMIENTO:
+- W/A/S/D o Flechas → Moverse
+- Shift (mantener) → Correr
+- Espacio → Saltar
+- E (mantener) → Escalar (cuando está frente a pared escalable)
+- Espacio (mientras escala) → Salto de pared
+
+GANCHO:
+- Click Derecho → Disparar gancho al punto más cercano
+- Click Izquierdo → Soltar gancho
+
+SISTEMA:
+- ESC → Pausar/Despausar
+
+================================================================================
+                              SISTEMA DE ESTADOS
+================================================================================
+
+El jugador usa una Máquina de Estados (State Machine) con los siguientes estados:
+
+┌─────────────────┐
+│    GROUNDED     │ ← Estado inicial, en el suelo
+├─────────────────┤
+│ - Movimiento    │
+│ - Sprint        │
+│ - Salto         │
+└────────┬────────┘
+         │
+    ┌────▼────┐        ┌─────────────┐
+    │  JUMP   │───────►│  AIRBORNE   │
+    └─────────┘        ├─────────────┤
+                       │ - Caída     │
+                       │ - Air control│
+                       │ - Coyote    │
+                       └──────┬──────┘
+                              │
+         ┌────────────────────┼────────────────────┐
+         ▼                    ▼                    ▼
+   ┌───────────┐        ┌─────────────┐      ┌──────────┐
+   │  GROUNDED │        │   CLIMB     │      │   HOOK   │
+   │ (aterrizó)│        ├─────────────┤      ├──────────┤
+   └───────────┘        │ - Escalada  │      │ - Viaje  │
+                        │ - Stamina   │      │ - Llegada│
+                        │ - Wall Jump │      └──────────┘
+                        └─────────────┘
+
+================================================================================
+                          SISTEMA DE MUERTE POR CAÍDA
+================================================================================
+
+El jugador NO tiene sistema de vida tradicional. Solo hay dos estados:
+- VIVO: El jugador puede moverse y realizar acciones normalmente
+- MUERTO: El jugador murió por una caída letal
+
+REGLAS DE CAÍDA:
+- Caída < 5m (SafeFallHeight): Sin efectos
+- Caída 5-15m: "Hard landing" (se puede añadir stagger)
+- Caída > 15m (LethalFallHeight): MUERTE INSTANTÁNEA
+
+RESPAWN:
+- El jugador reaparece en la última posición segura guardada
+- Posiciones seguras: Suelo, paredes escalables, puntos de gancho
+- Respawn automático después de 2 segundos o al presionar Espacio
+
+================================================================================
+                              TIPS DE DESARROLLO
+================================================================================
+
+1. DEBUGGING:
+   - Activar "Show Debug Info" en PlayerStateMachine para ver estado actual
+   - Los Gizmos muestran ground check, climb raycast y posición segura
+
+2. AJUSTAR SENSACIONES:
+   - Walk/Run Speed → Velocidad de movimiento
+   - Jump Force → Altura del salto
+   - Climb Speed → Velocidad de escalada
+   - Fall Multiplier → Qué tan rápido cae el jugador
+
+3. AÑADIR ANIMACIONES:
+   - Añadir Animator al Player
+   - El sistema llama automáticamente a ctx.Animator si existe
+   - Crear parámetros: Speed, IsGrounded, IsClimbing, IsHooking
+
+4. EXPANDIR SISTEMA:
+   - Crear nuevos estados heredando de PlayerBaseState
+   - Añadir al PlayerStateFactory
+   - El sistema de eventos (GameEvents) permite conectar otros sistemas
+
+================================================================================
+                      VERIFICACIÓN FINAL (CHECKLIST)
+================================================================================
+
+□ Tags creados: Player, HookPoint
+□ Layers creados: Player, Ground, Climbable, HookPoint
+□ Player tiene todos los componentes
+□ GroundCheck posicionado en los pies
+□ Ground Mask configurado correctamente
+□ Climbable Mask configurado correctamente
+□ Cámara tiene OrbitCamera configurado
+□ Suelo tiene Layer "Ground"
+□ Pared escalable tiene Layer "Climbable"
+□ Puntos de gancho tienen Tag "HookPoint" y Layer "HookPoint"
+□ GameManager existe en la escena
+
+¡Dale a PLAY y prueba el juego!
+
+================================================================================

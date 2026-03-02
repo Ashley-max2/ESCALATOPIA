@@ -1,0 +1,80 @@
+================================================================================
+                        GUÍA RÁPIDA - ESCALATOPIA
+================================================================================
+
+BIENVENIDO AL PROYECTO ESCALATOPIA
+----------------------------------
+
+Este proyecto es un juego 3D con mecánicas de escalada y gancho, inspirado en:
+- Zelda: Breath of the Wild (movimiento y cámara)
+- Jusant (sistema de escalada)
+
+================================================================================
+                          PRIMEROS PASOS
+================================================================================
+
+1. ABRIR EL SETUP WIZARD:
+   En Unity, ve a: Tools > Escalatopia > Player Setup Wizard
+
+2. CONFIGURAR LAYERS:
+   Antes de usar el wizard, ve a Edit > Project Settings > Tags and Layers
+   y crea los siguientes layers:
+   - Player (Layer 8)
+   - Ground (Layer 9)
+   - Climbable (Layer 10)
+   - HookPoint (Layer 11)
+
+3. EJECUTAR WIZARD:
+   Click en "=== CREAR TODO ===" para generar automáticamente:
+   - Player con todos los componentes
+   - Cámara orbital configurada
+   - Entorno de prueba con paredes y puntos de gancho
+   - UI de estamina
+   - Game Manager
+
+4. DALE A PLAY!
+
+================================================================================
+                            CONTROLES
+================================================================================
+
+MOVIMIENTO:
+  W/A/S/D    → Mover
+  Shift      → Sprint
+  Espacio    → Saltar
+
+ESCALADA:
+  E          → Escalar (mantener mientras miras una pared escalable)
+  Espacio    → Salto de pared (mientras escalas)
+
+GANCHO:
+  Click Der  → Disparar gancho
+  Click Izq  → Soltar gancho
+
+SISTEMA:
+  ESC        → Pausar
+
+================================================================================
+                       DOCUMENTACIÓN COMPLETA
+================================================================================
+
+Para una guía más detallada de configuración manual, consulta:
+→ GUIA_CONFIGURACION_PLAYER.txt
+
+================================================================================
+                         ARCHIVOS DEL PROYECTO
+================================================================================
+
+Scripts/
+├── Camera/OrbitCamera.cs         → Cámara estilo Zelda BotW
+├── Core/                         → Sistema de eventos y managers
+├── Editor/PlayerSetupWizard.cs   → Herramienta de setup automático
+├── Player/StateMachine/          → Máquina de estados del jugador
+└── Systems/                      → Gancho, estamina, puntos de hook
+
+Documentación/
+├── GDD proyecto.docx/pdf         → Game Design Document
+├── GUIA_CONFIGURACION_PLAYER.txt → Guía detallada de configuración
+└── Rúbriques...                  → Rúbricas de evaluación
+
+================================================================================
