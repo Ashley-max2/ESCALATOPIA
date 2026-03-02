@@ -25,11 +25,20 @@ public class StaminaSystem : MonoBehaviour
     public float CurrentStamina => currentStamina;
     public float MaxStamina => maxStamina;
     public float StaminaPercent => currentStamina / maxStamina;
+    public bool IsExhausted => _isExhausted;
     
     // Runtime
     private float _lastConsumeTime;
     private bool _warningTriggered;
-    
+    private bool _isExhausted;
+    private float _exhaustedGroundTimer;
+    private PlayerStateMachine _psm;
+
+    private void Start()
+    {
+        _psm = GetComponent<PlayerStateMachine>();
+    }
+
     private void Update()
     {
         RegenerateStamina();
@@ -59,6 +68,8 @@ public class StaminaSystem : MonoBehaviour
         // Depleted
         if (currentStamina <= 0 && previousStamina > 0)
         {
+            _isExhausted = true;
+            _exhaustedGroundTimer = 0f;
             OnStaminaDepleted?.Invoke();
         }
     }
@@ -101,7 +112,32 @@ public class StaminaSystem : MonoBehaviour
     
     private void RegenerateStamina()
     {
-        // Only regen after delay
+        // Lógica de "Extenuado": Si nos quedamos a 0, debemos esperar a tocar el suelo y esperar 2 segundos extra
+        if (_isExhausted)
+        {
+            if (_psm != null && _psm.IsGrounded)
+            {
+                _exhaustedGroundTimer += Time.deltaTime;
+                if (_exhaustedGroundTimer >= 2f)
+                {
+                    // Ya hemos esperado 2 segundos en el suelo, podemos volver a recargar
+                    _isExhausted = false;
+                    _exhaustedGroundTimer = 0f;
+                }
+                else
+                {
+                    return; // Sigue esperando en el suelo
+                }
+            }
+            else
+            {
+                // Si no está en el suelo (sigue escalando o cayendo), reseteamos el temporizador
+                _exhaustedGroundTimer = 0f;
+                return;
+            }
+        }
+
+        // Only regen after normal delay
         if (Time.time - _lastConsumeTime < regenDelay) return;
         
         if (currentStamina < maxStamina)

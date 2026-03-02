@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// UI de estamina simple que muestra una barra de progreso.
@@ -11,6 +12,7 @@ public class StaminaUI : MonoBehaviour
     [SerializeField] private Image staminaFill;
     [SerializeField] private Image staminaBackground;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private TextMeshProUGUI staminaText;
     
     [Header("=== COLORS ===")]
     [SerializeField] private Color normalColor = new Color(0.2f, 0.8f, 0.3f);
@@ -96,6 +98,12 @@ public class StaminaUI : MonoBehaviour
         else
         {
             staminaFill.color = normalColor;
+        }
+        
+        // Update text with percentage
+        if (staminaText != null)
+        {
+            staminaText.text = Mathf.CeilToInt(percent * 100).ToString() + "%";
         }
         
         // Show UI
