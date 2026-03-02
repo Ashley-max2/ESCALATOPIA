@@ -9,14 +9,14 @@ public class BossRaceManager : MonoBehaviour
     [Header("Referencias (Victoria del Boss)")]
     [Tooltip("El teletransportador que devolverá al boss a su posición inicial")]
     public HazardTeleporter bossTeleporter;
-    
+
     [Tooltip("El manager que reinicia el estado de la carrera")]
     public BossManager bossManager;
 
     [Header("Referencias (Victoria del Player)")]
     [Tooltip("El NPC Interactable de la puerta hacia los créditos que será desactivado")]
     public NPCInteractable creditDoorNPCInteractable;
-    
+
     [Tooltip("El script/GameObject de cambio de escena que será activado")]
     public SceneChangeTrigger creditSceneChanger;
 
@@ -67,6 +67,7 @@ public class BossRaceManager : MonoBehaviour
         // 3. Se activa el script de cambio de escena para abrir los créditos
         if (creditSceneChanger != null)
         {
+            creditSceneChanger.Unlock();
             creditSceneChanger.gameObject.SetActive(true);
             creditSceneChanger.enabled = true;
         }

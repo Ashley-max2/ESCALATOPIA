@@ -142,12 +142,20 @@ public class NPCInteractable : MonoBehaviour
     [Header("Dialogue")]
     [SerializeField] private List<string> subtitles = new List<string>();
 
+    [Tooltip("Si esta activado, los subtitulos empiezan al entrar en el trigger y avanzan solos sin pulsar E")]
+    [SerializeField] private bool autoPlay = false;
+
     private int currentSubtitleIndex = 0;
     public bool isPlayerNear = false;
     private float subtitleTimer = 0f;
     private bool showingSubtitle = false;
     public bool hasFinishedDialogue = false;
-    
+    private Transform playerTransform;
+
+    [Header("Seguridad")]
+    [Tooltip("Distancia maxima para interactuar (evita bugs al teletransportarse)")]
+    [SerializeField] private float maxInteractionDistance = 5f;
+
     void Start()
     {
         promptE.SetActive(false);
@@ -158,11 +166,22 @@ public class NPCInteractable : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            playerTransform = other.transform;
             isPlayerNear = true;
-            promptE.SetActive(true);
             currentSubtitleIndex = 0;
             subtitleTimer = 0f;
             showingSubtitle = false;
+
+            if (autoPlay)
+            {
+                // AutoPlay: empezar subtitulos directamente sin pulsar E
+                promptE.SetActive(false);
+                ShowSubtitle();
+            }
+            else
+            {
+                promptE.SetActive(true);
+            }
         }
     }
 
@@ -188,6 +207,19 @@ public class NPCInteractable : MonoBehaviour
 
     public void Update()
     {
+        // Seguridad: si el player se teletransporto lejos, resetear
+        if (isPlayerNear && playerTransform != null)
+        {
+            float dist = Vector3.Distance(transform.position, playerTransform.position);
+            if (dist > maxInteractionDistance)
+            {
+                isPlayerNear = false;
+                promptE.SetActive(false);
+                subtitlePanel.SetActive(false);
+                showingSubtitle = false;
+            }
+        }
+
         if (!isPlayerNear) return;
 
         // Escuchar tecla E
@@ -217,7 +249,15 @@ public class NPCInteractable : MonoBehaviour
             subtitleTimer += Time.deltaTime;
             if (subtitleTimer >= subtitleDuration)
             {
-                HideSubtitle();
+                if (autoPlay)
+                {
+                    // AutoPlay: avanzar al siguiente automaticamente
+                    NextSubtitle();
+                }
+                else
+                {
+                    HideSubtitle();
+                }
             }
         }
     }

@@ -21285,7 +21285,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b73f8687d864b44783d8be8d99fe6cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &733574162 stripped
+  promptE: {fileID: 1785318653}
+  subtitleText: {fileID: 5855805545032552211}
+  subtitlePanel: {fileID: 4377613208155059880}
+  subtitleDuration: 3
+  subtitles:
+  - Hola soy el Anas y no puedes ganarme!!!
+  - intenta conseguir la gema antes que yo HDP!!!!
+  autoPlay: 1
+  isPlayerNear: 1
+  hasFinishedDialogue: 0
+  maxInteractionDistance: 2
+--- !u!114 &733574162
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8251645889825647820, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
   m_PrefabInstance: {fileID: 4726357041814826688}
@@ -22413,9 +22424,11 @@ MonoBehaviour:
   subtitlePanel: {fileID: 4377613208155059880}
   subtitleDuration: 3
   subtitles:
-  - No puedes pasar eres negro
+  - Antes tendras que vencer el maginifico Anas!!!
+  autoPlay: 0
   isPlayerNear: 1
   hasFinishedDialogue: 0
+  maxInteractionDistance: 2
 --- !u!65 &1006776050
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22450,6 +22463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: Creditos
+  locked: 1
 --- !u!1001 &1026011217
 PrefabInstance:
   m_ObjectHideFlags: 0
