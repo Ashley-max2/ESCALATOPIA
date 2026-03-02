@@ -387,6 +387,7 @@ GameObject:
   - component: {fileID: 144574789}
   - component: {fileID: 144574788}
   - component: {fileID: 144574787}
+  - component: {fileID: 144574791}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -472,6 +473,7 @@ RectTransform:
   - {fileID: 5967881891883027650}
   - {fileID: 886091209}
   - {fileID: 5678194085460044423}
+  - {fileID: 943105343}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -479,6 +481,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &144574791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144574786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e4f1685ac44974f956b34f8478a9df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageToHide: {fileID: 943105344}
+  panelsToWatch:
+  - {fileID: 817739077952690458}
+  - {fileID: 6680182724575190684}
+  - {fileID: 4546921861290128294}
+  - {fileID: 1406695124534028698}
+  - {fileID: 1727244477117083666}
+  - {fileID: 2732616211728484280}
+  - {fileID: 3789092174634842973}
 --- !u!1 &175471139
 GameObject:
   m_ObjectHideFlags: 0
@@ -20840,7 +20863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoint: {fileID: 0}
+  checkpoint: {fileID: 2146148952}
   playerTag: Player
   timeBeforeFade: 0
   fadeDuration: 0.5
@@ -22167,6 +22190,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4473338750722148407, guid: 6e1905e7885809e4eb6d6f796ff4501d, type: 3}
   m_PrefabInstance: {fileID: 902497251}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &943105342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 943105343}
+  - component: {fileID: 943105345}
+  - component: {fileID: 943105344}
+  m_Layer: 5
+  m_Name: Punteria
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &943105343
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943105342}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 144574790}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 10, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &943105344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943105342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &943105345
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943105342}
+  m_CullTransparentMesh: 1
 --- !u!1 &946325650
 GameObject:
   m_ObjectHideFlags: 0
@@ -22574,8 +22672,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 10.127922, y: 11.519755, z: 10.000002}
-  m_Center: {x: 0.28770828, y: -2.6951075, z: 9.878078e-15}
+  m_Size: {x: 10.127922, y: 13.749751, z: 10.000002}
+  m_Center: {x: 0.28770828, y: -1.5801098, z: -5.9669914e-15}
 --- !u!114 &1006776051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23434,7 +23532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoint: {fileID: 0}
+  checkpoint: {fileID: 2146148952}
   playerTag: Player
   timeBeforeFade: 1
   fadeDuration: 0.5
@@ -26006,6 +26104,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa4b2b27d00c87a4cafd1b02c65a99ef, type: 3}
+--- !u!4 &2146148952 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6409366067606172173, guid: aa4b2b27d00c87a4cafd1b02c65a99ef, type: 3}
+  m_PrefabInstance: {fileID: 2146148951}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &14410067332513433
 MonoBehaviour:
   m_ObjectHideFlags: 0
