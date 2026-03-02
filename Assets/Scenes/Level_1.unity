@@ -21285,18 +21285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b73f8687d864b44783d8be8d99fe6cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptE: {fileID: 1785318653}
-  subtitleText: {fileID: 5855805545032552211}
-  subtitlePanel: {fileID: 4377613208155059880}
-  subtitleDuration: 3
-  subtitles:
-  - Hola soy el Anas y no puedes ganarme!!!
-  - intenta conseguir la gema antes que yo HDP!!!!
-  autoPlay: 1
-  isPlayerNear: 1
-  hasFinishedDialogue: 0
-  maxInteractionDistance: 2
---- !u!114 &733574162
+--- !u!114 &733574162 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8251645889825647820, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
   m_PrefabInstance: {fileID: 4726357041814826688}
@@ -21307,13 +21296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoint: {fileID: 436585725}
-  playerTag: Boss
-  timeBeforeFade: 0.5
-  fadeDuration: 0.5
-  unfadeDuration: 0.5
-  fadeImage: {fileID: 0}
-  isPlayerDeathTeleporter: 0
 --- !u!1001 &756095635
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22425,7 +22407,7 @@ MonoBehaviour:
   subtitleDuration: 3
   subtitles:
   - Antes tendras que vencer el maginifico Anas!!!
-  autoPlay: 0
+  autoPlay: 1
   isPlayerNear: 1
   hasFinishedDialogue: 0
   maxInteractionDistance: 2
@@ -32192,6 +32174,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: autoPlay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: subtitleText
       value: 
       objectReference: {fileID: 5855805545032552211}
@@ -32199,6 +32185,14 @@ PrefabInstance:
       propertyPath: subtitlePanel
       value: 
       objectReference: {fileID: 4377613208155059880}
+    - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: subtitles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: subtitles.Array.data[0]
+      value: Hola soy el npc Anas desafiame!!!
+      objectReference: {fileID: 0}
     - target: {fileID: 7999693861272224417, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: professionalFixedRoute.Array.data[4]
       value: 
