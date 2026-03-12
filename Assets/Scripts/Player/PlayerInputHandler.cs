@@ -284,11 +284,16 @@ public class PlayerInputHandler : MonoBehaviour
         float backward = Input.GetKey(GetBinding("Atras")) ? -1f : 0f;
         MoveZ = Mathf.Clamp(forward + backward, -1f, 1f);
 
-        // Sobrescribe si hay input de joystick (stick izquierdo, no rebindable)
-        float axisX = Input.GetAxisRaw("Horizontal");
-        float axisZ = Input.GetAxisRaw("Vertical");
-        if (Mathf.Abs(axisX) > gamepadDeadzone) MoveX = axisX;
-        if (Mathf.Abs(axisZ) > gamepadDeadzone) MoveZ = axisZ;
+        // Sobrescribe si hay input de joystick/gamepad (stick izquierdo, no rebindable)
+        // NOTA: No usamos "Horizontal"/"Vertical" porque incluyen WASD y flechas
+        // hardcodeadas en el Input Manager, lo que bypasea el sistema de rebind.
+        if (DetectedGamepad != GamepadType.None)
+        {
+            float axisX = Input.GetAxisRaw("GamepadMoveX");
+            float axisZ = Input.GetAxisRaw("GamepadMoveY");
+            if (Mathf.Abs(axisX) > gamepadDeadzone) MoveX = axisX;
+            if (Mathf.Abs(axisZ) > gamepadDeadzone) MoveZ = axisZ;
+        }
     }
 
     private void ProcessActionInput()
