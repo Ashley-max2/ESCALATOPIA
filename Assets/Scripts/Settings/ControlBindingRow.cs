@@ -16,6 +16,7 @@ public class ControlBindingRow : MonoBehaviour
     [Header("Referencias UI")]
     [SerializeField] private TMP_Text keyLabel;       // Texto dentro del boton que muestra la tecla
     [SerializeField] private Button rebindButton;     // Boton que el jugador pulsa para rebindear
+    [SerializeField] private bool allowKeyboardSubmit = false;
 
     private ControlsMenu menu;
     private PlayerInputHandler inputHandler;
@@ -53,10 +54,40 @@ public class ControlBindingRow : MonoBehaviour
 
     private void OnRebindClicked()
     {
-        MusicManager.PlayButton();
         if (inputHandler == null || inputHandler.IsRebinding) return;
+
+        if (!IsValidRebindTrigger()) return;
+
+        MusicManager.PlayButton();
 
         inputHandler.StartRebind(actionName);
         if (menu != null) menu.ShowRebindPanel();
+    }
+
+    private bool IsValidRebindTrigger()
+    {
+        if (inputHandler == null)
+            return false;
+
+        bool keyboardScheme = inputHandler.CurrentInputScheme == PlayerInputHandler.InputScheme.KeyboardMouse;
+        bool gamepadScheme = inputHandler.CurrentInputScheme == PlayerInputHandler.InputScheme.Gamepad;
+
+        // Click de raton siempre permitido.
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+            return keyboardScheme;
+
+        // Enter/Espacio permitidos para abrir remapeo desde teclado.
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))
+            return keyboardScheme;
+
+        // Confirmacion por mando (A / Cross) permitida cuando el esquema activo es mando.
+        if (gamepadScheme)
+        {
+            if (Input.GetKeyDown(KeyCode.JoystickButton0))
+                return true;
+        }
+
+        // Submit por teclado (espacio/enter) desactivado por defecto para evitar remapeos accidentales.
+        return allowKeyboardSubmit;
     }
 }
