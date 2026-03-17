@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1433443402688052296}
   - component: {fileID: 2583726562450046528}
   - component: {fileID: 4082952254415298384}
+  - component: {fileID: 5621835141046906821}
   m_Layer: 0
   m_Name: 'Cofre2 '
   m_TagString: Untagged
@@ -59,9 +60,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -87,6 +85,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5621835141046906821
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204628156051395334}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.72310364, y: 0.4172089, z: 0.35718653}
+  m_Center: {x: 0.0045959204, y: 0, z: -0.01581589}
 --- !u!1 &2125745111432504676
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,7 +117,7 @@ GameObject:
   - component: {fileID: 9066838055875053209}
   - component: {fileID: 7511650718898485473}
   - component: {fileID: 3096288877187278940}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 'TapaCofre2 '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,9 +164,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
