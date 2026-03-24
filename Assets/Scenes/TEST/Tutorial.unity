@@ -240,6 +240,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'Barril '
       objectReference: {fileID: 0}
+    - target: {fileID: 821692169944533716, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.0588655
@@ -291,31 +295,43 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1669694849}
     m_Modifications:
     - target: {fileID: 5926126324586821445, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_Name
       value: PiezaMecanismo
       objectReference: {fileID: 0}
     - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.58823526
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.58823526
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.58823526
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.3823104
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.22886911
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.3054893
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071067
       objectReference: {fileID: 0}
     - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.7071069
       objectReference: {fileID: 0}
     - target: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_LocalRotation.y
@@ -394,6 +410,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3921497040121305481, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.76
+      objectReference: {fileID: 0}
     - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: cam
       value: 
@@ -403,8 +423,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1879537017}
     - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: distanciaMax
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: tagAgarrable
       value: Barril
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: fuerzaLanzamiento
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: capaAgarrable.m_Bits
+      value: 4096
       objectReference: {fileID: 0}
     - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: tagsAgarrables.Array.size
@@ -413,6 +445,26 @@ PrefabInstance:
     - target: {fileID: 5821693814240133507, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: tagsAgarrables.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 5632
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064581358441401876, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064581358441401876, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064581358441401876, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064581358441401876, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -537,6 +589,11 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!4 &1344060754 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9068275367953156751, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+  m_PrefabInstance: {fileID: 448782091}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1407697106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -548,6 +605,10 @@ PrefabInstance:
     - target: {fileID: 821692169944533716, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
       propertyPath: m_Name
       value: Barril  (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 821692169944533716, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -594,6 +655,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+--- !u!4 &1669694849 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+  m_PrefabInstance: {fileID: 1764895088}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1699397191 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 9064581358441401876, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
@@ -610,6 +676,14 @@ PrefabInstance:
     - target: {fileID: 821692169944533716, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
       propertyPath: m_Name
       value: Barril  (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 821692169944533716, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 821692169944533716, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -653,7 +727,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1344060754}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
 --- !u!4 &1879537017 stripped
@@ -671,4 +748,3 @@ SceneRoots:
   - {fileID: 292785626}
   - {fileID: 1764895088}
   - {fileID: 1407697106}
-  - {fileID: 448782091}

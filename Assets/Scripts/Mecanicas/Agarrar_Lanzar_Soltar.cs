@@ -1,21 +1,32 @@
 using UnityEngine;
+using System.Collections;
 
-public class Agarrar_Lanzar_Soltar : MonoBehaviour
+public class AgarrarLanzarSoltar : MonoBehaviour
 {
     [Header("Referencias")]
-    public Camera cam;              // Cámara del jugador (arrastrar en inspector)
-    public Transform followPoint;  // Punto donde se coloca el objeto
+    [SerializeField] private Camera cam;
+    [SerializeField] private Transform followPoint;
 
     [Header("Configuración")]
-    public float distanciaMax = 3f;
-    public string tagAgarrable = "Objeto";
+    [SerializeField] private float distanciaMax = 3f;
+    [SerializeField] private LayerMask capaAgarrable;
+    [SerializeField] private float fuerzaLanzamiento = 10f;
 
     private GameObject objetoActual;
+    private Rigidbody rbActual;
 
+    // Se ejecuta al iniciar
+    void Awake()
+    {
+        if (cam == null) cam = Camera.main;
+    }
+
+    // Input + mantener objeto en mano
     void Update()
     {
         Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
+        // R = agarrar / soltar
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (objetoActual == null)
@@ -23,41 +34,111 @@ public class Agarrar_Lanzar_Soltar : MonoBehaviour
             else
                 SoltarObjeto();
         }
-    }
 
-    void IntentarAgarrar()
-    {
-        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, distanciaMax))
+        // Click izquierdo = lanzar
+        if (Input.GetMouseButtonDown(0) && objetoActual != null)
         {
-            GameObject obj = hit.collider.gameObject;
+            LanzarObjeto();
+        }
 
-            if (obj.CompareTag(tagAgarrable))
-            {
-                objetoActual = obj;
-                AgarrarObjeto(obj);
-            }
+        // Mantener objeto en la mano
+        if (objetoActual != null)
+        {
+            objetoActual.transform.position = followPoint.position;
+            objetoActual.transform.rotation = Quaternion.identity;
         }
     }
 
-    void AgarrarObjeto(GameObject obj)
+    // Detecta objeto con raycast
+    void IntentarAgarrar()
     {
-        obj.transform.SetParent(followPoint);
-        obj.transform.localPosition = Vector3.zero;
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
 
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = true;
+        if (Physics.Raycast(ray, out RaycastHit hit, distanciaMax, capaAgarrable))
+        {
+            AgarrarObjeto(hit.collider.gameObject);
+        }
     }
 
-    void SoltarObjeto()
+    // Agarra el objeto
+    void AgarrarObjeto(GameObject obj)
     {
+        objetoActual = obj;
+        rbActual = obj.GetComponent<Rigidbody>();
+
+        if (rbActual != null)
+        {
+            rbActual.useGravity = false;
+            rbActual.velocity = Vector3.zero;
+            rbActual.angularVelocity = Vector3.zero;
+            rbActual.freezeRotation = true;
+        }
+
+        obj.transform.SetParent(followPoint);
+    }
+
+    // Lanza el objeto y programa su destrucción diferida
+    void LanzarObjeto()
+    {
+        if (rbActual == null) return;
+
         objetoActual.transform.SetParent(null);
 
-        Rigidbody rb = objetoActual.GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = false;
+        rbActual.useGravity = true;
+        rbActual.freezeRotation = false;
+
+        rbActual.AddForce(cam.transform.forward * fuerzaLanzamiento, ForceMode.Impulse);
+
+        // Iniciar proceso de destrucción con delay
+        StartCoroutine(DestruirConHijos(objetoActual, 1f));
 
         objetoActual = null;
+        rbActual = null;
+    }
+
+    // Suelta el objeto sin lanzar
+    void SoltarObjeto()
+    {
+        if (objetoActual == null) return;
+
+        objetoActual.transform.SetParent(null);
+
+        if (rbActual != null)
+        {
+            rbActual.useGravity = true;
+            rbActual.freezeRotation = false;
+        }
+
+        objetoActual = null;
+        rbActual = null;
+    }
+
+    // Corrutina:
+    // Espera X segundos -> desparenta hijos -> destruye el objeto
+    IEnumerator DestruirConHijos(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (obj != null)
+        {
+            DesparentarHijos(obj);
+            Destroy(obj);
+        }
+    }
+
+    // Desparenta todos los hijos para que no se destruyan
+    void DesparentarHijos(GameObject padre)
+    {
+        Transform[] hijos = new Transform[padre.transform.childCount];
+
+        for (int i = 0; i < hijos.Length; i++)
+        {
+            hijos[i] = padre.transform.GetChild(i);
+        }
+
+        foreach (Transform hijo in hijos)
+        {
+            hijo.SetParent(null);
+        }
     }
 }
