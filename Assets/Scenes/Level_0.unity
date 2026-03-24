@@ -1732,8 +1732,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01644b1543bc0342951031a8cb69631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelUI: {fileID: 1419020057}
-  interactionDistance: 3
+  missionPanel: {fileID: 1824739188}
+  missionPanelRect: {fileID: 1824739189}
+  animationDuration: 0.6
+  hiddenPosition: {x: -900, y: 0}
+  shownPosition: {x: 250, y: 0}
+  objectCollected: 0
 --- !u!65 &390152504
 BoxCollider:
   m_ObjectHideFlags: 0
