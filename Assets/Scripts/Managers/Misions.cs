@@ -3,28 +3,23 @@ using DG.Tweening;
 
 public class Misions : MonoBehaviour
 {
-    [Header("Panel de Misiones")]
-    public GameObject missionPanel;
-    public RectTransform missionPanelRect;
+    [Header("Referencias")]
+    public GameObject missionPanel;           // ← Panel de misiones
+    public RectTransform missionPanelRect;    // ← El mismo panel
 
-    [Header("Configuración de Animación")]
-    public float animationDuration = 0.6f;
-    public Vector2 hiddenPosition = new Vector2(-900f, 0f);   // Fuera de pantalla (izquierda)
-    public Vector2 shownPosition = Vector2.zero;              // Posición visible
+    [Header("Configuración")]
+    public float hiddenX = -900f;             // Cambia si no entra bien
+    public float animationTime = 0.5f;
 
-    [Header("Estado")]
-    public bool objectCollected = false;
-
+    private bool objectCollected = false;
     private bool isPlayerNear = false;
-    private bool isPanelOpen = false;
-    private Tween currentTween;
 
     void Start()
     {
-        if (missionPanel != null)
+        if (missionPanelRect != null)
         {
             missionPanel.SetActive(false);
-            missionPanelRect.anchoredPosition = hiddenPosition;
+            missionPanelRect.anchoredPosition = new Vector2(hiddenX, 0f);
         }
     }
 
@@ -32,13 +27,13 @@ public class Misions : MonoBehaviour
     {
         if (!isPlayerNear) return;
 
-        // === RECOGER OBJETO con tecla E ===
+        // Recoger el objeto con E
         if (!objectCollected && Input.GetKeyDown(KeyCode.E))
         {
             CollectObject();
         }
 
-        // === ABRIR/CERRAR PANEL con tecla J (solo si ya recogió el objeto) ===
+        // Abrir/Cerrar misiones con J (solo después de recoger)
         if (objectCollected && Input.GetKeyDown(KeyCode.J))
         {
             ToggleMissionPanel();
@@ -48,75 +43,45 @@ public class Misions : MonoBehaviour
     private void CollectObject()
     {
         objectCollected = true;
-        gameObject.SetActive(false);           // Desactiva el objeto (lo "recoge")
+        Debug.Log("Objeto recogido. Ahora pulsa J para abrir las misiones");
 
-        Debug.Log("¡Objeto recogido! Ahora puedes abrir el menú de misiones pulsando J");
+        // IMPORTANTE: NO desactivamos este GameObject
+        // gameObject.SetActive(false);   ← Comentado para que el script siga vivo
     }
 
     private void ToggleMissionPanel()
     {
-        if (isPanelOpen)
-            CloseMissionPanel();
+        if (missionPanel.activeSelf)
+            ClosePanel();
         else
-            OpenMissionPanel();
+            OpenPanel();
     }
 
-    public void OpenMissionPanel()
+    private void OpenPanel()
     {
-        if (missionPanel == null) return;
-
         missionPanel.SetActive(true);
-        isPanelOpen = true;
+        missionPanelRect.anchoredPosition = new Vector2(hiddenX, 0f);
 
-        currentTween?.Kill();
-
-        currentTween = missionPanelRect.DOAnchorPos(shownPosition, animationDuration)
-            .SetEase(Ease.OutBack)
-            .OnComplete(() => Debug.Log("Menú de misiones abierto"));
+        missionPanelRect.DOAnchorPos(Vector2.zero, animationTime)
+            .SetEase(Ease.OutBack);
     }
 
-    public void CloseMissionPanel()
+    private void ClosePanel()
     {
-        if (missionPanel == null) return;
-
-        isPanelOpen = false;
-
-        currentTween?.Kill();
-
-        currentTween = missionPanelRect.DOAnchorPos(hiddenPosition, animationDuration)
+        missionPanelRect.DOAnchorPos(new Vector2(hiddenX, 0f), animationTime)
             .SetEase(Ease.InBack)
-            .OnComplete(() =>
-            {
-                missionPanel.SetActive(false);
-                Debug.Log("Menú de misiones cerrado");
-            });
+            .OnComplete(() => missionPanel.SetActive(false));
     }
 
-    // ====================== TRIGGER ======================
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
             isPlayerNear = true;
-
-            if (!objectCollected)
-                Debug.Log("Pulsa E para recoger el objeto");
-            else
-                Debug.Log("Pulsa J para abrir el menú de misiones");
-        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
             isPlayerNear = false;
-        }
-    }
-
-    // Opcional: método público por si quieres llamarlo desde otro script
-    public void ForceCollectObject()
-    {
-        CollectObject();
     }
 }
