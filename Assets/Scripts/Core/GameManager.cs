@@ -23,6 +23,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Si lo dejas vacio se crea uno automaticamente")]
     [SerializeField] private GameObject pausePanel;
 
+    [Header("=== PAUSE SETTINGS ===")]
+    [Tooltip("Escenas donde la pausa (ESC/Start/Options) queda deshabilitada")]
+    [SerializeField] private string[] pauseBlockedScenes = { "Creditos" };
+
     // Referencia al PauseMenuManager (se registra automaticamente)
     private PauseMenuManager _pauseMenuManager;
 
@@ -106,6 +110,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (IsPauseBlockedInCurrentScene())
+            return;
 
         // Buscar input handler si no lo tenemos
         if (_inputHandler == null && player != null)
@@ -140,6 +146,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
+        if (IsPauseBlockedInCurrentScene())
+            return;
+
         if (!hasFocus && !isPaused)
         {
             PauseGame();
@@ -151,6 +160,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void PauseGame()
     {
+        if (IsPauseBlockedInCurrentScene()) return;
         if (isPaused) return;
         isPaused = true;
 
@@ -181,6 +191,21 @@ public class GameManager : MonoBehaviour
         {
             pausePanel.SetActive(true);
         }
+    }
+
+    private bool IsPauseBlockedInCurrentScene()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (string.IsNullOrEmpty(currentScene) || pauseBlockedScenes == null)
+            return false;
+
+        for (int i = 0; i < pauseBlockedScenes.Length; i++)
+        {
+            if (string.Equals(currentScene, pauseBlockedScenes[i], System.StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>

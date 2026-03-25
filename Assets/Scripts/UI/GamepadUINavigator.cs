@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 /// <summary>
 /// Habilita la navegación de UI con mando (gamepad).
@@ -36,9 +37,13 @@ public class GamepadUINavigator : MonoBehaviour
     // Runtime
     private GameObject _lastSelected;
     private Outline _currentOutline;
+    private Vector3 _lastMousePosition;
+    private bool _mousePositionInitialized;
 
     private void Update()
     {
+        SelectHoveredButtonWithMouse();
+
         // Detectar panel activo y auto-seleccionar si no hay nada seleccionado
         GameObject currentSelected = EventSystem.current?.currentSelectedGameObject;
 
@@ -53,6 +58,47 @@ public class GamepadUINavigator : MonoBehaviour
         {
             UpdateHighlight(currentSelected);
             _lastSelected = currentSelected;
+        }
+    }
+
+    private void SelectHoveredButtonWithMouse()
+    {
+        if (EventSystem.current == null) return;
+
+        Vector3 currentMousePosition = Input.mousePosition;
+        if (!_mousePositionInitialized)
+        {
+            _lastMousePosition = currentMousePosition;
+            _mousePositionInitialized = true;
+            return;
+        }
+
+        if (currentMousePosition == _lastMousePosition)
+            return;
+
+        _lastMousePosition = currentMousePosition;
+
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = currentMousePosition
+        };
+
+        List<RaycastResult> raycastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, raycastResults);
+
+        for (int i = 0; i < raycastResults.Count; i++)
+        {
+            GameObject hoveredObject = raycastResults[i].gameObject;
+            if (hoveredObject == null) continue;
+
+            Selectable hoveredSelectable = hoveredObject.GetComponentInParent<Selectable>();
+            if (hoveredSelectable != null && hoveredSelectable.IsInteractable() && hoveredSelectable.gameObject.activeInHierarchy)
+            {
+                if (EventSystem.current.currentSelectedGameObject != hoveredSelectable.gameObject)
+                    EventSystem.current.SetSelectedGameObject(hoveredSelectable.gameObject);
+
+                return;
+            }
         }
     }
 
