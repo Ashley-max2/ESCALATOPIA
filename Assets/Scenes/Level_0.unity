@@ -1750,13 +1750,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 390152498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d01644b1543bc0342951031a8cb69631, type: 3}
+  m_Script: {fileID: 11500000, guid: dc5de974ebfacaa45abe4403443a0238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missionPanel: {fileID: 1824739188}
-  missionPanelRect: {fileID: 1824739189}
-  hiddenX: 200
-  animationTime: 0.5
+  missionManager: {fileID: 859060756}
 --- !u!1001 &392134742
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3160,9 +3157,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   missionPanel: {fileID: 1824739188}
-  missionPanelRect: {fileID: 1824739189}
-  hiddenX: -900
-  animationTime: 0.5
 --- !u!1001 &864656959
 PrefabInstance:
   m_ObjectHideFlags: 0
