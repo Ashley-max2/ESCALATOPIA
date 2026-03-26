@@ -755,6 +755,7 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         // Asigna
+        bool bindingFound = false;
         foreach (var b in bindings)
         {
             if (b.actionName == action)
@@ -766,9 +767,15 @@ public class PlayerInputHandler : MonoBehaviour
                 }
                 else
                     b.keyCode = newKey;
+                bindingFound = true;
                 break;
             }
         }
+        
+        // Solo guardar si se encontró y modificó el binding
+        if (!bindingFound)
+            return false;
+            
         CacheBindings();
         SaveBindings();
         return true;

@@ -49,7 +49,8 @@ public class BindingRow : MonoBehaviour
         if (!IsValidRebindTrigger()) return;
 
         inputHandler.StartRebind(actionName);
-        controlsMenu.ShowRebindPanel();
+        if (controlsMenu != null)
+            controlsMenu.ShowRebindPanel();
     }
 
     bool IsValidRebindTrigger()
