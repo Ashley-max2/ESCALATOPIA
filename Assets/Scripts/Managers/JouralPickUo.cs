@@ -12,10 +12,12 @@ public class JouralPickUo : MonoBehaviour
     {
         if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
         {
+            /*
             Pickup();
+            */
         }
     }
-
+    /*/
     private void Pickup()
     {
         if (missionManager != null)
@@ -23,6 +25,7 @@ public class JouralPickUo : MonoBehaviour
 
         gameObject.SetActive(false);
     }
+    */
 
     private void OnTriggerEnter(Collider other)
     {
