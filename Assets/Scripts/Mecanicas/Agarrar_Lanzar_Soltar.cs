@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class AgarrarLanzarSoltar : MonoBehaviour
 {
@@ -77,7 +76,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
         obj.transform.SetParent(followPoint);
     }
 
-    // Lanza el objeto y programa su destrucción diferida
+    // Lanza el objeto
     void LanzarObjeto()
     {
         if (rbActual == null) return;
@@ -89,14 +88,18 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
         rbActual.AddForce(cam.transform.forward * fuerzaLanzamiento, ForceMode.Impulse);
 
-        // Iniciar proceso de destrucción con delay
-        StartCoroutine(DestruirConHijos(objetoActual, 1f));
+        // Marcar el objeto como lanzado para que se destruya al tocar el suelo
+        DetectarColisionSuelo scriptColision = objetoActual.GetComponent<DetectarColisionSuelo>();
+        if (scriptColision != null)
+        {
+            scriptColision.MarcarComoLanzado();
+        }
 
         objetoActual = null;
         rbActual = null;
     }
 
-    // Suelta el objeto sin lanzar
+    // Suelta el objeto sin lanzarlo
     void SoltarObjeto()
     {
         if (objetoActual == null) return;
@@ -111,34 +114,5 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
         objetoActual = null;
         rbActual = null;
-    }
-
-    // Corrutina:
-    // Espera X segundos -> desparenta hijos -> destruye el objeto
-    IEnumerator DestruirConHijos(GameObject obj, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        if (obj != null)
-        {
-            DesparentarHijos(obj);
-            Destroy(obj);
-        }
-    }
-
-    // Desparenta todos los hijos para que no se destruyan
-    void DesparentarHijos(GameObject padre)
-    {
-        Transform[] hijos = new Transform[padre.transform.childCount];
-
-        for (int i = 0; i < hijos.Length; i++)
-        {
-            hijos[i] = padre.transform.GetChild(i);
-        }
-
-        foreach (Transform hijo in hijos)
-        {
-            hijo.SetParent(null);
-        }
     }
 }
