@@ -290,9 +290,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 882e183129e9a15438b0e4e1c5fcf28e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tagsAgarrables: []
-  distanciaMax: 3
-  followPoint: {fileID: 0}
+  cam: {fileID: 9064581358441401876}
+  followPoint: {fileID: 3921497040121305481}
+  distanciaMax: 8
+  capaAgarrable:
+    serializedVersion: 2
+    m_Bits: 4096
+  fuerzaLanzamiento: 100
 --- !u!1 &7173003493043281783
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,7 +556,7 @@ Transform:
   m_GameObject: {fileID: 8627489161978445082}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
