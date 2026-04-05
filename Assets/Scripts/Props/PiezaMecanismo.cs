@@ -33,6 +33,7 @@ public class PiezaMecanismo : MonoBehaviour
                     if (objetoAActivar != null)
                     {
                         objetoAActivar.SetActive(true);
+                        Destroy(gameObject);
                     }
 
                     // Aquí termina la lógica de este script
