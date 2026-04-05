@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    private const string AutoPauseCanvasName = "AutoPauseCanvas";
+
     public static GameManager Instance { get; private set; }
 
     [Header("=== GAME STATE ===")]
@@ -61,7 +63,7 @@ public class GameManager : MonoBehaviour
         // Find player if not assigned
         if (player == null)
         {
-            player = FindObjectOfType<PlayerStateMachine>();
+            player = FindFirstSceneObject<PlayerStateMachine>();
         }
     }
 
@@ -95,7 +97,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         // Re-buscar player
-        player = FindObjectOfType<PlayerStateMachine>();
+        player = FindFirstSceneObject<PlayerStateMachine>();
         _inputHandler = null; // se re-busca en Update
 
         // PauseMenuManager se registrara automaticamente en su Awake()
@@ -245,28 +247,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CreatePausePanel()
     {
-        // Buscar o crear Canvas
-        Canvas canvas = FindObjectOfType<Canvas>();
-        if (canvas == null)
-        {
-            GameObject canvasObj = new GameObject("Canvas");
-            canvas = canvasObj.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 100; // por encima de todo
-            canvasObj.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            canvasObj.GetComponent<CanvasScaler>().referenceResolution = new Vector2(1920, 1080);
-            canvasObj.AddComponent<GraphicRaycaster>();
-            DontDestroyOnLoad(canvasObj);
-
-            // EventSystem necesario para clicks
-            if (FindObjectOfType<UnityEngine.EventSystems.EventSystem>() == null)
-            {
-                GameObject eventSystem = new GameObject("EventSystem");
-                eventSystem.AddComponent<UnityEngine.EventSystems.EventSystem>();
-                eventSystem.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
-                DontDestroyOnLoad(eventSystem);
-            }
-        }
+        // Usamos un canvas dedicado para pausa y evitar conflictos si hay multiples canvas en escena.
+        Canvas canvas = GetOrCreatePauseCanvas();
+        EnsureEventSystemExists();
 
         // Panel oscuro de fondo (overlay)
         pausePanel = new GameObject("PausePanel");
@@ -318,6 +301,54 @@ public class GameManager : MonoBehaviour
         CreatePauseButton(container.transform, "ExitButton", "SALIR", new Vector2(0, -90), () => QuitGame());
 
         pausePanel.SetActive(false);
+    }
+
+    private Canvas GetOrCreatePauseCanvas()
+    {
+        Canvas[] canvases = Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvases.Length; i++)
+        {
+            if (canvases[i] != null && canvases[i].name == AutoPauseCanvasName)
+                return canvases[i];
+        }
+
+        GameObject canvasObj = new GameObject(AutoPauseCanvasName);
+        Canvas canvas = canvasObj.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 100;
+
+        CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920, 1080);
+
+        canvasObj.AddComponent<GraphicRaycaster>();
+        DontDestroyOnLoad(canvasObj);
+
+        return canvas;
+    }
+
+    private void EnsureEventSystemExists()
+    {
+        if (EventSystem.current != null)
+            return;
+
+        EventSystem[] systems = Object.FindObjectsByType<EventSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        if (systems != null && systems.Length > 0)
+            return;
+
+        GameObject eventSystemObj = new GameObject("EventSystem");
+        eventSystemObj.AddComponent<EventSystem>();
+        eventSystemObj.AddComponent<StandaloneInputModule>();
+        DontDestroyOnLoad(eventSystemObj);
+    }
+
+    private T FindFirstSceneObject<T>() where T : Object
+    {
+        T[] found = Object.FindObjectsByType<T>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        if (found != null && found.Length > 0)
+            return found[0];
+
+        return null;
     }
 
     /// <summary>

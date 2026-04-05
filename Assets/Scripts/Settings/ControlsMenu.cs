@@ -10,6 +10,7 @@ using System.Collections;
 public class ControlsMenu : MonoBehaviour
 {
     public static ControlsMenu Instance;
+    public bool IsRebindPanelVisible => rebindPanel != null && rebindPanel.activeInHierarchy;
 
     [Header("Filas de Controles")]
     [Tooltip("Arrastra aqui el panel donde estan los botones de rebind (ControlsPanel).\nSi se deja vacio, busca las filas como hijos de este objeto.")]
@@ -134,15 +135,15 @@ public class ControlsMenu : MonoBehaviour
         switch (inputHandler.DetectedGamepad)
         {
             case PlayerInputHandler.GamepadType.Xbox:
-                rebindText.text = "PULSA UN BOTON DE MANDO\n(B o START para cancelar)";
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(ESC para cancelar)";
                 break;
 
             case PlayerInputHandler.GamepadType.PlayStation:
-                rebindText.text = "PULSA UN BOTON DE MANDO\n(CIRCULO u OPTIONS para cancelar)";
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(ESC para cancelar)";
                 break;
 
             default:
-                rebindText.text = "PULSA UN BOTON DE MANDO\n(BOTON ATRAS o MENU para cancelar)";
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(ESC para cancelar)";
                 break;
         }
     }
