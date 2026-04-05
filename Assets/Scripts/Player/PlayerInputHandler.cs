@@ -667,6 +667,13 @@ public class PlayerInputHandler : MonoBehaviour
             return;
         }
 
+        if (IsGamepadRebindCancelPressed())
+        {
+            EndRebind();
+            ControlsMenu.Instance?.HideRebindPanel();
+            return;
+        }
+
         if (CurrentInputScheme == InputScheme.Gamepad && IsHookAction(currentRebindAction))
         {
             if (TryCaptureGamepadTriggerAxisRebind())
@@ -1095,9 +1102,6 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (DetectedGamepad == GamepadType.None)
             return false;
-
-        if (_gamepadCancelKey != KeyCode.None && Input.GetKeyDown(_gamepadCancelKey))
-            return true;
 
         if (_gamepadMenuKey != KeyCode.None && Input.GetKeyDown(_gamepadMenuKey))
             return true;

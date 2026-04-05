@@ -135,15 +135,15 @@ public class ControlsMenu : MonoBehaviour
         switch (inputHandler.DetectedGamepad)
         {
             case PlayerInputHandler.GamepadType.Xbox:
-                rebindText.text = "PULSA UN BOTON DE MANDO\n(ESC para cancelar)";
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(START para cancelar)";
                 break;
 
             case PlayerInputHandler.GamepadType.PlayStation:
-                rebindText.text = "PULSA UN BOTON DE MANDO\n(ESC para cancelar)";
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(OPTIONS para cancelar)";
                 break;
 
             default:
-                rebindText.text = "PULSA UN BOTON DE MANDO\n(ESC para cancelar)";
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(BOTON MENU para cancelar)";
                 break;
         }
     }
