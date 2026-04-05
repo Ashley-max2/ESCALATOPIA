@@ -26,6 +26,16 @@ public class AudioVCASettings : MonoBehaviour
         LoadAndApplyVolumes();
     }
 
+    private void OnEnable()
+    {
+        // Al abrir el panel de sonido, solo sincronizamos UI con valores actuales.
+        // No reasignamos listeners aqui para evitar duplicados.
+        if (_audioSettingsManager == null)
+            _audioSettingsManager = AudioSettingsManager.GetOrCreate();
+
+        LoadAndApplyVolumes();
+    }
+
     // Métodos llamados por los sliders
     public void SetGeneralMusic(float volume)
     {
