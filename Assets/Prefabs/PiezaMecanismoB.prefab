@@ -11,8 +11,10 @@ GameObject:
   - component: {fileID: 9068275367953156751}
   - component: {fileID: 4611056539658465304}
   - component: {fileID: 8398911639873066828}
+  - component: {fileID: 6858477526155468013}
+  - component: {fileID: 2711779733564664482}
   m_Layer: 0
-  m_Name: PiezaMecanismo
+  m_Name: PiezaMecanismoB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,3 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &6858477526155468013
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5926126324586821445}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.20020752
+  m_Height: 0.3766495
+  m_Direction: 1
+  m_Center: {x: -0.17569532, y: 0.41719338, z: 0.003975458}
+--- !u!114 &2711779733564664482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5926126324586821445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3442f0c2c725d47b9f35b6d985ec53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tieneElJugador: 0
+  distanciaInteraccion: 3
+  objetoAActivar: {fileID: 0}
