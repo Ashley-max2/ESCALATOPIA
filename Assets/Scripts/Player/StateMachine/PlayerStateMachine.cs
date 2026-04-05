@@ -1,4 +1,7 @@
 using UnityEngine;
+using FMOD.Studio;
+using FMODUnity;
+using FMOD;
 
 /// <summary>
 /// Máquina de estados principal del jugador.
@@ -123,6 +126,15 @@ public class PlayerStateMachine : MonoBehaviour
     [Header("=== DEBUG ===")]
     [SerializeField] private bool showDebugInfo = true;
     #endregion
+
+    #region FMOD Audio
+    [Header("=== FMOD AUDIO ===")]
+    [EventRef] [SerializeField] private string walkEventPath = "event:/SFX/Player/Walking";
+    [EventRef] [SerializeField] private string runEventPath = "event:/SFX/Player/Running";
+
+    private EventInstance _movementEventInstance;
+    private string _activeMovementEventPath;
+    #endregion
     
     private void Awake()
     {
@@ -163,6 +175,11 @@ public class PlayerStateMachine : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
+    private void OnDestroy()
+    {
+        StopMovementEvent();
+    }
     
     /// <summary>
     /// Comprueba si el juego esta pausado (via GameManager)
@@ -186,6 +203,9 @@ public class PlayerStateMachine : MonoBehaviour
         
         // Update state (aqui se lee JumpPressed y IsJumpBuffered)
         CurrentState?.Execute();
+
+        // Update footstep/locomotion audio
+        UpdateMovementAudio();
 
         // Player animator controller
         switch (CurrentState)
@@ -226,6 +246,75 @@ public class PlayerStateMachine : MonoBehaviour
         CurrentState?.FixedExecute();
     }
     
+    private void UpdateMovementAudio()
+    {
+        if (CurrentState is PlayerGroundedState)
+        {
+            float horizontalSpeed = new Vector2(Rb.velocity.x, Rb.velocity.z).magnitude;
+
+            if (horizontalSpeed > 0.1f)
+            {
+                string eventPath = Input.SprintHeld ? runEventPath : walkEventPath;
+
+                bool sameEvent = eventPath == _activeMovementEventPath;
+                bool isPlaying = IsMovementEventPlaying();
+
+                if (!sameEvent)
+                {
+                    StopMovementEvent();
+                    PlayMovementEvent(eventPath);
+                    return;
+                }
+
+                if (!isPlaying)
+                {
+                    // El evento terminó y todavía se está moviendo: reiniciar.
+                    StopMovementEvent();
+                    PlayMovementEvent(eventPath);
+                    return;
+                }
+
+                return;
+            }
+        }
+
+        StopMovementEvent();
+    }
+
+    private bool IsMovementEventPlaying()
+    {
+        if (!_movementEventInstance.isValid())
+            return false;
+
+        PLAYBACK_STATE state;
+        if (_movementEventInstance.getPlaybackState(out state) != RESULT.OK)
+            return false;
+
+        return state == PLAYBACK_STATE.STARTING || state == PLAYBACK_STATE.PLAYING;
+    }
+
+    private void PlayMovementEvent(string eventPath)
+    {
+        if (string.IsNullOrEmpty(eventPath))
+            return;
+
+        _movementEventInstance = RuntimeManager.CreateInstance(eventPath);
+        RuntimeManager.AttachInstanceToGameObject(_movementEventInstance, transform, Rb);
+        _movementEventInstance.start();
+        _activeMovementEventPath = eventPath;
+    }
+
+    private void StopMovementEvent()
+    {
+        if (_movementEventInstance.isValid())
+        {
+            _movementEventInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            _movementEventInstance.release();
+        }
+
+        _activeMovementEventPath = null;
+    }
+
     private void UpdateGroundCheck()
     {
         bool wasGrounded = IsGrounded;
