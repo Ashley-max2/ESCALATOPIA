@@ -5822,6 +5822,10 @@ PrefabInstance:
       propertyPath: checkpoint
       value: 
       objectReference: {fileID: 543450651925085658}
+    - target: {fileID: 4008784220886398847, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: checkpointOnlyTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: climbSpeed
       value: 4
@@ -10820,6 +10824,7 @@ MonoBehaviour:
   gamepadCameraSensitivity: 3
   gamepadDeadzone: 0.25
   inputSchemeSwitchDelay: 0.5
+  rebindTriggerSuppressSeconds: 0.5
   triggerThreshold: 0.5
   psTriggerThreshold: 0
   OnBindingsChanged:
@@ -11139,8 +11144,27 @@ MonoBehaviour:
     firstSelected: {fileID: 277636670563612271}
   - panel: {fileID: 1727244476318002350}
     firstSelected: {fileID: 3342609953826786630}
+  visualOverrides: []
+  controlsVisualOverrides: []
+  permanentTextColorOverrides: []
   highlightColor: {r: 1, g: 0.85, b: 0.2, a: 1}
   highlightSize: {x: 4, y: 4}
+  autoAddOutlineOnTarget: 0
+  nullSelectionGraceFrames: 6
+  syncMouseHoverSelection: 1
+  selectedButtonSprite: {fileID: 0}
+  useSelectedSprite: 1
+  selectedFramePadding: {x: 10, y: 6}
+  skipHugeHighlightRects: 1
+  maxHighlightScreenWidthRatio: 0.65
+  maxHighlightScreenHeightRatio: 0.5
+  applySelectedTextColor: 1
+  selectedTextColor: {r: 1, g: 0.95, b: 0.55, a: 1}
+  highlightSliderFill: 1
+  selectedSliderFillColor: {r: 1, g: 0.95, b: 0.55, a: 1}
+  sliderFrameExtraPadding: {x: 6, y: 3}
+  highlightToggleWholeButton: 1
+  toggleFrameExtraPadding: {x: 14, y: 8}
 --- !u!222 &2039850004296174620
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21234,6 +21258,63 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1001 &9105591089698520004
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5046960189256181424, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_Name
+      value: CheckpointManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 478.27893
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -9.108748
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 279.7326
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629034099419899308, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4bcc1657238aca44ba0244bad348e9bf, type: 3}
 --- !u!1 &9123424273576226605
 GameObject:
   m_ObjectHideFlags: 0
@@ -21638,3 +21719,4 @@ SceneRoots:
   - {fileID: 2028000729}
   - {fileID: 967980363}
   - {fileID: 859060755}
+  - {fileID: 9105591089698520004}

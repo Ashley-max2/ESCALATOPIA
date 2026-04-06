@@ -29,8 +29,17 @@ public class MainMenu : MonoBehaviour
     public void PlayGame(string sceneName)
     {
         MusicManager.PlayButton();
-        Debug.Log("Cargando escena: " + sceneName);
-        SceneManager.LoadScene(sceneName);
+        string targetScene = sceneName;
+
+        if (GameProgressDatabase.HasSave())
+        {
+            GameProgressData save = GameProgressDatabase.Load();
+            if (save != null && !string.IsNullOrWhiteSpace(save.Scene))
+                targetScene = save.Scene;
+        }
+
+        Debug.Log("Cargando escena: " + targetScene);
+        SceneManager.LoadScene(targetScene);
     }
 
     public void Creditos(string sceneName)
