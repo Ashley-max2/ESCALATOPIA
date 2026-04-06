@@ -60,9 +60,11 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Puzzle\PuzzleDoor.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\StoneSlot.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlBindingRow.cs" />
     <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\PanelMusic.cs" />
@@ -80,6 +82,8 @@
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossManager.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaUI.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
+    <Compile Include="Assets\Scripts\Props\PiezaMecanismoA.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
     <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
     <Compile Include="Assets\Scripts\Core\GameManager.cs" />
@@ -88,16 +92,17 @@
     <Compile Include="Assets\Scripts\Mecanicas\Agarrar_Lanzar_Soltar.cs" />
     <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
-    <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\SwordPuzzleManager.cs" />
     <Compile Include="Assets\Scripts\Managers\JournalPickUo.cs" />
+    <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
     <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
-    <Compile Include="Assets\Scripts\Props\PiezaMecanismo.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Managers\ScreenSettingsManager.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRaceManager.cs" />
+    <Compile Include="Assets\Scripts\Props\PiezaMecanismoB.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
     <Compile Include="Assets\Scripts\Systems\GrapplingHook.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettings.cs" />
