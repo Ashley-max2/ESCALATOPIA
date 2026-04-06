@@ -62,7 +62,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
+    <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoA.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
+    <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoB.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlBindingRow.cs" />
     <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\PanelMusic.cs" />
@@ -90,10 +92,12 @@
     <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
+    <Compile Include="Assets\Scripts\Managers\JournalPickUo.cs" />
     <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
-    <Compile Include="Assets\Scripts\Props\PiezaMecanismo.cs" />
+    <Compile Include="Assets\Scripts\UI\punteia.cs" />
+    <Compile Include="Assets\Scripts\UI\HookAim.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Managers\ScreenSettingsManager.cs" />
@@ -103,7 +107,6 @@
     <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettings.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressDatabase.cs" />
     <Compile Include="Assets\Scripts\Props\ThrownBox.cs" />
-    <Compile Include="Assets\Scripts\Managers\JouralPickUo.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateMachine.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\NPCInteractable.cs" />
     <Compile Include="Assets\Scripts\Managers\FadeInSceneManager.cs" />

@@ -21,6 +21,7 @@ public class GrapplingHook : MonoBehaviour
     [Header("=== VISUALS ===")]
     [SerializeField] private LineRenderer ropeRenderer;
     [SerializeField] private Transform hookOrigin;
+    [SerializeField] private punteia uiPunteia;
     
     // Properties
     public float TravelSpeed => travelSpeed;
@@ -56,6 +57,19 @@ public class GrapplingHook : MonoBehaviour
     private void Update()
     {
         UpdateRopeVisual();
+        
+        // Actualizar el color de la UI
+        if (uiPunteia != null)
+        {
+            if (!IsActive && FindBestTarget() != Vector3.zero)
+            {
+                uiPunteia.ActivarColorHookpoint();
+            }
+            else
+            {
+                uiPunteia.DesactivarColorHookpoint();
+            }
+        }
     }
     
     /// <summary>
