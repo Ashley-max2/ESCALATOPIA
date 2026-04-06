@@ -12,22 +12,28 @@ public class FadeInSceneManager : MonoBehaviour
     [Header("Nombre de la escena a cargar")]
     public string sceneToLoad;
 
-    public void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Saliendo del nivel");
-        director.Play();
-        if (director != null)
+        // Solo reaccionar si colisiona el jugador
+        if (other.CompareTag("Player"))
         {
-            director.stopped -= OnTimelineFinished;
-            Debug.Log("Escena cargando");
+            Debug.Log("Saliendo del nivel");
+
+            if (director != null)
+            {
+                // Nos aseguramos de no duplicar suscripciones
+                director.stopped -= OnTimelineFinished;
+                director.stopped += OnTimelineFinished;
+
+                // Reproducir la timeline
+                director.Play();
+            }
         }
-        
     }
 
     private void OnTimelineFinished(PlayableDirector pd)
     {
+        Debug.Log("Timeline terminada, cargando escena...");
         SceneManager.LoadScene(sceneToLoad);
-        
     }
-
 }
