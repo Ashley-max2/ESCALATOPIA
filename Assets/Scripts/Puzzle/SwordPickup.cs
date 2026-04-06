@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 
 public class SwordPickup : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class SwordPickup : MonoBehaviour
     public Renderer[] highlightRenderers;
     public Color highlightColor = new Color(1f, 0.88f, 0.15f);
     public float emissionIntensity = 2f;
+
+    [Header("Audio")]
+    [EventRef] public string pickupSound = "event:/SFX/PickUp";
 
     private SwordPuzzleManager puzzleManager;
     private bool isPicked;
@@ -139,6 +143,7 @@ public class SwordPickup : MonoBehaviour
             rigidbody.angularVelocity = Vector3.zero;
         }
 
+        RuntimeManager.PlayOneShot(pickupSound, transform.position);
         isPicked = true;
         SetHighlighted(false);
     }

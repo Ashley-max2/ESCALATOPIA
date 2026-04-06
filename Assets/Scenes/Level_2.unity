@@ -3782,6 +3782,7 @@ MonoBehaviour:
   highlightRenderers: []
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
+  pickupSound: event:/SFX/PickUp
 --- !u!114 &617078430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3800,6 +3801,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
   placeDuration: 0.4
+  placeSound: event:/SFX/Buttons
 --- !u!1001 &620780246
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4065,6 +4067,7 @@ MonoBehaviour:
   highlightRenderers: []
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
+  pickupSound: event:/SFX/PickUp
 --- !u!1 &632662552
 GameObject:
   m_ObjectHideFlags: 0
@@ -6616,11 +6619,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: runEventPath
-      value: event:/SFX/Player/Running
+      value: event:/SFX/Player/RunningCueva
       objectReference: {fileID: 0}
     - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: walkEventPath
-      value: event:/SFX/Player/Walking
+      value: event:/SFX/Player/WalkingCueva
       objectReference: {fileID: 0}
     - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: climbStaminaCost
@@ -8212,6 +8215,7 @@ MonoBehaviour:
   highlightRenderers: []
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
+  pickupSound: event:/SFX/PickUp
 --- !u!114 &1254235480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8230,6 +8234,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
   placeDuration: 0.4
+  placeSound: event:/SFX/Buttons
 --- !u!1001 &1266735228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11212,6 +11217,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
   placeDuration: 0.4
+  placeSound: event:/SFX/Buttons
 --- !u!1 &1737224783
 GameObject:
   m_ObjectHideFlags: 0
@@ -11575,6 +11581,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
   placeDuration: 0.4
+  placeSound: event:/SFX/Buttons
 --- !u!1001 &1845150166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11943,6 +11950,7 @@ MonoBehaviour:
   highlightRenderers: []
   highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
   emissionIntensity: 2
+  pickupSound: event:/SFX/PickUp
 --- !u!1001 &1882223077
 PrefabInstance:
   m_ObjectHideFlags: 0
