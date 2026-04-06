@@ -49,6 +49,7 @@ public class MainMenu : MonoBehaviour
             haySave = save != null && !string.IsNullOrWhiteSpace(save.Scene);
         }
 
+        // Si hay save → botón visible; si no → botón oculto
         botonContinuar.gameObject.SetActive(haySave);
     }
 
