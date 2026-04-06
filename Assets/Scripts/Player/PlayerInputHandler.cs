@@ -90,6 +90,7 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private float gamepadCameraSensitivity = 3f;
     [SerializeField] private float gamepadDeadzone = 0.25f;
     [SerializeField] private float inputSchemeSwitchDelay = 0.5f;
+    [SerializeField] private float rebindTriggerSuppressSeconds = 0.5f;
 
     [Header("Gamepad Triggers")]
     [SerializeField] private float triggerThreshold = 0.5f;
@@ -126,6 +127,8 @@ public class PlayerInputHandler : MonoBehaviour
     private bool _hasPendingSchemeSwitch;
     private InputScheme _pendingInputScheme;
     private float _pendingSchemeSwitchStart;
+    private float _rebindTriggersSuppressedUntil;
+    private float _lastInputSchemeChangeTime;
 
     // Nombres de ejes segun tipo de mando
     private string _cameraXAxis;
@@ -439,8 +442,17 @@ public class PlayerInputHandler : MonoBehaviour
             return false;
 
         CurrentInputScheme = newScheme;
+        _lastInputSchemeChangeTime = Time.unscaledTime;
+        SuppressRebindTriggers();
         OnBindingsChanged?.Invoke();
         return true;
+    }
+
+    public bool IsRebindInputSuppressed => Time.unscaledTime < _rebindTriggersSuppressedUntil;
+
+    private void SuppressRebindTriggers()
+    {
+        _rebindTriggersSuppressedUntil = Time.unscaledTime + Mathf.Max(0f, rebindTriggerSuppressSeconds);
     }
 
     // ==================== INPUT PROCESSING ====================
@@ -641,6 +653,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void ProcessRebindInput()
     {
+        if (IsRebindInputSuppressed)
+            return;
+
         // Ignorar el frame en que se inicio el rebind
         // para no capturar el Enter/clic que abrio el panel
         if (Time.frameCount <= rebindStartFrame) return;
@@ -698,6 +713,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (IsRebinding) return;
         IsRebinding = true;
         currentRebindAction = actionName;
+        SuppressRebindTriggers();
         rebindStartFrame = Time.frameCount; // evitar capturar la tecla que inicio el rebind
     }
 
@@ -771,11 +787,11 @@ public class PlayerInputHandler : MonoBehaviour
                 break;
             }
         }
-        
+
         // Solo guardar si se encontró y modificó el binding
         if (!bindingFound)
             return false;
-            
+
         CacheBindings();
         SaveBindings();
         return true;
@@ -1086,9 +1102,6 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (DetectedGamepad == GamepadType.None)
             return false;
-
-        if (_gamepadCancelKey != KeyCode.None && Input.GetKeyDown(_gamepadCancelKey))
-            return true;
 
         if (_gamepadMenuKey != KeyCode.None && Input.GetKeyDown(_gamepadMenuKey))
             return true;

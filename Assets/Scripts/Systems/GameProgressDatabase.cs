@@ -60,4 +60,19 @@ public static class GameProgressDatabase
 
         Save(data);
     }
+
+    public static void SaveSceneAndSpawn(string sceneName, Vector3 spawnPosition)
+    {
+        GameProgressData data = Load();
+        data.Scene = sceneName ?? string.Empty;
+        data.SetSpawnPosition(spawnPosition);
+        Save(data);
+    }
+
+    public static void SaveSceneKeepingSpawn(string sceneName)
+    {
+        GameProgressData data = Load();
+        data.Scene = sceneName ?? string.Empty;
+        Save(data);
+    }
 }

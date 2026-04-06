@@ -46,6 +46,7 @@ public class BindingRow : MonoBehaviour
     void Rebind()
     {
         if (inputHandler.IsRebinding) return;
+        if (inputHandler.IsRebindInputSuppressed) return;
         if (!IsValidRebindTrigger()) return;
 
         inputHandler.StartRebind(actionName);
@@ -56,6 +57,9 @@ public class BindingRow : MonoBehaviour
     bool IsValidRebindTrigger()
     {
         if (inputHandler == null)
+            return false;
+
+        if (inputHandler.IsRebindInputSuppressed)
             return false;
 
         bool keyboardScheme = inputHandler.CurrentInputScheme == PlayerInputHandler.InputScheme.KeyboardMouse;

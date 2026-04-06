@@ -5822,9 +5822,21 @@ PrefabInstance:
       propertyPath: checkpoint
       value: 
       objectReference: {fileID: 543450651925085658}
+    - target: {fileID: 4008784220886398847, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: checkpointOnlyTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: climbSpeed
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: runEventPath
+      value: event:/SFX/Player/Running
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: walkEventPath
+      value: event:/SFX/Player/Walking
       objectReference: {fileID: 0}
     - target: {fileID: 6397048273884976069, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: climbStaminaCost
@@ -8234,6 +8246,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2158199812904069551, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: objetoAActivar
+      value: 
+      objectReference: {fileID: 9168775206417998274}
     - target: {fileID: 4207553706610257580, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
       propertyPath: m_Name
       value: BarrilSorpresa
@@ -10808,6 +10824,7 @@ MonoBehaviour:
   gamepadCameraSensitivity: 3
   gamepadDeadzone: 0.25
   inputSchemeSwitchDelay: 0.5
+  rebindTriggerSuppressSeconds: 0.5
   triggerThreshold: 0.5
   psTriggerThreshold: 0
   OnBindingsChanged:
@@ -11127,8 +11144,27 @@ MonoBehaviour:
     firstSelected: {fileID: 277636670563612271}
   - panel: {fileID: 1727244476318002350}
     firstSelected: {fileID: 3342609953826786630}
+  visualOverrides: []
+  controlsVisualOverrides: []
+  permanentTextColorOverrides: []
   highlightColor: {r: 1, g: 0.85, b: 0.2, a: 1}
   highlightSize: {x: 4, y: 4}
+  autoAddOutlineOnTarget: 0
+  nullSelectionGraceFrames: 6
+  syncMouseHoverSelection: 1
+  selectedButtonSprite: {fileID: 0}
+  useSelectedSprite: 1
+  selectedFramePadding: {x: 10, y: 6}
+  skipHugeHighlightRects: 1
+  maxHighlightScreenWidthRatio: 0.65
+  maxHighlightScreenHeightRatio: 0.5
+  applySelectedTextColor: 1
+  selectedTextColor: {r: 1, g: 0.95, b: 0.55, a: 1}
+  highlightSliderFill: 1
+  selectedSliderFillColor: {r: 1, g: 0.95, b: 0.55, a: 1}
+  sliderFrameExtraPadding: {x: 6, y: 3}
+  highlightToggleWholeButton: 1
+  toggleFrameExtraPadding: {x: 14, y: 8}
 --- !u!222 &2039850004296174620
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21375,8 +21411,12 @@ PrefabInstance:
       value: 144.155
       objectReference: {fileID: 0}
     - target: {fileID: 3121641585986084013, guid: 04af922d2d1dc7a49926473cbdda5aeb, type: 3}
+      propertyPath: m_Name
+      value: PiezaMecanismoA
+      objectReference: {fileID: 0}
+    - target: {fileID: 3121641585986084013, guid: 04af922d2d1dc7a49926473cbdda5aeb, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4772314318654471323, guid: 04af922d2d1dc7a49926473cbdda5aeb, type: 3}
       propertyPath: m_Name

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -104,6 +105,16 @@ public class PauseMenuManager : MonoBehaviour
     public void ExitToMainMenu()
     {
         MusicManager.PlayButton();
+
+        // Guardamos la escena actual manteniendo el ultimo checkpoint ya guardado.
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (!string.IsNullOrEmpty(currentScene) &&
+            !string.Equals(currentScene, mainMenuSceneName, System.StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(currentScene, "Creditos", System.StringComparison.OrdinalIgnoreCase))
+        {
+            GameProgressDatabase.SaveSceneKeepingSpawn(currentScene);
+        }
+
         if (GameManager.Instance != null)
             GameManager.Instance.ResumeGame();
 

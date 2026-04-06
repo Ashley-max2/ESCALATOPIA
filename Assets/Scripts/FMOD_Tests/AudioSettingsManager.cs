@@ -29,7 +29,8 @@ public class AudioSettingsManager : MonoBehaviour
         if (Instance != null)
             return Instance;
 
-        AudioSettingsManager found = FindObjectOfType<AudioSettingsManager>();
+        AudioSettingsManager[] managers = Object.FindObjectsByType<AudioSettingsManager>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        AudioSettingsManager found = (managers != null && managers.Length > 0) ? managers[0] : null;
         if (found != null)
             return found;
 
@@ -49,6 +50,7 @@ public class AudioSettingsManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         CacheVcas();
+        EnsureSavedKeysExist();
         ApplySavedVolumes();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -74,6 +76,45 @@ public class AudioSettingsManager : MonoBehaviour
         _vcaGeneralMusic = GetVca("vca:/GeneralMusic");
         _vcaMusic = GetVca("vca:/Music");
         _vcaSfx = GetVca("vca:/SFX");
+    }
+
+    private void EnsureSavedKeysExist()
+    {
+        bool changed = false;
+
+        if (!PlayerPrefs.HasKey(KEY_GENERAL))
+        {
+            PlayerPrefs.SetFloat(KEY_GENERAL, GetCurrentVcaVolume(_vcaGeneralMusic, 1f));
+            changed = true;
+        }
+
+        if (!PlayerPrefs.HasKey(KEY_MUSIC))
+        {
+            PlayerPrefs.SetFloat(KEY_MUSIC, GetCurrentVcaVolume(_vcaMusic, 1f));
+            changed = true;
+        }
+
+        if (!PlayerPrefs.HasKey(KEY_SFX))
+        {
+            PlayerPrefs.SetFloat(KEY_SFX, GetCurrentVcaVolume(_vcaSfx, 1f));
+            changed = true;
+        }
+
+        if (changed)
+            PlayerPrefs.Save();
+    }
+
+    private float GetCurrentVcaVolume(VCA vca, float fallback)
+    {
+        if (!vca.isValid())
+            return fallback;
+
+        float volume;
+        FMOD.RESULT result = vca.getVolume(out volume);
+        if (result != FMOD.RESULT.OK)
+            return fallback;
+
+        return Mathf.Clamp01(volume);
     }
 
     private VCA GetVca(string path)
@@ -140,5 +181,11 @@ public class AudioSettingsManager : MonoBehaviour
         PlayerPrefs.SetFloat(KEY_SFX, sfx);
         PlayerPrefs.Save();
         ApplyVolumes(general, music, sfx);
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Bootstrap()
+    {
+        GetOrCreate();
     }
 }

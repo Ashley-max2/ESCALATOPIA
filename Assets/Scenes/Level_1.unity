@@ -27869,6 +27869,7 @@ MonoBehaviour:
   gamepadCameraSensitivity: 3
   gamepadDeadzone: 0.25
   inputSchemeSwitchDelay: 0.5
+  rebindTriggerSuppressSeconds: 0.5
   triggerThreshold: 0.5
   psTriggerThreshold: 0
   OnBindingsChanged:
@@ -28201,8 +28202,27 @@ MonoBehaviour:
     firstSelected: {fileID: 277636670813235923}
   - panel: {fileID: 1727244477117083666}
     firstSelected: {fileID: 3342609955720450554}
+  visualOverrides: []
+  controlsVisualOverrides: []
+  permanentTextColorOverrides: []
   highlightColor: {r: 1, g: 0.85, b: 0.2, a: 1}
   highlightSize: {x: 4, y: 4}
+  autoAddOutlineOnTarget: 0
+  nullSelectionGraceFrames: 6
+  syncMouseHoverSelection: 1
+  selectedButtonSprite: {fileID: 0}
+  useSelectedSprite: 1
+  selectedFramePadding: {x: 10, y: 6}
+  skipHugeHighlightRects: 1
+  maxHighlightScreenWidthRatio: 0.65
+  maxHighlightScreenHeightRatio: 0.5
+  applySelectedTextColor: 1
+  selectedTextColor: {r: 1, g: 0.95, b: 0.55, a: 1}
+  highlightSliderFill: 1
+  selectedSliderFillColor: {r: 1, g: 0.95, b: 0.55, a: 1}
+  sliderFrameExtraPadding: {x: 6, y: 3}
+  highlightToggleWholeButton: 1
+  toggleFrameExtraPadding: {x: 14, y: 8}
 --- !u!222 &2039850002410770592
 CanvasRenderer:
   m_ObjectHideFlags: 0

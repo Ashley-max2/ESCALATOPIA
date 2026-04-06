@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 4617283289273488258}
   - component: {fileID: 7053467162024586984}
   - component: {fileID: 865465536060743696}
+  - component: {fileID: 3146478411582426094}
+  - component: {fileID: 8605888561574801026}
   m_Layer: 0
   m_Name: Fogata
   m_TagString: Untagged
@@ -117,6 +119,42 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 5.8
   OverrideMaxDistance: 20
+--- !u!65 &3146478411582426094
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834876226708301848}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20.132622, y: 79.9485, z: 87.424706}
+  m_Center: {x: -1.8916931, y: 3.0494545, z: 5.0906744}
+--- !u!114 &8605888561574801026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834876226708301848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2725ccb2543f5464892967c65458166a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 6409366067606172173}
+  playerTag: Player
+  saveOnlyOnce: 1
 --- !u!1001 &7506416066087507510
 PrefabInstance:
   m_ObjectHideFlags: 0
