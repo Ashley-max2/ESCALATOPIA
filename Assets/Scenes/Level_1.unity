@@ -5217,6 +5217,35 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6880262858201208964, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
+--- !u!1 &1570144987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3778613992591054678, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+  m_PrefabInstance: {fileID: 4726357041814826688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1570144989 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7627876280544286614, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+  m_PrefabInstance: {fileID: 4726357041814826688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1570144990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570144987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9d2c22634aea7749b02ee1bccff8a7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1570144989}
+  runFloatParameter: Run
+  movementThreshold: 0.1
+  speedForFullRun: 4
+  ignoreYMovement: 1
+  useRigidbodyVelocity: 1
+  smoothTime: 0.08
 --- !u!1001 &1591400492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7725,7 +7754,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8053,6 +8082,14 @@ PrefabInstance:
       propertyPath: subtitles.Array.data[3]
       value: el objetivo que es la puerta para pasar el siguiente nivel.
       objectReference: {fileID: 0}
+    - target: {fileID: 7627876280544286614, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9ad3f7f4f438aa3499c1a4984ad75d0b, type: 2}
+    - target: {fileID: 7627876280544286614, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7999693861272224417, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: professionalFixedRoute.Array.data[4]
       value: 
@@ -8062,9 +8099,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 6848478856362209376, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3778613992591054678, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1570144990}
   m_SourcePrefab: {fileID: 100100000, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
 --- !u!224 &5065058027115593022
 RectTransform:
