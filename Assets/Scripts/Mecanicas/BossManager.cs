@@ -38,11 +38,10 @@ public class BossManager : MonoBehaviour
         // ¡Así el Boss no desaparece si pusiste el script en el mismo jefe!
         if (npcInteractable != null)
         {
+            // Bloquear permanentemente: ya no responde al player aunque entre en la zona
+            npcInteractable.isLocked = true;
+            npcInteractable.ForceReset();
             npcInteractable.enabled = false;
-            
-            // Ocultamos el cartel de E por si se quedó encendido
-            npcInteractable.isPlayerNear = false;
-            npcInteractable.Update(); 
         }
 
         if (bossAI != null)
@@ -71,7 +70,8 @@ public class BossManager : MonoBehaviour
         // Reactivamos el COMPONENTE NPC de inicio
         if (npcInteractable != null)
         {
-            npcInteractable.hasFinishedDialogue = false; 
+            npcInteractable.isLocked = false;          // permite volver a interactuar
+            npcInteractable.hasFinishedDialogue = false;
             npcInteractable.enabled = true;
         }
 
