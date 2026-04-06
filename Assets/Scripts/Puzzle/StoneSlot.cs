@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using FMODUnity;
 
 public class StoneSlot : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class StoneSlot : MonoBehaviour
     public float emissionIntensity = 2f;
     [Header("Animación")]
     public float placeDuration = 0.4f;
+
+    [Header("Audio")]
+    [EventRef] public string placeSound = "event:/SFX/Buttons";
 
     private bool isPlaced = false;
     private Material[] highlightMaterials;
@@ -128,6 +132,7 @@ public class StoneSlot : MonoBehaviour
             swordObject.transform.localRotation = Quaternion.identity;
         });
 
+        RuntimeManager.PlayOneShot(placeSound, transform.position);
         sword.DisablePickup();
         isPlaced = true;
         SetHighlighted(false);
