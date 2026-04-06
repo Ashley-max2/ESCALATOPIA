@@ -34,6 +34,7 @@ Transform:
   m_Children:
   - {fileID: 8929724259049045180}
   - {fileID: 4831940187957232048}
+  - {fileID: 4913240675041652687}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4617283289273488258
@@ -117,6 +118,75 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 5.8
   OverrideMaxDistance: 20
+--- !u!1 &5208544296592321873
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4913240675041652687}
+  - component: {fileID: 4621742405147863114}
+  - component: {fileID: 4652671855543645804}
+  m_Layer: 0
+  m_Name: ColliderCheckpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4913240675041652687
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5208544296592321873}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.0004830435, y: 0.0046129446, z: -0.022715926, w: 0.9997312}
+  m_LocalPosition: {x: -5.2, y: 0.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6409366067606172173}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4621742405147863114
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5208544296592321873}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.9399874, y: 79.94851, z: 87.424706}
+  m_Center: {x: 6.204839, y: 3.0494545, z: 5.0906744}
+--- !u!114 &4652671855543645804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5208544296592321873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2725ccb2543f5464892967c65458166a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 6409366067606172173}
+  playerTag: Player
+  saveOnlyOnce: 1
 --- !u!1001 &7506416066087507510
 PrefabInstance:
   m_ObjectHideFlags: 0
