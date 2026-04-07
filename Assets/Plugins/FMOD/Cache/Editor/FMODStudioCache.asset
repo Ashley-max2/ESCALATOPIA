@@ -27,6 +27,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 31294
+--- !u!114 &-8980760805825773705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/RunningCueva
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/RunningCueva
+  Guid:
+    Data1: 637620424
+    Data2: 1106605812
+    Data3: 1391861667
+    Data4: 817303841
+  Banks:
+  - {fileID: -7514493059691930883}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1520
 --- !u!114 &-7514493059691930883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42,10 +69,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639111085468805661
+  lastModified: 639111563771056530
   FileSizes:
   - Name: Desktop
-    Value: 2749344
+    Value: 2908800
   Exists: 1
 --- !u!114 &-7131808043504657163
 MonoBehaviour:
@@ -62,10 +89,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639111085468860885
+  lastModified: 639111563771091742
   FileSizes:
   - Name: Desktop
-    Value: 1758
+    Value: 1902
   Exists: 1
 --- !u!114 &-6953730273116094259
 MonoBehaviour:
@@ -175,6 +202,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 682
+--- !u!114 &-3663081754516816939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/OpenDoor
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/OpenDoor
+  Guid:
+    Data1: -430288220
+    Data2: 1258238560
+    Data3: -135003243
+    Data4: 1508496345
+  Banks:
+  - {fileID: -7514493059691930883}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 10
+  Length: 4670
 --- !u!114 &-962208807032002973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,13 +343,16 @@ MonoBehaviour:
   - {fileID: 6525422029539997624}
   - {fileID: 7608584938087390900}
   - {fileID: 5342856273981250944}
+  - {fileID: -3663081754516816939}
+  - {fileID: 2059024253025421053}
+  - {fileID: -8980760805825773705}
   EditorParameters: []
   MasterBanks:
   - {fileID: -7514493059691930883}
   StringsBanks:
   - {fileID: -7131808043504657163}
   cacheVersion: 131858
-  cacheTime: 639111085468860885
+  cacheTime: 639111563771091742
   SerializableEventsDict:
   - key: event:/SFX/Gancho/GuardarGancho
     index: 0
@@ -331,6 +388,39 @@ MonoBehaviour:
     index: 15
   - key: event:/Ambient/OceanSound
     index: 16
+  - key: event:/Ambient/OpenDoor
+    index: 17
+  - key: event:/SFX/Player/WalkingCueva
+    index: 18
+  - key: event:/SFX/Player/RunningCueva
+    index: 19
+--- !u!114 &2059024253025421053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/WalkingCueva
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/WalkingCueva
+  Guid:
+    Data1: -246855851
+    Data2: 1244400888
+    Data3: 214589355
+    Data4: 234179979
+  Banks:
+  - {fileID: -7514493059691930883}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 650
 --- !u!114 &2324039896657776394
 MonoBehaviour:
   m_ObjectHideFlags: 0
