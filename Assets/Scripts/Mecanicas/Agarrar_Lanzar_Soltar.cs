@@ -1,25 +1,119 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Agarrar_Lanzar_Soltar : MonoBehaviour
+public class AgarrarLanzarSoltar : MonoBehaviour
 {
-    public void FollowPlayer()
+    [Header("Referencias")]
+    [SerializeField] private Camera cam;
+    [SerializeField] private Transform followPoint;
+
+    [Header("Configuración")]
+    [SerializeField] private float distanciaMax = 3f;
+    [SerializeField] private LayerMask capaAgarrable;
+    [SerializeField] private float fuerzaLanzamiento = 10f;
+
+    private GameObject objetoActual;
+    private Rigidbody rbActual;
+
+    void Awake()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        GameObject followPoint = GameObject.FindGameObjectWithTag("ObjectFollow");
+        if (cam == null) cam = Camera.main;
+    }
 
-        if (player != null && followPoint != null)
-        {
-            // Primero lo hacemos hijo del Player
-            transform.SetParent(player.transform);
+    void Update()
+    {
+        Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
-            // Luego copiamos posición y rotación del ObjectFollow
-            transform.position = followPoint.transform.position;
-        }
-        else
+        // R = agarrar / soltar
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.LogWarning("No se encontró Player o ObjectFollow.");
+            if (objetoActual == null)
+                IntentarAgarrar();
+            else
+                SoltarObjeto();
         }
+
+        // Click izquierdo = lanzar
+        if (Input.GetMouseButtonDown(0) && objetoActual != null)
+        {
+            LanzarObjeto();
+        }
+
+        // Mantener objeto en la mano
+        if (objetoActual != null)
+        {
+            objetoActual.transform.position = followPoint.position;
+            objetoActual.transform.rotation = Quaternion.identity;
+        }
+    }
+
+    void IntentarAgarrar()
+    {
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, distanciaMax, capaAgarrable))
+        {
+            AgarrarObjeto(hit.collider.gameObject);
+        }
+    }
+
+    void AgarrarObjeto(GameObject obj)
+    {
+        objetoActual = obj;
+        rbActual = obj.GetComponent<Rigidbody>();
+
+        if (rbActual != null)
+        {
+            rbActual.useGravity = false;
+            rbActual.velocity = Vector3.zero;
+            rbActual.angularVelocity = Vector3.zero;
+            rbActual.freezeRotation = true;
+        }
+
+        obj.transform.SetParent(followPoint);
+    }
+
+    void LanzarObjeto()
+    {
+        if (rbActual == null) return;
+
+        objetoActual.transform.SetParent(null);
+
+        rbActual.useGravity = true;
+        rbActual.freezeRotation = false;
+
+        rbActual.AddForce(cam.transform.forward * fuerzaLanzamiento, ForceMode.Impulse);
+
+        // BUSCAR ThrownBox (en objeto, hijo o padre)
+        ThrownBox thrown = objetoActual.GetComponent<ThrownBox>();
+
+        if (thrown == null)
+            thrown = objetoActual.GetComponentInChildren<ThrownBox>();
+
+        if (thrown == null)
+            thrown = objetoActual.GetComponentInParent<ThrownBox>();
+
+        if (thrown != null)
+        {
+            thrown.MarcarComoLanzado();
+        }
+
+        objetoActual = null;
+        rbActual = null;
+    }
+
+    void SoltarObjeto()
+    {
+        if (objetoActual == null) return;
+
+        objetoActual.transform.SetParent(null);
+
+        if (rbActual != null)
+        {
+            rbActual.useGravity = true;
+            rbActual.freezeRotation = false;
+        }
+
+        objetoActual = null;
+        rbActual = null;
     }
 }

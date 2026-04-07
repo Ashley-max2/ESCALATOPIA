@@ -38,6 +38,10 @@ public class PlayerInputHandler : MonoBehaviour
         public string actionName;
         [SerializeField] public KeyCode keyCode = KeyCode.None;
         [SerializeField] public KeyCode defaultKeyCode = KeyCode.None;
+        [SerializeField] public KeyCode gamepadKeyCode = KeyCode.None;
+        [SerializeField] public KeyCode defaultGamepadKeyCode = KeyCode.None;
+        [SerializeField] public string gamepadAxis = "";
+        [SerializeField] public string defaultGamepadAxis = "";
     }
 
     [Header("Key Bindings (se auto-rellena con defaults)")]
@@ -50,8 +54,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     public enum GamepadType { None, Xbox, PlayStation }
 
+    public enum InputScheme { KeyboardMouse, Gamepad }
+
     /// <summary>Tipo de mando detectado actualmente</summary>
     public GamepadType DetectedGamepad { get; private set; }
+
+    /// <summary>Ultimo dispositivo usado para actualizar la UI de controles</summary>
+    public InputScheme CurrentInputScheme { get; private set; } = InputScheme.KeyboardMouse;
 
     // ==================== OUTPUT PROPERTIES ====================
 
@@ -80,6 +89,8 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private float gamepadCameraSensitivity = 3f;
     [SerializeField] private float gamepadDeadzone = 0.25f;
+    [SerializeField] private float inputSchemeSwitchDelay = 0.5f;
+    [SerializeField] private float rebindTriggerSuppressSeconds = 0.5f;
 
     [Header("Gamepad Triggers")]
     [SerializeField] private float triggerThreshold = 0.5f;
@@ -91,6 +102,8 @@ public class PlayerInputHandler : MonoBehaviour
     [HideInInspector] public bool IsRebinding { get; private set; }
     private string currentRebindAction;
     private Dictionary<string, KeyCode> actionToKey = new Dictionary<string, KeyCode>();
+    private Dictionary<string, KeyCode> actionToGamepadKey = new Dictionary<string, KeyCode>();
+    private Dictionary<string, string> actionToGamepadAxis = new Dictionary<string, string>();
 
     public UnityEvent OnBindingsChanged = new UnityEvent();
 
@@ -104,9 +117,18 @@ public class PlayerInputHandler : MonoBehaviour
     // Trigger tracking (para detectar "pressed" como GetKeyDown)
     private float _prevHookFireTrigger;
     private float _prevHookReleaseTrigger;
+    private float _prevHookCustomTrigger;
+    private float _prevReleaseCustomTrigger;
 
     // Gamepad detection cache
     private float _nextGamepadCheck;
+
+    // Cambio diferido de esquema de input para UI de controles
+    private bool _hasPendingSchemeSwitch;
+    private InputScheme _pendingInputScheme;
+    private float _pendingSchemeSwitchStart;
+    private float _rebindTriggersSuppressedUntil;
+    private float _lastInputSchemeChangeTime;
 
     // Nombres de ejes segun tipo de mando
     private string _cameraXAxis;
@@ -123,6 +145,8 @@ public class PlayerInputHandler : MonoBehaviour
     // Botones de mando
     private KeyCode _gamepadJumpKey;
     private KeyCode _gamepadSprintKey;
+    private KeyCode _gamepadCancelKey;
+    private KeyCode _gamepadMenuKey;
 
     // ==================== LIFECYCLE ====================
 
@@ -147,18 +171,21 @@ public class PlayerInputHandler : MonoBehaviour
             return;
         }
 
+        // Re-detectar mando cada 2 segundos (tambien en menus)
+        // para que la UI de controles cambie automaticamente al conectar/desconectar.
+        if (Time.unscaledTime > _nextGamepadCheck)
+        {
+            DetectGamepad();
+            _nextGamepadCheck = Time.unscaledTime + 2f;
+        }
+
+        UpdateActiveInputScheme();
+
         // Si el cursor esta desbloqueado no procesamos input de juego
         if (Cursor.lockState != CursorLockMode.Locked)
         {
             ClearAllInput();
             return;
-        }
-
-        // Re-detectar mando cada 2 segundos
-        if (Time.unscaledTime > _nextGamepadCheck)
-        {
-            DetectGamepad();
-            _nextGamepadCheck = Time.unscaledTime + 2f;
         }
 
         ProcessMovementInput();
@@ -186,6 +213,7 @@ public class PlayerInputHandler : MonoBehaviour
     /// </summary>
     private void DetectGamepad()
     {
+        GamepadType previousType = DetectedGamepad;
         DetectedGamepad = GamepadType.None;
 
         string[] joysticks = Input.GetJoystickNames();
@@ -201,7 +229,8 @@ public class PlayerInputHandler : MonoBehaviour
                 break;
             }
             if (name.Contains("wireless controller") || name.Contains("dualshock") ||
-                name.Contains("dualsense") || name.Contains("sony"))
+                name.Contains("dualsense") || name.Contains("sony") ||
+                name.Contains("playstation") || name.Contains("ps4") || name.Contains("ps5"))
             {
                 DetectedGamepad = GamepadType.PlayStation;
                 break;
@@ -222,6 +251,8 @@ public class PlayerInputHandler : MonoBehaviour
                 _activeTriggerThreshold = triggerThreshold;
                 _gamepadJumpKey = KeyCode.JoystickButton0;   // A
                 _gamepadSprintKey = KeyCode.JoystickButton5;  // RB
+                _gamepadCancelKey = KeyCode.JoystickButton1;  // B
+                _gamepadMenuKey = KeyCode.JoystickButton7;    // Start
                 _psUseButtonsForHook = false;
                 _hookFireKey = KeyCode.None;
                 _hookReleaseKey = KeyCode.None;
@@ -239,6 +270,8 @@ public class PlayerInputHandler : MonoBehaviour
                 _activeTriggerThreshold = psTriggerThreshold;
                 _gamepadJumpKey = KeyCode.JoystickButton1;   // Cross (X)
                 _gamepadSprintKey = KeyCode.JoystickButton5;  // R1
+                _gamepadCancelKey = KeyCode.JoystickButton2;  // Circulo
+                _gamepadMenuKey = KeyCode.JoystickButton9;    // Options
                 break;
 
             default:
@@ -249,8 +282,177 @@ public class PlayerInputHandler : MonoBehaviour
                 _activeTriggerThreshold = triggerThreshold;
                 _gamepadJumpKey = KeyCode.None;
                 _gamepadSprintKey = KeyCode.None;
+                _gamepadCancelKey = KeyCode.None;
+                _gamepadMenuKey = KeyCode.None;
                 break;
         }
+
+        bool typeChanged = previousType != DetectedGamepad;
+        bool schemeChanged = false;
+
+        if (DetectedGamepad == GamepadType.None)
+        {
+            ClearPendingSchemeSwitch();
+            schemeChanged = SetInputScheme(InputScheme.KeyboardMouse);
+        }
+        else if (typeChanged && previousType == GamepadType.None)
+        {
+            // Al conectar mando, prioriza mostrar mando hasta que el jugador use teclado/raton.
+            ClearPendingSchemeSwitch();
+            schemeChanged = SetInputScheme(InputScheme.Gamepad);
+        }
+
+        if (typeChanged && !schemeChanged)
+        {
+            // Reutilizamos este evento para refrescar filas de controles en UI.
+            OnBindingsChanged?.Invoke();
+        }
+    }
+
+    private void UpdateActiveInputScheme()
+    {
+        if (DetectedGamepad == GamepadType.None)
+        {
+            ClearPendingSchemeSwitch();
+            SetInputScheme(InputScheme.KeyboardMouse);
+            return;
+        }
+
+        bool keyboardMouseUsed = HasKeyboardMouseActivity();
+        bool gamepadUsed = HasGamepadActivity();
+
+        bool hasDesiredScheme = false;
+        InputScheme desiredScheme = CurrentInputScheme;
+
+        // Prioridad a teclado/raton si ambos reportan actividad el mismo frame.
+        if (keyboardMouseUsed)
+        {
+            hasDesiredScheme = true;
+            desiredScheme = InputScheme.KeyboardMouse;
+        }
+        else if (gamepadUsed)
+        {
+            hasDesiredScheme = true;
+            desiredScheme = InputScheme.Gamepad;
+        }
+
+        if (hasDesiredScheme)
+        {
+            if (desiredScheme == CurrentInputScheme)
+            {
+                ClearPendingSchemeSwitch();
+            }
+            else
+            {
+                StartOrRefreshPendingSchemeSwitch(desiredScheme);
+            }
+        }
+
+        if (_hasPendingSchemeSwitch)
+        {
+            if (Time.unscaledTime - _pendingSchemeSwitchStart >= inputSchemeSwitchDelay)
+            {
+                SetInputScheme(_pendingInputScheme);
+                ClearPendingSchemeSwitch();
+            }
+        }
+    }
+
+    private void StartOrRefreshPendingSchemeSwitch(InputScheme desiredScheme)
+    {
+        if (!_hasPendingSchemeSwitch || _pendingInputScheme != desiredScheme)
+        {
+            _hasPendingSchemeSwitch = true;
+            _pendingInputScheme = desiredScheme;
+            _pendingSchemeSwitchStart = Time.unscaledTime;
+        }
+    }
+
+    private void ClearPendingSchemeSwitch()
+    {
+        _hasPendingSchemeSwitch = false;
+    }
+
+    private bool HasKeyboardMouseActivity()
+    {
+        if (Mathf.Abs(Input.GetAxisRaw("Mouse X")) > 0.01f) return true;
+        if (Mathf.Abs(Input.GetAxisRaw("Mouse Y")) > 0.01f) return true;
+
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
+            return true;
+
+        // Cualquier tecla de binding o ESC cuenta como actividad de teclado.
+        for (int i = 0; i < bindings.Count; i++)
+        {
+            if (Input.GetKeyDown(bindings[i].keyCode))
+                return true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            return true;
+
+        // Si cualquier tecla baja y no es de joystick, tratar como teclado.
+        if (Input.anyKeyDown)
+            return !AnyJoystickButtonDown();
+
+        return false;
+    }
+
+    private bool HasGamepadActivity()
+    {
+        if (Mathf.Abs(Input.GetAxisRaw("GamepadMoveX")) > gamepadDeadzone) return true;
+        if (Mathf.Abs(Input.GetAxisRaw("GamepadMoveY")) > gamepadDeadzone) return true;
+
+        if (!string.IsNullOrEmpty(_cameraXAxis))
+        {
+            if (Mathf.Abs(Input.GetAxisRaw(_cameraXAxis)) > gamepadDeadzone) return true;
+            if (Mathf.Abs(Input.GetAxisRaw(_cameraYAxis)) > gamepadDeadzone) return true;
+        }
+
+        if (_psUseButtonsForHook)
+        {
+            if (Input.GetKeyDown(_hookFireKey) || Input.GetKeyDown(_hookReleaseKey)) return true;
+        }
+        else if (!string.IsNullOrEmpty(_hookFireAxis))
+        {
+            if (Input.GetAxisRaw(_hookFireAxis) > _activeTriggerThreshold) return true;
+            if (Input.GetAxisRaw(_hookReleaseAxis) > _activeTriggerThreshold) return true;
+        }
+
+        if (Input.GetKeyDown(_gamepadJumpKey) || Input.GetKeyDown(_gamepadSprintKey)) return true;
+
+        return AnyJoystickButtonDown();
+    }
+
+    private bool AnyJoystickButtonDown()
+    {
+        foreach (KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
+        {
+            string keyName = key.ToString();
+            if (keyName.Contains("Joystick") && Input.GetKeyDown(key))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool SetInputScheme(InputScheme newScheme)
+    {
+        if (CurrentInputScheme == newScheme)
+            return false;
+
+        CurrentInputScheme = newScheme;
+        _lastInputSchemeChangeTime = Time.unscaledTime;
+        SuppressRebindTriggers();
+        OnBindingsChanged?.Invoke();
+        return true;
+    }
+
+    public bool IsRebindInputSuppressed => Time.unscaledTime < _rebindTriggersSuppressedUntil;
+
+    private void SuppressRebindTriggers()
+    {
+        _rebindTriggersSuppressedUntil = Time.unscaledTime + Mathf.Max(0f, rebindTriggerSuppressSeconds);
     }
 
     // ==================== INPUT PROCESSING ====================
@@ -271,6 +473,8 @@ public class PlayerInputHandler : MonoBehaviour
         _hookReleasePressedThisFrame = false;
         _prevHookFireTrigger = 0;
         _prevHookReleaseTrigger = 0;
+        _prevHookCustomTrigger = 0;
+        _prevReleaseCustomTrigger = 0;
     }
 
     private void ProcessMovementInput()
@@ -284,11 +488,16 @@ public class PlayerInputHandler : MonoBehaviour
         float backward = Input.GetKey(GetBinding("Atras")) ? -1f : 0f;
         MoveZ = Mathf.Clamp(forward + backward, -1f, 1f);
 
-        // Sobrescribe si hay input de joystick (stick izquierdo, no rebindable)
-        float axisX = Input.GetAxisRaw("Horizontal");
-        float axisZ = Input.GetAxisRaw("Vertical");
-        if (Mathf.Abs(axisX) > gamepadDeadzone) MoveX = axisX;
-        if (Mathf.Abs(axisZ) > gamepadDeadzone) MoveZ = axisZ;
+        // Sobrescribe si hay input de joystick/gamepad (stick izquierdo, no rebindable)
+        // NOTA: No usamos "Horizontal"/"Vertical" porque incluyen WASD y flechas
+        // hardcodeadas en el Input Manager, lo que bypasea el sistema de rebind.
+        if (DetectedGamepad != GamepadType.None)
+        {
+            float axisX = Input.GetAxisRaw("GamepadMoveX");
+            float axisZ = Input.GetAxisRaw("GamepadMoveY");
+            if (Mathf.Abs(axisX) > gamepadDeadzone) MoveX = axisX;
+            if (Mathf.Abs(axisZ) > gamepadDeadzone) MoveZ = axisZ;
+        }
     }
 
     private void ProcessActionInput()
@@ -303,9 +512,13 @@ public class PlayerInputHandler : MonoBehaviour
         // Mando (no rebindable, auto-detectado)
         if (DetectedGamepad != GamepadType.None)
         {
-            if (Input.GetKeyDown(_gamepadJumpKey))
+            KeyCode jumpGamepadBinding = GetGamepadBinding("Saltar");
+            KeyCode effectiveJumpKey = jumpGamepadBinding != KeyCode.None ? jumpGamepadBinding : _gamepadJumpKey;
+
+            if (effectiveJumpKey != KeyCode.None && Input.GetKeyDown(effectiveJumpKey))
                 _jumpPressedThisFrame = true;
-            JumpHeld |= Input.GetKey(_gamepadJumpKey);
+            if (effectiveJumpKey != KeyCode.None)
+                JumpHeld |= Input.GetKey(effectiveJumpKey);
         }
 
         JumpPressed = _jumpPressedThisFrame;
@@ -316,7 +529,12 @@ public class PlayerInputHandler : MonoBehaviour
 
         // Mando (no rebindable, auto-detectado)
         if (DetectedGamepad != GamepadType.None)
-            SprintHeld |= Input.GetKey(_gamepadSprintKey);
+        {
+            KeyCode sprintGamepadBinding = GetGamepadBinding("Correr");
+            KeyCode effectiveSprintKey = sprintGamepadBinding != KeyCode.None ? sprintGamepadBinding : _gamepadSprintKey;
+            if (effectiveSprintKey != KeyCode.None)
+                SprintHeld |= Input.GetKey(effectiveSprintKey);
+        }
 
         // === GANCHO (Teclado/Raton rebindable) ===
         KeyCode hookBinding = GetBinding("Gancho");
@@ -329,12 +547,48 @@ public class PlayerInputHandler : MonoBehaviour
         // === GANCHO (Mando, no rebindable) ===
         if (DetectedGamepad != GamepadType.None)
         {
+            KeyCode hookGamepadBinding = GetGamepadBinding("Gancho");
+            KeyCode releaseGamepadBinding = GetGamepadBinding("LiberarGancho");
+            string hookGamepadAxisBinding = GetGamepadAxisBinding("Gancho");
+            string releaseGamepadAxisBinding = GetGamepadAxisBinding("LiberarGancho");
+
+            bool usedCustomHook = false;
+            bool usedCustomRelease = false;
+
+            if (hookGamepadBinding != KeyCode.None)
+            {
+                usedCustomHook = true;
+                if (Input.GetKeyDown(hookGamepadBinding))
+                    _hookPressedThisFrame = true;
+            }
+
+            if (releaseGamepadBinding != KeyCode.None)
+            {
+                usedCustomRelease = true;
+                if (Input.GetKeyDown(releaseGamepadBinding))
+                    _hookReleasePressedThisFrame = true;
+            }
+
+            if (!string.IsNullOrEmpty(hookGamepadAxisBinding))
+            {
+                usedCustomHook = true;
+                if (ReadAxisDown(hookGamepadAxisBinding, ref _prevHookCustomTrigger))
+                    _hookPressedThisFrame = true;
+            }
+
+            if (!string.IsNullOrEmpty(releaseGamepadAxisBinding))
+            {
+                usedCustomRelease = true;
+                if (ReadAxisDown(releaseGamepadAxisBinding, ref _prevReleaseCustomTrigger))
+                    _hookReleasePressedThisFrame = true;
+            }
+
             if (_psUseButtonsForHook)
             {
                 // PS4/PS5: L2 y R2 son botones (6 y 7)
-                if (Input.GetKeyDown(_hookFireKey))
+                if (!usedCustomHook && Input.GetKeyDown(_hookFireKey))
                     _hookPressedThisFrame = true;
-                if (Input.GetKeyDown(_hookReleaseKey))
+                if (!usedCustomRelease && Input.GetKeyDown(_hookReleaseKey))
                     _hookReleasePressedThisFrame = true;
             }
             else if (!string.IsNullOrEmpty(_hookFireAxis))
@@ -345,9 +599,9 @@ public class PlayerInputHandler : MonoBehaviour
                     float hookFireTrigger = Input.GetAxisRaw(_hookFireAxis);
                     float hookReleaseTrigger = Input.GetAxisRaw(_hookReleaseAxis);
 
-                    if (hookFireTrigger > _activeTriggerThreshold && _prevHookFireTrigger <= _activeTriggerThreshold)
+                    if (!usedCustomHook && hookFireTrigger > _activeTriggerThreshold && _prevHookFireTrigger <= _activeTriggerThreshold)
                         _hookPressedThisFrame = true;
-                    if (hookReleaseTrigger > _activeTriggerThreshold && _prevHookReleaseTrigger <= _activeTriggerThreshold)
+                    if (!usedCustomRelease && hookReleaseTrigger > _activeTriggerThreshold && _prevHookReleaseTrigger <= _activeTriggerThreshold)
                         _hookReleasePressedThisFrame = true;
 
                     _prevHookFireTrigger = hookFireTrigger;
@@ -399,6 +653,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void ProcessRebindInput()
     {
+        if (IsRebindInputSuppressed)
+            return;
+
         // Ignorar el frame en que se inicio el rebind
         // para no capturar el Enter/clic que abrio el panel
         if (Time.frameCount <= rebindStartFrame) return;
@@ -407,6 +664,30 @@ public class PlayerInputHandler : MonoBehaviour
         {
             EndRebind();
             ControlsMenu.Instance?.HideRebindPanel();
+            return;
+        }
+
+        if (IsGamepadRebindCancelPressed())
+        {
+            EndRebind();
+            ControlsMenu.Instance?.HideRebindPanel();
+            return;
+        }
+
+        if (CurrentInputScheme == InputScheme.Gamepad && IsHookAction(currentRebindAction))
+        {
+            if (TryCaptureGamepadTriggerAxisRebind())
+                return;
+        }
+
+        // Captura explicita de Espacio para evitar conflictos con Submit de UI.
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (SetBinding(currentRebindAction, KeyCode.Space))
+            {
+                EndRebind();
+                ControlsMenu.Instance?.HideRebindPanel();
+            }
             return;
         }
 
@@ -432,6 +713,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (IsRebinding) return;
         IsRebinding = true;
         currentRebindAction = actionName;
+        SuppressRebindTriggers();
         rebindStartFrame = Time.frameCount; // evitar capturar la tecla que inicio el rebind
     }
 
@@ -446,11 +728,87 @@ public class PlayerInputHandler : MonoBehaviour
     /// </summary>
     public bool SetBinding(string action, KeyCode newKey)
     {
+        bool gamepadRebind = CurrentInputScheme == InputScheme.Gamepad;
+
+        if (gamepadRebind)
+        {
+            if (!IsGamepadRebindableAction(action) || !IsJoystickKey(newKey))
+                return false;
+        }
+        else
+        {
+            if (IsJoystickKey(newKey))
+                return false;
+        }
+
         // Busca conflicto
         string conflictingAction = null;
         foreach (var b in bindings)
         {
-            if (b.actionName != action && b.keyCode == newKey)
+            if (b.actionName == action) continue;
+
+            if (!gamepadRebind && b.keyCode == newKey)
+            {
+                conflictingAction = b.actionName;
+                break;
+            }
+
+            if (gamepadRebind)
+            {
+                GetEffectiveGamepadBinding(b.actionName, out KeyCode otherKey, out _);
+                if (otherKey == newKey && otherKey != KeyCode.None)
+                {
+                    conflictingAction = b.actionName;
+                    break;
+                }
+            }
+        }
+
+        if (conflictingAction != null)
+        {
+            ControlsMenu.Instance?.ShowConflict(conflictingAction);
+            return false;
+        }
+
+        // Asigna
+        bool bindingFound = false;
+        foreach (var b in bindings)
+        {
+            if (b.actionName == action)
+            {
+                if (gamepadRebind)
+                {
+                    b.gamepadKeyCode = newKey;
+                    b.gamepadAxis = "";
+                }
+                else
+                    b.keyCode = newKey;
+                bindingFound = true;
+                break;
+            }
+        }
+
+        // Solo guardar si se encontró y modificó el binding
+        if (!bindingFound)
+            return false;
+
+        CacheBindings();
+        SaveBindings();
+        return true;
+    }
+
+    private bool SetGamepadAxisBinding(string action, string axisName)
+    {
+        if (!IsGamepadRebindableAction(action) || string.IsNullOrEmpty(axisName))
+            return false;
+
+        string conflictingAction = null;
+        foreach (var b in bindings)
+        {
+            if (b.actionName == action) continue;
+
+            GetEffectiveGamepadBinding(b.actionName, out _, out string otherAxis);
+            if (otherAxis == axisName)
             {
                 conflictingAction = b.actionName;
                 break;
@@ -463,15 +821,16 @@ public class PlayerInputHandler : MonoBehaviour
             return false;
         }
 
-        // Asigna
         foreach (var b in bindings)
         {
             if (b.actionName == action)
             {
-                b.keyCode = newKey;
+                b.gamepadAxis = axisName;
+                b.gamepadKeyCode = KeyCode.None;
                 break;
             }
         }
+
         CacheBindings();
         SaveBindings();
         return true;
@@ -483,20 +842,29 @@ public class PlayerInputHandler : MonoBehaviour
     {
         bindings.Clear();
         // Movimiento individual (solo teclado)
-        AddBinding("Adelante", KeyCode.W);
-        AddBinding("Atras", KeyCode.S);
-        AddBinding("Izquierda", KeyCode.A);
-        AddBinding("Derecha", KeyCode.D);
+        AddBinding("Adelante", KeyCode.W, KeyCode.None);
+        AddBinding("Atras", KeyCode.S, KeyCode.None);
+        AddBinding("Izquierda", KeyCode.A, KeyCode.None);
+        AddBinding("Derecha", KeyCode.D, KeyCode.None);
         // Acciones (solo teclado/raton)
-        AddBinding("Saltar", KeyCode.Space);
-        AddBinding("Correr", KeyCode.LeftShift);
-        AddBinding("Gancho", KeyCode.Mouse1);
-        AddBinding("LiberarGancho", KeyCode.Mouse0);
+        AddBinding("Saltar", KeyCode.Space, KeyCode.None);
+        AddBinding("Correr", KeyCode.LeftShift, KeyCode.None);
+        AddBinding("Gancho", KeyCode.Mouse1, KeyCode.None);
+        AddBinding("LiberarGancho", KeyCode.Mouse0, KeyCode.None);
     }
 
-    private void AddBinding(string name, KeyCode def)
+    private void AddBinding(string name, KeyCode keyboardDefault, KeyCode gamepadDefault)
     {
-        bindings.Add(new KeyBinding { actionName = name, defaultKeyCode = def, keyCode = def });
+        bindings.Add(new KeyBinding
+        {
+            actionName = name,
+            defaultKeyCode = keyboardDefault,
+            keyCode = keyboardDefault,
+            defaultGamepadKeyCode = gamepadDefault,
+            gamepadKeyCode = gamepadDefault,
+            defaultGamepadAxis = "",
+            gamepadAxis = ""
+        });
     }
 
     private KeyCode GetBinding(string action)
@@ -504,11 +872,27 @@ public class PlayerInputHandler : MonoBehaviour
         return actionToKey.TryGetValue(action, out var key) ? key : KeyCode.None;
     }
 
+    private KeyCode GetGamepadBinding(string action)
+    {
+        return actionToGamepadKey.TryGetValue(action, out var key) ? key : KeyCode.None;
+    }
+
+    private string GetGamepadAxisBinding(string action)
+    {
+        return actionToGamepadAxis.TryGetValue(action, out var axis) ? axis : "";
+    }
+
     private void CacheBindings()
     {
         actionToKey.Clear();
+        actionToGamepadKey.Clear();
+        actionToGamepadAxis.Clear();
         foreach (var b in bindings)
+        {
             actionToKey[b.actionName] = b.keyCode;
+            actionToGamepadKey[b.actionName] = b.gamepadKeyCode;
+            actionToGamepadAxis[b.actionName] = b.gamepadAxis;
+        }
         OnBindingsChanged?.Invoke();
     }
 
@@ -525,7 +909,8 @@ public class PlayerInputHandler : MonoBehaviour
         {
             var json = PlayerPrefs.GetString("PlayerBindings");
             var data = JsonUtility.FromJson<SerializableBindings>(json);
-            bindings = data.bindings;
+            if (data != null && data.bindings != null && data.bindings.Count > 0)
+                bindings = data.bindings;
             CacheBindings();
         }
     }
@@ -538,6 +923,18 @@ public class PlayerInputHandler : MonoBehaviour
     }
 
     public string GetDisplayName(string action)
+    {
+        bool showGamepadLabels = DetectedGamepad != GamepadType.None && CurrentInputScheme == InputScheme.Gamepad;
+
+        if (showGamepadLabels)
+        {
+            return GetGamepadDisplayName(action);
+        }
+
+        return GetKeyboardDisplayName(action);
+    }
+
+    private string GetKeyboardDisplayName(string action)
     {
         var key = GetBinding(action);
         return key switch
@@ -554,6 +951,228 @@ public class PlayerInputHandler : MonoBehaviour
             KeyCode.RightAlt => "Alt Der.",
             _ => key.ToString().ToUpper()
         };
+    }
+
+    private string GetGamepadDisplayName(string action)
+    {
+        if (action == "Adelante" || action == "Atras" || action == "Izquierda" || action == "Derecha")
+            return "Stick Izq.";
+
+        KeyCode custom = GetGamepadBinding(action);
+        if (custom != KeyCode.None)
+            return ToGamepadButtonLabel(custom);
+
+        string customAxis = GetGamepadAxisBinding(action);
+        if (!string.IsNullOrEmpty(customAxis))
+            return ToGamepadAxisLabel(customAxis);
+
+        return GetDefaultGamepadLabel(action);
+    }
+
+    private string GetDefaultGamepadLabel(string action)
+    {
+        if (DetectedGamepad == GamepadType.Xbox)
+        {
+            return action switch
+            {
+                "Saltar" => "A",
+                "Correr" => "RB",
+                "Gancho" => "RT",
+                "LiberarGancho" => "LT",
+                _ => "-"
+            };
+        }
+
+        if (DetectedGamepad == GamepadType.PlayStation)
+        {
+            return action switch
+            {
+                "Saltar" => "X",
+                "Correr" => "R1",
+                "Gancho" => "R2",
+                "LiberarGancho" => "L2",
+                _ => "-"
+            };
+        }
+
+        return "-";
+    }
+
+    private string ToGamepadButtonLabel(KeyCode key)
+    {
+        if (DetectedGamepad == GamepadType.PlayStation)
+        {
+            return key switch
+            {
+                KeyCode.JoystickButton0 => "Cuadrado",
+                KeyCode.JoystickButton1 => "X",
+                KeyCode.JoystickButton2 => "Circulo",
+                KeyCode.JoystickButton3 => "Triangulo",
+                KeyCode.JoystickButton4 => "L1",
+                KeyCode.JoystickButton5 => "R1",
+                KeyCode.JoystickButton6 => "L2",
+                KeyCode.JoystickButton7 => "R2",
+                KeyCode.JoystickButton8 => "Share",
+                KeyCode.JoystickButton9 => "Options",
+                KeyCode.JoystickButton10 => "L3",
+                KeyCode.JoystickButton11 => "R3",
+                _ => key.ToString().Replace("JoystickButton", "BTN ")
+            };
+        }
+
+        return key switch
+        {
+            KeyCode.JoystickButton0 => "A",
+            KeyCode.JoystickButton1 => "B",
+            KeyCode.JoystickButton2 => "X",
+            KeyCode.JoystickButton3 => "Y",
+            KeyCode.JoystickButton4 => "LB",
+            KeyCode.JoystickButton5 => "RB",
+            KeyCode.JoystickButton6 => "Back",
+            KeyCode.JoystickButton7 => "Start",
+            KeyCode.JoystickButton8 => "LS",
+            KeyCode.JoystickButton9 => "RS",
+            _ => key.ToString().Replace("JoystickButton", "BTN ")
+        };
+    }
+
+    private string ToGamepadAxisLabel(string axis)
+    {
+        if (axis == "GamepadHookFire")
+            return DetectedGamepad == GamepadType.PlayStation ? "R2" : "RT";
+        if (axis == "GamepadHookRelease")
+            return DetectedGamepad == GamepadType.PlayStation ? "L2" : "LT";
+        return axis;
+    }
+
+    private bool TryCaptureGamepadTriggerAxisRebind()
+    {
+        if (IsAxisPressedNow("GamepadHookFire"))
+        {
+            if (SetGamepadAxisBinding(currentRebindAction, "GamepadHookFire"))
+            {
+                EndRebind();
+                ControlsMenu.Instance?.HideRebindPanel();
+            }
+            return true;
+        }
+
+        if (IsAxisPressedNow("GamepadHookRelease"))
+        {
+            if (SetGamepadAxisBinding(currentRebindAction, "GamepadHookRelease"))
+            {
+                EndRebind();
+                ControlsMenu.Instance?.HideRebindPanel();
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsAxisPressedNow(string axis)
+    {
+        try
+        {
+            return Input.GetAxisRaw(axis) > _activeTriggerThreshold;
+        }
+        catch (System.Exception)
+        {
+            return false;
+        }
+    }
+
+    private bool ReadAxisDown(string axis, ref float previousValue)
+    {
+        try
+        {
+            float value = Input.GetAxisRaw(axis);
+            bool down = value > _activeTriggerThreshold && previousValue <= _activeTriggerThreshold;
+            previousValue = value;
+            return down;
+        }
+        catch (System.Exception)
+        {
+            previousValue = 0f;
+            return false;
+        }
+    }
+
+    private bool IsGamepadRebindCancelPressed()
+    {
+        if (DetectedGamepad == GamepadType.None)
+            return false;
+
+        if (_gamepadMenuKey != KeyCode.None && Input.GetKeyDown(_gamepadMenuKey))
+            return true;
+
+        return false;
+    }
+
+    private bool IsHookAction(string action)
+    {
+        return action == "Gancho" || action == "LiberarGancho";
+    }
+
+    private bool IsJoystickKey(KeyCode key)
+    {
+        return key.ToString().Contains("Joystick");
+    }
+
+    private bool IsGamepadRebindableAction(string action)
+    {
+        // El movimiento del stick izquierdo se mantiene fijo para mando.
+        return action == "Saltar" || action == "Correr" || action == "Gancho" || action == "LiberarGancho";
+    }
+
+    private void GetEffectiveGamepadBinding(string action, out KeyCode key, out string axis)
+    {
+        key = GetGamepadBinding(action);
+        axis = GetGamepadAxisBinding(action);
+
+        // Si ya hay remapeo custom, respetarlo.
+        if (key != KeyCode.None || !string.IsNullOrEmpty(axis))
+            return;
+
+        // Si no hay remapeo custom, usar defaults segun plataforma.
+        switch (DetectedGamepad)
+        {
+            case GamepadType.Xbox:
+                switch (action)
+                {
+                    case "Saltar":
+                        key = KeyCode.JoystickButton0; // A
+                        break;
+                    case "Correr":
+                        key = KeyCode.JoystickButton5; // RB
+                        break;
+                    case "Gancho":
+                        axis = "GamepadHookFire"; // RT
+                        break;
+                    case "LiberarGancho":
+                        axis = "GamepadHookRelease"; // LT
+                        break;
+                }
+                break;
+
+            case GamepadType.PlayStation:
+                switch (action)
+                {
+                    case "Saltar":
+                        key = KeyCode.JoystickButton1; // X
+                        break;
+                    case "Correr":
+                        key = KeyCode.JoystickButton5; // R1
+                        break;
+                    case "Gancho":
+                        key = KeyCode.JoystickButton7; // R2
+                        break;
+                    case "LiberarGancho":
+                        key = KeyCode.JoystickButton6; // L2
+                        break;
+                }
+                break;
+        }
     }
 
     [System.Serializable]

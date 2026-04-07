@@ -36,6 +36,7 @@ public class ScreenSettingsManager : MonoBehaviour
     public void OnResolutionChanged(int index)
     {
         if (initializing) return;
+        MusicManager.PlayButton();
         ApplyResolutionByIndex(index);
         PlayerPrefs.SetInt("Resolution", index);
         PlayerPrefs.Save();
@@ -60,6 +61,7 @@ public class ScreenSettingsManager : MonoBehaviour
     public void OnFullscreenToggleChanged(bool isFullscreen)
     {
         if (initializing) return;
+        MusicManager.PlayButton();
         Screen.fullScreen = isFullscreen;
         PlayerPrefs.SetInt("Fullscreen", isFullscreen ? 1 : 0);
         PlayerPrefs.Save();

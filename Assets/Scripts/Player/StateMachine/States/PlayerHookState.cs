@@ -1,4 +1,5 @@
 using UnityEngine;
+using FMODUnity;
 
 /// <summary>
 /// Estado cuando el jugador está usando el gancho.
@@ -28,6 +29,7 @@ public class PlayerHookState : PlayerBaseState
             if (_hookTarget != Vector3.zero)
             {
                 _currentPhase = HookPhase.Traveling;
+                RuntimeManager.PlayOneShot("event:/SFX/Gancho/UsarGancho", ctx.transform.position);
                 GameEvents.HookFired(_hookTarget);
                 GameEvents.HookConnected();
                 

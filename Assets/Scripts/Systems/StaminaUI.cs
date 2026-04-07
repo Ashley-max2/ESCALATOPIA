@@ -2,10 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// UI de estamina simple que muestra una barra de progreso.
-/// Se conecta automáticamente al StaminaSystem del jugador.
-/// </summary>
 public class StaminaUI : MonoBehaviour
 {
     [Header("=== REFERENCES ===")]

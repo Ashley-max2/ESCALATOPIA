@@ -10,6 +10,7 @@ using System.Collections;
 public class ControlsMenu : MonoBehaviour
 {
     public static ControlsMenu Instance;
+    public bool IsRebindPanelVisible => rebindPanel != null && rebindPanel.activeInHierarchy;
 
     [Header("Filas de Controles")]
     [Tooltip("Arrastra aqui el panel donde estan los botones de rebind (ControlsPanel).\nSi se deja vacio, busca las filas como hijos de este objeto.")]
@@ -44,8 +45,7 @@ public class ControlsMenu : MonoBehaviour
         if (backButton)
             backButton.onClick.AddListener(OnBackClicked);
 
-        if (rebindText)
-            rebindText.text = "PULSA UNA TECLA\n(ESC para cancelar)";
+        UpdateRebindHint();
     }
 
     private void OnEnable()
@@ -62,7 +62,8 @@ public class ControlsMenu : MonoBehaviour
 
         InitRows();
 
-        inputHandler.OnBindingsChanged.AddListener(RefreshAllRows);
+        inputHandler.OnBindingsChanged.AddListener(RefreshControlsUI);
+        RefreshControlsUI();
 
         // Ocultar overlays
         if (rebindPanel) rebindPanel.SetActive(false);
@@ -72,7 +73,7 @@ public class ControlsMenu : MonoBehaviour
     private void OnDisable()
     {
         if (inputHandler != null)
-            inputHandler.OnBindingsChanged.RemoveListener(RefreshAllRows);
+            inputHandler.OnBindingsChanged.RemoveListener(RefreshControlsUI);
     }
 
     // ==================== INIT ROWS ====================
@@ -108,10 +109,50 @@ public class ControlsMenu : MonoBehaviour
         }
     }
 
+    private void RefreshControlsUI()
+    {
+        RefreshAllRows();
+        UpdateRebindHint();
+    }
+
+    private void UpdateRebindHint()
+    {
+        if (rebindText == null)
+            return;
+
+        if (inputHandler == null)
+        {
+            rebindText.text = "PULSA UNA TECLA\n(ESC para cancelar)";
+            return;
+        }
+
+        if (inputHandler.CurrentInputScheme == PlayerInputHandler.InputScheme.KeyboardMouse)
+        {
+            rebindText.text = "PULSA UNA TECLA\n(ESC para cancelar)";
+            return;
+        }
+
+        switch (inputHandler.DetectedGamepad)
+        {
+            case PlayerInputHandler.GamepadType.Xbox:
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(START para cancelar)";
+                break;
+
+            case PlayerInputHandler.GamepadType.PlayStation:
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(OPTIONS para cancelar)";
+                break;
+
+            default:
+                rebindText.text = "PULSA UN BOTON DE MANDO\n(BOTON MENU para cancelar)";
+                break;
+        }
+    }
+
     // ==================== REBIND UI ====================
 
     public void ShowRebindPanel()
     {
+        UpdateRebindHint();
         if (rebindPanel) rebindPanel.SetActive(true);
         if (conflictPanel) conflictPanel.SetActive(false);
     }

@@ -4,9 +4,10 @@ using TMPro;
 
 public class BindingRow : MonoBehaviour
 {
-    [SerializeField] private string actionName = "Adelante"; // ¡Pon aquí el nombre de la acción MANUAL!
+    [SerializeField] private string actionName = "Adelante"; // ï¿½Pon aquï¿½ el nombre de la acciï¿½n MANUAL!
     [SerializeField] private Button keyButton;
     [SerializeField] private TMP_Text keyText;
+    [SerializeField] private bool allowKeyboardSubmit = false;
 
     private PlayerInputHandler inputHandler;
     private static ControlsMenu controlsMenu;
@@ -45,7 +46,41 @@ public class BindingRow : MonoBehaviour
     void Rebind()
     {
         if (inputHandler.IsRebinding) return;
+        if (inputHandler.IsRebindInputSuppressed) return;
+        if (!IsValidRebindTrigger()) return;
+
         inputHandler.StartRebind(actionName);
-        controlsMenu.ShowRebindPanel();
+        if (controlsMenu != null)
+            controlsMenu.ShowRebindPanel();
+    }
+
+    bool IsValidRebindTrigger()
+    {
+        if (inputHandler == null)
+            return false;
+
+        if (inputHandler.IsRebindInputSuppressed)
+            return false;
+
+        bool keyboardScheme = inputHandler.CurrentInputScheme == PlayerInputHandler.InputScheme.KeyboardMouse;
+        bool gamepadScheme = inputHandler.CurrentInputScheme == PlayerInputHandler.InputScheme.Gamepad;
+
+        // Click de raton siempre permitido.
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+            return keyboardScheme;
+
+        // Enter/Espacio permitidos para abrir remapeo desde teclado.
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))
+            return keyboardScheme;
+
+        // Confirmacion por mando (A / Cross) permitida cuando el esquema activo es mando.
+        if (gamepadScheme)
+        {
+            if (Input.GetKeyDown(KeyCode.JoystickButton0))
+                return true;
+        }
+
+        // Submit por teclado (espacio/enter) desactivado por defecto para evitar remapeos accidentales.
+        return allowKeyboardSubmit;
     }
 }

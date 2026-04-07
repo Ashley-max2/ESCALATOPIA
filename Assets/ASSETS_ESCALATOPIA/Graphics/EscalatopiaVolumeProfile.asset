@@ -15,13 +15,13 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: -0.042372894}
+    m_Value: {x: 1, y: 1, z: 1, w: 0.10762711}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: -0.5508475}
+    m_Value: {x: 1, y: 1, z: 1, w: -0.6508475}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0.04237286}
+    m_Value: {x: 1, y: 1, z: 1, w: 0.11737286}
 --- !u!114 &-8270506406425502121
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -43,7 +43,7 @@ MonoBehaviour:
     m_Value: {r: 1, g: 1, b: 1, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -8
 --- !u!114 &-8104416584915340131
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -139,7 +139,7 @@ MonoBehaviour:
     m_Value: 0.64
   contrast:
     m_OverrideState: 1
-    m_Value: 46
+    m_Value: 26
   colorFilter:
     m_OverrideState: 1
     m_Value: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
@@ -148,7 +148,7 @@ MonoBehaviour:
     m_Value: -14
   saturation:
     m_OverrideState: 1
-    m_Value: 100
+    m_Value: 6
 --- !u!114 &-5520245016509672950
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -310,6 +310,9 @@ MonoBehaviour:
   highQualityFiltering:
     m_OverrideState: 1
     m_Value: 0
+  filter:
+    m_OverrideState: 0
+    m_Value: 0
   downscale:
     m_OverrideState: 1
     m_Value: 0
@@ -338,7 +341,7 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 10
   tint:
     m_OverrideState: 1
     m_Value: 0
@@ -474,10 +477,10 @@ MonoBehaviour:
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 1, y: 1, z: 1, w: -0.4}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_Value: {x: 1, y: 1, z: 1, w: -0.275}
   shadowsStart:
     m_OverrideState: 1
     m_Value: 0
@@ -582,21 +585,21 @@ MonoBehaviour:
   active: 0
   redOutRedIn:
     m_OverrideState: 1
-    m_Value: 100
+    m_Value: 76
   redOutGreenIn:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 23
   redOutBlueIn:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -60
   greenOutRedIn:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 4
   greenOutGreenIn:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 100
   greenOutBlueIn:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   blueOutRedIn:
     m_OverrideState: 0
