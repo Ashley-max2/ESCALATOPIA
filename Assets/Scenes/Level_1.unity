@@ -5217,35 +5217,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6880262858201208964, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
---- !u!1 &1570144987 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3778613992591054678, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
-  m_PrefabInstance: {fileID: 4726357041814826688}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1570144989 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7627876280544286614, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
-  m_PrefabInstance: {fileID: 4726357041814826688}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1570144990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1570144987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9d2c22634aea7749b02ee1bccff8a7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 1570144989}
-  runFloatParameter: Run
-  movementThreshold: 0.1
-  speedForFullRun: 4
-  ignoreYMovement: 1
-  useRigidbodyVelocity: 1
-  smoothTime: 0.08
 --- !u!1001 &1591400492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7978,14 +7949,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1468676127601927547, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
-      propertyPath: m_Size.y
-      value: 0.19987106
-      objectReference: {fileID: 0}
-    - target: {fileID: 1468676127601927547, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
-      propertyPath: m_Center.y
-      value: -0.90006447
-      objectReference: {fileID: 0}
     - target: {fileID: 1966428600798258095, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_Name
       value: Boss1
@@ -8040,10 +8003,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6071274032203721434, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
-      propertyPath: autoPlay
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
@@ -8102,10 +8061,7 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 6848478856362209376, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3778613992591054678, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1570144990}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
 --- !u!224 &5065058027115593022
 RectTransform:

@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7999693861272224417}
   - component: {fileID: 6571802030492727744}
   - component: {fileID: 8251645889825647820}
+  - component: {fileID: 8433616416457749387}
   m_Layer: 0
   m_Name: Anas
   m_TagString: Boss
@@ -38,7 +39,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 472962605164963881}
-  - {fileID: 4556382527442750956}
+  - {fileID: 4029404218170889185}
+  - {fileID: 6071274032203721434}
   m_Father: {fileID: 2952091604001258396}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -127,7 +129,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 192374871595289292}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -173,8 +175,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.8085938, y: 4.0685577, z: 3.8628273}
-  m_Center: {x: 0.01890564, y: 1.0342789, z: -0.28138924}
+  m_Size: {x: 4.8085938, y: 0.19987106, z: 3.8628273}
+  m_Center: {x: 0.01890564, y: -0.90006447, z: -0.28138924}
 --- !u!114 &7999693861272224417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,10 +224,12 @@ MonoBehaviour:
   promptE: {fileID: 9075573746443302907}
   subtitleText: {fileID: 0}
   subtitlePanel: {fileID: 0}
-  subtitleDuration: 3
+  subtitleDuration: 3.8
   subtitles:
-  - Hola soy negro hdp
-  - aaaaaa
+  - Hola, bienvenido a este desafio!!!
+  - Quiero proponerte algo...
+  - Tienes que desafiarme en hacer una carrera hasta llegar
+  - el objetivo que es la puerta para pasar el siguiente nivel.
   autoPlay: 0
   hasFinishedDialogue: 0
   isLocked: 0
@@ -248,6 +252,20 @@ MonoBehaviour:
   unfadeDuration: 0.5
   fadeImage: {fileID: 0}
   isPlayerDeathTeleporter: 0
+--- !u!114 &8433616416457749387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192374871595289292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f46b1c3f3314b7a4ca2bcb9353a8a6b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6992820410701351323}
+  speedParam: Run
 --- !u!1 &1966428600798258095
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +514,78 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &4085113106156022279
+--- !u!1001 &3486323449946977290
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4195958798034448907}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_Name
+      value: boss1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 4438774a4ba992047a795e190015213d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 9ad3f7f4f438aa3499c1a4984ad75d0b, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4438774a4ba992047a795e190015213d, type: 3}
+--- !u!4 &4029404218170889185 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
+  m_PrefabInstance: {fileID: 3486323449946977290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6992820410701351323 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 4438774a4ba992047a795e190015213d, type: 3}
+  m_PrefabInstance: {fileID: 3486323449946977290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6038138450005396785
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -565,8 +654,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4438774a4ba992047a795e190015213d, type: 3}
---- !u!4 &4556382527442750956 stripped
+--- !u!4 &6071274032203721434 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4438774a4ba992047a795e190015213d, type: 3}
-  m_PrefabInstance: {fileID: 4085113106156022279}
+  m_PrefabInstance: {fileID: 6038138450005396785}
   m_PrefabAsset: {fileID: 0}
