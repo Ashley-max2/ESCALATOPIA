@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 619906678570261293}
   - component: {fileID: 7884660431156397553}
   - component: {fileID: 8622560924937243473}
+  - component: {fileID: 3338310068646817535}
   m_Layer: 0
   m_Name: 'Mecanismo1 '
   m_TagString: mecanismo
@@ -84,6 +85,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3338310068646817535
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4772314318654471323}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6540110866217290134, guid: 7e79e1677b87a824db42b05770ab039b, type: 3}
 --- !u!1001 &1921634029219900658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -139,10 +162,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3600996841304223839, guid: 62c98e353d3a3fa4fb1d2239dbecf31c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6127192306147276551}
   m_SourcePrefab: {fileID: 100100000, guid: 62c98e353d3a3fa4fb1d2239dbecf31c, type: 3}
 --- !u!4 &339850677542642023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2169723006315564437, guid: 62c98e353d3a3fa4fb1d2239dbecf31c, type: 3}
   m_PrefabInstance: {fileID: 1921634029219900658}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3121641585986084013 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3600996841304223839, guid: 62c98e353d3a3fa4fb1d2239dbecf31c, type: 3}
+  m_PrefabInstance: {fileID: 1921634029219900658}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &6127192306147276551
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3121641585986084013}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.31923047, y: 0.3766495, z: 0.40041503}
+  m_Center: {x: -0.17563431, y: 0.41719335, z: 0.0039735236}
