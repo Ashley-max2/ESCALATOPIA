@@ -74,7 +74,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c393ab72b8d2d9648ad6daef3710859f, type: 2}
+  - {fileID: 2100000, guid: 3a296564cef169c448adc7276062948b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bindings: []
   mouseSensitivity: 2
-  gamepadCameraSensitivity: 3
+  gamepadCameraSensitivity: 0.5
   gamepadDeadzone: 0.25
   inputSchemeSwitchDelay: 0.5
   rebindTriggerSuppressSeconds: 0.5
@@ -192,8 +192,8 @@ MonoBehaviour:
   lowJumpMultiplier: 2
   coyoteTime: 0.15
   jumpBufferTime: 0.1
-  climbSpeed: 6
-  climbStaminaCost: 10
+  climbSpeed: 4
+  climbStaminaCost: 3
   wallJumpForce: 8
   wallJumpUpwardForce: 6
   climbCheckDistance: 0.6
@@ -253,13 +253,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6dbd52498b3d864fa09291ad53567b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRange: 25
+  maxRange: 40
   detectionRadius: 3
   hookableMask:
     serializedVersion: 2
     m_Bits: 2048
   hookPointTag: HookPoint
-  travelSpeed: 12
+  travelSpeed: 20
   cooldown: 1
   ropeRenderer: {fileID: 0}
   hookOrigin: {fileID: 2313725668745862014}
