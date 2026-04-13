@@ -3,7 +3,7 @@ using UnityEngine;
 public class InteractuableHighlighter : MonoBehaviour
 {
     [Header("Resalte de Interactuables")]
-    public Color highlightColor = new Color(1f, 0.88f, 0.15f); // Amarillo
+    public Color highlightColor = new Color(1f, 0.88f, 0.15f);
     public float emissionIntensity = 2f;
 
     private void Start()
