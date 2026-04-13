@@ -4,12 +4,13 @@ using UnityEngine;
 public class InteractuableHighlighter : MonoBehaviour
 {
     [SerializeField] private List<string> interactuableTags;
-    [SerializeField] private Color highlightColor; 
-    [SerializeField] private float emissionIntensity = 1.5f; 
+    [SerializeField] private Color outlineColor = Color.white; 
+    [SerializeField] private float outlineWidth = 0.02f; 
     [SerializeField] private float maxRayDistance = 10f; // Distancia máxima del raycast
     [SerializeField] private Camera playerCamera; // Cámara del jugador
 
     private GameObject lastHighlightedObject;
+    private Dictionary<Renderer, List<Material>> originalMaterials = new Dictionary<Renderer, List<Material>>();
 
     private void Update()
     {
@@ -28,8 +29,12 @@ public class InteractuableHighlighter : MonoBehaviour
             if (interactuableTags.Contains(hitObject.tag))
             {
                 // Aplicar el resaltado al objeto
-                HighlightObject(hitObject);
-                lastHighlightedObject = hitObject;
+                if (lastHighlightedObject != hitObject)
+                {
+                    RemoveHighlight();
+                    HighlightObject(hitObject);
+                    lastHighlightedObject = hitObject;
+                }
             }
             else
             {
@@ -49,14 +54,40 @@ public class InteractuableHighlighter : MonoBehaviour
         Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
         {
-            foreach (Material mat in renderer.materials)
+            // Guardar los materiales originales
+            Material[] materials = renderer.materials;
+            if (!originalMaterials.ContainsKey(renderer))
             {
-                if (mat.HasProperty("_EmissionColor"))
-                {
-                    mat.EnableKeyword("_EMISSION");
-                    mat.SetColor("_EmissionColor", highlightColor * emissionIntensity);
-                }
+                originalMaterials[renderer] = new List<Material>(materials);
             }
+
+            // Crear nuevos materiales con efecto de outline
+            Material[] newMaterials = new Material[materials.Length];
+            for (int i = 0; i < materials.Length; i++)
+            {
+                Material outlineMat = new Material(materials[i]);
+                
+                // Establecer propiedades para outline
+                if (outlineMat.HasProperty("_OutlineWidth"))
+                {
+                    outlineMat.SetFloat("_OutlineWidth", outlineWidth);
+                }
+                if (outlineMat.HasProperty("_OutlineColor"))
+                {
+                    outlineMat.SetColor("_OutlineColor", outlineColor);
+                }
+
+                // Usar emisión blanca para el efecto de resaltado
+                if (outlineMat.HasProperty("_EmissionColor"))
+                {
+                    outlineMat.EnableKeyword("_EMISSION");
+                    outlineMat.SetColor("_EmissionColor", Color.white * 0.3f);
+                }
+                
+                newMaterials[i] = outlineMat;
+            }
+            
+            renderer.materials = newMaterials;
         }
     }
 
@@ -67,11 +98,22 @@ public class InteractuableHighlighter : MonoBehaviour
             Renderer[] renderers = lastHighlightedObject.GetComponentsInChildren<Renderer>();
             foreach (Renderer renderer in renderers)
             {
-                foreach (Material mat in renderer.materials)
+                // Restaurar los materiales originales
+                if (originalMaterials.ContainsKey(renderer))
                 {
-                    if (mat.HasProperty("_EmissionColor"))
+                    Material[] originalMats = originalMaterials[renderer].ToArray();
+                    renderer.materials = originalMats;
+                    originalMaterials.Remove(renderer);
+                }
+                else
+                {
+                    // Si no tenemos los originales, simplemente quitar emisión
+                    foreach (Material mat in renderer.materials)
                     {
-                        mat.SetColor("_EmissionColor", Color.black); // Restablecer el color de emisión
+                        if (mat.HasProperty("_EmissionColor"))
+                        {
+                            mat.SetColor("_EmissionColor", Color.black);
+                        }
                     }
                 }
             }
