@@ -1163,7 +1163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5851656249442908172, guid: 71a8640c9361f9e4bb64995d0c731568, type: 3}
       propertyPath: m_TagString
-      value: Interactuable
+      value: Barril
       objectReference: {fileID: 0}
     - target: {fileID: 5851656249442908172, guid: 71a8640c9361f9e4bb64995d0c731568, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1606,6 +1606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 186674253}
   - component: {fileID: 186674252}
+  - component: {fileID: 186674254}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1646,6 +1647,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &186674254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186674251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a77fca15e40de614fa8f12b5e13aa799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactuableTags:
+  - Interactuable
+  - Barril
+  - Cofre
+  highlightColor: {r: 1, g: 1, b: 1, a: 0}
+  emissionIntensity: 0.2
+  maxRayDistance: 5
+  playerCamera: {fileID: 725277191}
 --- !u!64 &208288862
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12804,52 +12825,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5774114060809492757, guid: 48ee16de6feddc24e8c961c78d5933e6, type: 3}
   m_PrefabInstance: {fileID: 1859310664}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1859619290
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1859619291}
-  - component: {fileID: 1859619292}
-  m_Layer: 0
-  m_Name: InteractuableManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1859619291
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1859619290}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 361.72668, y: -32.741215, z: 306.84622}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1859619292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1859619290}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a77fca15e40de614fa8f12b5e13aa799, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightColor: {r: 1, g: 0.88, b: 0.15, a: 1}
-  emissionIntensity: 2
 --- !u!1001 &1873397466
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16461,4 +16436,3 @@ SceneRoots:
   - {fileID: 881973702}
   - {fileID: 97789942}
   - {fileID: 587615076}
-  - {fileID: 1859619291}
