@@ -1053,6 +1053,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4008784220886398847, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: checkpoint
+      value: 
+      objectReference: {fileID: 3344934816709645670}
     - target: {fileID: 9064581358441401876, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_BackGroundColor.a
       value: 1
@@ -7712,6 +7716,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f82e5a2590bc9414cb87caf32616cfdf, type: 3}
+--- !u!4 &3344934816709645670 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7567618340843145574, guid: f82e5a2590bc9414cb87caf32616cfdf, type: 3}
+  m_PrefabInstance: {fileID: 3344934816709645669}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3562133661373171825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8022,8 +8031,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4227969678189003202, guid: 501672fc53e82fb4083f8a44db655d12, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8166188022907492341}
   m_SourcePrefab: {fileID: 100100000, guid: 501672fc53e82fb4083f8a44db655d12, type: 3}
+--- !u!1 &8166188022907492340 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4227969678189003202, guid: 501672fc53e82fb4083f8a44db655d12, type: 3}
+  m_PrefabInstance: {fileID: 8166188022907492339}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8166188022907492341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166188022907492340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoint: {fileID: 3344934816709645670}
+  playerTag: Player
+  timeBeforeFade: 0.5
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
+  fadeImage: {fileID: 0}
+  isPlayerDeathTeleporter: 0
 --- !u!1001 &8828166929338960878
 PrefabInstance:
   m_ObjectHideFlags: 0
