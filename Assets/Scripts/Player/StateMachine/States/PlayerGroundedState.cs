@@ -16,6 +16,9 @@ public class PlayerGroundedState : PlayerBaseState
         ctx.IsClimbing = false;
         ctx.CurrentVelocity = new Vector3(ctx.Rb.velocity.x, 0, ctx.Rb.velocity.z);
         
+        // Play end jump animation when landing
+        ctx.Animator.Play("JumpEnd");
+        
         // Check for fall damage
         if (ctx.FallStartHeight > 0)
         {
