@@ -4276,7 +4276,7 @@ MonoBehaviour:
   swordSymbol: Amarillo
   highlightRenderers: []
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
-  emissionIntensity: 0.5
+  emissionIntensity: 1.5
   pickupSound: event:/SFX/PickUp
 --- !u!114 &617078430
 MonoBehaviour:
@@ -4567,7 +4567,7 @@ MonoBehaviour:
   swordSymbol: Rojo
   highlightRenderers: []
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
-  emissionIntensity: 0.5
+  emissionIntensity: 1.5
   pickupSound: event:/SFX/PickUp
 --- !u!1 &632662552
 GameObject:
@@ -5510,12 +5510,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2028976849}
-  headOffset: {x: 0, y: 1, z: 0}
+  headOffset: {x: 0, y: 1, z: -0.5}
   mouseSensitivity: 3
   gamepadSensitivity: 3
   gamepadDeadzone: 0.25
   minVerticalAngle: -60
-  maxVerticalAngle: 55
+  maxVerticalAngle: 35
 --- !u!1001 &800463954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9013,7 +9013,7 @@ MonoBehaviour:
   swordSymbol: Azul
   highlightRenderers: []
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
-  emissionIntensity: 0.5
+  emissionIntensity: 1.5
   pickupSound: event:/SFX/PickUp
 --- !u!114 &1254235480
 MonoBehaviour:
@@ -12927,7 +12927,7 @@ MonoBehaviour:
   swordSymbol: Celeste
   highlightRenderers: []
   highlightColor: {r: 1, g: 1, b: 1, a: 1}
-  emissionIntensity: 0.5
+  emissionIntensity: 1.5
   pickupSound: event:/SFX/PickUp
 --- !u!1001 &1882223077
 PrefabInstance:
@@ -15673,7 +15673,7 @@ GameObject:
   - component: {fileID: 7758275753095951277}
   m_Layer: 0
   m_Name: EspadaRoja
-  m_TagString: Sword
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15693,7 +15693,7 @@ GameObject:
   - component: {fileID: 7758275753106765531}
   m_Layer: 0
   m_Name: EspadaAmarilla
-  m_TagString: Sword
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15710,11 +15710,10 @@ GameObject:
   - component: {fileID: 7758275752153482654}
   - component: {fileID: 4803519118921146069}
   - component: {fileID: 1878803550}
-  - component: {fileID: 7758275752153482656}
   - component: {fileID: 7758275752153482655}
   m_Layer: 0
   m_Name: EspadaAzul
-  m_TagString: Sword
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15734,7 +15733,7 @@ GameObject:
   - component: {fileID: 7758275753475683585}
   m_Layer: 0
   m_Name: EspadaRosa
-  m_TagString: Sword
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16173,28 +16172,6 @@ MeshFilter:
   m_GameObject: {fileID: 3410342226767334890}
   m_Mesh: {fileID: -1593577335283316231, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
 --- !u!64 &7758275752153482655
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3410342226767334890}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1593577335283316231, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
---- !u!64 &7758275752153482656
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
