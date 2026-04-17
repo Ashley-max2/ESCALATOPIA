@@ -10,7 +10,7 @@ public class FirstPersonCamera : MonoBehaviour
 {
     [Header("=== TARGET ===")]
     [SerializeField] private Transform target;
-    [SerializeField] private Vector3 headOffset = new Vector3(0, 0.6f, 0);
+    [SerializeField] private Vector3 headOffset = new Vector3(0, 0.6f, 0.2f);
 
     [Header("=== ROTATION ===")]
     [SerializeField] private float mouseSensitivity = 3f;
@@ -129,7 +129,9 @@ public class FirstPersonCamera : MonoBehaviour
 
     private Vector3 GetHeadPosition()
     {
-        return target.position + Vector3.Scale(target.lossyScale, headOffset);
+        // El offset se rota según la dirección del jugador para que siempre esté adelante
+        Vector3 rotatedOffset = target.TransformDirection(headOffset);
+        return target.position + rotatedOffset;
     }
 
     /// <summary>
