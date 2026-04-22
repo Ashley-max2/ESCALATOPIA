@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class BindingRow : MonoBehaviour
 {
@@ -48,6 +49,9 @@ public class BindingRow : MonoBehaviour
         if (inputHandler.IsRebinding) return;
         if (inputHandler.IsRebindInputSuppressed) return;
         if (!IsValidRebindTrigger()) return;
+
+        if (keyButton != null && EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(keyButton.gameObject);
 
         inputHandler.StartRebind(actionName);
         if (controlsMenu != null)
