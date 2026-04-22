@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4473338750722148407}
   - component: {fileID: 1407890044413274075}
   - component: {fileID: 2443562217786375129}
-  - component: {fileID: 7302662641405435420}
-  m_Layer: 0
+  - component: {fileID: 7803270157358173322}
+  m_Layer: 10
   m_Name: Arbol1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,9 +60,6 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -88,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7302662641405435420
-CapsuleCollider:
+--- !u!64 &7803270157358173322
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -106,11 +103,10 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5036972
-  m_Height: 3.0322487
-  m_Direction: 2
-  m_Center: {x: 0.093726955, y: -0.35000005, z: 1.0361816}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5534591290900139944, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
 --- !u!1001 &9027890161543991035
 PrefabInstance:
   m_ObjectHideFlags: 0
