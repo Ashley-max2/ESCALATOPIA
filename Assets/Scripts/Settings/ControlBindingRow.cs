@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Componente para cada fila del panel de controles.
@@ -60,6 +61,9 @@ public class ControlBindingRow : MonoBehaviour
         if (!IsValidRebindTrigger()) return;
 
         MusicManager.PlayButton();
+
+        if (rebindButton != null && EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(rebindButton.gameObject);
 
         inputHandler.StartRebind(actionName);
         if (menu != null) menu.ShowRebindPanel();

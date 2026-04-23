@@ -8,8 +8,8 @@ public class SwordPickup : MonoBehaviour
 
     [Header("Resaltar al mirar")]
     public Renderer[] highlightRenderers;
-    public Color highlightColor = new Color(1f, 0.88f, 0.15f);
-    public float emissionIntensity = 2f;
+    public Color highlightColor = Color.white;
+    public float emissionIntensity = 0.5f;
 
     [Header("Audio")]
     [EventRef] public string pickupSound = "event:/SFX/PickUp";

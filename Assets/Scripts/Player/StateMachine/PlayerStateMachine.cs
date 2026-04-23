@@ -222,7 +222,11 @@ public class PlayerStateMachine : MonoBehaviour
                 break;
 
             case PlayerJumpState:
-                Animator.Play("Jump");
+                Animator.Play("JumpStart");
+                break;
+
+            case PlayerAirborneState:
+                Animator.Play("JumpLoop");
                 break;
 
             case PlayerHookState:

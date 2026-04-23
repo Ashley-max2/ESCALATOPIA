@@ -674,6 +674,10 @@ public class PlayerInputHandler : MonoBehaviour
             return;
         }
 
+        // Mientras el panel de conflicto esta visible, solo permitimos cancelar.
+        if (ControlsMenu.Instance != null && ControlsMenu.Instance.IsConflictPanelVisible)
+            return;
+
         if (CurrentInputScheme == InputScheme.Gamepad && IsHookAction(currentRebindAction))
         {
             if (TryCaptureGamepadTriggerAxisRebind())

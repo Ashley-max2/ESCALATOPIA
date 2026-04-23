@@ -4,8 +4,8 @@ Juego 3D de escalada y exploración inspirado en **Zelda: Breath of the Wild** (
 
 ## 🎮 Características Principales
 
-- **Movimiento estilo Zelda BotW**: Cámara orbital con rotación suave y movimiento relativo
-- **Escalada estilo Jusant**: Sistema de escalada en cualquier dirección con consumo de estamina
+- **Movimiento**: Cámara orbital con rotación suave y movimiento relativo
+- **Escalada**: Sistema de escalada en cualquier dirección con consumo de estamina
 - **Sistema de Gancho**: Enganche a puntos específicos para traversar el entorno
 - **Sistema de Caída**: Sin barras de vida - caídas letales desde gran altura
 - **Máquina de Estados**: Arquitectura modular y extensible para las mecánicas del jugador
@@ -22,7 +22,7 @@ Juego 3D de escalada y exploración inspirado en **Zelda: Breath of the Wild** (
 
 ```
 Assets/Scripts/
-├── Camera/           → Cámara orbital estilo Zelda
+├── Camera/           → Cámara orbital estilo
 ├── Core/             → Eventos y managers
 ├── Editor/           → Herramientas de setup
 ├── Player/           → Sistema de jugador (State Machine)
