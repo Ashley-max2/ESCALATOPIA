@@ -3160,6 +3160,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4473338750722148407, guid: 6e1905e7885809e4eb6d6f796ff4501d, type: 3}
   m_PrefabInstance: {fileID: 902497251}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &938323758 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2053993767217516432, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+  m_PrefabInstance: {fileID: 4726357041814826688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &943105342
 GameObject:
   m_ObjectHideFlags: 0
@@ -4659,6 +4664,9 @@ MonoBehaviour:
   bossAI: {fileID: 733574153}
   npcInteractable: {fileID: 733574161}
   finalObject: {fileID: 1235538417}
+  bossRigidbody: {fileID: 938323758}
+  lockBossBeforeRace: 1
+  freezeTiltRotation: 1
 --- !u!1001 &1426637299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8169,7 +8177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: subtitles.Array.data[0]
-      value: Hola, bienvenido a este desafio!!!
+      value: Hola, bienvenido a este desafio!!
       objectReference: {fileID: 0}
     - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: subtitles.Array.data[1]
