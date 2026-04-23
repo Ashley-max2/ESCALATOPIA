@@ -215,14 +215,14 @@ public class PlayerStateMachine : MonoBehaviour
 
                 Animator.SetFloat("ClimbSpeed", 0f);
 
-                if (horizontalSpeed > 0.1f)
-                    Animator.SetFloat("Speed", 1f);
-                else
-                    Animator.SetFloat("Speed", 0f);
+                // Set Speed parameter based on horizontal velocity
+                // Normalized by walkSpeed for smooth transitions between Idle and Walk
+                float speedParameter = horizontalSpeed / walkSpeed;
+                Animator.SetFloat("Speed", speedParameter);
                 break;
 
             case PlayerJumpState:
-                Animator.Play("JumpStart");
+                // Animation is played in Enter(), not here
                 break;
 
             case PlayerAirborneState:
