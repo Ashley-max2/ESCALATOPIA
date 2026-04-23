@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{A9126FB1-79A6-8328-FB3F-2C3B755ABDF1}</ProjectGuid>
+    <ProjectGuid>{AD2CE4B9-22B5-2823-CA38-F2EA1979BB83}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -84,11 +84,13 @@
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossManager.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaUI.cs" />
+    <Compile Include="Assets\Scripts\FreezeUnfreezePosition.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
     <Compile Include="Assets\Scripts\BossAnimatorSpeed.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
     <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
     <Compile Include="Assets\Scripts\Core\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Props\FragmentoDestruible.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettingsManager.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\Agarrar_Lanzar_Soltar.cs" />
@@ -97,7 +99,6 @@
     <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPuzzleManager.cs" />
-    <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
     <Compile Include="Assets\Scripts\Managers\JournalPickUo.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
     <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BolaGuiaTrigger.cs" />
+    <Compile Include="Assets\Scripts\Props\BarrilFragmentado.cs" />
     <Compile Include="Assets\Scripts\Managers\ScreenSettingsManager.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRaceManager.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
@@ -1160,23 +1162,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{9A12D714-ABD6-5246-049B-4E5EB97A9965}</Project>
+      <Project>{0B693ED3-C7D4-768B-FB18-265DCBFD6B36}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityEditor.csproj">
-      <Project>{E0373054-D8CA-379E-24FD-2641BEE2C374}</Project>
+      <Project>{4A72E195-D112-DBB4-1590-A68BD4DBF5B7}</Project>
       <Name>FMODUnityEditor</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityResonance.csproj">
-      <Project>{B4884D07-CE83-00B9-B43E-C43BC9353005}</Project>
+      <Project>{55E61988-F589-3B46-9E47-6442A15FE027}</Project>
       <Name>FMODUnityResonance</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnity.csproj">
-      <Project>{3815801A-A7F5-CD20-692D-2D6D78DB7344}</Project>
+      <Project>{45363691-E6BE-F9F3-D2F0-E25339B35872}</Project>
       <Name>FMODUnity</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityResonanceEditor.csproj">
-      <Project>{FF71BD9F-4CB7-B350-399F-E52398BDA92E}</Project>
+      <Project>{20F2B747-81B5-9772-1C00-70FB3B467702}</Project>
       <Name>FMODUnityResonanceEditor</Name>
     </ProjectReference>
   </ItemGroup>
