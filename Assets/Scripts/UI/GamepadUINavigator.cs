@@ -147,12 +147,18 @@ public class GamepadUINavigator : MonoBehaviour
     {
         if (IsRebindOverlayBlockingUI())
         {
-            SuspendSelectionVisualsForRebind();
+            _selectionSuspendedByRebindOverlay = true;
             return;
         }
 
         if (_selectionSuspendedByRebindOverlay)
+        {
             _selectionSuspendedByRebindOverlay = false;
+
+            // Reanuda tomando la seleccion actual sin borrar el highlight previo.
+            if (EventSystem.current != null)
+                _lastSelected = EventSystem.current.currentSelectedGameObject;
+        }
 
         ApplyPermanentTextColorOverrides();
 
@@ -191,28 +197,6 @@ public class GamepadUINavigator : MonoBehaviour
     private bool IsRebindOverlayBlockingUI()
     {
         return ControlsMenu.Instance != null && ControlsMenu.Instance.IsRebindPanelVisible;
-    }
-
-    private void SuspendSelectionVisualsForRebind()
-    {
-        if (_currentOutline != null)
-            _currentOutline.enabled = false;
-
-        if (_selectionFrameObject != null)
-            _selectionFrameObject.SetActive(false);
-
-        if (_selectionSuspendedByRebindOverlay)
-            return;
-
-        RestoreSelectedButtonVisuals();
-
-        if (EventSystem.current != null)
-            EventSystem.current.SetSelectedGameObject(null);
-
-        _currentSelectable = null;
-        _lastSelected = null;
-        _nullSelectionFrames = 0;
-        _selectionSuspendedByRebindOverlay = true;
     }
 
     private void SelectHoveredButtonWithMouse()
@@ -653,7 +637,6 @@ public class GamepadUINavigator : MonoBehaviour
 
         if (_styledTmpText != null)
         {
-            _styledTmpText.text = _originalTmpText;
             _styledTmpText.color = _originalTmpColor;
             _styledTmpText = null;
             _originalTmpText = null;
@@ -661,7 +644,6 @@ public class GamepadUINavigator : MonoBehaviour
 
         if (_styledTmpText2 != null)
         {
-            _styledTmpText2.text = _originalTmpText2;
             _styledTmpText2.color = _originalTmpColor2;
             _styledTmpText2 = null;
             _originalTmpText2 = null;
@@ -669,7 +651,6 @@ public class GamepadUINavigator : MonoBehaviour
 
         if (_styledLegacyText != null)
         {
-            _styledLegacyText.text = _originalLegacyText;
             _styledLegacyText.color = _originalLegacyColor;
             _styledLegacyText = null;
             _originalLegacyText = null;

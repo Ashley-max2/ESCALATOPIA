@@ -1,80 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9118250255738725382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Ambient/MenuMusic
-  m_EditorClassIdentifier: 
-  Path: event:/Ambient/MenuMusic
-  Guid:
-    Data1: 1494043854
-    Data2: 1340547814
-    Data3: 2115580330
-    Data4: 1386907479
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 31294
---- !u!114 &-8980760805825773705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Player/RunningCueva
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Player/RunningCueva
-  Guid:
-    Data1: 637620424
-    Data2: 1106605812
-    Data3: 1391861667
-    Data4: 817303841
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 1520
---- !u!114 &-7514493059691930883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.bank
-  m_EditorClassIdentifier: 
-  Path: FMOD_Escalatopia/Build/Desktop/Master.bank
-  Name: Master
-  StudioPath: bank:/Master
-  lastModified: 639118738408448122
-  FileSizes:
-  - Name: Desktop
-    Value: 2908800
-  Exists: 1
---- !u!114 &-7131808043504657163
+--- !u!114 &-6721025876191737530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,312 +15,12 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639118738408448122
+  lastModified: 639126544085497108
   FileSizes:
   - Name: Desktop
     Value: 1902
   Exists: 1
---- !u!114 &-6953730273116094259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Player/Jumping
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Player/Jumping
-  Guid:
-    Data1: -1161526214
-    Data2: 1256069842
-    Data3: 4925613
-    Data4: -932610521
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-6033685067448689241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Player/Falling
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Player/Falling
-  Guid:
-    Data1: 1686065640
-    Data2: 1129608821
-    Data3: 1119585964
-    Data4: 572773351
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-5169400999956955992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Player/Dead
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Player/Dead
-  Guid:
-    Data1: 1214623288
-    Data2: 1179765392
-    Data3: 369337272
-    Data4: -1825347665
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-4776012392158864051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Player/Running
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Player/Running
-  Guid:
-    Data1: -458771021
-    Data2: 1105704505
-    Data3: -1880736327
-    Data4: -1791583878
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 682
---- !u!114 &-3663081754516816939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Ambient/OpenDoor
-  m_EditorClassIdentifier: 
-  Path: event:/Ambient/OpenDoor
-  Guid:
-    Data1: -430288220
-    Data2: 1258238560
-    Data3: -135003243
-    Data4: 1508496345
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 1
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 10
-  Length: 4670
---- !u!114 &-962208807032002973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Buttons
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Buttons
-  Guid:
-    Data1: 70972473
-    Data2: 1124116280
-    Data3: 1558247073
-    Data4: 907025183
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-454303882702386194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Gancho/UsarGancho
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Gancho/UsarGancho
-  Guid:
-    Data1: 1536313052
-    Data2: 1326718121
-    Data3: -194682957
-    Data4: -732719691
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 0
---- !u!114 &-255576046952524130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Ambient/MountainMusic
-  m_EditorClassIdentifier: 
-  Path: event:/Ambient/MountainMusic
-  Guid:
-    Data1: 637671620
-    Data2: 1336516282
-    Data3: -729570900
-    Data4: -2079929327
-  Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 97567
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
-  m_Name: FMODStudioCache
-  m_EditorClassIdentifier: 
-  EditorBanks:
-  - {fileID: -7131808043504657163}
-  - {fileID: -7514493059691930883}
-  EditorEvents:
-  - {fileID: 5153305628679015859}
-  - {fileID: -5169400999956955992}
-  - {fileID: -962208807032002973}
-  - {fileID: -6953730273116094259}
-  - {fileID: 6023271785392732106}
-  - {fileID: 2324039896657776394}
-  - {fileID: -4776012392158864051}
-  - {fileID: -255576046952524130}
-  - {fileID: -9118250255738725382}
-  - {fileID: 7163789507965345172}
-  - {fileID: -454303882702386194}
-  - {fileID: -6033685067448689241}
-  - {fileID: 8628862449532103761}
-  - {fileID: 4574918769676873539}
-  - {fileID: 6525422029539997624}
-  - {fileID: 7608584938087390900}
-  - {fileID: 5342856273981250944}
-  - {fileID: -3663081754516816939}
-  - {fileID: 2059024253025421053}
-  - {fileID: -8980760805825773705}
-  EditorParameters: []
-  MasterBanks:
-  - {fileID: -7514493059691930883}
-  StringsBanks:
-  - {fileID: -7131808043504657163}
-  cacheVersion: 131858
-  cacheTime: 639118738408448122
-  SerializableEventsDict:
-  - key: event:/SFX/Gancho/GuardarGancho
-    index: 0
-  - key: event:/SFX/Player/Dead
-    index: 1
-  - key: event:/SFX/Buttons
-    index: 2
-  - key: event:/SFX/Player/Jumping
-    index: 3
-  - key: event:/SFX/Gancho/SacarGancho
-    index: 4
-  - key: event:/SFX/Player/Walking
-    index: 5
-  - key: event:/SFX/Player/Running
-    index: 6
-  - key: event:/Ambient/MountainMusic
-    index: 7
-  - key: event:/Ambient/MenuMusic
-    index: 8
-  - key: event:/SFX/Gancho/RecogerGancho
-    index: 9
-  - key: event:/SFX/Gancho/UsarGancho
-    index: 10
-  - key: event:/SFX/Player/Falling
-    index: 11
-  - key: snapshot:/PauseMenu
-    index: 12
-  - key: event:/SFX/Fogata
-    index: 13
-  - key: event:/SFX/TrowBarill
-    index: 14
-  - key: event:/SFX/PickUp
-    index: 15
-  - key: event:/Ambient/OceanSound
-    index: 16
-  - key: event:/Ambient/OpenDoor
-    index: 17
-  - key: event:/SFX/Player/WalkingCueva
-    index: 18
-  - key: event:/SFX/Player/RunningCueva
-    index: 19
---- !u!114 &2059024253025421053
+--- !u!114 &-4826452910057170398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -413,7 +39,7 @@ MonoBehaviour:
     Data3: 214589355
     Data4: 234179979
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -421,7 +47,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 650
---- !u!114 &2324039896657776394
+--- !u!114 &-3903563874091995363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -431,16 +57,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Player/Walking
+  m_Name: event:/SFX/Player/Jumping
   m_EditorClassIdentifier: 
-  Path: event:/SFX/Player/Walking
+  Path: event:/SFX/Player/Jumping
   Guid:
-    Data1: -1780951893
-    Data2: 1212435035
-    Data3: -1137716860
-    Data4: -154822056
+    Data1: -1161526214
+    Data2: 1256069842
+    Data3: 4925613
+    Data4: -932610521
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -448,7 +74,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &4574918769676873539
+--- !u!114 &-3545537222828932607
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -458,43 +84,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Fogata
+  m_Name: event:/SFX/Player/Dead
   m_EditorClassIdentifier: 
-  Path: event:/SFX/Fogata
+  Path: event:/SFX/Player/Dead
   Guid:
-    Data1: -1757606658
-    Data2: 1194289721
-    Data3: -1792925270
-    Data4: -1041671345
+    Data1: 1214623288
+    Data2: 1179765392
+    Data3: 369337272
+    Data4: -1825347665
   Banks:
-  - {fileID: -7514493059691930883}
-  IsStream: 0
-  Is3D: 1
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 5.8
-  MaxDistance: 20
-  Length: 5500
---- !u!114 &5153305628679015859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Gancho/GuardarGancho
-  m_EditorClassIdentifier: 
-  Path: event:/SFX/Gancho/GuardarGancho
-  Guid:
-    Data1: -1514259676
-    Data2: 1320368665
-    Data3: 2112706696
-    Data4: 2117636068
-  Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -502,7 +101,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &5342856273981250944
+--- !u!114 &-3018205829195327070
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -521,7 +120,7 @@ MonoBehaviour:
     Data3: 1652222894
     Data4: -682009823
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -529,7 +128,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 35
   Length: 92280
---- !u!114 &6023271785392732106
+--- !u!114 &-1979774230715365122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -539,16 +138,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Gancho/SacarGancho
+  m_Name: event:/SFX/Buttons
   m_EditorClassIdentifier: 
-  Path: event:/SFX/Gancho/SacarGancho
+  Path: event:/SFX/Buttons
   Guid:
-    Data1: 77041051
-    Data2: 1115541228
-    Data3: -550434432
-    Data4: -129813150
+    Data1: 70972473
+    Data2: 1124116280
+    Data3: 1558247073
+    Data4: 907025183
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -556,7 +155,61 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &6525422029539997624
+--- !u!114 &-1128372213916518569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Gancho/GuardarGancho
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Gancho/GuardarGancho
+  Guid:
+    Data1: -1514259676
+    Data2: 1320368665
+    Data3: 2112706696
+    Data4: 2117636068
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &-691714556129609456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/MountainMusic
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/MountainMusic
+  Guid:
+    Data1: 637671620
+    Data2: 1336516282
+    Data3: -729570900
+    Data4: -2079929327
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 97567
+--- !u!114 &-270746888864263197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -575,7 +228,7 @@ MonoBehaviour:
     Data3: 1977187505
     Data4: 854928102
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -583,7 +236,111 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &7163789507965345172
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: 
+  EditorBanks:
+  - {fileID: -6721025876191737530}
+  - {fileID: 449710013043388044}
+  EditorEvents:
+  - {fileID: -270746888864263197}
+  - {fileID: -1128372213916518569}
+  - {fileID: -3545537222828932607}
+  - {fileID: -1979774230715365122}
+  - {fileID: -3903563874091995363}
+  - {fileID: -4826452910057170398}
+  - {fileID: -3018205829195327070}
+  - {fileID: 8675735508390093089}
+  - {fileID: 1419542585726163654}
+  - {fileID: 6350228595614694126}
+  - {fileID: 7233618560948401032}
+  - {fileID: 3975117942349173378}
+  - {fileID: -691714556129609456}
+  - {fileID: 8048024500018515637}
+  - {fileID: 1906740911112428076}
+  - {fileID: 677818371187828877}
+  - {fileID: 7945105789362165978}
+  - {fileID: 2631439292441236211}
+  - {fileID: 2017277306522510353}
+  - {fileID: 8451342407431390579}
+  EditorParameters: []
+  MasterBanks:
+  - {fileID: 449710013043388044}
+  StringsBanks:
+  - {fileID: -6721025876191737530}
+  cacheVersion: 131858
+  cacheTime: 639126544085497108
+  SerializableEventsDict:
+  - key: event:/SFX/TrowBarill
+    index: 0
+  - key: event:/SFX/Gancho/GuardarGancho
+    index: 1
+  - key: event:/SFX/Player/Dead
+    index: 2
+  - key: event:/SFX/Buttons
+    index: 3
+  - key: event:/SFX/Player/Jumping
+    index: 4
+  - key: event:/SFX/Player/WalkingCueva
+    index: 5
+  - key: event:/Ambient/OceanSound
+    index: 6
+  - key: event:/SFX/Gancho/SacarGancho
+    index: 7
+  - key: event:/Ambient/OpenDoor
+    index: 8
+  - key: event:/SFX/Player/Walking
+    index: 9
+  - key: event:/SFX/PickUp
+    index: 10
+  - key: event:/SFX/Player/Running
+    index: 11
+  - key: event:/Ambient/MountainMusic
+    index: 12
+  - key: event:/SFX/Player/RunningCueva
+    index: 13
+  - key: event:/Ambient/MenuMusic
+    index: 14
+  - key: event:/SFX/Gancho/RecogerGancho
+    index: 15
+  - key: event:/SFX/Gancho/UsarGancho
+    index: 16
+  - key: event:/SFX/Player/Falling
+    index: 17
+  - key: snapshot:/PauseMenu
+    index: 18
+  - key: event:/SFX/Fogata
+    index: 19
+--- !u!114 &449710013043388044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMOD_Escalatopia/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 639126544085487112
+  FileSizes:
+  - Name: Desktop
+    Value: 2908800
+  Exists: 1
+--- !u!114 &677818371187828877
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -602,7 +359,7 @@ MonoBehaviour:
     Data3: -50433091
     Data4: -717685684
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -610,7 +367,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &7608584938087390900
+--- !u!114 &1419542585726163654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -620,24 +377,51 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/PickUp
+  m_Name: event:/Ambient/OpenDoor
   m_EditorClassIdentifier: 
-  Path: event:/SFX/PickUp
+  Path: event:/Ambient/OpenDoor
   Guid:
-    Data1: -131535698
-    Data2: 1232105282
-    Data3: 1303938720
-    Data4: -1791557098
+    Data1: -430288220
+    Data2: 1258238560
+    Data3: -135003243
+    Data4: 1508496345
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
-  Is3D: 0
+  Is3D: 1
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
+  MaxDistance: 10
+  Length: 4670
+--- !u!114 &1906740911112428076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Ambient/MenuMusic
+  m_EditorClassIdentifier: 
+  Path: event:/Ambient/MenuMusic
+  Guid:
+    Data1: 1494043854
+    Data2: 1340547814
+    Data3: 2115580330
+    Data4: 1386907479
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
   MaxDistance: 20
-  Length: 0
---- !u!114 &8628862449532103761
+  Length: 31294
+--- !u!114 &2017277306522510353
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -656,11 +440,227 @@ MonoBehaviour:
     Data3: -164473964
     Data4: 171408743
   Banks:
-  - {fileID: -7514493059691930883}
+  - {fileID: 449710013043388044}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
+  Length: 0
+--- !u!114 &2631439292441236211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/Falling
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/Falling
+  Guid:
+    Data1: 1686065640
+    Data2: 1129608821
+    Data3: 1119585964
+    Data4: 572773351
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &3975117942349173378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/Running
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/Running
+  Guid:
+    Data1: -458771021
+    Data2: 1105704505
+    Data3: -1880736327
+    Data4: -1791583878
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 682
+--- !u!114 &6350228595614694126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/Walking
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/Walking
+  Guid:
+    Data1: -1780951893
+    Data2: 1212435035
+    Data3: -1137716860
+    Data4: -154822056
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &7233618560948401032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/PickUp
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/PickUp
+  Guid:
+    Data1: -131535698
+    Data2: 1232105282
+    Data3: 1303938720
+    Data4: -1791557098
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &7945105789362165978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Gancho/UsarGancho
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Gancho/UsarGancho
+  Guid:
+    Data1: 1536313052
+    Data2: 1326718121
+    Data3: -194682957
+    Data4: -732719691
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 0
+--- !u!114 &8048024500018515637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Player/RunningCueva
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Player/RunningCueva
+  Guid:
+    Data1: 637620424
+    Data2: 1106605812
+    Data3: 1391861667
+    Data4: 817303841
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1520
+--- !u!114 &8451342407431390579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Fogata
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Fogata
+  Guid:
+    Data1: -1757606658
+    Data2: 1194289721
+    Data3: -1792925270
+    Data4: -1041671345
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 5.8
+  MaxDistance: 20
+  Length: 5500
+--- !u!114 &8675735508390093089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Gancho/SacarGancho
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Gancho/SacarGancho
+  Guid:
+    Data1: 77041051
+    Data2: 1115541228
+    Data3: -550434432
+    Data4: -129813150
+  Banks:
+  - {fileID: 449710013043388044}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
   Length: 0

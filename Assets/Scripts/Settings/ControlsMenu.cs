@@ -11,6 +11,7 @@ public class ControlsMenu : MonoBehaviour
 {
     public static ControlsMenu Instance;
     public bool IsRebindPanelVisible => rebindPanel != null && rebindPanel.activeInHierarchy;
+    public bool IsConflictPanelVisible => conflictPanel != null && conflictPanel.activeInHierarchy;
 
     [Header("Filas de Controles")]
     [Tooltip("Arrastra aqui el panel donde estan los botones de rebind (ControlsPanel).\nSi se deja vacio, busca las filas como hijos de este objeto.")]

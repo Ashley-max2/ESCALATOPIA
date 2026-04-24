@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7706877111800329777}
   - component: {fileID: 5308123749949168640}
   - component: {fileID: 228520248586530910}
+  - component: {fileID: 1635192600240122861}
   - component: {fileID: 629076208459401393}
   - component: {fileID: 6397048273884976069}
   - component: {fileID: 5223750590258687490}
@@ -74,7 +75,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c393ab72b8d2d9648ad6daef3710859f, type: 2}
+  - {fileID: 2100000, guid: 3a296564cef169c448adc7276062948b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,6 +147,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1635192600240122861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167365225216592441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2addb212ddd215d4099bdd593f68df67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &629076208459401393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bindings: []
   mouseSensitivity: 2
-  gamepadCameraSensitivity: 3
+  gamepadCameraSensitivity: 0.5
   gamepadDeadzone: 0.25
   inputSchemeSwitchDelay: 0.5
   rebindTriggerSuppressSeconds: 0.5
@@ -192,8 +205,8 @@ MonoBehaviour:
   lowJumpMultiplier: 2
   coyoteTime: 0.15
   jumpBufferTime: 0.1
-  climbSpeed: 6
-  climbStaminaCost: 10
+  climbSpeed: 4
+  climbStaminaCost: 3
   wallJumpForce: 8
   wallJumpUpwardForce: 6
   climbCheckDistance: 0.6
@@ -207,7 +220,7 @@ MonoBehaviour:
   groundCheckRadius: 0.3
   groundMask:
     serializedVersion: 2
-    m_Bits: 1536
+    m_Bits: 5632
   maxWalkableSlope: 45
   lethalFallHeight: 15
   safeFallHeight: 5
@@ -253,13 +266,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6dbd52498b3d864fa09291ad53567b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRange: 25
+  maxRange: 40
   detectionRadius: 3
   hookableMask:
     serializedVersion: 2
     m_Bits: 2048
   hookPointTag: HookPoint
-  travelSpeed: 12
+  travelSpeed: 50
   cooldown: 1
   ropeRenderer: {fileID: 0}
   hookOrigin: {fileID: 2313725668745862014}
@@ -301,7 +314,7 @@ MonoBehaviour:
   capaAgarrable:
     serializedVersion: 2
     m_Bits: 4096
-  fuerzaLanzamiento: 100
+  fuerzaLanzamiento: 69
 --- !u!1 &7173003493043281783
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,7 +528,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0

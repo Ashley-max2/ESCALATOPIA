@@ -16,6 +16,9 @@ public class PlayerGroundedState : PlayerBaseState
         ctx.IsClimbing = false;
         ctx.CurrentVelocity = new Vector3(ctx.Rb.velocity.x, 0, ctx.Rb.velocity.z);
         
+        // Desactivar Landing después de reproducir EndJump
+        ctx.Animator.SetBool("Landing", false);
+        
         // Check for fall damage
         if (ctx.FallStartHeight > 0)
         {
