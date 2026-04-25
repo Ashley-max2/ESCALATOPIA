@@ -20,9 +20,23 @@ public class BossRaceManager : MonoBehaviour
     [Tooltip("El script/GameObject de cambio de escena que será activado")]
     public SceneChangeTrigger creditSceneChanger;
 
-    [Header("Subtítulos de Resultado")]
-    [Tooltip("Script que muestra los subtítulos de victoria y derrota")]
+    [Header("Subtítulos de Resultado (LEGACY)")]
+    [Tooltip("Script que muestra los subtítulos de victoria y derrota (opcional si usas CharacterDialogue)")]
     public RaceResultSubtitles raceResultSubtitles;
+
+    [Header("Nuevo Sistema de Diálogos")]
+    [Tooltip("Script CharacterDialogue del personaje (si se asigna, usará este en lugar de RaceResultSubtitles)")]
+    public CharacterDialogue characterDialogue;
+
+    [Tooltip("Script que reinicia la carrera después de perder (si se asigna con nuevo sistema de diálogos)")]
+    public RaceRestartController raceRestartController;
+
+    private bool useCharacterDialogue = false;
+
+    private void Start()
+    {
+        useCharacterDialogue = characterDialogue != null;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -50,16 +64,37 @@ public class BossRaceManager : MonoBehaviour
         // 3. Reactiva el objeto
         gameObject.SetActive(true);
 
-        // 4. Mostrar subtítulos de derrota (teletransporta al player a la fogata al acabar)
-        if (raceResultSubtitles != null)
+        // 4. Mostrar diálogo de derrota
+        if (useCharacterDialogue && characterDialogue != null)
+        {
+            characterDialogue.ShowLoseDialogue();
+            // Reiniciar la carrera después de mostrar el diálogo
+            if (raceRestartController != null)
+            {
+                Invoke(nameof(RestartRaceAfterDelay), 2f); // pequeño delay para que se vea el diálogo
+            }
+        }
+        else if (raceResultSubtitles != null)
         {
             raceResultSubtitles.ShowDefeat();
+            // Si usas el sistema antiguo, el BossManager también reinicia
+            if (bossManager != null)
+            {
+                bossManager.RestartRace();
+            }
         }
-
-        // 5. Se llama a BossManager para reiniciarlo
-        if (bossManager != null)
+        // Si no usas ni el nuevo ni el antiguo, al menos reinicia con BossManager
+        else if (bossManager != null)
         {
             bossManager.RestartRace();
+        }
+    }
+
+    private void RestartRaceAfterDelay()
+    {
+        if (raceRestartController != null)
+        {
+            raceRestartController.RestartRace();
         }
     }
 
@@ -71,8 +106,8 @@ public class BossRaceManager : MonoBehaviour
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
 
-        // 2. Desactivar el NPC de la puerta ANTES de ShowVictory
-        //    (su OnDisable oculta el PanelNPC → si lo hacemos antes, ShowVictory lo reactiva limpio)
+        // 2. Desactivar el NPC de la puerta ANTES de mostrar resultado
+        //    (su OnDisable oculta el PanelNPC → si lo hacemos antes, se reactiva limpio)
         if (creditDoorNPCInteractable != null)
         {
             creditDoorNPCInteractable.gameObject.SetActive(false);
@@ -86,15 +121,20 @@ public class BossRaceManager : MonoBehaviour
             creditSceneChanger.enabled = true;
         }
 
-        // 4. Mostrar subtítulos de victoria (ahora nada apagará el panel durante la corrutina)
-        if (raceResultSubtitles != null)
+        // 4. Mostrar diálogo de victoria
+        if (useCharacterDialogue && characterDialogue != null)
         {
-            Debug.Log("[BossRaceManager] Llamando ShowVictory()...");
+            Debug.Log("[BossRaceManager] Llamando ShowWinDialogue() del CharacterDialogue...");
+            characterDialogue.ShowWinDialogue();
+        }
+        else if (raceResultSubtitles != null)
+        {
+            Debug.Log("[BossRaceManager] Llamando ShowVictory() del RaceResultSubtitles...");
             raceResultSubtitles.ShowVictory();
         }
         else
         {
-            Debug.LogError("[BossRaceManager] raceResultSubtitles es NULL. Asígnalo en el Inspector del BossRaceManager.");
+            Debug.LogError("[BossRaceManager] No hay CharacterDialogue ni RaceResultSubtitles asignados.");
         }
 
         // 5. Hacer el diamante invisible sin desactivar el GameObject completo
