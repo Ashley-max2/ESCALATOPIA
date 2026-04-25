@@ -3381,6 +3381,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6510034829835026239, guid: 0bcce96e04668c243bdeb0a955b182f5, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3622,7 +3626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4941,6 +4945,12 @@ MonoBehaviour:
   pausePanel: {fileID: 1168180518}
   pauseBlockedScenes:
   - Creditos
+  - Main_Menu
+  hudPanelsToHideOnPause:
+  - {fileID: 1603823142}
+  - {fileID: 4377613208155059880}
+  - {fileID: 2140573108}
+  - {fileID: 943105342}
 --- !u!1001 &1345440170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6427,6 +6437,11 @@ MeshCollider:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2151937742911513251, guid: 2f57b399b656cbc4ab4af4b92bb88803, type: 3}
   m_PrefabInstance: {fileID: 1734222439}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1603823142 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 739316724638168098, guid: 0bcce96e04668c243bdeb0a955b182f5, type: 3}
+  m_PrefabInstance: {fileID: 886091208}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1616134360 stripped
 Transform:
