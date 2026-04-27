@@ -49,14 +49,12 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float airControl = 0.5f;
     [SerializeField] private float fallMultiplier = 2.5f;
-    [SerializeField] private float lowJumpMultiplier = 2f;
     [SerializeField] private float coyoteTime = 0.15f;
     [SerializeField] private float jumpBufferTime = 0.1f;
     
     public float JumpForce => jumpForce;
     public float AirControl => airControl;
     public float FallMultiplier => fallMultiplier;
-    public float LowJumpMultiplier => lowJumpMultiplier;
     public float CoyoteTime => coyoteTime;
     public float JumpBufferTime => jumpBufferTime;
     #endregion
@@ -83,6 +81,14 @@ public class PlayerStateMachine : MonoBehaviour
     public float MantleExtraHeight => mantleExtraHeight;
     public float MinClimbAngle => minClimbAngle;
     public float MaxClimbAngle => maxClimbAngle;
+    #endregion
+    
+    #region Hook Settings
+    [Header("=== HOOK ===")]
+    [Tooltip("Tiempo en segundos de aceleración inicial del gancho")]
+    [SerializeField] private float hookAccelerationTime = 0.3f;
+    
+    public float HookAccelerationTime => hookAccelerationTime;
     #endregion
     
     #region Ground Check
@@ -208,6 +214,7 @@ public class PlayerStateMachine : MonoBehaviour
         UpdateMovementAudio();
 
         // Player animator controller
+        if (Animator == null) return;
         switch (CurrentState)
         {
             case PlayerGroundedState:
@@ -408,7 +415,7 @@ public class PlayerStateMachine : MonoBehaviour
     }
     
     /// <summary>
-    /// Aplica la mecánica de "mejor salto" estilo plataformero moderno
+    /// Aplica gravedad extra al caer para mejor sensación de salto
     /// </summary>
     public void ApplyBetterJumpPhysics()
     {
@@ -416,11 +423,6 @@ public class PlayerStateMachine : MonoBehaviour
         {
             // Falling - apply extra gravity
             Rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
-        }
-        else if (Rb.velocity.y > 0 && !Input.JumpHeld)
-        {
-            // Rising but not holding jump - cut jump short
-            Rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
     

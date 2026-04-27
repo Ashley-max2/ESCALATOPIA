@@ -3,6 +3,8 @@ using UnityEngine;
 /// <summary>
 /// Sistema de gancho (Grappling Hook).
 /// Permite al jugador engancharse a puntos específicos y viajar hacia ellos.
+/// También permite atraer objetos con la capa pullableMask.
+/// Pulsar "R" cambia entre modo hookpoint y modo atraer objetos.
 /// </summary>
 public class GrapplingHook : MonoBehaviour
 {
@@ -18,20 +20,46 @@ public class GrapplingHook : MonoBehaviour
     [SerializeField] private float travelSpeed = 20f;
     [SerializeField] private float cooldown = 1f;
     
+    [Header("=== PULL OBJECTS ===")]
+    [Tooltip("Capa de objetos que se pueden atraer con el gancho")]
+    [SerializeField] private LayerMask pullableMask;
+    [SerializeField] private float pullSpeed = 15f;
+    [SerializeField] private float pullStopDistance = 1.5f;
+    
     [Header("=== VISUALS ===")]
     [SerializeField] private LineRenderer ropeRenderer;
     [SerializeField] private Transform hookOrigin;
     [SerializeField] private punteia uiPunteia;
+    [Tooltip("Desactivar si hay un CuerdaRenderer externo manejando la cuerda")]
+    [SerializeField] private bool usarRendererInterno = true;
     
     // Properties
     public float TravelSpeed => travelSpeed;
+    public float PullSpeed => pullSpeed;
+    public float PullStopDistance => pullStopDistance;
     public bool IsActive { get; private set; }
-    public Vector3 CurrentTarget { get; private set; }
+    public Vector3 CurrentTarget { get; set; }
+    public bool IsPulling { get; private set; }
+    public Rigidbody PulledObject { get; private set; }
+    public Transform HookOrigin => hookOrigin;
+    
+    /// <summary>
+    /// Referencia al CuerdaRenderer para saber si la cuerda ha llegado al destino.
+    /// </summary>
+    public CuerdaRenderer Cuerda { get; private set; }
+    
+    /// <summary>
+    /// Modo actual del gancho: true = modo atraer objetos, false = modo hookpoint
+    /// </summary>
+    public bool ModoPull { get; private set; } = false;
     
     // Runtime
     private float _lastFireTime;
     private Transform _currentHookPoint;
     private Transform _playerTransform;
+    
+    // Referencia al sistema de agarrar para saber si tiene un objeto
+    private AgarrarLanzarSoltar _agarrarSystem;
     
     private void Awake()
     {
@@ -39,6 +67,9 @@ public class GrapplingHook : MonoBehaviour
         
         if (hookOrigin == null)
             hookOrigin = transform;
+        
+        // Buscar CuerdaRenderer en hijos
+        Cuerda = GetComponentInChildren<CuerdaRenderer>();
         
         // Setup line renderer if not assigned
         if (ropeRenderer == null)
@@ -54,16 +85,42 @@ public class GrapplingHook : MonoBehaviour
         ropeRenderer.enabled = false;
     }
     
+    private void Start()
+    {
+        // Buscar el sistema de agarrar en el player
+        if (_playerTransform != null)
+            _agarrarSystem = _playerTransform.GetComponentInChildren<AgarrarLanzarSoltar>();
+        if (_agarrarSystem == null)
+            _agarrarSystem = FindObjectOfType<AgarrarLanzarSoltar>();
+    }
+    
     private void Update()
     {
+        // Cambiar modo con R
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ModoPull = !ModoPull;
+            Debug.Log($"Gancho modo: {(ModoPull ? "ATRAER OBJETOS" : "HOOKPOINT")}");
+        }
+        
         UpdateRopeVisual();
         
         // Actualizar el color de la UI
         if (uiPunteia != null)
         {
-            if (!IsActive && FindBestTarget() != Vector3.zero)
+            if (!IsActive)
             {
-                uiPunteia.ActivarColorHookpoint();
+                bool hayObjetivo = false;
+
+                if (ModoPull)
+                    hayObjetivo = TryFindPullTarget() != null;
+                else
+                    hayObjetivo = FindBestTarget() != Vector3.zero;
+
+                if (hayObjetivo)
+                    uiPunteia.ActivarColorHookpoint();
+                else
+                    uiPunteia.DesactivarColorHookpoint();
             }
             else
             {
@@ -81,6 +138,14 @@ public class GrapplingHook : MonoBehaviour
         if (Time.time - _lastFireTime < cooldown) return false;
         
         return true;
+    }
+    
+    /// <summary>
+    /// Comprueba si hay un objeto agarrado (no se puede enganchar un objeto que ya tienes)
+    /// </summary>
+    public bool TieneObjetoAgarrado()
+    {
+        return _agarrarSystem != null && _agarrarSystem.TieneObjeto;
     }
     
     /// <summary>
@@ -132,7 +197,37 @@ public class GrapplingHook : MonoBehaviour
     }
     
     /// <summary>
-    /// Dispara el gancho hacia el mejor objetivo disponible
+    /// Busca un objeto atraíble en la dirección de la cámara (raycast directo).
+    /// Solo busca si pullableMask está configurado.
+    /// No puede atraer objetos que estén agarrados por el player.
+    /// </summary>
+    public Rigidbody TryFindPullTarget()
+    {
+        if (pullableMask == 0) return null;
+        
+        Transform cam = Camera.main?.transform;
+        if (cam == null) return null;
+        
+        if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, maxRange, pullableMask))
+        {
+            Rigidbody rb = hit.collider.GetComponentInParent<Rigidbody>();
+            if (rb != null)
+            {
+                // No atraer objetos que están siendo agarrados por el player
+                if (_agarrarSystem != null && _agarrarSystem.EsObjetoAgarrado(rb.gameObject))
+                    return null;
+            }
+            return rb;
+        }
+        return null;
+    }
+    
+    /// <summary>
+    /// Dispara el gancho según el modo actual.
+    /// En modo hookpoint: se engancha al punto más cercano.
+    /// En modo pull: atrae un objeto hacia el jugador.
+    /// Retorna el target o Vector3.zero si falla (modo hookpoint).
+    /// Para modo pull, usar FireInCurrentMode() que retorna info completa.
     /// </summary>
     public Vector3 Fire()
     {
@@ -156,6 +251,27 @@ public class GrapplingHook : MonoBehaviour
     }
     
     /// <summary>
+    /// Dispara el gancho para atraer un objeto hacia el jugador.
+    /// Retorna el Rigidbody del objeto si se encontró, null si no.
+    /// </summary>
+    public Rigidbody FirePull()
+    {
+        Rigidbody target = TryFindPullTarget();
+        if (target == null) return null;
+        
+        IsActive = true;
+        IsPulling = true;
+        PulledObject = target;
+        CurrentTarget = target.position;
+        _lastFireTime = Time.time;
+        
+        ropeRenderer.enabled = true;
+        
+        Debug.Log($"Hook pulling object {target.name}");
+        return target;
+    }
+    
+    /// <summary>
     /// Libera el gancho
     /// </summary>
     public void Release()
@@ -168,13 +284,34 @@ public class GrapplingHook : MonoBehaviour
         ropeRenderer.enabled = false;
     }
     
+    /// <summary>
+    /// Libera el gancho de atracción de objeto, deteniendo el objeto
+    /// </summary>
+    public void ReleasePull()
+    {
+        if (PulledObject != null)
+        {
+            PulledObject.velocity = Vector3.zero;
+            PulledObject.angularVelocity = Vector3.zero;
+        }
+        IsPulling = false;
+        PulledObject = null;
+        Release();
+    }
+    
     private void UpdateRopeVisual()
     {
+        if (!usarRendererInterno) return;
         if (!IsActive || ropeRenderer == null) return;
         
         ropeRenderer.positionCount = 2;
         ropeRenderer.SetPosition(0, hookOrigin.position);
-        ropeRenderer.SetPosition(1, CurrentTarget);
+        
+        // Si estamos atrayendo un objeto, la cuerda va hacia él
+        if (IsPulling && PulledObject != null)
+            ropeRenderer.SetPosition(1, PulledObject.position);
+        else
+            ropeRenderer.SetPosition(1, CurrentTarget);
     }
     
     private void OnDrawGizmosSelected()

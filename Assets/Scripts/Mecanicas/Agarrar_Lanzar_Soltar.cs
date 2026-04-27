@@ -1,4 +1,7 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+
+
+
 
 public class AgarrarLanzarSoltar : MonoBehaviour
 {
@@ -6,13 +9,26 @@ public class AgarrarLanzarSoltar : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private Transform followPoint;
 
-    [Header("Configuración")]
+    [Header("Configuracion")]
     [SerializeField] private float distanciaMax = 3f;
     [SerializeField] private LayerMask capaAgarrable;
     [SerializeField] private float fuerzaLanzamiento = 10f;
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
+
+    /// <summary>
+    /// True si el player tiene un objeto agarrado
+    /// </summary>
+    public bool TieneObjeto => objetoActual != null;
+
+    /// <summary>
+    /// Comprueba si un GameObject especifico es el que esta agarrado
+    /// </summary>
+    public bool EsObjetoAgarrado(GameObject obj)
+    {
+        return objetoActual != null && objetoActual == obj;
+    }
 
     void Awake()
     {
@@ -23,8 +39,8 @@ public class AgarrarLanzarSoltar : MonoBehaviour
     {
         Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
-        // R = agarrar / soltar
-        if (Input.GetKeyDown(KeyCode.R))
+        // E = agarrar / soltar
+        if (Input.GetKeyDown(KeyCode.E))
         {
             if (objetoActual == null)
                 IntentarAgarrar();

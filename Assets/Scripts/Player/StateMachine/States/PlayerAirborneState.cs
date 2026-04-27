@@ -40,7 +40,7 @@ public class PlayerAirborneState : PlayerBaseState
     public override void FixedExecute()
     {
         HandleAirControl();
-        ApplyBetterJumpPhysics();
+        ApplyFallGravity();
     }
     
     public override void Exit()
@@ -59,9 +59,16 @@ public class PlayerAirborneState : PlayerBaseState
         }
     }
     
-    private void ApplyBetterJumpPhysics()
+    /// <summary>
+    /// Solo aplica gravedad extra al caer. El salto siempre sube lo mismo.
+    /// </summary>
+    private void ApplyFallGravity()
     {
-        ctx.ApplyBetterJumpPhysics();
+        if (ctx.Rb.velocity.y < 0)
+        {
+            // Caída - aplica gravedad extra para que caiga más rápido
+            ctx.Rb.velocity += Vector3.up * Physics.gravity.y * (ctx.FallMultiplier - 1) * Time.fixedDeltaTime;
+        }
     }
     
     private void CheckTransitions()
