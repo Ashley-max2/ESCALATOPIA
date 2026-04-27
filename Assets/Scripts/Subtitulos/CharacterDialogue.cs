@@ -26,7 +26,8 @@ public class DialoguePhase
 /// Controla el diálogo secuencial de un NPC con varias fases de conversación.
 ///
 /// - Muestra un prompt "E" cuando el jugador está cerca.
-/// - Avanza cada frase solamente al pulsar E o clic izquierdo.
+/// - Avanza cada frase automáticamente al terminar de escribirse.
+/// - La tecla E se usa como salto inmediato.
 /// - Reproduce un efecto de máquina de escribir en cada línea.
 /// - El diálogo cambia dependiendo de si el objeto ha sido recogido.
 /// - Permite mostrar diálogos de victoria/derrota desde código.
@@ -38,6 +39,9 @@ public class CharacterDialogue : MonoBehaviour
     [SerializeField] private GameObject subtitlePanel;
     [SerializeField] private TextMeshProUGUI subtitleText;
     [SerializeField] private float typingSpeed = 0.04f;
+
+    [Header("Dialogue Behaviour")]
+    [SerializeField] private float autoAdvanceDelay = 1.25f;
 
     [Header("Dialogue Phases")]
     [SerializeField] private List<DialoguePhase> dialoguePhases = new List<DialoguePhase>
@@ -129,6 +133,12 @@ public class CharacterDialogue : MonoBehaviour
     [Tooltip("Evento que se dispara cuando termina el diálogo de inicio de carrera.")]
     public UnityEvent onReadyToStartRace;
 
+    [Tooltip("Evento que se dispara cuando termina el diálogo de derrota.")]
+    public UnityEvent onLoseDialogueFinished;
+
+    [Tooltip("Evento que se dispara cuando termina el diálogo de victoria.")]
+    public UnityEvent onWinDialogueFinished;
+
     private bool playerInsideTrigger = false;
     private bool entryFrameCooldown = false;
     private bool showingSubtitle = false;
@@ -136,6 +146,7 @@ public class CharacterDialogue : MonoBehaviour
     private bool interactionEnabled = true;
     private Coroutine typewriterCoroutine;
     private int currentLineIndex = 0;
+    private float autoAdvanceTimer = 0f;
     private DialoguePhaseType currentPhase;
     private List<string> currentLines;
 
@@ -151,7 +162,7 @@ public class CharacterDialogue : MonoBehaviour
 
     private void Update()
     {
-        if (!playerInsideTrigger || !CanInteract())
+        if (!showingSubtitle && (!playerInsideTrigger || !CanInteract()))
         {
             if (promptE != null)
                 promptE.SetActive(false);
@@ -179,6 +190,15 @@ public class CharacterDialogue : MonoBehaviour
                 AdvanceSubtitle();
             }
         }
+
+        if (showingSubtitle && !isTyping)
+        {
+            autoAdvanceTimer += Time.deltaTime;
+            if (autoAdvanceTimer >= autoAdvanceDelay)
+            {
+                AdvanceSubtitle();
+            }
+        }
     }
 
     private bool CanInteract()
@@ -193,7 +213,7 @@ public class CharacterDialogue : MonoBehaviour
 
     private bool AdvancePressed()
     {
-        return Input.GetKeyDown(KeyCode.E) || Input.GetMouseButtonDown(0);
+        return Input.GetKeyDown(KeyCode.E);
     }
 
     public void SetInteractionEnabled(bool enabled)
@@ -276,6 +296,11 @@ public class CharacterDialogue : MonoBehaviour
             return;
         }
 
+        if (phaseType == DialoguePhaseType.StartRace && bossManager != null)
+        {
+            bossManager.SetFinalObjectActive(true);
+        }
+
         currentPhase = phaseType;
         currentLines = phase.lines;
         currentLineIndex = 0;
@@ -287,6 +312,8 @@ public class CharacterDialogue : MonoBehaviour
             typewriterCoroutine = null;
         }
 
+        autoAdvanceTimer = 0f;
+
         if (promptE != null) promptE.SetActive(false);
         if (subtitlePanel != null) subtitlePanel.SetActive(true);
 
@@ -297,6 +324,8 @@ public class CharacterDialogue : MonoBehaviour
     {
         if (subtitleText == null || currentLines == null || currentLineIndex >= currentLines.Count)
             return;
+
+        autoAdvanceTimer = 0f;
 
         if (typewriterCoroutine != null)
         {
@@ -338,6 +367,7 @@ public class CharacterDialogue : MonoBehaviour
 
         subtitleText.text = currentLines[currentLineIndex];
         isTyping = false;
+        autoAdvanceTimer = 0f;
     }
 
     private void AdvanceSubtitle()
@@ -345,6 +375,7 @@ public class CharacterDialogue : MonoBehaviour
         if (!showingSubtitle) return;
 
         currentLineIndex++;
+        autoAdvanceTimer = 0f;
         if (currentLines == null || currentLineIndex >= currentLines.Count)
         {
             FinishCurrentPhase();
@@ -359,6 +390,7 @@ public class CharacterDialogue : MonoBehaviour
     {
         showingSubtitle = false;
         isTyping = false;
+        autoAdvanceTimer = 0f;
 
         if (typewriterCoroutine != null)
         {
@@ -388,6 +420,12 @@ public class CharacterDialogue : MonoBehaviour
                 }
                 SetInteractionEnabled(false);
                 break;
+            case DialoguePhaseType.Lose:
+                onLoseDialogueFinished?.Invoke();
+                break;
+            case DialoguePhaseType.Win:
+                onWinDialogueFinished?.Invoke();
+                break;
             default:
                 break;
         }
@@ -416,6 +454,7 @@ public class CharacterDialogue : MonoBehaviour
         isTyping = false;
         currentLines = null;
         currentLineIndex = 0;
+        autoAdvanceTimer = 0f;
         if (typewriterCoroutine != null)
         {
             StopCoroutine(typewriterCoroutine);
