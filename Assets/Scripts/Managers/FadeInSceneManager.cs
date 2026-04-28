@@ -34,6 +34,6 @@ public class FadeInSceneManager : MonoBehaviour
     private void OnTimelineFinished(PlayableDirector pd)
     {
         Debug.Log("Timeline terminada, cargando escena...");
-        SceneManager.LoadScene(sceneToLoad);
+        LoadingManager.LoadLevel(sceneToLoad);
     }
 }
