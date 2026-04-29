@@ -20,22 +20,34 @@ public class BossRaceManager : MonoBehaviour
     [Tooltip("El script/GameObject de cambio de escena que será activado")]
     public SceneChangeTrigger creditSceneChanger;
 
-    [Header("Subtítulos de Resultado (LEGACY)")]
-    [Tooltip("Script que muestra los subtítulos de victoria y derrota (opcional si usas CharacterDialogue)")]
-    public RaceResultSubtitles raceResultSubtitles;
-
-    [Header("Nuevo Sistema de Diálogos")]
-    [Tooltip("Script CharacterDialogue del personaje (si se asigna, usará este en lugar de RaceResultSubtitles)")]
+    [Header("Sistema de Diálogos")]
+    [Tooltip("Script CharacterDialogue del personaje para mostrar diálogos de victoria y derrota")]
     public CharacterDialogue characterDialogue;
 
-    [Tooltip("Script que reinicia la carrera después de perder (si se asigna con nuevo sistema de diálogos)")]
-    public RaceRestartController raceRestartController;
+    [Tooltip("Teletransportador de la fogata. Solo se usa cuando el Boss gana y el jugador pierde.")]
+    public HazardTeleporter campfireTeleporter;
 
-    private bool useCharacterDialogue = false;
+    private Collider playerCollider;
 
     private void Start()
     {
-        useCharacterDialogue = characterDialogue != null;
+        CachePlayerCollider();
+    }
+
+    private void OnEnable()
+    {
+        if (characterDialogue != null)
+        {
+            characterDialogue.onLoseDialogueFinished.AddListener(HandleLoseDialogueFinished);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (characterDialogue != null)
+        {
+            characterDialogue.onLoseDialogueFinished.RemoveListener(HandleLoseDialogueFinished);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -65,36 +77,54 @@ public class BossRaceManager : MonoBehaviour
         gameObject.SetActive(true);
 
         // 4. Mostrar diálogo de derrota
-        if (useCharacterDialogue && characterDialogue != null)
+        if (characterDialogue != null)
         {
             characterDialogue.ShowLoseDialogue();
-            // Reiniciar la carrera después de mostrar el diálogo
-            if (raceRestartController != null)
-            {
-                Invoke(nameof(RestartRaceAfterDelay), 2f); // pequeño delay para que se vea el diálogo
-            }
-        }
-        else if (raceResultSubtitles != null)
-        {
-            raceResultSubtitles.ShowDefeat();
-            // Si usas el sistema antiguo, el BossManager también reinicia
-            if (bossManager != null)
-            {
-                bossManager.RestartRace();
-            }
-        }
-        // Si no usas ni el nuevo ni el antiguo, al menos reinicia con BossManager
-        else if (bossManager != null)
-        {
-            bossManager.RestartRace();
         }
     }
 
-    private void RestartRaceAfterDelay()
+    private void HandleLoseDialogueFinished()
     {
-        if (raceRestartController != null)
+        if (bossManager != null)
         {
-            raceRestartController.RestartRace();
+            bossManager.RestartRace();
+        }
+
+        if (characterDialogue != null)
+        {
+            characterDialogue.AllowRaceRetry();
+            characterDialogue.SetInteractionEnabled(true);
+        }
+
+        TeleportPlayerToCheckpoint();
+    }
+
+    private void CachePlayerCollider()
+    {
+        GameObject playerGO = GameObject.FindGameObjectWithTag(playerTag);
+        if (playerGO == null)
+            return;
+
+        playerCollider = playerGO.GetComponentInChildren<Collider>();
+        if (playerCollider == null)
+        {
+            playerCollider = playerGO.GetComponent<Collider>();
+        }
+    }
+
+    private void TeleportPlayerToCheckpoint()
+    {
+        if (campfireTeleporter == null)
+            return;
+
+        if (playerCollider == null)
+        {
+            CachePlayerCollider();
+        }
+
+        if (playerCollider != null)
+        {
+            campfireTeleporter.ForceTeleport(playerCollider);
         }
     }
 
@@ -122,19 +152,14 @@ public class BossRaceManager : MonoBehaviour
         }
 
         // 4. Mostrar diálogo de victoria
-        if (useCharacterDialogue && characterDialogue != null)
+        if (characterDialogue != null)
         {
-            Debug.Log("[BossRaceManager] Llamando ShowWinDialogue() del CharacterDialogue...");
+            Debug.Log("[BossRaceManager] Mostrando diálogo de victoria...");
             characterDialogue.ShowWinDialogue();
-        }
-        else if (raceResultSubtitles != null)
-        {
-            Debug.Log("[BossRaceManager] Llamando ShowVictory() del RaceResultSubtitles...");
-            raceResultSubtitles.ShowVictory();
         }
         else
         {
-            Debug.LogError("[BossRaceManager] No hay CharacterDialogue ni RaceResultSubtitles asignados.");
+            Debug.LogError("[BossRaceManager] No hay CharacterDialogue asignado.");
         }
 
         // 5. Hacer el diamante invisible sin desactivar el GameObject completo
