@@ -246,7 +246,7 @@ PlayableDirector:
   m_GameObject: {fileID: 353358026}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 685caccfa52148c4ab2fac49b0471a4c, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -255,6 +255,10 @@ PlayableDirector:
   - key: {fileID: 5668259899787001277, guid: 67f3987c038800d418261f34b97f699a, type: 2}
     value: {fileID: 606977820}
   - key: {fileID: 6122694494705790046, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 441267257}
+  - key: {fileID: 5693895730347711511, guid: 685caccfa52148c4ab2fac49b0471a4c, type: 2}
+    value: {fileID: 606977820}
+  - key: {fileID: -4691596545127726088, guid: 685caccfa52148c4ab2fac49b0471a4c, type: 2}
     value: {fileID: 441267257}
   m_ExposedReferences:
     m_References: []
@@ -343,6 +347,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5918465993006711876, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
       propertyPath: idLlave
+      value: Llave2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7218345163570609486, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: m_Name
       value: Llave2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -3326,6 +3334,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1124647897884654781, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1124647897884654781, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1124647897884654781, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1124647897884654781, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.3916
+      objectReference: {fileID: 0}
+    - target: {fileID: 1124647897884654781, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0471
+      objectReference: {fileID: 0}
+    - target: {fileID: 1124647897884654781, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3054656243999574384, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       propertyPath: m_Name
       value: PROPS
@@ -3349,10 +3381,6 @@ PrefabInstance:
     - target: {fileID: 6631121535001857121, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7370618570435279482, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
-      propertyPath: idLlaveRequerida
-      value: Llave1
       objectReference: {fileID: 0}
     - target: {fileID: 7622308288963569188, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       propertyPath: m_StaticEditorFlags
