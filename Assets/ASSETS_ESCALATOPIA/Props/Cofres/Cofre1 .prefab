@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 877268844328930394}
   - component: {fileID: 2558055815728320378}
   - component: {fileID: 8418391228794282538}
+  - component: {fileID: 2045007894361513173}
   m_Layer: 0
   m_Name: 'TapaCofre1 '
   m_TagString: Untagged
@@ -106,6 +107,27 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8258101256795184531, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
+--- !u!95 &2045007894361513173
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037038204682916432}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6416759772511805221
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,6 +140,8 @@ GameObject:
   - component: {fileID: 4197605477263454123}
   - component: {fileID: 7250403029898657322}
   - component: {fileID: 6986543002599189005}
+  - component: {fileID: 6609504947670391040}
+  - component: {fileID: 2676608070322421155}
   m_Layer: 0
   m_Name: 'Cofre1 '
   m_TagString: Untagged
@@ -213,3 +237,38 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7901270495838132685, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
+--- !u!114 &6609504947670391040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416759772511805221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ad10cd74d7c384197eb38fb294fe1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timelineObject: {fileID: 6416759772511805221}
+  distanciaRay: 10
+--- !u!320 &2676608070322421155
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416759772511805221}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 5668259899787001277, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6122694494705790046, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
