@@ -168,6 +168,7 @@ public class PlayerStateMachine : MonoBehaviour
     private void Start()
     {
         // Iniciar en grounded
+        LastJumpPressTime = -100f;
         TransitionToState(States.Grounded());
         LastGroundedPosition = transform.position;
         

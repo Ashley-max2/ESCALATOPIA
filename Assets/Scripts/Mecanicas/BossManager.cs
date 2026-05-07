@@ -79,6 +79,14 @@ public class BossManager : MonoBehaviour
         ResetRaceState();
     }
 
+    public void SetFinalObjectActive(bool active)
+    {
+        if (finalObject != null)
+        {
+            finalObject.SetActive(active);
+        }
+    }
+
     private void ResetRaceState()
     {
         raceStarted = false;
@@ -101,10 +109,7 @@ public class BossManager : MonoBehaviour
         }
 
         // El objeto final se apaga hasta que vuelvan a correr
-        if (finalObject != null)
-        {
-            finalObject.SetActive(false);
-        }
+        SetFinalObjectActive(false);
     }
 
     private void CacheBossPhysics()
