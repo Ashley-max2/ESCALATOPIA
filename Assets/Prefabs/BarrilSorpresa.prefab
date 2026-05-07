@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2108348202872875074}
     m_Modifications:
+    - target: {fileID: 5053944287238105876, guid: 3ef037e9ad2550f4db79c13b2cd1022c, type: 3}
+      propertyPath: particulasLuz
+      value: 
+      objectReference: {fileID: 3133800384757719738}
     - target: {fileID: 5547165487874969815, guid: 3ef037e9ad2550f4db79c13b2cd1022c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -133,5 +137,10 @@ PrefabInstance:
 --- !u!4 &2108348202872875074 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+  m_PrefabInstance: {fileID: 3531674647720518776}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3133800384757719738 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1909097130980869826, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
   m_PrefabInstance: {fileID: 3531674647720518776}
   m_PrefabAsset: {fileID: 0}
