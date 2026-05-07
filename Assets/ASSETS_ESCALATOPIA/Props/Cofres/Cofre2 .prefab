@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1433443402688052296}
   - component: {fileID: 2583726562450046528}
   - component: {fileID: 4082952254415298384}
+  - component: {fileID: 581012788530390288}
+  - component: {fileID: 7669718556025621379}
   m_Layer: 0
   m_Name: 'Cofre2 '
   m_TagString: Untagged
@@ -85,6 +87,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &581012788530390288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204628156051395334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49052e4a6f90f3541a34f55e4b17858c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idLlaveRequerida: Llave1
+  timelineObject: {fileID: 204628156051395334}
+--- !u!320 &7669718556025621379
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204628156051395334}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 5668259899787001277, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 8775290483362234684}
+  - key: {fileID: 6122694494705790046, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 971328503498252619}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &2125745111432504676
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,6 +133,7 @@ GameObject:
   - component: {fileID: 9066838055875053209}
   - component: {fileID: 7511650718898485473}
   - component: {fileID: 3096288877187278940}
+  - component: {fileID: 8775290483362234684}
   m_Layer: 0
   m_Name: 'TapaCofre2 '
   m_TagString: Untagged
@@ -168,6 +206,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &8775290483362234684
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125745111432504676}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &7370328484214834236
 PrefabInstance:
   m_ObjectHideFlags: 0

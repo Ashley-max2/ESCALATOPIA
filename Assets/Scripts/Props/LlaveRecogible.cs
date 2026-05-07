@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class LlaveRecogible : MonoBehaviour
 {
-    public static bool llaveRecogida = false;
+    [SerializeField] private string idLlave;
 
     [SerializeField] private ParticleSystem particulasLuz;
 
@@ -19,8 +19,13 @@ public class LlaveRecogible : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            llaveRecogida = true;
+            // Guardar en inventario
+            if (InventarioLlaves.instancia != null)
+            {
+                InventarioLlaves.instancia.AgregarLlave(idLlave);
+            }
 
+            // Desaparecer visualmente
             foreach (Renderer r in renderers)
                 r.enabled = false;
 
@@ -30,7 +35,7 @@ public class LlaveRecogible : MonoBehaviour
             if (particulasLuz != null)
                 Destroy(particulasLuz.gameObject);
 
-            Debug.Log("Llave recogida");
+            Debug.Log("Llave recogida: " + idLlave);
         }
     }
 }
