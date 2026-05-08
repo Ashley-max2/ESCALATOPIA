@@ -33,6 +33,7 @@ public class GrapplingHook : MonoBehaviour
     private float _lastFireTime;
     private Transform _currentHookPoint;
     private Transform _playerTransform;
+    private Vector3 _smoothedAimForward;
     
     private void Awake()
     {
@@ -40,6 +41,10 @@ public class GrapplingHook : MonoBehaviour
         
         if (hookOrigin == null)
             hookOrigin = transform;
+        
+        // Inicializar dirección suavizada
+        Transform cam = Camera.main != null ? Camera.main.transform : null;
+        _smoothedAimForward = cam != null ? cam.forward : _playerTransform.forward;
         
         // Setup line renderer if not assigned
         if (ropeRenderer == null)
@@ -57,7 +62,17 @@ public class GrapplingHook : MonoBehaviour
     
     private void Update()
     {
+        // Suavizar la dirección de apuntado
+        Transform cam = Camera.main != null ? Camera.main.transform : null;
+        if (cam != null)
+        {
+            _smoothedAimForward = Vector3.Slerp(_smoothedAimForward, cam.forward, Time.deltaTime * 20f); // Aumentado a 20f para más suavidad
+        }
+        
         UpdateRopeVisual();
+        
+        // Dibujar rayo rojo suavizado para debug (dirección de apuntado)
+        Debug.DrawRay(_playerTransform.position + Vector3.up, _smoothedAimForward * maxRange, Color.red);
         
         // Actualizar el color de la UI
         if (uiPunteia != null)
@@ -94,7 +109,7 @@ public class GrapplingHook : MonoBehaviour
         
         // Usar la direccion de la camara para apuntar (hay que mirar al hook point)
         Transform cam = Camera.main != null ? Camera.main.transform : null;
-        Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
+        Vector3 aimForward = _smoothedAimForward;
         
         // Find all potential hook points
         Collider[] colliders = Physics.OverlapSphere(_playerTransform.position, maxRange, hookableMask);

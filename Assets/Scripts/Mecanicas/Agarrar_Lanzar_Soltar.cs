@@ -6,22 +6,27 @@ public class AgarrarLanzarSoltar : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private Transform followPoint;
 
-    [Header("Configuración")]
+    [Header("Configuraciï¿½n")]
     [SerializeField] private float distanciaMax = 3f;
     [SerializeField] private LayerMask capaAgarrable;
     [SerializeField] private float fuerzaLanzamiento = 5f; // fuerza reducida
+    [SerializeField] private float smoothSpeed = 20f; // Velocidad de suavizado del rayo (aumentada para mÃ¡s suavidad)
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
+    private Vector3 smoothedForward;
 
     void Awake()
     {
         if (cam == null) cam = Camera.main;
+        smoothedForward = cam.transform.forward;
     }
 
     void Update()
     {
-        Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
+        // Suavizar la direcciÃ³n del rayo usando interpolaciÃ³n esfÃ©rica para direcciones
+        smoothedForward = Vector3.Slerp(smoothedForward, cam.transform.forward, Time.deltaTime * smoothSpeed);
+        Debug.DrawRay(cam.transform.position, smoothedForward * distanciaMax, Color.red);
 
         // R = agarrar / soltar
         if (Input.GetKeyDown(KeyCode.R))
@@ -67,10 +72,10 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             rbActual.velocity = Vector3.zero;
             rbActual.angularVelocity = Vector3.zero;
 
-            // rotación fija correcta
+            // rotaciï¿½n fija correcta
             obj.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
 
-            // bloquear rotación
+            // bloquear rotaciï¿½n
             rbActual.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
@@ -85,12 +90,12 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
         rbActual.useGravity = true;
 
-        // desbloquear física completa
+        // desbloquear fï¿½sica completa
         rbActual.constraints = RigidbodyConstraints.None;
 
         rbActual.freezeRotation = false;
 
-        // lanzamiento en arco (45°)
+        // lanzamiento en arco (45ï¿½)
         Vector3 direccion =
             (cam.transform.forward + Vector3.up).normalized;
 
@@ -99,7 +104,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             ForceMode.Impulse
         );
 
-        // activar lógica del barril
+        // activar lï¿½gica del barril
         ThrownBox thrown = objetoActual.GetComponent<ThrownBox>();
 
         if (thrown == null)

@@ -3661,6 +3661,7 @@ GameObject:
   - component: {fileID: 943105345}
   - component: {fileID: 943105344}
   - component: {fileID: 943105346}
+  - component: {fileID: 943105347}
   m_Layer: 5
   m_Name: Punteria
   m_TagString: Untagged
@@ -3685,7 +3686,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 10}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &943105344
 MonoBehaviour:
@@ -3707,7 +3708,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1198118750, guid: 1786050ae8f96da448bf6618b5b313fd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3739,6 +3740,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imagen: {fileID: 943105344}
   colorEnganchable: {r: 1, g: 0, b: 0.028076172, a: 1}
+--- !u!114 &943105347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943105342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0edd50a293f345645a1014f9f69c474b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grapplingHook: {fileID: 2070027121}
+  miraRectTransform: {fileID: 943105343}
 --- !u!1 &946325650
 GameObject:
   m_ObjectHideFlags: 0
@@ -5162,7 +5177,6 @@ Transform:
   - {fileID: 1434632001}
   - {fileID: 2111172742}
   - {fileID: 946325651}
-  - {fileID: 2139602800}
   - {fileID: 688201712}
   - {fileID: 519406112}
   - {fileID: 1841396508907224443}
@@ -9083,6 +9097,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2070027121 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6358550011126728178, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+  m_PrefabInstance: {fileID: 2070027115}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6dbd52498b3d864fa09291ad53567b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2071753026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9227,55 +9252,6 @@ Transform:
   - {fileID: 902497252}
   - {fileID: 45510109}
   - {fileID: 831126318}
-  m_Father: {fileID: 1354558676}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2139602798
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2139602800}
-  - component: {fileID: 2139602799}
-  m_Layer: 0
-  m_Name: Global Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2139602799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139602798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 6f152163f57933041a1c49f4a514cf6b, type: 2}
---- !u!4 &2139602800
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139602798}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -100, y: -24.308735, z: -100}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
   m_Father: {fileID: 1354558676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2140573108
@@ -9761,6 +9737,12 @@ MonoBehaviour:
   bossManager: {fileID: 1419977140}
   disableDuringRace: 1
   onReadyToStartRace:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoseDialogueFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onWinDialogueFinished:
     m_PersistentCalls:
       m_Calls: []
 --- !u!224 &5065058027115593022
