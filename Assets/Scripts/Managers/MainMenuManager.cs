@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button botonContinuar;
 
     [Tooltip("Nombre de la escena inicial del juego (Level_0, etc.)")]
-    [SerializeField] private string escenaInicial = "Level_1";
+    [SerializeField] private string escenaInicial = "Level_0";
 
     private void Start()
     {
