@@ -52,7 +52,7 @@ public class StaminaSystem : MonoBehaviour
         if (amount <= 0) return;
         
         float previousStamina = currentStamina;
-        currentStamina = Mathf.Max(0, currentStamina - amount);
+        currentStamina = Mathf.Max(-5f, currentStamina - amount);
         _lastConsumeTime = Time.time;
         
         // Trigger events

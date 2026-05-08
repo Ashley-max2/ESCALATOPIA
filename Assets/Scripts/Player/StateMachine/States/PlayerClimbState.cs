@@ -5,6 +5,9 @@ using UnityEngine;
 /// Se activa automaticamente al colisionar con Climbable mientras estas en el aire.
 /// Movimiento absoluto en la pared: W=arriba, S=abajo, A=izquierda, D=derecha.
 /// El player SIEMPRE mira hacia la pared, asi WASD siempre funciona igual.
+/// 
+/// Anti-shaking: suaviza las transiciones de normal y rotación para evitar
+/// temblor en bordes y esquinas de la geometría.
 /// </summary>
 public class PlayerClimbState : PlayerBaseState
 {
@@ -12,6 +15,10 @@ public class PlayerClimbState : PlayerBaseState
     private Vector3 _wallNormal;
     private Vector3 _wallRight;  // derecha en la superficie (A/D)
     private Vector3 _wallUp;     // arriba en la superficie (W/S)
+    
+    // Suavizado de normal para evitar temblor en bordes
+    private Vector3 _smoothedWallNormal;
+    private bool _firstWallContact = true;
     
     private float _staminaConsumeTimer;
     private float _offWallTimer = 0f;
@@ -41,8 +48,9 @@ public class PlayerClimbState : PlayerBaseState
         ctx.Rb.velocity = Vector3.zero;
         ctx.Rb.useGravity = false;
         
-        // Calcular ejes de la pared
-        UpdateWallAxes(ctx.WallNormal);
+        // Calcular ejes de la pared (snap inmediato en la primera toma de contacto)
+        _firstWallContact = true;
+        UpdateWallAxes(ctx.WallNormal, true);
         
         // Rotar el player para que MIRE HACIA la pared (forward = -wallNormal)
         SnapRotationToWall();
@@ -103,11 +111,30 @@ public class PlayerClimbState : PlayerBaseState
     }
     
     /// <summary>
-    /// Calcula los ejes de movimiento en la pared
+    /// Calcula los ejes de movimiento en la pared.
+    /// Suaviza las transiciones de normal para evitar temblor en bordes y esquinas.
     /// </summary>
-    private void UpdateWallAxes(Vector3 normal)
+    private void UpdateWallAxes(Vector3 normal, bool snap = false)
     {
-        _wallNormal = normal.normalized;
+        Vector3 newNormal = normal.normalized;
+        
+        if (snap || _firstWallContact)
+        {
+            // Snap inmediato (primera vez o forzado)
+            _wallNormal = newNormal;
+            _smoothedWallNormal = newNormal;
+            _firstWallContact = false;
+        }
+        else
+        {
+            // Ignorar micro-cambios de normal para evitar temblor en bordes
+            float angleDiff = Vector3.Angle(_smoothedWallNormal, newNormal);
+            if (angleDiff < 1.5f) return;
+            
+            // Suavizar la transición de la normal (anti-shaking)
+            _smoothedWallNormal = Vector3.Slerp(_smoothedWallNormal, newNormal, Time.fixedDeltaTime * 6f);
+            _wallNormal = _smoothedWallNormal.normalized;
+        }
         
         // Right desde la perspectiva del player mirando la pared
         // Cross(Normal, Up) da la derecha correcta del jugador
@@ -142,6 +169,13 @@ public class PlayerClimbState : PlayerBaseState
         float horizontal = ctx.Input.MoveX; // A (-1) / D (+1)
         float vertical = ctx.Input.MoveZ;   // S (-1) / W (+1)
         
+        // El player no se mueve si la stamina llego a su limite inferior (-5)
+        if (ctx.Stamina != null && ctx.Stamina.CurrentStamina <= -4.9f)
+        {
+            horizontal = 0;
+            vertical = 0;
+        }
+
         // Movimiento ABSOLUTO referenciado 100% a la pared actual. ¡Nunca a la cámara!
         // W siempre aplica fuerza en `_wallUp`, D siempre en `_wallRight`.
         Vector3 climbDir = (_wallRight * horizontal + _wallUp * vertical).normalized;
@@ -149,10 +183,18 @@ public class PlayerClimbState : PlayerBaseState
         // Aplicar velocidad de escalada
         Vector3 targetVel = climbDir * ctx.ClimbSpeed;
         
-        // Un pequeño empuje hacia la pared para mantener el contacto sin rebotar
-        targetVel += -_wallNormal * 2f;
+        // Empuje proporcional a la distancia de la pared (evita rebote/temblor en bordes)
+        float distToWall = ctx.ClimbCheckDistance;
+        if (Physics.Raycast(ctx.transform.position + Vector3.up * 0.5f, -_wallNormal, 
+            out RaycastHit wallDistHit, ctx.ClimbCheckDistance * 2f, ctx.ClimbableMask))
+        {
+            distToWall = wallDistHit.distance;
+        }
+        float pushForce = Mathf.Clamp(distToWall * 3f, 0.5f, 2f);
+        targetVel += -_wallNormal * pushForce;
         
-        ctx.Rb.velocity = Vector3.Lerp(ctx.Rb.velocity, targetVel, Time.fixedDeltaTime * 10f);
+        // Transición de velocidad suavizada con damping (reduce oscilación)
+        ctx.Rb.velocity = Vector3.Lerp(ctx.Rb.velocity, targetVel, Time.fixedDeltaTime * 8f);
         
         // Consumir stamina extra al moverse
         if (climbDir.sqrMagnitude > 0.01f && ctx.Stamina != null)
@@ -162,23 +204,24 @@ public class PlayerClimbState : PlayerBaseState
     }
     
     /// <summary>
-    /// Mantiene al player pegado a la pared con raycast continuo
+    /// Mantiene al player pegado a la pared con raycast continuo.
+    /// Suaviza la rotación para evitar temblor.
     /// </summary>
     private void MaintainWallContact()
     {
         RaycastHit hit;
         if (ctx.CheckClimbableSurface(out hit))
         {
-            // Actualizar ejes de la pared
+            // Actualizar ejes de la pared (con suavizado anti-shaking)
             UpdateWallAxes(hit.normal);
             
-            // Rotar SUAVEMENTE pero más rápido hacia la pared
-            Vector3 lookDir = -hit.normal;
+            // Rotar SUAVEMENTE hacia la pared (velocidad reducida para evitar temblor)
+            Vector3 lookDir = -_wallNormal;
             lookDir.y = 0;
             if (lookDir.sqrMagnitude > 0.01f)
             {
                 Quaternion targetRot = Quaternion.LookRotation(lookDir, Vector3.up);
-                ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRot, Time.fixedDeltaTime * 15f);
+                ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRot, Time.fixedDeltaTime * 8f);
             }
             
             // Actualizar normal en el contexto
@@ -205,7 +248,6 @@ public class PlayerClimbState : PlayerBaseState
         // Si no hay pared a la altura del pecho o cabeza = estamos en el borde
         float checkHeight = playerHeight * 0.85f; // cerca de la cabeza
         Vector3 headOrigin = ctx.transform.position + Vector3.up * checkHeight;
-        float checkDist = ctx.ClimbCheckDistance * 2f;
         
         bool wallAtHead = Physics.Raycast(headOrigin, -_wallNormal, ctx.ClimbCheckDistance * 2f, ctx.ClimbableMask);
         
@@ -288,14 +330,6 @@ public class PlayerClimbState : PlayerBaseState
         if (ctx.Input.JumpPressed)
         {
             SwitchState(factory.WallJump());
-            return;
-        }
-        
-        // Sin stamina -> caer
-        if (ctx.Stamina != null && !ctx.Stamina.HasStamina())
-        {
-            Debug.Log("Out of stamina! Falling...");
-            SwitchState(factory.Airborne());
             return;
         }
         
