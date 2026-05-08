@@ -64,6 +64,8 @@ public class BossRaceManager : MonoBehaviour
 
     private void HandleBossWin(Collider bossCollider)
     {
+        AnalyticsManager.Instance?.SetSessionOutcome("boss_won");
+
         // 1. Hace desaparecer el objeto final temporalmente
         gameObject.SetActive(false);
 
@@ -132,6 +134,9 @@ public class BossRaceManager : MonoBehaviour
     {
         Debug.Log("[BossRaceManager] HandlePlayerWin() llamado.");
 
+        AnalyticsManager.Instance?.FinishBossAttempt(GetBossAnalyticsId(), true);
+        AnalyticsManager.Instance?.SetSessionOutcome("completed");
+
         // 1. Desactivar solo el Collider del diamante para evitar re-triggers
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
@@ -165,5 +170,13 @@ public class BossRaceManager : MonoBehaviour
         // 5. Hacer el diamante invisible sin desactivar el GameObject completo
         foreach (Renderer r in GetComponentsInChildren<Renderer>())
             r.enabled = false;
+    }
+
+    private string GetBossAnalyticsId()
+    {
+        if (bossManager != null)
+            return bossManager.GetBossAnalyticsId();
+
+        return gameObject.name;
     }
 }

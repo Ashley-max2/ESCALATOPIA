@@ -448,6 +448,7 @@ public class GameManager : MonoBehaviour
     private void HandlePlayerDeath(Vector3 position)
     {
         Debug.Log($"Player died at {position}");
+        AnalyticsManager.Instance?.RecordDeath();
     }
 
     private void HandlePlayerRespawn(Vector3 position)

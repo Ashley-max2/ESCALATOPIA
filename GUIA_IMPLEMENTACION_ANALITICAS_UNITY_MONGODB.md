@@ -1,172 +1,353 @@
-# Guia d'implementacio del sistema d'analiticas de sessio
+# Guia Completa: Analytics en Escalatopia con MongoDB Atlas y Unity
 
-Projecte: EscalatopiaGit  
-Objectiu de l'entrega: documentar i implementar la recollida d'analiticas per sessio, amb almenys 2 triggers, al menys 5 dades per membre de l'equip i capacitat d'enviament a MongoDB.
+**Projecte:** EscalatopiaGit
+**Versió Unity:** 2022.3.45f1
+**Objectiu:** Implementar recollida d'analiticas per sessio (almenys 2 triggers + 5 dades per membre) i enviament a MongoDB.
 
-## 1. Objectiu de la implementacio
+---
 
-El sistema ha de registrar dades de cada sessio de joc, guardar-les en un JSON local i preparar-les per enviar-les a una base de dades MongoDB. La idea no es només guardar dades, sino poder analitzar com juga l'usuari, on es bloqueja, quines mecanicas usa i en quin punt abandona.
+# PART 1: MONGODB ATLAS - CONFIGURACIÓ COMPLETA
 
-La arquitectura recomanada es aquesta:
+La arquitectura final serà:
+```
+Unity (recull dades) → JSON local → POST a Backend → Backend guarda a MongoDB
+```
 
-1. Unity genera i actualitza les dades de la sessio.
-2. Unity guarda un fitxer JSON local com a copia de seguretat.
-3. Unity envia el JSON a una API intermèdia.
-4. L'API desa el document a MongoDB.
+**Important:** Unity NO es connecta directament a MongoDB. MongoDB es només el servidor de base de dades al núvol.
 
-Important: Unity no hauria de connectar directament a MongoDB en un projecte real, perquè exposaria credencials i faria la base de dades insegura. El correcte es passar per un backend o API.
+## PASO 1: Crear Compte en MongoDB Atlas
 
-## 2. Dades minimes que ha de recollir cada sessio
+### 1.1 Anar al web
+- Obrir navegador: Chrome, Firefox, Edge
+- Entrar a: **https://www.mongodb.com/cloud/atlas**
 
-Per complir el requisit de l'activitat, la sessio ha de guardar com a minim aquestes dades. Si sou 4 membres, podeu repartir la responsabilitat en 5 camps per persona o repartir les 20 dades entre tots, segons us demanin a classe.
+### 1.2 Registrarse
+- Click en **"Sign Up"** (botó verd arriba a la dreta)
+- Omplir:
+  - **Email:** el teu correu
+  - **Password:** contrasenya segura
+  - **First Name:** el teu nom
+  - **Last Name:** el teu cognom
+- Click **"Create your Atlas account"**
 
-### Dades base recomanades
-- `sessionId`
-- `timestamp`
-- `playerName`
-- `timeTotalSeconds`
-- `maxHeightReached`
-- `checkpointsReached`
-- `averageTimePerPuzzleSeconds`
-- `totalDeaths`
-- `bossAttempts`
-- `bossClearTimeSeconds`
-- `hookUsesCount`
-- `puzzlesCompleted`
-- `puzzlesTotal`
-- `itemsCollected`
-- `itemIds`
-- `movementStats`
-- `maxLevelReached`
-- `hasCompletedGame`
-- `sessionOutcome`
-- `notes`
+### 1.3 Verificar email
+- MongoDB t'enviarà un correu
+- Obre la teva bústia i click a l'enllaç
+# Guia Completa: Analytics en Escalatopia con MongoDB Atlas y Unity
 
-### Repartiment orientatiu per membre
-Si us demanen justificacio per membre, podeu distribuir-ho així:
+**Projecte:** EscalatopiaGit
+**Versió Unity:** 2022.3.45f1
+**Objectiu:** Implementar recollida d'analiticas per sessio (almenys 2 triggers + 5 dades per membre) i enviament a MongoDB.
 
-- Membre 1: temps de sessio, altura maxima, checkpoints, nivell maximo, notes.
-- Membre 2: morts, intents de boss, temps de boss, completat del joc, bosses per nivell.
-- Membre 3: ganxo, puzzles completats, temps mitja de puzzle, puzzles totals, triggers de mecanica.
-- Membre 4: items recollits, IDs d'items, moviment per direccio, zones visitades, scene changes.
+---
 
-### Nota sobre el recompte
-La llista anterior queda en 20 dades si afegiu `sessionOutcome`. Aquest camp serveix per indicar si la sessio ha acabat en victoria, abandonament, mort, sortida manual o error, i ajuda molt a interpretar la resta de metricas.
+Nota ràpida: he integrat els scripts i les crides als triggers al repo. Aquesta guia conté tot: instruccions Atlas, backend (Node.js), scripts Unity (C#) i exemples JSON.
 
-## 3. Triggers mínims a implementar
+---
 
-Cal utilitzar almenys 2 triggers reals del projecte. Els mes clars dins Escalatopia son aquests:
+# PART 1 — MongoDB Atlas (resum i dades que has proporcionat)
 
-### Trigger 1: CheckpointSaveTrigger
-Fitxer: [Assets/Scripts/Mecanicas/CheckpointSaveTrigger.cs](Assets/Scripts/Mecanicas/CheckpointSaveTrigger.cs)
+Connection string original (SRV):
 
-Aquest trigger es activa quan el jugador entra al checkpoint. Es pot aprofitar per registrar:
+```
+mongodb+srv://anas:Anas_712066@escalatopiaanalytics.lurpmjs.mongodb.net/?appName=EscalatopiaAnalytics
+```
 
-- Increment de checkpoints.
-- Actualitzacio de la posicio de respawn.
-- Altura maxima si el checkpoint esta mes amunt.
-- Moment exacte de pas pel checkpoint.
+Ús: en Windows, si Node falla amb `mongodb+srv://`, usa la URI estàndard `mongodb://` de la PART 4.
 
-### Trigger 2: SceneChangeTrigger
-Fitxer: [Assets/Scripts/Mecanicas/SceneChangeTrigger.cs](Assets/Scripts/Mecanicas/SceneChangeTrigger.cs)
+---
 
-Aquest trigger es activa quan el jugador entra a una zona que carrega una altra escena. Es pot usar per registrar:
+# PART 2 — Esquema de la sessió (exemple JSON)
 
-- Canvi de nivell o acte.
-- Progres maximal assolit.
-- Abandonament parcial si el jugador no arriba al final.
-- Temps entre escenes.
+Aquest és l'exemple que m'has donat (he afegit `sessionOutcome` recomanat):
 
-### Trigger opcional 3: BolaGuiaTrigger o un trigger de item
-Si voleu reforcar la part d'analitica, podeu afegir un tercer trigger per comptar:
+```json
+{
+  "sessionId": "SESSION_20260507_143000",
+  "timestamp": "2026-05-07T14:30:00Z",
+  "playerName": "Player-001",
+  "timeTotalSeconds": 1250,
+  "maxHeightReached": 542.3,
+  "checkpointsReached": 8,
+  "averageTimePerPuzzleSeconds": 85.3,
+  "totalDeaths": 15,
+  "bossAttempts": { "BOSS_ACT1": 5, "BOSS_ACT2": 12 },
+  "bossClearTimeSeconds": { "BOSS_ACT1": 180.5 },
+  "hookUsesCount": 87,
+  "puzzlesCompleted": 5,
+  "puzzlesTotal": 7,
+  "itemsCollected": 12,
+  "itemIds": ["COIN_001", "GEM_RED_01"],
+  "movementStats": { "up": 450, "down": 200, "left": 380, "right": 420 },
+  "maxLevelReached": "ACT_2_BOSS",
+  "hasCompletedGame": false,
+  "sessionOutcome": "abandoned",
+  "notes": "Abandono en Boss Act 2"
+}
+```
 
-- Interaccio amb guia o NPC.
-- Recollida d'item.
-- Activacio d'un event de tutorial.
+Comentari: `sessionOutcome` ajuda a analitzar abandonaments/completions. Valors típics: `"completed"`, `"died"`, `"abandoned"`.
 
-## 4. Què s'ha de fer a Unity
+---
 
-### Pas 1: Crear la classe serialitzable de sessio
-Crear un script com `GameSessionAnalytics.cs` amb una classe serialitzable que guardi totes les dades de la sessio.
+# PART 3 — Unity: scripts i integració
 
-Ha de contenir com a minim:
+Col·loca aquests fitxers a `Assets/Scripts/Systems/`.
 
-- identificador de sessio;
-- hora i data;
-- nom del jugador;
-- metricas de progressio;
-- metricas de dificultat;
-- metricas d'exploracio;
-- diccionaris o llistes per bosses, items i moviment.
+1) `GameSessionAnalytics.cs`
 
-### Pas 2: Crear un manager d'analiticas
-Crear un `AnalyticsManager.cs` com a singleton o gestor central. Aquest script ha de fer aquestes feines:
+```csharp
+using System;
+using System.Collections.Generic;
 
-- iniciar una nova sessio quan comenca la partida;
-- actualitzar el JSON en memoria durant el joc;
-- guardar el fitxer local quan la sessio acaba;
-- preparar el JSON per enviar-lo al backend;
-- controlar que no es perdi informacio si el joc es tanca bruscament.
+[Serializable]
+public class GameSessionAnalytics {
+    public string sessionId;
+    public string timestamp;
+    public string playerName;
+    public int timeTotalSeconds;
+    public float maxHeightReached;
+    public int checkpointsReached;
+    public float averageTimePerPuzzleSeconds;
+    public int totalDeaths;
+    public Dictionary<string,int> bossAttempts;
+    public Dictionary<string,float> bossClearTimeSeconds;
+    public int hookUsesCount;
+    public int puzzlesCompleted;
+    public int puzzlesTotal;
+    public int itemsCollected;
+    public List<string> itemIds;
+    public Dictionary<string,int> movementStats;
+    public string maxLevelReached;
+    public bool hasCompletedGame;
+    public string sessionOutcome;
+    public string notes;
+}
+```
 
-### Pas 3: Integrar els triggers existents
+2) `AnalyticsManager.cs` (singleton, guardat local i POST al backend)
 
-#### En `CheckpointSaveTrigger`
-Quan el jugador entra al trigger:
+```csharp
+using UnityEngine;
+using System.IO;
+using UnityEngine.Networking;
+using System.Text;
+using System.Collections;
 
-- cridar `RecordCheckpoint()`;
-- incrementar `checkpointsReached`;
-- si cal, actualitzar `maxHeightReached`;
-- guardar la sessio localment o marcar-la com a canvi important.
+public class AnalyticsManager : MonoBehaviour {
+  public static AnalyticsManager Instance;
+  public GameSessionAnalytics current;
+  private float sessionStartTime;
 
-#### En `SceneChangeTrigger`
-Quan el jugador entra al trigger:
+  void Awake(){
+    if(Instance==null){
+      Instance=this;
+      DontDestroyOnLoad(gameObject);
+    } else {
+      Destroy(gameObject);
+    }
+  }
 
-- cridar `SetMaxLevelReached(sceneName)` o una funcio equivalent;
-- registrar el canvi de nivell;
-- si el canvi es fa al final d'un acte, marcar si ha completat la zona;
-- fer un guardat abans de carregar la nova escena.
+  public void StartSession(string playerName){
+    current = new GameSessionAnalytics();
+    current.sessionId = "SESSION_" + System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
+    current.timestamp = System.DateTime.UtcNow.ToString("o");
+    current.playerName = playerName;
+    current.timeTotalSeconds = 0;
+    current.maxHeightReached = 0f;
+    current.checkpointsReached = 0;
+    current.totalDeaths = 0;
+    current.bossAttempts = new System.Collections.Generic.Dictionary<string,int>();
+    current.bossClearTimeSeconds = new System.Collections.Generic.Dictionary<string,float>();
+    current.itemIds = new System.Collections.Generic.List<string>();
+    current.movementStats = new System.Collections.Generic.Dictionary<string,int>{ {"up",0}, {"down",0}, {"left",0}, {"right",0} };
+    current.notes = "";
+    sessionStartTime = Time.time;
+    Debug.Log("[Analytics] Sesión iniciada: " + current.sessionId);
+  }
 
-### Pas 4: Afegir registres en altres scripts
-Per completar les 12 metricas, afegiu crides al gestor des d'altres scripts del projecte:
+  public void RecordCheckpoint(){
+    if(current == null) return;
+    current.checkpointsReached++;
+    SaveLocal();
+    Debug.Log("[Analytics] Checkpoint registrado: " + current.checkpointsReached);
+  }
 
-- `PlayerController` o `PlayerStateMachine`: altura maxima, mort, moviment.
-- `BossRaceManager` o boss controller: intents de boss i temps de boss.
-- `PuzzleController`: puzzles completats i temps invertit.
-- `ItemPickup` o objecte equivalent: item recollit.
-- `PlayerInputHandler`: usos del ganxo i moviment per direccio si es vol mes detall.
+  public void RecordDeath(){
+    if(current == null) return;
+    current.totalDeaths++;
+    SaveLocal();
+    Debug.Log("[Analytics] Death registrado: " + current.totalDeaths);
+  }
 
-### Pas 5: Guardar el JSON local
-Guardar la sessio amb `Application.persistentDataPath` en una carpeta `Analytics`.
+  public void RecordItem(string itemId){
+    if(current == null) return;
+    current.itemsCollected++;
+    current.itemIds.Add(itemId);
+    SaveLocal();
+    Debug.Log("[Analytics] Item registrado: " + itemId);
+  }
 
-Ruta orientativa:
+  public void SaveLocal(){
+    if(current == null) return;
+    current.timeTotalSeconds = (int)(Time.time - sessionStartTime);
+    string folder = Path.Combine(Application.persistentDataPath, "Analytics");
+    Directory.CreateDirectory(folder);
+    string path = Path.Combine(folder, current.sessionId + ".json");
+    File.WriteAllText(path, JsonUtility.ToJson(current, true));
+    Debug.Log("[Analytics] Guardado local: " + path);
+  }
 
-- Windows: `...\AppData\LocalLow\CompanyName\ProjectName\Analytics\`
+  public void SendToServer(string url){
+    if(current == null) return;
+    StartCoroutine(PostCoroutine(url));
+  }
 
-Nom orientatiu del fitxer:
+  IEnumerator PostCoroutine(string url){
+    current.timeTotalSeconds = (int)(Time.time - sessionStartTime);
+    string json = JsonUtility.ToJson(current, true);
 
-- `SESSION_YYYYMMDD_HHMMSS.json`
+    var uwr = new UnityWebRequest(url, "POST");
+    byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+    uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+    uwr.downloadHandler = new DownloadHandlerBuffer();
+    uwr.SetRequestHeader("Content-Type", "application/json");
 
-### Pas 6: Fer proves a Unity
-Cal provar que els triggers realment registren dades. Les comprovacions basiques son:
+    yield return uwr.SendWebRequest();
 
-- entrar a un checkpoint i veure que puja el comptador;
-- entrar a una escena nova i veure que s'actualitza el nivell maximo;
-- morir una vegada i confirmar que el total de morts augmenta;
-- recollir un item i veure el seu ID a la sessio;
-- completar un puzzle i revisar el temps registrat.
+    if (uwr.result != UnityWebRequest.Result.Success) {
+      Debug.LogError("[Analytics] POST failed: " + uwr.error);
+    } else {
+      Debug.Log("[Analytics] POST OK: " + uwr.downloadHandler.text);
+    }
+  }
+}
+```
 
-## 5. Què s'ha de fer amb MongoDB
+3) Integració als triggers (ja aplicada al repo):
 
-### Pas 1: Crear la base de dades
-Podeu fer-ho amb MongoDB Atlas o amb una instancia local. Si comenceu de zero, la ruta mes recomanable es MongoDB Atlas, perquè us permet crear-ho tot des de la web sense instal·lar res al principi i deixa molt clara la part de desplegament per a la memoria o el PDF.
+- `Assets/Scripts/Mecanicas/CheckpointSaveTrigger.cs` — crida a `RecordCheckpoint()` i `SaveLocal()` després de guardar el checkpoint.
+- `Assets/Scripts/Mecanicas/SceneChangeTrigger.cs` — registra `current.maxLevelReached = sceneName;` i `SaveLocal()` abans de carregar la nova escena.
 
-Si voleu treballar des de zero, aquest es el cami correcte:
+---
 
-1. Entrar a https://www.mongodb.com/atlas i crear un compte.
-2. Fer login i crear un projecte nou, per exemple `EscalatopiaAnalytics`.
-3. Crear un cluster gratuït o compartit si només es per proves i entrega academica.
-4. Crear un usuari de base de dades amb nom i contrasenya propis.
-5. A `Network Access`, afegir la vostra IP o permetre acces temporal per provar.
+# PART 4 — Backend Node.js (col·loca a `backend/`)
+
+1) `package.json` (indicatiu):
+
+```json
+{
+  "name": "escalatopia-analytics-backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.0",
+    "mongodb": "^4.12.0"
+  }
+}
+```
+
+2) `.env` (crear a `backend/.env`) — en aquest projecte, millor fer servir la URI estàndard per evitar el problema SRV de Node en Windows:
+
+```
+MONGODB_URI=mongodb://anas:Anas_712066@ac-9hhbda3-shard-00-00.lurpmjs.mongodb.net:27017,ac-9hhbda3-shard-00-01.lurpmjs.mongodb.net:27017,ac-9hhbda3-shard-00-02.lurpmjs.mongodb.net:27017/?replicaSet=atlas-rsveae-shard-0&authSource=admin&tls=true&retryWrites=true&w=majority&appName=EscalatopiaAnalytics
+MONGODB_DATABASE=EscalatopiaAnalytics
+MONGODB_COLLECTION=sessions
+PORT=3000
+```
+
+3) `server.js` (a `backend/server.js`):
+
+```javascript
+require('dotenv').config();
+const express = require('express');
+const { MongoClient } = require('mongodb');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+const uri = process.env.MONGODB_URI;
+if (!uri) { console.error('Falta MONGODB_URI a .env'); process.exit(1); }
+
+MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(client => {
+    const db = client.db(process.env.MONGODB_DATABASE || 'EscalatopiaAnalytics');
+    const sessions = db.collection(process.env.MONGODB_COLLECTION || 'sessions');
+
+    app.post('/api/sessions', async (req, res) => {
+      try {
+        const doc = req.body;
+        if (!doc || !doc.sessionId) return res.status(400).json({ ok: false, error: 'Missing sessionId' });
+        await sessions.insertOne(doc);
+        res.status(200).json({ ok: true });
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ ok: false, error: err.message });
+      }
+    });
+
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => console.log(`API listening on http://localhost:${port}`));
+  })
+  .catch(err => console.error('Mongo connect error', err));
+```
+
+4) Comandes per instal·lar i executar (des de `backend/`):
+
+```bash
+npm init -y
+npm install express mongodb dotenv body-parser cors
+node server.js
+```
+
+---
+
+# PART 5 — Proves i passos ràpids
+
+1. Obrir Unity.
+2. Afegir un GameObject buit amb el component `AnalyticsManager` en l'escena inicial (o crear un prefab persistent).
+3. Cridar `AnalyticsManager.Instance.StartSession("PlayerName");` al començar la partida (p.ex. en el menú principal o GameManager).
+4. Entrar a un checkpoint — comprovar consola i el fitxer JSON en `Application.persistentDataPath/Analytics/`.
+5. Tenir el backend corrent i enviar:
+
+```csharp
+AnalyticsManager.Instance.SendToServer("http://localhost:3000/api/sessions");
+```
+
+Prova manual amb `curl` (backend actiu):
+
+```bash
+curl -X POST http://localhost:3000/api/sessions \
+  -H "Content-Type: application/json" \
+  -d '{"sessionId":"TEST_001","playerName":"TestPlayer","timestamp":"2026-05-08T12:00:00Z","timeTotalSeconds":60,"sessionOutcome":"test"}'
+```
+
+---
+
+# NOTES I RECOMANACIONS
+
+- `sessionOutcome` és recomanat per analitzar abandonaments/completions.
+- No posis la URI pública amb credencials dins del build de Unity; utilitza el backend i variables d'entorn.
+- Quan lliuris, restringeix `Network Access` en Atlas al rang d'IP del professor o al teu backend.
+
+---
+
+# Fitxers creats/actualitzats en el repo
+
+- `Assets/Scripts/Systems/GameSessionAnalytics.cs`  (classe de dades)
+- `Assets/Scripts/Systems/AnalyticsManager.cs`      (gestor singleton)
+- `Assets/Scripts/Mecanicas/CheckpointSaveTrigger.cs`  (afegides crides analytics)
+- `Assets/Scripts/Mecanicas/SceneChangeTrigger.cs`     (afegides crides analytics)
+
+Si vols, puc crear ara la carpeta `backend/` amb `server.js` i `.env` i el `package.json` mínim dins el repo. Vols que ho faci?
+
 6. A `Database`, crear la base de dades `EscalatopiaAnalytics` i la colleccio `sessions`.
 7. Copiar la connection string que ofereix Atlas per al backend.
 

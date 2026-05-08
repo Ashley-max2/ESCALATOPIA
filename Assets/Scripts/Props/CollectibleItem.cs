@@ -49,6 +49,7 @@ public class CollectibleItem : MonoBehaviour
         if (isCollected) return;
 
         isCollected = true;
+        AnalyticsManager.Instance?.RecordItem(itemName);
         onCollected?.Invoke();
         gameObject.SetActive(false);
     }

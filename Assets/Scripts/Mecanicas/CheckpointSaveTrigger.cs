@@ -25,19 +25,33 @@ public class CheckpointSaveTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("[Checkpoint] Trigger enter: " + (other != null ? other.name : "null"));
+
         if (_alreadySaved && saveOnlyOnce)
+        {
+            Debug.Log("[Checkpoint] Ignorado: ya se guardo una vez");
             return;
+        }
 
         if (other == null)
+        {
+            Debug.LogWarning("[Checkpoint] Ignorado: other es null");
             return;
+        }
 
         PlayerStateMachine psm = other.GetComponentInParent<PlayerStateMachine>();
         if (psm == null)
+        {
+            Debug.LogWarning("[Checkpoint] Ignorado: no se encontro PlayerStateMachine en el objeto que entra");
             return;
+        }
 
         bool validByTag = other.CompareTag(playerTag) || psm.gameObject.CompareTag(playerTag);
         if (!validByTag)
+        {
+            Debug.LogWarning("[Checkpoint] Ignorado: tag invalido. Se esperaba '" + playerTag + "' y se encontro '" + other.tag + "'");
             return;
+        }
 
         Vector3 spawn = spawnPoint != null ? spawnPoint.position : transform.position;
         string sceneName = SceneManager.GetActiveScene().name;
@@ -54,5 +68,12 @@ public class CheckpointSaveTrigger : MonoBehaviour
 
         _alreadySaved = true;
         Debug.Log("[Checkpoint] Guardado en JSON: " + spawn + " | Escena: " + sceneName);
+        // Analytics
+        if (UnityEngine.Object.FindObjectOfType<AnalyticsManager>() != null) {
+            AnalyticsManager.Instance?.RecordCheckpoint();
+            AnalyticsManager.Instance?.SaveLocal();
+        } else {
+            Debug.LogWarning("[Checkpoint] AnalyticsManager no encontrado en escena, no se guardo analytics");
+        }
     }
 }

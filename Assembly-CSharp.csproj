@@ -63,12 +63,36 @@
     <Compile Include="Assets\Scripts\Puzzle\PuzzleDoor.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
+    <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
+    <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
+    <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
+    <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
+    <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettingsManager.cs" />
+    <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\UI\IndicadorObjetivoUI.cs" />
+    <Compile Include="Assets\Scripts\Subtitulos\RaceResultSubtitles.cs" />
+    <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
+    <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
+    <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
+    <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
+    <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
+    <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
+    <Compile Include="Assets\Scripts\UI\punteia.cs" />
+    <Compile Include="Assets\Scripts\Mecanicas\RaceRestartController.cs" />
+    <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
+    <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
+    <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
     <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoA.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
+    <Compile Include="Assets\Scripts\Systems\GameSessionAnalytics.cs" />
     <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoB.cs" />
     <Compile Include="Assets\Scripts\Puzzle\StoneSlot.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlBindingRow.cs" />
-    <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\PanelMusic.cs" />
     <Compile Include="Assets\Scripts\Managers\MisionManager.cs" />
     <Compile Include="Assets\Scripts\Managers\CreditsManager.cs" />
@@ -81,45 +105,26 @@
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerClimbState.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\DialogueSystemInitializer.cs" />
-    <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossManager.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaUI.cs" />
     <Compile Include="Assets\Scripts\FreezeUnfreezePosition.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\CharacterDialogue.cs" />
-    <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
     <Compile Include="Assets\Scripts\BossAnimatorSpeed.cs" />
-    <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
-    <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
     <Compile Include="Assets\Scripts\Core\GameManager.cs" />
     <Compile Include="Assets\Scripts\Props\FragmentoDestruible.cs" />
-    <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettingsManager.cs" />
-    <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\Agarrar_Lanzar_Soltar.cs" />
-    <Compile Include="Assets\Scripts\UI\IndicadorObjetivoUI.cs" />
-    <Compile Include="Assets\Scripts\Subtitulos\RaceResultSubtitles.cs" />
-    <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
     <Compile Include="Assets\Scripts\Props\CollectibleItem.cs" />
-    <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPuzzleManager.cs" />
-    <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
+    <Compile Include="Assets\Scripts\Systems\AnalyticsManager.cs" />
     <Compile Include="Assets\Scripts\Managers\JournalPickUo.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
-    <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
-    <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
-    <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
     <Compile Include="Assets\Scripts\Props\MuroGancho.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
-    <Compile Include="Assets\Scripts\UI\punteia.cs" />
     <Compile Include="Assets\Scripts\UI\HookAim.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
-    <Compile Include="Assets\Scripts\Mecanicas\RaceRestartController.cs" />
-    <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BolaGuiaTrigger.cs" />
     <Compile Include="Assets\Scripts\Props\BarrilFragmentado.cs" />
     <Compile Include="Assets\Scripts\Managers\ScreenSettingsManager.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRaceManager.cs" />
-    <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRunFloatBySpeed.cs" />
     <Compile Include="Assets\Scripts\Systems\GrapplingHook.cs" />
@@ -130,10 +135,7 @@
     <Compile Include="Assets\Scripts\Subtitulos\NPCInteractable.cs" />
     <Compile Include="Assets\Scripts\Managers\FadeInSceneManager.cs" />
     <Compile Include="Assets\Scripts\UI\GamepadUINavigator.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
-    <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerBaseState.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInputHandler.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -485,12 +487,8 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -997,6 +995,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MCPForUnity.Runtime">
+      <HintPath>Library\ScriptAssemblies\MCPForUnity.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Sysroot.Linux_x86_64">
       <HintPath>Library\ScriptAssemblies\Unity.Sysroot.Linux_x86_64.dll</HintPath>
       <Private>False</Private>
@@ -1147,6 +1149,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MCPForUnity.Editor">
+      <HintPath>Library\ScriptAssemblies\MCPForUnity.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
