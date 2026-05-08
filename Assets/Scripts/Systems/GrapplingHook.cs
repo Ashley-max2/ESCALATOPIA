@@ -27,6 +27,7 @@ public class GrapplingHook : MonoBehaviour
     public float TravelSpeed => travelSpeed;
     public bool IsActive { get; private set; }
     public Vector3 CurrentTarget { get; private set; }
+    public Transform CurrentHookPoint => _currentHookPoint;
     
     // Runtime
     private float _lastFireTime;
