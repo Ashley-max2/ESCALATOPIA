@@ -24,11 +24,18 @@ public class PlayerStateMachine : MonoBehaviour
     public StaminaSystem Stamina { get; private set; }
     public Transform CameraTarget { get; private set; }
     #endregion
+
+    public event System.Action OnDie;
     
     #region State Management
     public IState CurrentState { get; private set; }
     private PlayerStateFactory _stateFactory;
-    public PlayerStateFactory States => _stateFactory;
+    public PlayerStateFactory States {
+        get {
+            if (_stateFactory == null) _stateFactory = new PlayerStateFactory(this);
+            return _stateFactory;
+        }
+    }
     #endregion
     
     #region Movement Settings
@@ -43,6 +50,14 @@ public class PlayerStateMachine : MonoBehaviour
     public float RunSpeed => runSpeed;
     public float RotationSpeed => rotationSpeed;
     public float Acceleration => acceleration;
+    
+    public void SetWalkSpeed(float val) => walkSpeed = val;
+    public void SetRunSpeed(float val) => runSpeed = val;
+    public void SetJumpForce(float val) => jumpForce = val;
+    public void SetClimbSpeed(float val) => climbSpeed = val;
+    public void SetClimbStaminaCost(float val) => climbStaminaCost = val;
+    public void SetFallMultiplier(float val) => fallMultiplier = val;
+    public void SetHookAccelerationTime(float val) => hookAccelerationTime = val;
     
     [SerializeField] private float runStaminaCost = 5f;
     public float RunStaminaCost => runStaminaCost;
@@ -467,6 +482,7 @@ public float Deceleration => deceleration;
     #region Death/Respawn
     public void Die()
     {
+        OnDie?.Invoke();
         TransitionToState(States.Dead());
     }
     
@@ -555,6 +571,12 @@ public float Deceleration => deceleration;
     
     public void DieWithCause(DeathCause cause)
     {
+        if (Input != null && Input.IsAI)
+        {
+            OnDie?.Invoke();
+            return;
+        }
+
         DeathManager.LastDeathCause = cause;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

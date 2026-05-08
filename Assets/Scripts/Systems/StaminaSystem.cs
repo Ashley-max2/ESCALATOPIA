@@ -12,6 +12,9 @@ public class StaminaSystem : MonoBehaviour
     [SerializeField] private float regenRate = 15f;
     [SerializeField] private float regenDelay = 1.5f;
     
+    public void SetRegenRate(float val) => regenRate = val;
+    public void SetRegenDelay(float val) => regenDelay = val;
+    
     [Header("=== THRESHOLDS ===")]
     [SerializeField] private float warningThreshold = 25f;
     [SerializeField] private float criticalThreshold = 10f;

@@ -33,10 +33,16 @@ public class GrapplingHook : MonoBehaviour
     [Tooltip("Desactivar si hay un CuerdaRenderer externo manejando la cuerda")]
     [SerializeField] private bool usarRendererInterno = true;
     
+    public event System.Action OnHookAttached;
+    
     // Properties
     public float TravelSpeed => travelSpeed;
     public float PullSpeed => pullSpeed;
     public float PullStopDistance => pullStopDistance;
+    
+    public void SetMaxRange(float val) => maxRange = val;
+    public void SetTravelSpeed(float val) => travelSpeed = val;
+    public void SetPullSpeed(float val) => pullSpeed = val;
     public bool IsActive { get; private set; }
     public Vector3 CurrentTarget { get; set; }
     public bool IsPulling { get; private set; }
@@ -244,6 +250,7 @@ public class GrapplingHook : MonoBehaviour
         if (Cuerda != null) { /* Automaticamente detectado por CuerdaRenderer */ }
         
         Debug.Log($"Hook fired to {target}");
+        OnHookAttached?.Invoke();
         return target;
     }
     
@@ -266,6 +273,7 @@ public class GrapplingHook : MonoBehaviour
         if (Cuerda != null) { /* Automaticamente detectado por CuerdaRenderer */ }
         
         Debug.Log($"Hook pulling object {target.name}");
+        OnHookAttached?.Invoke();
         return target;
     }
     
