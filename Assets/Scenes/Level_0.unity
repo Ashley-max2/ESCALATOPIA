@@ -4874,8 +4874,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc0318ba0332694d8eabaa595997d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imagen: {fileID: 842148052}
-  colorEnganchable: {r: 1, g: 0, b: 0.028076172, a: 1}
+  fondo: {fileID: 0}
+  iconoEnganchar: {fileID: 0}
+  iconoAtraer: {fileID: 0}
+  colorFondoInactivo: {r: 0.2, g: 0.2, b: 0.2, a: 0.6}
+  colorFondoEnganchar: {r: 0, g: 1, b: 0.5, a: 0.8}
+  colorFondoAtraer: {r: 1, g: 0.6, b: 0, a: 0.8}
+  colorIconoActivo: {r: 1, g: 1, b: 1, a: 1}
+  colorIconoInactivo: {r: 1, g: 1, b: 1, a: 0.25}
 --- !u!114 &842148052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15082,6 +15088,10 @@ PrefabInstance:
     - target: {fileID: 2167365225216592441, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2167365225216592441, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3690487399966190797, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_LocalPosition.x

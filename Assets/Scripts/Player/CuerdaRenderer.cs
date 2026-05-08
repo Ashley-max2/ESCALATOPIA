@@ -14,13 +14,13 @@ public class CuerdaRenderer : MonoBehaviour
 {
     [Header("Configuración de Cuerda")]
     [Tooltip("Número de segmentos de la curva (más = más suave)")]
-    [SerializeField] private int segmentos = 30;
+    [SerializeField] public int segmentos = 30;
     [Tooltip("Altura máxima de la parábola en metros (cuánto sube la cuerda al lanzarla)")]
-    [SerializeField] private float alturaParabola = 4f;
+    [SerializeField] public float alturaParabola = 4f;
     [Tooltip("Velocidad a la que la cuerda viaja hacia el destino (unidades/seg)")]
-    [SerializeField] private float velocidadCuerda = 45f;
+    [SerializeField] public float velocidadCuerda = 45f;
     [Tooltip("Velocidad de transición para tensar la cuerda")]
-    [SerializeField] private float velocidadTensar = 10f;
+    [SerializeField] public float velocidadTensar = 10f;
 
     private LineRenderer lineRenderer;
     private HookSystem hookSystem;

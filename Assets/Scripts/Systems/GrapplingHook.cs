@@ -17,7 +17,7 @@ public class GrapplingHook : MonoBehaviour
     [SerializeField] private string hookPointTag = "HookPoint";
     
     [Header("=== TRAVEL ===")]
-    [SerializeField] private float travelSpeed = 20f;
+    public float travelSpeed = 20f;
     [SerializeField] private float cooldown = 1f;
     
     [Header("=== PULL OBJECTS ===")]
@@ -42,10 +42,6 @@ public class GrapplingHook : MonoBehaviour
     public bool IsPulling { get; private set; }
     public Rigidbody PulledObject { get; private set; }
     public Transform HookOrigin => hookOrigin;
-    
-    /// <summary>
-    /// Referencia al CuerdaRenderer para saber si la cuerda ha llegado al destino.
-    /// </summary>
     public CuerdaRenderer Cuerda { get; private set; }
     
     /// <summary>
@@ -245,6 +241,7 @@ public class GrapplingHook : MonoBehaviour
         
         // Show rope
         ropeRenderer.enabled = true;
+        if (Cuerda != null) { /* Automaticamente detectado por CuerdaRenderer */ }
         
         Debug.Log($"Hook fired to {target}");
         return target;
@@ -266,6 +263,7 @@ public class GrapplingHook : MonoBehaviour
         _lastFireTime = Time.time;
         
         ropeRenderer.enabled = true;
+        if (Cuerda != null) { /* Automaticamente detectado por CuerdaRenderer */ }
         
         Debug.Log($"Hook pulling object {target.name}");
         return target;
@@ -282,6 +280,7 @@ public class GrapplingHook : MonoBehaviour
         
         // Hide rope
         ropeRenderer.enabled = false;
+        if (Cuerda != null) { /* Automaticamente detectado por CuerdaRenderer */ }
     }
     
     /// <summary>

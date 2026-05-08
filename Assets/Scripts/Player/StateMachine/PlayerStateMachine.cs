@@ -1,7 +1,9 @@
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using FMOD.Studio;
 using FMODUnity;
 using FMOD;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Máquina de estados principal del jugador.
@@ -41,7 +43,10 @@ public class PlayerStateMachine : MonoBehaviour
     public float RunSpeed => runSpeed;
     public float RotationSpeed => rotationSpeed;
     public float Acceleration => acceleration;
-    public float Deceleration => deceleration;
+    
+    [SerializeField] private float runStaminaCost = 5f;
+    public float RunStaminaCost => runStaminaCost;
+public float Deceleration => deceleration;
     #endregion
     
     #region Jump Settings
@@ -62,7 +67,7 @@ public class PlayerStateMachine : MonoBehaviour
     #region Climbing Settings
     [Header("=== CLIMBING ===")]
     [SerializeField] private float climbSpeed = 3f;
-    [SerializeField] private float climbStaminaCost = 10f;
+    [SerializeField] private float climbStaminaCost = 3f;
     [SerializeField] private float wallJumpForce = 8f;
     [SerializeField] private float wallJumpUpwardForce = 6f;
     [SerializeField] private float climbCheckDistance = 0.6f;
@@ -86,7 +91,7 @@ public class PlayerStateMachine : MonoBehaviour
     #region Hook Settings
     [Header("=== HOOK ===")]
     [Tooltip("Tiempo en segundos de aceleración inicial del gancho")]
-    [SerializeField] private float hookAccelerationTime = 0.3f;
+    public float hookAccelerationTime = 0.3f;
     
     public float HookAccelerationTime => hookAccelerationTime;
     #endregion
@@ -472,6 +477,29 @@ public class PlayerStateMachine : MonoBehaviour
         TransitionToState(States.Grounded());
         GameEvents.PlayerRespawn(transform.position);
     }
+    
+    /// <summary>
+    /// Centraliza la comprobación de muerte por caída.
+    /// Llamado desde PlayerGroundedState al aterrizar.
+    /// Las 3 formas de morir están en este script:
+    ///   1. Agua       - OnCollisionEnter / OnTriggerEnter con tag Water
+    ///   2. Stamina    - HandleStaminaDepleted (evento OnStaminaDepleted)
+    ///   3. Caída      - HandleLanding (fallDistance >= lethalFallHeight)
+    /// </summary>
+    public void HandleLanding(float fallDistance)
+    {
+        GameEvents.PlayerLanded(fallDistance);
+    
+        if (fallDistance >= lethalFallHeight)
+        {
+            DieWithCause(DeathCause.Fall);
+        }
+        else if (fallDistance >= safeFallHeight)
+        {
+            Debug.Log($"Hard landing from {fallDistance:F1}m");
+        }
+    }
+    
     #endregion
     
     #region Gizmos
@@ -505,4 +533,47 @@ public class PlayerStateMachine : MonoBehaviour
         GUILayout.EndArea();
     }
     #endregion
+    
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Water"))
+        {
+            DieWithCause(DeathCause.Water);
+        }
+    }
+    
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Water"))
+        {
+            DieWithCause(DeathCause.Water);
+        }
+    }
+    
+    
+    public void DieWithCause(DeathCause cause)
+    {
+        DeathManager.LastDeathCause = cause;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("Pantalla de muerte");
+    }
+    
+    
+    private void OnEnable()
+    {
+        if (Stamina != null) Stamina.OnStaminaDepleted += HandleStaminaDepleted;
+    }
+    
+    private void OnDisable()
+    {
+        if (Stamina != null) Stamina.OnStaminaDepleted -= HandleStaminaDepleted;
+    }
+    
+    private void HandleStaminaDepleted()
+    {
+        DieWithCause(DeathCause.Stamina);
+    }
 }

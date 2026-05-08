@@ -169,6 +169,13 @@ public class PlayerClimbState : PlayerBaseState
         float horizontal = ctx.Input.MoveX; // A (-1) / D (+1)
         float vertical = ctx.Input.MoveZ;   // S (-1) / W (+1)
         
+        // El player no se mueve si la stamina llego a su limite inferior (-5)
+        if (ctx.Stamina != null && ctx.Stamina.CurrentStamina <= -4.9f)
+        {
+            horizontal = 0;
+            vertical = 0;
+        }
+
         // Movimiento ABSOLUTO referenciado 100% a la pared actual. ¡Nunca a la cámara!
         // W siempre aplica fuerza en `_wallUp`, D siempre en `_wallRight`.
         Vector3 climbDir = (_wallRight * horizontal + _wallUp * vertical).normalized;
@@ -323,14 +330,6 @@ public class PlayerClimbState : PlayerBaseState
         if (ctx.Input.JumpPressed)
         {
             SwitchState(factory.WallJump());
-            return;
-        }
-        
-        // Sin stamina -> caer
-        if (ctx.Stamina != null && !ctx.Stamina.HasStamina())
-        {
-            Debug.Log("Out of stamina! Falling...");
-            SwitchState(factory.Airborne());
             return;
         }
         

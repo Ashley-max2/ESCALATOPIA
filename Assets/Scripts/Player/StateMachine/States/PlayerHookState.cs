@@ -165,7 +165,7 @@ public class PlayerHookState : PlayerBaseState
         
         // Comprobar si la cuerda ha llegado al destino
         CuerdaRenderer cuerda = ctx.GrapplingHook.Cuerda;
-        if (cuerda != null && cuerda.CuerdaLlegó)
+        if (cuerda == null || cuerda.CuerdaLlegó)
         {
             // ¡La cuerda se ha tensado! Empezar a mover al jugador
             _currentPhase = HookPhase.Traveling;
