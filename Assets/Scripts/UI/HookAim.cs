@@ -1,22 +1,27 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class HookAim : MonoBehaviour
 {
     public GrapplingHook grapplingHook;
     public RectTransform miraRectTransform; // Asignar el RectTransform de la mira (punteia)
     private Vector2 centerPosition;
+    private Tween miraTween;
+    private Vector3 miraOriginalScale;
 
     void Start()
     {
         if (miraRectTransform != null)
         {
             centerPosition = miraRectTransform.anchoredPosition;
+            miraOriginalScale = miraRectTransform.localScale;
         }
     }
 
     void Update()
     {
-        if (grapplingHook != null && grapplingHook.CurrentHookPoint != null && !grapplingHook.IsActive)
+        bool targeting = grapplingHook != null && grapplingHook.CurrentHookPoint != null && !grapplingHook.IsActive;
+        if (targeting)
         {
             // Calcular posición en pantalla del target
             Vector3 screenPos = Camera.main.WorldToScreenPoint(grapplingHook.CurrentHookPoint.position);
@@ -36,10 +41,28 @@ public class HookAim : MonoBehaviour
             {
                 miraRectTransform.anchoredPosition = centerPosition;
             }
+            // Efecto de agrandar y achicar la mira continuamente
+            if (miraTween == null || !miraTween.IsActive())
+            {
+                // Restablecemos la escala original por si estaba oculta (Vector3.zero)
+                miraRectTransform.localScale = miraOriginalScale;
+                miraTween = miraRectTransform.DOScale(miraOriginalScale * 1.4f, 0.3f)
+                    .SetLoops(-1, LoopType.Yoyo)
+                    .SetEase(Ease.InOutSine);
+            }
         }
         else
         {
             miraRectTransform.anchoredPosition = centerPosition;
+            // Detener efecto 
+            if (miraTween != null)
+            {
+                miraTween.Kill();
+                miraTween = null;
+            }
+            // Ocultar cambiando la escala a 0 en lugar de desactivar el GameObject
+            // para evitar que este mismo script deje de ejecutarse.
+            miraRectTransform.localScale = Vector3.zero;
         }
     }
 }

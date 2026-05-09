@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 /// <summary>
 /// Sistema de gancho (Grappling Hook).
@@ -221,4 +222,6 @@ public class GrapplingHook : MonoBehaviour
             Gizmos.DrawLine(hookOrigin?.position ?? origin.position, CurrentTarget);
         }
     }
+
+
 }

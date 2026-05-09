@@ -11,6 +11,8 @@ public class InteractuableHighlighter : MonoBehaviour
 
     private GameObject lastHighlightedObject;
     private Vector3 _smoothedForward;
+    // Dictionary to store original materials for each renderer
+    private Dictionary<Renderer, List<Material>> originalMaterials = new Dictionary<Renderer, List<Material>>();
 
     private void Start()
     {
