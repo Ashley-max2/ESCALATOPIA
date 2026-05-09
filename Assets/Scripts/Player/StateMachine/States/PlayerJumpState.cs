@@ -8,7 +8,7 @@ using UnityEngine;
 public class PlayerJumpState : PlayerBaseState
 {
     private bool _jumpApplied;
-    private float _jumpDelay = 1f; // Delay antes de aplicar el salto (en segundos)
+    private float _jumpDelay = 0f; // Delay antes de aplicar el salto (en segundos)
     private float _jumpTimer = 0f;
     
     public PlayerJumpState(PlayerStateMachine context, PlayerStateFactory factory) 

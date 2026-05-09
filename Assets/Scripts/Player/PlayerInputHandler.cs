@@ -62,6 +62,19 @@ public class PlayerInputHandler : MonoBehaviour
     /// <summary>Ultimo dispositivo usado para actualizar la UI de controles</summary>
     public InputScheme CurrentInputScheme { get; private set; } = InputScheme.KeyboardMouse;
 
+    // ==================== AI OVERRIDE ====================
+    public bool IsAI = false;
+    private float _aiMoveX, _aiMoveZ;
+    private bool _aiJumpPressed, _aiJumpHeld, _aiSprintHeld, _aiHookPressed, _aiHookReleasePressed, _aiInteractPressed;
+    private float _aiCameraX, _aiCameraY;
+
+    public void SetAIMovement(float x, float z) { _aiMoveX = x; _aiMoveZ = z; }
+    public void SetAIJump(bool pressed, bool held) { if (pressed) _aiJumpPressed = true; _aiJumpHeld = held; }
+    public void SetAISprint(bool held) { _aiSprintHeld = held; }
+    public void SetAIHook(bool hook, bool release) { if (hook) _aiHookPressed = true; if (release) _aiHookReleasePressed = true; }
+    public void SetAIInteract(bool pressed) { if (pressed) _aiInteractPressed = true; }
+    public void SetAICamera(float x, float y) { _aiCameraX = x; _aiCameraY = y; }
+
     // ==================== OUTPUT PROPERTIES ====================
 
     // Movement Input
@@ -78,6 +91,7 @@ public class PlayerInputHandler : MonoBehaviour
     // Hook
     public bool HookPressed { get; private set; }
     public bool HookReleasePressed { get; private set; }
+    public bool InteractPressed { get; private set; }
 
     // Camera
     public float CameraX { get; private set; }
@@ -113,6 +127,7 @@ public class PlayerInputHandler : MonoBehaviour
     private bool _jumpPressedThisFrame;
     private bool _hookPressedThisFrame;
     private bool _hookReleasePressedThisFrame;
+    private bool _interactPressedThisFrame;
 
     // Trigger tracking (para detectar "pressed" como GetKeyDown)
     private float _prevHookFireTrigger;
@@ -199,9 +214,11 @@ public class PlayerInputHandler : MonoBehaviour
         _jumpPressedThisFrame = false;
         _hookPressedThisFrame = false;
         _hookReleasePressedThisFrame = false;
+        _interactPressedThisFrame = false;
         JumpPressed = false;
         HookPressed = false;
         HookReleasePressed = false;
+        InteractPressed = false;
     }
 
     // ==================== GAMEPAD DETECTION ====================
@@ -466,11 +483,13 @@ public class PlayerInputHandler : MonoBehaviour
         SprintHeld = false;
         HookPressed = false;
         HookReleasePressed = false;
+        InteractPressed = false;
         CameraX = 0;
         CameraY = 0;
         _jumpPressedThisFrame = false;
         _hookPressedThisFrame = false;
         _hookReleasePressedThisFrame = false;
+        _interactPressedThisFrame = false;
         _prevHookFireTrigger = 0;
         _prevHookReleaseTrigger = 0;
         _prevHookCustomTrigger = 0;
@@ -479,6 +498,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void ProcessMovementInput()
     {
+        if (IsAI)
+        {
+            MoveX = _aiMoveX;
+            MoveZ = _aiMoveZ;
+            return;
+        }
+
         // Movimiento teclado rebindable
         float left = Input.GetKey(GetBinding("Izquierda")) ? -1f : 0f;
         float right = Input.GetKey(GetBinding("Derecha")) ? 1f : 0f;
@@ -502,6 +528,28 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void ProcessActionInput()
     {
+        if (IsAI)
+        {
+            if (_aiJumpPressed) _jumpPressedThisFrame = true;
+            JumpHeld = _aiJumpHeld;
+            SprintHeld = _aiSprintHeld;
+            if (_aiHookPressed) _hookPressedThisFrame = true;
+            if (_aiHookReleasePressed) _hookReleasePressedThisFrame = true;
+            if (_aiInteractPressed) _interactPressedThisFrame = true;
+
+            // Reset AI trigger-like flags
+            _aiJumpPressed = false;
+            _aiHookPressed = false;
+            _aiHookReleasePressed = false;
+            _aiInteractPressed = false;
+
+            JumpPressed = _jumpPressedThisFrame;
+            HookPressed = _hookPressedThisFrame;
+            HookReleasePressed = _hookReleasePressedThisFrame;
+            InteractPressed = _interactPressedThisFrame;
+            return;
+        }
+
         // === SALTO ===
         // Teclado rebindable
         KeyCode jumpBinding = GetBinding("Saltar");
@@ -620,6 +668,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void ProcessCameraInput()
     {
+        if (IsAI)
+        {
+            CameraX = _aiCameraX;
+            CameraY = _aiCameraY;
+            return;
+        }
+
         // Raton
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;

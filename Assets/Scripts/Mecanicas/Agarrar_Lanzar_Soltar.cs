@@ -1,31 +1,51 @@
 using UnityEngine;
 
+
+
+
 public class AgarrarLanzarSoltar : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private Camera cam;
     [SerializeField] private Transform followPoint;
 
-    [Header("Configuraci�n")]
+    [Header("Configuracion")]
     [SerializeField] private float distanciaMax = 3f;
     [SerializeField] private LayerMask capaAgarrable;
-    [SerializeField] private float fuerzaLanzamiento = 5f; // fuerza reducida
-    [SerializeField] private float smoothSpeed = 20f; // Velocidad de suavizado del rayo (aumentada para más suavidad)
+    [SerializeField] private float fuerzaLanzamiento = 10f;
+
+    public void SetDistanciaMax(float val) => distanciaMax = val;
+    public void SetFuerzaLanzamiento(float val) => fuerzaLanzamiento = val;
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
+    private PlayerInputHandler _input;
+
+    /// <summary>
+    /// True si el player tiene un objeto agarrado
+    /// </summary>
+    public bool TieneObjeto => objetoActual != null;
+
+    /// <summary>
+    /// Comprueba si un GameObject especifico es el que esta agarrado
+    /// </summary>
+    public bool EsObjetoAgarrado(GameObject obj)
+    {
+        return objetoActual != null && objetoActual == obj;
+    }
 
     void Awake()
     {
         if (cam == null) cam = Camera.main;
+        _input = GetComponentInParent<PlayerInputHandler>();
     }
 
     void Update()
     {
         Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
-        // R = agarrar / soltar
-        if (Input.GetKeyDown(KeyCode.R))
+        // InteractPressed = agarrar / soltar
+        if (_input != null && _input.InteractPressed)
         {
             if (objetoActual == null)
                 IntentarAgarrar();
@@ -33,8 +53,8 @@ public class AgarrarLanzarSoltar : MonoBehaviour
                 SoltarObjeto();
         }
 
-        // Click izquierdo = lanzar
-        if (Input.GetMouseButtonDown(0) && objetoActual != null)
+        // HookReleasePressed = lanzar (as an alternative to mouse)
+        if (_input != null && _input.HookReleasePressed && objetoActual != null)
         {
             LanzarObjeto();
         }

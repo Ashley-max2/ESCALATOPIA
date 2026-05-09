@@ -2,13 +2,19 @@ using UnityEngine;
 
 /// <summary>
 /// Estado de salto desde pared (Wall Jump).
-/// Aplica fuerza en dirección opuesta a la pared más fuerza hacia arriba.
+/// Salta en la dirección WASD relativa a la pared:
+///   W = hacia fuera de la pared (normal) + arriba
+///   S = hacia abajo
+///   A = izquierda en la pared
+///   D = derecha en la pared
+/// Sin input = salta hacia atrás (alejándose de la pared).
+/// El player NO se gira durante el wall jump.
 /// </summary>
 public class PlayerWallJumpState : PlayerBaseState
 {
     private bool _jumpApplied;
     private float _wallJumpTimer;
-    private const float WALL_JUMP_LOCK_DURATION = 0.2f; // Tiempo mínimo antes de poder re-escalar
+    private const float WALL_JUMP_LOCK_DURATION = 0.2f;
     
     public PlayerWallJumpState(PlayerStateMachine context, PlayerStateFactory factory) 
         : base(context, factory) { }
@@ -18,7 +24,7 @@ public class PlayerWallJumpState : PlayerBaseState
         _jumpApplied = false;
         _wallJumpTimer = 0;
         
-        // Consume stamina for wall jump
+        // Consumir stamina por wall jump
         if (ctx.Stamina != null)
         {
             ctx.Stamina.ConsumeStamina(ctx.ClimbStaminaCost * 2f);
@@ -29,7 +35,6 @@ public class PlayerWallJumpState : PlayerBaseState
     {
         _wallJumpTimer += Time.deltaTime;
         
-        // Transition after brief lock
         if (_jumpApplied && _wallJumpTimer >= WALL_JUMP_LOCK_DURATION)
         {
             SwitchState(factory.Airborne());
@@ -51,23 +56,64 @@ public class PlayerWallJumpState : PlayerBaseState
     
     private void ApplyWallJump()
     {
-        // Reset velocity
         ctx.Rb.velocity = Vector3.zero;
         
-        // Calculate jump direction (away from wall + up)
-        Vector3 jumpDirection = ctx.WallNormal * ctx.WallJumpForce + Vector3.up * ctx.WallJumpUpwardForce;
+        // Ejes de la pared (misma lógica que PlayerClimbState)
+        Vector3 wallNormal = ctx.WallNormal.normalized;
+        Vector3 wallRight = Vector3.Cross(wallNormal, Vector3.up).normalized;
+        Vector3 wallUp = Vector3.up;
         
-        // Apply force
-        ctx.Rb.AddForce(jumpDirection, ForceMode.Impulse);
+        // Input CRUDO del teclado (WASD)
+        float horizontal = ctx.Input.MoveX; // A (-1) / D (+1)
+        float vertical = ctx.Input.MoveZ;   // S (-1) / W (+1)
         
-        // Rotate to face jump direction
-        Vector3 facingDir = new Vector3(ctx.WallNormal.x, 0, ctx.WallNormal.z).normalized;
-        if (facingDir.magnitude > 0.1f)
+        Vector3 jumpDirection;
+        
+        if (ctx.Input.HasMovementInput)
         {
-            ctx.transform.rotation = Quaternion.LookRotation(facingDir);
+            // Calcular dirección basada en WASD relativo a la pared
+            // horizontal (A/D) = moverse a lo largo de la pared
+            // vertical (W) = saltar hacia fuera de la pared + arriba
+            // vertical (S) = ir hacia abajo
+            Vector3 dir = Vector3.zero;
+            
+            // Componente lateral (A/D mueven a lo largo de la pared)
+            dir += wallRight * horizontal;
+            
+            // Componente vertical/normal
+            if (vertical > 0.1f)
+            {
+                // W = saltar hacia fuera de la pared + arriba
+                dir += wallNormal * 1f;
+            }
+            else if (vertical < -0.1f)
+            {
+                // S = saltar ligeramente hacia fuera + abajo
+                dir += wallNormal * 0.3f;
+                dir += Vector3.down * 0.3f;
+            }
+            
+            // Si solo hay input lateral (A o D sin W/S), añadir componente normal para separarse
+            if (Mathf.Abs(horizontal) > 0.1f && Mathf.Abs(vertical) < 0.1f)
+            {
+                dir += wallNormal * 0.5f;
+            }
+            
+            dir = dir.normalized;
+            
+            // Aplicar fuerzas
+            jumpDirection = dir * ctx.WallJumpForce + wallUp * ctx.WallJumpUpwardForce;
+        }
+        else
+        {
+            // Sin input = saltar hacia atrás (alejándose de la pared)
+            jumpDirection = wallNormal * ctx.WallJumpForce + wallUp * ctx.WallJumpUpwardForce;
         }
         
-        // Set fall tracking from new position
+        ctx.Rb.AddForce(jumpDirection, ForceMode.Impulse);
+        
+        // NO rotar al player - se queda mirando en la misma dirección
+        
         ctx.FallStartHeight = ctx.transform.position.y;
         
         Debug.Log("Wall Jump!");

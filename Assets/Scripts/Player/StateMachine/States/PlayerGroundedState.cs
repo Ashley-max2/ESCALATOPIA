@@ -47,8 +47,10 @@ public class PlayerGroundedState : PlayerBaseState
         // Get input
         Vector3 inputDir = new Vector3(ctx.Input.MoveX, 0, ctx.Input.MoveZ).normalized;
         
+        bool isSprinting = ctx.Input.SprintHeld && inputDir.sqrMagnitude > 0.01f;
+        
         // Determine speed based on sprint
-        float targetSpeed = ctx.Input.SprintHeld ? ctx.RunSpeed : ctx.WalkSpeed;
+        float targetSpeed = isSprinting ? ctx.RunSpeed : ctx.WalkSpeed;
         
         // Apply movement relative to camera (estilo Zelda BotW)
         ctx.MoveRelativeToCamera(inputDir, targetSpeed);
@@ -80,16 +82,7 @@ public class PlayerGroundedState : PlayerBaseState
     
     private void HandleLanding(float fallDistance)
     {
-        GameEvents.PlayerLanded(fallDistance);
-        
-        // Check for lethal fall
-        if (fallDistance >= ctx.LethalFallHeight)
-        {
-            ctx.Die();
-        }
-        else if (fallDistance >= ctx.SafeFallHeight)
-        {
-            Debug.Log($"Hard landing from {fallDistance:F1}m");
-        }
+        // Toda la lógica de muerte por caída está centralizada en PlayerStateMachine
+        ctx.HandleLanding(fallDistance);
     }
 }

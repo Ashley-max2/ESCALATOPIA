@@ -29,6 +29,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Escenas donde la pausa (ESC/Start/Options) queda deshabilitada")]
     [SerializeField] private string[] pauseBlockedScenes = { "Creditos" };
 
+    [Header("=== HUD PANELS (se ocultan al pausar) ===")]
+    [Tooltip("Arrastra aqui los paneles de HUD que quieres ocultar al pausar (stamina, punteria, etc.)")]
+    [SerializeField] private GameObject[] hudPanelsToHideOnPause;
+
     // Referencia al PauseMenuManager (se registra automaticamente)
     private PauseMenuManager _pauseMenuManager;
 
@@ -184,6 +188,9 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
+        // Ocultar paneles de HUD (stamina, punteria, etc.)
+        SetHudPanelsActive(false);
+
         // Mostrar panel via PauseMenuManager
         if (_pauseMenuManager != null)
         {
@@ -240,6 +247,9 @@ public class GameManager : MonoBehaviour
             _pauseMenuManager.Hide();
         else if (pausePanel != null)
             pausePanel.SetActive(false);
+
+        // Restaurar paneles de HUD
+        SetHudPanelsActive(true);
     }
 
     /// <summary>
@@ -420,9 +430,25 @@ public class GameManager : MonoBehaviour
         return font;
     }
 
+    /// <summary>
+    /// Activa o desactiva todos los paneles de HUD configurados.
+    /// Se usa para ocultar stamina, punteria, etc. durante la pausa.
+    /// </summary>
+    private void SetHudPanelsActive(bool active)
+    {
+        if (hudPanelsToHideOnPause == null) return;
+
+        for (int i = 0; i < hudPanelsToHideOnPause.Length; i++)
+        {
+            if (hudPanelsToHideOnPause[i] != null)
+                hudPanelsToHideOnPause[i].SetActive(active);
+        }
+    }
+
     private void HandlePlayerDeath(Vector3 position)
     {
         Debug.Log($"Player died at {position}");
+        AnalyticsManager.Instance?.RecordDeath();
     }
 
     private void HandlePlayerRespawn(Vector3 position)
