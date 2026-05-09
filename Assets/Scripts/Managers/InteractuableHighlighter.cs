@@ -10,34 +10,30 @@ public class InteractuableHighlighter : MonoBehaviour
     [SerializeField] private Camera playerCamera; // Cámara del jugador
 
     private GameObject lastHighlightedObject;
-    private Vector3 _smoothedForward;
     // Dictionary to store original materials for each renderer
     private Dictionary<Renderer, List<Material>> originalMaterials = new Dictionary<Renderer, List<Material>>();
 
     private void Start()
     {
-        if (playerCamera != null)
+        if (playerCamera == null)
         {
-            _smoothedForward = playerCamera.transform.forward;
+            playerCamera = Camera.main;
         }
     }
 
     private void Update()
     {
-        // Suavizar la dirección de apuntado
-        if (playerCamera != null)
-        {
-            _smoothedForward = Vector3.Slerp(_smoothedForward, playerCamera.transform.forward, Time.deltaTime * 20f);
-        }
-
         ApplyHighlightToInteractuables();
     }
 
     private void ApplyHighlightToInteractuables()
     {
-        // Realizar un raycast desde la cámara del jugador con dirección suavizada
-        Ray ray = new Ray(playerCamera.transform.position, _smoothedForward);
-        Debug.DrawRay(playerCamera.transform.position, _smoothedForward * maxRayDistance, Color.red);
+        Vector3 aimForward = playerCamera != null ? playerCamera.transform.forward : transform.forward;
+        Vector3 originPos = playerCamera != null ? playerCamera.transform.position : transform.position;
+        
+        // Realizar un raycast desde la cámara del jugador
+        Ray ray = new Ray(originPos, aimForward);
+        Debug.DrawRay(originPos, aimForward * maxRayDistance, Color.red);
         if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance))
         {
             GameObject hitObject = hit.collider.gameObject;

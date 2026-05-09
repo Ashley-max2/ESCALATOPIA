@@ -14,19 +14,15 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
-    private Vector3 smoothedForward;
 
     void Awake()
     {
         if (cam == null) cam = Camera.main;
-        smoothedForward = cam.transform.forward;
     }
 
     void Update()
     {
-        // Suavizar la dirección del rayo usando interpolación esférica para direcciones
-        smoothedForward = Vector3.Slerp(smoothedForward, cam.transform.forward, Time.deltaTime * smoothSpeed);
-        Debug.DrawRay(cam.transform.position, smoothedForward * distanciaMax, Color.red);
+        Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
         // R = agarrar / soltar
         if (Input.GetKeyDown(KeyCode.R))
