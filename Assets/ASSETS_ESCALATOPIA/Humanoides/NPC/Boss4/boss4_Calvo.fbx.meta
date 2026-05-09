@@ -1,9 +1,24 @@
 fileFormatVersion: 2
-guid: f001b57f2cd7e9541bda53483ae363bc
+guid: a099b6677b10b404f9b3a29a33817430
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PIEL
+    second: {fileID: 2100000, guid: a3ed5520267d7a74dac763e40b5d3260, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ROPA_INFERIOR
+    second: {fileID: 2100000, guid: 8cc62c471a7bfee4dbe4815b39b268c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ROPA_SUPERIOR
+    second: {fileID: 2100000, guid: 74eb5d386fcae354c9936b1ef3c39185, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -79,7 +94,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
