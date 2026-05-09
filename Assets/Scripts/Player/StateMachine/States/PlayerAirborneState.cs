@@ -73,11 +73,19 @@ public class PlayerAirborneState : PlayerBaseState
     
     private void CheckTransitions()
     {
-        // Landed
+        // Landed - Verificar específicamente con raycast a layer Ground
         if (ctx.IsGrounded && ctx.Rb.velocity.y <= 0.1f)
         {
-            SwitchState(factory.Grounded());
-            return;
+            // Verificar que realmente está tocando Ground layer
+            Vector3 origin = ctx.GroundCheck.position + Vector3.up * ctx.GroundCheckRadius;
+            if (Physics.Raycast(origin, Vector3.down, ctx.GroundCheckRadius * 2.5f, ctx.GroundMask))
+            {
+                // Activar parámetro Landing para reproducir EndJump inmediatamente
+                ctx.Animator.SetBool("Landing", true);
+                Debug.Log("Landing activado - tocando Ground layer");
+                SwitchState(factory.Grounded());
+                return;
+            }
         }
         
         // Coyote time jump

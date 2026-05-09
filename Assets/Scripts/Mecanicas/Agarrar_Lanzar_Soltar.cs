@@ -13,7 +13,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
     [SerializeField] private float distanciaMax = 3f;
     [SerializeField] private LayerMask capaAgarrable;
     [SerializeField] private float fuerzaLanzamiento = 10f;
-    
+
     public void SetDistanciaMax(float val) => distanciaMax = val;
     public void SetFuerzaLanzamiento(float val) => fuerzaLanzamiento = val;
 
@@ -63,7 +63,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
         if (objetoActual != null)
         {
             objetoActual.transform.position = followPoint.position;
-            objetoActual.transform.rotation = Quaternion.identity;
+            objetoActual.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
         }
     }
 
@@ -87,7 +87,12 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             rbActual.useGravity = false;
             rbActual.velocity = Vector3.zero;
             rbActual.angularVelocity = Vector3.zero;
-            rbActual.freezeRotation = true;
+
+            // rotaci�n fija correcta
+            obj.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+
+            // bloquear rotaci�n
+            rbActual.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
         obj.transform.SetParent(followPoint);
@@ -100,11 +105,22 @@ public class AgarrarLanzarSoltar : MonoBehaviour
         objetoActual.transform.SetParent(null);
 
         rbActual.useGravity = true;
+
+        // desbloquear f�sica completa
+        rbActual.constraints = RigidbodyConstraints.None;
+
         rbActual.freezeRotation = false;
 
-        rbActual.AddForce(cam.transform.forward * fuerzaLanzamiento, ForceMode.Impulse);
+        // lanzamiento en arco (45�)
+        Vector3 direccion =
+            (cam.transform.forward + Vector3.up).normalized;
 
-        // BUSCAR ThrownBox (en objeto, hijo o padre)
+        rbActual.AddForce(
+            direccion * fuerzaLanzamiento * 1.7f,
+            ForceMode.Impulse
+        );
+
+        // activar l�gica del barril
         ThrownBox thrown = objetoActual.GetComponent<ThrownBox>();
 
         if (thrown == null)
@@ -131,7 +147,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
         if (rbActual != null)
         {
             rbActual.useGravity = true;
-            rbActual.freezeRotation = false;
+            rbActual.constraints = RigidbodyConstraints.None;
         }
 
         objetoActual = null;
