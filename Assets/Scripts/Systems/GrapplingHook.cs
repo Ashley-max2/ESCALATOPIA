@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 /// <summary>
 /// Sistema de gancho (Grappling Hook).
@@ -44,7 +45,8 @@ public class GrapplingHook : MonoBehaviour
     public void SetTravelSpeed(float val) => travelSpeed = val;
     public void SetPullSpeed(float val) => pullSpeed = val;
     public bool IsActive { get; private set; }
-    public Vector3 CurrentTarget { get; set; }
+    public Vector3 CurrentTarget { get;  set; }
+    public Transform CurrentHookPoint => _currentHookPoint;
     public bool IsPulling { get; private set; }
     public Rigidbody PulledObject { get; private set; }
     public Transform HookOrigin => hookOrigin;
@@ -59,6 +61,9 @@ public class GrapplingHook : MonoBehaviour
     private float _lastFireTime;
     private Transform _currentHookPoint;
     private Transform _playerTransform;
+    private float _lostTargetTime;
+    private Transform _lastValidTarget;
+    
 
     // Referencia al sistema de agarrar para saber si tiene un objeto
     private AgarrarLanzarSoltar _agarrarSystem;
@@ -98,6 +103,15 @@ public class GrapplingHook : MonoBehaviour
 
     private void Update()
     {
+        Transform cam = Camera.main != null ? Camera.main.transform : null;
+        Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
+        
+        UpdateRopeVisual();
+        
+        // Dibujar rayo rojo suavizado para debug (dirección de apuntado)
+        Vector3 debugOrigin = cam != null ? cam.position : _playerTransform.position + Vector3.up;
+        Debug.DrawRay(debugOrigin, aimForward * maxRange, Color.red);
+        
         // Cambiar modo con R
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -161,10 +175,13 @@ public class GrapplingHook : MonoBehaviour
         // Usar la direccion de la camara para apuntar (hay que mirar al hook point)
         Transform cam = Camera.main != null ? Camera.main.transform : null;
         Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
+        
+        // Origin of detection is now the camera
+        Vector3 originPos = cam != null ? cam.position : _playerTransform.position + Vector3.up;
 
         // Find all potential hook points
-        Collider[] colliders = Physics.OverlapSphere(_playerTransform.position, maxRange, hookableMask);
-
+        Collider[] colliders = Physics.OverlapSphere(originPos, maxRange, hookableMask);
+        
         foreach (var col in colliders)
         {
             // Check tag (optional)
@@ -172,15 +189,18 @@ public class GrapplingHook : MonoBehaviour
                 continue;
 
             Vector3 targetPos = col.transform.position;
-            Vector3 directionToTarget = targetPos - _playerTransform.position;
-
+            Vector3 directionToTarget = targetPos - originPos;
+            
             // Must be where the camera is looking (within 30 degree cone)
             float angle = Vector3.Angle(aimForward, directionToTarget);
             if (angle > 15f) continue;
-
-            // Line of sight check
-            if (Physics.Raycast(_playerTransform.position + Vector3.up, directionToTarget.normalized,
-                directionToTarget.magnitude - 0.5f, ~hookableMask))
+            
+            // Line of sight check (ignoramos capa Player, Ignore Raycast y lo que ya es hookable)
+            int layerMaskToIgnore = hookableMask.value | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"));
+            int obstacleMask = ~layerMaskToIgnore;
+            
+            if (Physics.Raycast(originPos, directionToTarget.normalized, 
+                directionToTarget.magnitude - 0.5f, obstacleMask))
                 continue;
 
             // Score based on angle and distance (lower is better)
@@ -193,8 +213,27 @@ public class GrapplingHook : MonoBehaviour
                 bestTarget = col.transform;
             }
         }
-
-        _currentHookPoint = bestTarget;
+        
+        if (bestTarget != null)
+        {
+            _currentHookPoint = bestTarget;
+            _lastValidTarget = bestTarget;
+            _lostTargetTime = Time.time;
+        }
+        else
+        {
+            if (Time.time - _lostTargetTime <= 0.1f && _lastValidTarget != null)
+            {
+                bestTarget = _lastValidTarget;
+                _currentHookPoint = bestTarget;
+            }
+            else
+            {
+                _currentHookPoint = null;
+                _lastValidTarget = null;
+            }
+        }
+        
         return bestTarget != null ? bestTarget.position : Vector3.zero;
     }
 
@@ -286,7 +325,8 @@ public class GrapplingHook : MonoBehaviour
         IsActive = false;
         CurrentTarget = Vector3.zero;
         _currentHookPoint = null;
-
+        _lastValidTarget = null;
+        
         // Hide rope
         ropeRenderer.enabled = false;
         if (Cuerda != null) { /* Automaticamente detectado por CuerdaRenderer */ }
@@ -324,30 +364,35 @@ public class GrapplingHook : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // En edit mode _playerTransform aun no existe, usamos transform
-        Transform origin = Application.isPlaying ? (_playerTransform ?? transform) : transform;
-
-        if (origin == null) return;
-
+        Transform playerOrTransform = Application.isPlaying ? (_playerTransform ?? transform) : transform;
+        Transform camTransform = Camera.main != null ? Camera.main.transform : null;
+        
+        if (playerOrTransform == null) return;
+        
+        Vector3 originPos = camTransform != null ? camTransform.position : playerOrTransform.position + Vector3.up;
+        Vector3 forwardDir = camTransform != null ? camTransform.forward : playerOrTransform.forward;
+        
         // Rango de deteccion
         Gizmos.color = new Color(0, 1, 1, 0.1f);
-        Gizmos.DrawWireSphere(origin.position, maxRange);
-
+        Gizmos.DrawWireSphere(originPos, maxRange);
+        
         // Cono de deteccion
         Gizmos.color = Color.cyan;
-        Vector3 forward = origin.forward * maxRange;
+        Vector3 forward = forwardDir * maxRange;
         Vector3 leftEdge = Quaternion.Euler(0, -15, 0) * forward;
         Vector3 rightEdge = Quaternion.Euler(0, 15, 0) * forward;
-
-        Gizmos.DrawRay(origin.position + Vector3.up, leftEdge);
-        Gizmos.DrawRay(origin.position + Vector3.up, rightEdge);
-
+        
+        Gizmos.DrawRay(originPos, leftEdge);
+        Gizmos.DrawRay(originPos, rightEdge);
+        
         // Target actual
         if (IsActive)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(CurrentTarget, 0.5f);
-            Gizmos.DrawLine(hookOrigin?.position ?? origin.position, CurrentTarget);
+            Gizmos.DrawLine(hookOrigin?.position ?? originPos, CurrentTarget);
         }
     }
+
+
 }

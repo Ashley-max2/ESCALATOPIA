@@ -430,18 +430,13 @@ public float Deceleration => deceleration;
 
         // Apply horizontal velocity, preserve vertical
         Rb.velocity = new Vector3(CurrentVelocity.x, Rb.velocity.y, CurrentVelocity.z);
-
-        // Rotate towards movement direction (estilo Zelda BotW)
+        
+        // Rotar siempre hacia la dirección del movimiento (estilo Honkai Star Rail / vista libre)
         if (moveDirection.magnitude > 0.1f)
         {
-            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-            float angle = Mathf.SmoothDampAngle(
-                transform.eulerAngles.y,
-                targetAngle,
-                ref _currentRotationVelocity,
-                1f / rotationSpeed
-            );
-            transform.rotation = Quaternion.Euler(0, angle, 0);
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            // Usamos Slerp para una rotación suave y fluida que gire completamente al personaje
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         }
     }
 
