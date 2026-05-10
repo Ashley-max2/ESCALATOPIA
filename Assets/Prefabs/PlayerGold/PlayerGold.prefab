@@ -14685,6 +14685,8 @@ GameObject:
   - component: {fileID: 8525876419314267651}
   - component: {fileID: 8725259313225057789}
   - component: {fileID: 622057648719624731}
+  - component: {fileID: 5457009002486873683}
+  - component: {fileID: 2220677867364616749}
   m_Layer: 8
   m_Name: PlayerGold
   m_TagString: Player
@@ -14957,6 +14959,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2addb212ddd215d4099bdd593f68df67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5457009002486873683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389546477085994539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7076ed20b3cc151438384ae8f03456b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distanciaRay: 3
+  camaraJugador: {fileID: 2543911948357123419}
+  capaInteractuable:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &2220677867364616749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389546477085994539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbfd423e5271cc843bb55457fe8e6ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5771029953877517713
