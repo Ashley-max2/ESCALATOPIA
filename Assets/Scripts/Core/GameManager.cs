@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
 
     [Header("=== REFERENCES ===")]
     [SerializeField] private PlayerStateMachine player;
+    [Header("=== HUD PANELS (se ocultan al pausar) ===")]
+    [Tooltip("Arrastra aqui los paneles de HUD que quieres ocultar al pausar (stamina, subtitulos, punteria, etc.)")]
+    [SerializeField] private GameObject[] hudPanelsToHideOnPause;
 
     [Header("=== PAUSE PANEL ===")]
     [Tooltip("Si lo dejas vacio se crea uno automaticamente")]
@@ -47,6 +50,8 @@ public class GameManager : MonoBehaviour
     // Guardamos estado del player al pausar
     private Vector3 _savedVelocity;
     private bool _savedGravity;
+    // Guardar estado de HUDs para restaurar al reanudar
+    private System.Collections.Generic.List<GameObject> _hudPanelsActiveBeforePause = new System.Collections.Generic.List<GameObject>();
 
     private void Awake()
     {
@@ -184,6 +189,9 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
+        // Ocultar paneles HUD (stamina, subtitulos, etc.) y registrar su estado previo
+        RecordHudPanelsAndSetActive(false);
+
         // Mostrar panel via PauseMenuManager
         if (_pauseMenuManager != null)
         {
@@ -240,6 +248,73 @@ public class GameManager : MonoBehaviour
             _pauseMenuManager.Hide();
         else if (pausePanel != null)
             pausePanel.SetActive(false);
+
+        // Restaurar HUD panels que estaban activos antes de pausar
+        RestoreHudPanelsAfterPause();
+    }
+
+    private void SetHudPanelsActive(bool active)
+    {
+        if (hudPanelsToHideOnPause == null || hudPanelsToHideOnPause.Length == 0) return;
+
+        for (int i = 0; i < hudPanelsToHideOnPause.Length; i++)
+        {
+            var go = hudPanelsToHideOnPause[i];
+            if (go == null) continue;
+            go.SetActive(active);
+        }
+    }
+
+    private void RecordHudPanelsAndSetActive(bool active)
+    {
+        _hudPanelsActiveBeforePause.Clear();
+        if (hudPanelsToHideOnPause == null || hudPanelsToHideOnPause.Length == 0)
+        {
+            // Si no hay panels explícitos asignados, intentar encontrar panels de subtítulos
+            var subtitleHandlers = Object.FindObjectsByType<RaceResultSubtitles>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            if (subtitleHandlers != null)
+            {
+                foreach (var sh in subtitleHandlers)
+                {
+                    // access the serialized field via reflection (private field 'subtitlePanel')
+                    var t = sh.GetType();
+                    var panelField = t.GetField("subtitlePanel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    if (panelField != null)
+                    {
+                        var panel = panelField.GetValue(sh) as GameObject;
+                        if (panel != null)
+                        {
+                            if (!active && panel.activeSelf) _hudPanelsActiveBeforePause.Add(panel);
+                            panel.SetActive(active);
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        for (int i = 0; i < hudPanelsToHideOnPause.Length; i++)
+        {
+            var go = hudPanelsToHideOnPause[i];
+            if (go == null) continue;
+            if (!active && go.activeSelf)
+                _hudPanelsActiveBeforePause.Add(go);
+            go.SetActive(active);
+        }
+    }
+
+    private void RestoreHudPanelsAfterPause()
+    {
+        if (_hudPanelsActiveBeforePause == null || _hudPanelsActiveBeforePause.Count == 0) return;
+
+        for (int i = 0; i < _hudPanelsActiveBeforePause.Count; i++)
+        {
+            var go = _hudPanelsActiveBeforePause[i];
+            if (go == null) continue;
+            go.SetActive(true);
+        }
+
+        _hudPanelsActiveBeforePause.Clear();
     }
 
     /// <summary>

@@ -2236,6 +2236,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1622798260364795890, guid: a3a23a4bd4e49644dbbf412d47be7f4d, type: 3}
   m_PrefabInstance: {fileID: 642626313}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &645574059 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 739316724638168098, guid: 0bcce96e04668c243bdeb0a955b182f5, type: 3}
+  m_PrefabInstance: {fileID: 886091208}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &661821056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2509,7 +2514,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.5
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -5074,6 +5079,10 @@ MonoBehaviour:
   isPaused: 0
   gameOver: 0
   player: {fileID: 2070027116}
+  hudPanelsToHideOnPause:
+  - {fileID: 943105342}
+  - {fileID: 645574059}
+  - {fileID: 4377613208155059880}
   pausePanel: {fileID: 1168180518}
   pauseBlockedScenes:
   - Creditos
@@ -5702,6 +5711,7 @@ MonoBehaviour:
   distanceFromBoss: 3
   fadeDuration: 0.5
   unfadeDuration: 0.5
+  pickupSound: event:/SFX/Buttons
   onCollected:
     m_PersistentCalls:
       m_Calls: []
