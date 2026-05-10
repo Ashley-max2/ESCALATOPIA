@@ -477,8 +477,28 @@ public class PlayerStateMachine : MonoBehaviour
     
     public void Respawn()
     {
-        transform.position = LastGroundedPosition;
-        Rb.velocity = Vector3.zero;
+        // Prioridad: posición guardada en el último checkpoint (JSON).
+        // Si no hay save o no tiene posición, cae al LastGroundedPosition.
+        Vector3 spawnPos = LastGroundedPosition;
+
+        if (GameProgressDatabase.HasSave())
+        {
+            GameProgressData save = GameProgressDatabase.Load();
+            if (save != null && save.HasSpawnPosition)
+                spawnPos = save.GetSpawnPosition();
+        }
+
+        // Usar rb.position para evitar snap-back con Rigidbody.Interpolate
+        Rb.isKinematic = true;
+        Rb.velocity        = Vector3.zero;
+        Rb.angularVelocity = Vector3.zero;
+        Rb.position        = spawnPos;
+        Rb.isKinematic     = false;
+
+        transform.position  = spawnPos;
+        LastGroundedPosition = spawnPos;
+        Physics.SyncTransforms();
+
         TransitionToState(States.Grounded());
         GameEvents.PlayerRespawn(transform.position);
     }
