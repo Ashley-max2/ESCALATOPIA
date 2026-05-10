@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using FMODUnity;
 using System.Collections;
 
 /// <summary>
@@ -24,6 +25,9 @@ public class CollectibleItem : MonoBehaviour
     public float fadeDuration = 0.5f;
     [Tooltip("Duración del fade in")]
     public float unfadeDuration = 0.5f;
+
+    [Header("Audio")]
+    [EventRef] public string pickupSound = "event:/SFX/Buttons";
 
     [Header("Events")]
     public UnityEvent onCollected;
@@ -49,6 +53,13 @@ public class CollectibleItem : MonoBehaviour
         if (isCollected) return;
 
         isCollected = true;
+
+        // Reproducir sonido de pickup
+        if (!string.IsNullOrEmpty(pickupSound))
+        {
+            RuntimeManager.PlayOneShot(pickupSound, transform.position);
+        }
+
         onCollected?.Invoke();
 
         // Si teleportToBoss está activado, iniciar la corrutina ANTES de desactivar

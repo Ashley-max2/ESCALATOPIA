@@ -4911,18 +4911,16 @@ MonoBehaviour:
   hookableMask:
     serializedVersion: 2
     m_Bits: 2048
-  hookPointTag: HookPoint
-  travelSpeed: 20
-  cooldown: 1
   pullableMask:
     serializedVersion: 2
     m_Bits: 4096
+  hookPointTag: HookPoint
+  travelSpeed: 20
+  cooldown: 1
   pullSpeed: 15
-  pullStopDistance: 1.5
   ropeRenderer: {fileID: 1787044922679830763}
   hookOrigin: {fileID: 4763541342759204447}
   uiPunteia: {fileID: 0}
-  usarRendererInterno: 0
 --- !u!1 &2483504383602215341
 GameObject:
   m_ObjectHideFlags: 0
@@ -10129,10 +10127,10 @@ MonoBehaviour:
   rotationSpeed: 12
   acceleration: 10
   deceleration: 8
-  runStaminaCost: 5
   jumpForce: 10
   airControl: 0.5
   fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   climbSpeed: 6
@@ -10146,7 +10144,6 @@ MonoBehaviour:
   mantleExtraHeight: 0.6
   minClimbAngle: 45
   maxClimbAngle: 135
-  hookAccelerationTime: 0.3
   groundCheck: {fileID: 5924030976497425069}
   groundCheckRadius: 0.3
   groundMask:
@@ -10180,9 +10177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bindings: []
-  IsAI: 0
   mouseSensitivity: 2
-  gamepadCameraSensitivity: 3
+  gamepadCameraSensitivity: 0.5
   gamepadDeadzone: 0.25
   inputSchemeSwitchDelay: 0.5
   rebindTriggerSuppressSeconds: 0.5
