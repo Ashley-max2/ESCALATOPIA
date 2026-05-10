@@ -260,7 +260,8 @@ public float Deceleration => deceleration;
                 break;
 
             case PlayerAirborneState:
-                Animator.Play("JumpLoop");
+                // El Animator Controller transiciona automáticamente a Jump_Loop
+                // después de Jump_Start (cuando Jump=false). No es necesario Play().
                 break;
 
             case PlayerHookState:
@@ -274,6 +275,15 @@ public float Deceleration => deceleration;
                     Animator.SetFloat("ClimbSpeed", 1f);
                 else
                     Animator.SetFloat("ClimbSpeed", 0f);
+
+                // MoveX/MoveZ para ClimbLeft, ClimbRight y ClimbForward.
+                // Dead zone de 0.2 para evitar que valores residuales de un frame
+                // disparen ClimbForward/Left/Right cuando no hay input real.
+                const float CLIMB_INPUT_DEADZONE = 0.2f;
+                float climbMoveX = Mathf.Abs(Input.MoveX) > CLIMB_INPUT_DEADZONE ? Input.MoveX : 0f;
+                float climbMoveZ = Mathf.Abs(Input.MoveZ) > CLIMB_INPUT_DEADZONE ? Input.MoveZ : 0f;
+                Animator.SetFloat("MoveX", climbMoveX);
+                Animator.SetFloat("MoveZ", climbMoveZ);
                 break;
         }
     }

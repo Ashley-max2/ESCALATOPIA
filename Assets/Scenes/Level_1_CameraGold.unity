@@ -2747,7 +2747,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2199396345389832988, guid: 0a6f20c872f2e7347940d0aa17047787, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1071292684}
   m_SourcePrefab: {fileID: 100100000, guid: 0a6f20c872f2e7347940d0aa17047787, type: 3}
 --- !u!1 &785428330
 GameObject:
@@ -4445,6 +4448,33 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1046695161}
   m_SourcePrefab: {fileID: 100100000, guid: 2f57b399b656cbc4ab4af4b92bb88803, type: 3}
+--- !u!1 &1071292680 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2199396345389832988, guid: 0a6f20c872f2e7347940d0aa17047787, type: 3}
+  m_PrefabInstance: {fileID: 781711509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1071292684
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071292680}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 800285959599157283, guid: 7e79e1677b87a824db42b05770ab039b, type: 3}
 --- !u!1 &1079445669 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3345139858612071259, guid: 98279c478e1107049823846757804b74, type: 3}
@@ -5887,7 +5917,7 @@ TerrainCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -38211,7 +38241,7 @@ Animator:
   m_GameObject: {fileID: 3741824985851744810}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: aaf1ec7515d73794081ecdaedf3a8b60, type: 3}
-  m_Controller: {fileID: 9100000, guid: 590e5a0bfc54af04d9e90270755531bd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 50e8599d929302547b2844d36d9fd972, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

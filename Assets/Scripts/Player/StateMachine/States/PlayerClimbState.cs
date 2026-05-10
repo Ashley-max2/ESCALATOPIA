@@ -22,6 +22,13 @@ public class PlayerClimbState : PlayerBaseState
     
     private float _staminaConsumeTimer;
     private float _offWallTimer = 0f;
+
+    // Collider adjustment para escalada (evita que el mesh atraviese la pared)
+    private Vector3 _originalColliderCenter;
+    private float _originalColliderHeight;
+    [UnityEngine.Tooltip("Desplazamiento del collider hacia la pared durante la escalada")]
+    private const float CLIMB_COLLIDER_FORWARD_OFFSET = 0.2f;
+    private const float CLIMB_COLLIDER_HEIGHT_REDUCTION = 0.3f;
     
     // Mantle
     private const float MANTLE_FORWARD_DIST = 1.0f;
@@ -37,8 +44,21 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void Enter()
     {
-        //Animator
+        // Animator: activar capa Climb (Layer 1) y parámetro Climb
+        ctx.Animator.SetLayerWeight(1, 1f);
         ctx.Animator.SetBool("Climb", true);
+
+        // Ajustar collider para la postura de escalada:
+        // Lo desplazamos hacia adelante (hacia la pared) y lo hacemos un poco más bajo
+        // para que el mesh no atraviese la roca.
+        if (ctx.Collider != null)
+        {
+            _originalColliderCenter = ctx.Collider.center;
+            _originalColliderHeight = ctx.Collider.height;
+
+            ctx.Collider.center = _originalColliderCenter + new Vector3(0f, 0f, CLIMB_COLLIDER_FORWARD_OFFSET);
+            ctx.Collider.height = _originalColliderHeight - CLIMB_COLLIDER_HEIGHT_REDUCTION;
+        }
 
         ctx.IsClimbing = true;
         _isMantling = false;
@@ -99,8 +119,16 @@ public class PlayerClimbState : PlayerBaseState
     
     public override void Exit()
     {
-        //Animator
+        // Animator: desactivar parámetro Climb y capa Climb (Layer 1)
         ctx.Animator.SetBool("Climb", false);
+        ctx.Animator.SetLayerWeight(1, 0f);
+
+        // Restaurar collider original
+        if (ctx.Collider != null)
+        {
+            ctx.Collider.center = _originalColliderCenter;
+            ctx.Collider.height = _originalColliderHeight;
+        }
 
         ctx.IsClimbing = false;
         ctx.Rb.useGravity = true;
