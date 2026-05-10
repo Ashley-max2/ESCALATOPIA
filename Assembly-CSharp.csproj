@@ -17,6 +17,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <RootNamespace></RootNamespace>
+    <ProjectGuid>{6996A313-B50D-2650-381A-B2537DB188C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -66,24 +67,19 @@
     <Compile Include="Assets\Scripts\Puzzle\PuzzleDoor.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
+    <Compile Include="Assets\Scripts\Props\CofreTimeline.cs" />
     <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
-    <Compile Include="Assets\Scripts\Bosses\BossLevitante.cs" />
-    <Compile Include="Assets\Scripts\Systems\DeathManager.cs" />
+    <Compile Include="Assets\Scripts\Props\InventarioLlaves.cs" />
     <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
-    <Compile Include="Assets\Scripts\Mecanicas\SkiSlope.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
     <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettingsManager.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\UI\DeathScreenManager.cs" />
     <Compile Include="Assets\Scripts\UI\IndicadorObjetivoUI.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\RaceResultSubtitles.cs" />
     <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
-    <Compile Include="Assets\Scripts\Player\HookSystem.cs" />
-    <Compile Include="Assets\Scripts\AI\BossAgent.cs" />
-    <Compile Include="Assets\Scripts\Bosses\BossRock.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
     <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
     <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
@@ -92,18 +88,15 @@
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
     <Compile Include="Assets\Scripts\UI\punteia.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\RaceRestartController.cs" />
-    <Compile Include="Assets\Scripts\AI\GlobalMetaTracker.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerVFXController.cs" />
-    <Compile Include="Assets\Scripts\AI\BossSpawner.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
     <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\LeafSpawner.cs" />
     <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\Leaf3DMovement.cs" />
-    <Compile Include="Assets\BossMLAgent.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
     <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
     <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoA.cs" />
+    <Compile Include="Assets\Scripts\Props\LlaveRecogible.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
     <Compile Include="Assets\Scripts\Systems\GameSessionAnalytics.cs" />
     <Compile Include="Assets\Scripts\Player\CuerdaRenderer.cs" />
@@ -115,6 +108,7 @@
     <Compile Include="Assets\Scripts\Terrain\GridData.cs" />
     <Compile Include="Assets\Scripts\Managers\CreditsManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateFactory.cs" />
+    <Compile Include="Assets\Scripts\Props\InteraccionJugadorCofres.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossAIController.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlsMenu.cs" />
     <Compile Include="Assets\Scripts\UI\HideImageOnPanel.cs" />
@@ -130,7 +124,6 @@
     <Compile Include="Assets\Scripts\BossAnimatorSpeed.cs" />
     <Compile Include="Assets\Scripts\Core\GameManager.cs" />
     <Compile Include="Assets\Scripts\Props\FragmentoDestruible.cs" />
-    <Compile Include="Assets\Scripts\Terrain\MeshGenerator.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\Agarrar_Lanzar_Soltar.cs" />
     <Compile Include="Assets\Scripts\Props\CollectibleItem.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPuzzleManager.cs" />
@@ -145,13 +138,17 @@
     <Compile Include="Assets\Scripts\Props\BarrilFragmentado.cs" />
     <Compile Include="Assets\Scripts\Managers\ScreenSettingsManager.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRaceManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
+    <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\LeafSpawner.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRunFloatBySpeed.cs" />
     <Compile Include="Assets\Scripts\Systems\GrapplingHook.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettings.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressDatabase.cs" />
+    <Compile Include="Assets\Scripts\Props\HookManager.cs" />
     <Compile Include="Assets\Scripts\Props\ThrownBox.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateMachine.cs" />
+    <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\Leaf3DMovement.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\NPCInteractable.cs" />
     <Compile Include="Assets\Scripts\Managers\FadeInSceneManager.cs" />
     <Compile Include="Assets\Scripts\UI\GamepadUINavigator.cs" />
@@ -517,16 +514,8 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>Library\PackageCache\com.unity.barracuda@3.0.0\Barracuda\Runtime\Plugins\ProtoBuffer\Google.Protobuf.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Grpc.Core">
-      <HintPath>Library\PackageCache\com.unity.ml-agents@2.0.2\Plugins\ProtoBuffer\Grpc.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Unity.Android.Types">
+      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.IO.Abstractions.TestingHelpers">
@@ -1239,38 +1228,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj" />
-    <ProjectReference Include="FMODUnityEditor.csproj" />
-    <ProjectReference Include="FMODUnityResonance.csproj" />
-    <ProjectReference Include="FMODUnity.csproj" />
-    <ProjectReference Include="FMODUnityResonanceEditor.csproj" />
-  </ItemGroup>
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
-  <ItemGroup>
-    <ProjectCapability Remove="LaunchProfiles" />
-    <ProjectCapability Remove="SharedProjectReferences" />
-    <ProjectCapability Remove="ReferenceManagerSharedProjects" />
-    <ProjectCapability Remove="ProjectReferences" />
-    <ProjectCapability Remove="ReferenceManagerProjects" />
-    <ProjectCapability Remove="COMReferences" />
-    <ProjectCapability Remove="ReferenceManagerCOM" />
-    <ProjectCapability Remove="AssemblyReferences" />
-    <ProjectCapability Remove="ReferenceManagerAssemblies" />
-  </ItemGroup>
-  <!--This section is added by Unity Code Assist-->
-  <ItemGroup>
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.AnalyzersLite.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.Common.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.Completion.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.CompletionInternals.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.Logger.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.MQTTnet.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.MQTTnet.Extensions.ManagedClient.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.Newtonsoft.Json.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.ProjectData.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.RoslynAnalyzerManager.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.Synchronizer.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.SynchronizerModel.dll" />
-    <Analyzer Include="C:\Users\aiban\Desktop\ESCALATOPIAREALCHAT\Packages\com.merry-yellow.code-assist\Editor\ExternalReferences\Meryel.UnityCodeAssist.VSIXLibrary.dll" />
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{E47E6847-7565-3B8E-FEF9-E47EDCB00D22}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnityEditor.csproj">
+      <Project>{1017B31C-9682-D133-D50C-13D17F2870C3}</Project>
+      <Name>FMODUnityEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnityResonance.csproj">
+      <Project>{F0CC71A8-A61E-5F46-5171-EDB197FF7B47}</Project>
+      <Name>FMODUnityResonance</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnity.csproj">
+      <Project>{36758F01-B77C-7899-B42F-5741DD11BF83}</Project>
+      <Name>FMODUnity</Name>
+    </ProjectReference>
+    <ProjectReference Include="FMODUnityResonanceEditor.csproj">
+      <Project>{BF8C02FC-AB6B-0E0C-D5FE-661D43534EF4}</Project>
+      <Name>FMODUnityResonanceEditor</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
