@@ -41,6 +41,10 @@ public class GrapplingHook : MonoBehaviour
     private Transform _playerTransform;
     private float _lostTargetTime;
     private Transform _lastValidTarget;
+    
+    // Pull mode timers
+    private float _pullStuckTimer;
+    private float _pullDurationTimer;
 
     private void Awake()
     {
@@ -81,10 +85,12 @@ public class GrapplingHook : MonoBehaviour
             Debug.Log($"Gancho modo: {(ModoPull ? "ATRAER OBJETOS" : "HOOKPOINT")}");
         }
 
+        Vector3 bestTargetPos = FindBestTarget();
+
         // Actualizar el color de la UI
         if (uiPunteia != null)
         {
-            if (!IsActive && FindBestTarget() != Vector3.zero)
+            if (!IsActive && bestTargetPos != Vector3.zero)
             {
                 uiPunteia.ActivarColorHookpoint();
             }
@@ -95,15 +101,37 @@ public class GrapplingHook : MonoBehaviour
         }
 
         // Si estamos atrayendo un objeto, moverlo hacia nosotros
-        if (IsActive && IsPulling && PulledObject != null)
+        if (IsActive && IsPulling)
         {
-            Vector3 targetPos = hookOrigin.position;
-            PulledObject.position = Vector3.MoveTowards(PulledObject.position, targetPos, pullSpeed * Time.deltaTime);
-
-            // Si llega cerca del origen, detener el tiro
-            if (Vector3.Distance(PulledObject.position, targetPos) < 1.5f)
+            if (PulledObject == null)
             {
                 Release();
+            }
+            else
+            {
+                Vector3 targetPos = hookOrigin.position;
+                float distBefore = Vector3.Distance(PulledObject.position, targetPos);
+                
+                PulledObject.position = Vector3.MoveTowards(PulledObject.position, targetPos, pullSpeed * Time.deltaTime);
+                
+                float distAfter = Vector3.Distance(PulledObject.position, targetPos);
+                _pullDurationTimer += Time.deltaTime;
+
+                // Si apenas se ha movido, incrementar el contador de "atascado"
+                if (Mathf.Abs(distBefore - distAfter) < 0.01f)
+                {
+                    _pullStuckTimer += Time.deltaTime;
+                }
+                else
+                {
+                    _pullStuckTimer = 0f;
+                }
+
+                // Si llega cerca del origen, o si lleva 0.5s atascado, o si han pasado 3s en total, soltar
+                if (distAfter < 1.5f || _pullStuckTimer > 0.5f || _pullDurationTimer > 3f)
+                {
+                    Release();
+                }
             }
         }
     }
@@ -154,7 +182,7 @@ public class GrapplingHook : MonoBehaviour
             float angle = Vector3.Angle(aimForward, directionToTarget);
             if (angle > 15f) continue;
             
-            int layerMaskToIgnore = hookableMask.value | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"));
+            int layerMaskToIgnore = maskToUse.value | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"));
             int obstacleMask = ~layerMaskToIgnore;
             
             if (Physics.Raycast(originPos, directionToTarget.normalized, directionToTarget.magnitude - 0.5f, obstacleMask))
@@ -211,6 +239,8 @@ public class GrapplingHook : MonoBehaviour
         {
             IsPulling = true;
             PulledObject = _currentHookPoint;
+            _pullStuckTimer = 0f;
+            _pullDurationTimer = 0f;
             
             // Deshabilitar gravedad temporalmente
             Rigidbody rb = PulledObject.GetComponent<Rigidbody>();
