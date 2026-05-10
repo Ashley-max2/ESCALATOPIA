@@ -19,6 +19,11 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private float minVerticalAngle = -90f;
     [SerializeField] private float maxVerticalAngle = 90f;
 
+    [Header("=== COLLISION ===")]
+    [Tooltip("Capas con las que la cámara chocará (asegúrate de excluir la capa del Player)")]
+    [SerializeField] private LayerMask collisionMask = ~0;
+    [SerializeField] private float collisionRadius = 0.15f;
+
     // Runtime
     private float _horizontalAngle;
     private float _verticalAngle;
@@ -121,6 +126,27 @@ public class FirstPersonCamera : MonoBehaviour
 
         // Posicion final de la camara (en la cabeza del jugador) - sin suavizado para juego rapido
         Vector3 headPos = GetHeadPosition();
+
+        // Evitar que la camara atraviese el techo u otros objetos
+        Vector3 startPos = target.position;
+        if (_characterController != null)
+        {
+            // Partir desde el centro del personaje para no chocar con el suelo
+            startPos = target.TransformPoint(_characterController.center);
+        }
+
+        Vector3 dir = headPos - startPos;
+        float dist = dir.magnitude;
+
+        if (dist > 0.01f)
+        {
+            // SphereCast hacia la cabeza para detectar colisiones con el entorno
+            if (Physics.SphereCast(startPos, collisionRadius, dir.normalized, out RaycastHit hit, dist, collisionMask))
+            {
+                headPos = startPos + dir.normalized * hit.distance;
+            }
+        }
+
         transform.position = headPos;
 
         // Rotacion de la camara
