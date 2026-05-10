@@ -1604,6 +1604,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3983063591393173388, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
+--- !u!95 &385540738 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9079517799548299494, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+  m_PrefabInstance: {fileID: 4726357041814826688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &388350800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3758,14 +3763,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc0318ba0332694d8eabaa595997d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fondo: {fileID: 0}
-  iconoEnganchar: {fileID: 0}
-  iconoAtraer: {fileID: 0}
-  colorFondoInactivo: {r: 0.2, g: 0.2, b: 0.2, a: 0.6}
-  colorFondoEnganchar: {r: 0, g: 1, b: 0.5, a: 0.8}
-  colorFondoAtraer: {r: 1, g: 0.6, b: 0, a: 0.8}
-  colorIconoActivo: {r: 1, g: 1, b: 1, a: 1}
-  colorIconoInactivo: {r: 1, g: 1, b: 1, a: 0.25}
+  imagen: {fileID: 0}
+  colorEnganchable: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &943105347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5075,15 +5074,10 @@ MonoBehaviour:
   isPaused: 0
   gameOver: 0
   player: {fileID: 2070027116}
-  deathScreenManager: {fileID: 0}
   pausePanel: {fileID: 1168180518}
   pauseBlockedScenes:
   - Creditos
   - Main_Menu
-  hudPanelsToHideOnPause:
-  - {fileID: 1603823142}
-  - {fileID: 4377613208155059880}
-  - {fileID: 943105342}
 --- !u!1001 &1345440170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5488,7 +5482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkpoint: {fileID: 2146148952}
+  checkpoint: {fileID: 0}
   playerTag: Player
   timeBeforeFade: 0
   fadeDuration: 0.5
@@ -5704,7 +5698,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: "Objeto de la monta\xF1a"
-  pickupKey: 101
+  teleportToBoss: 1
+  distanceFromBoss: 3
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
   onCollected:
     m_PersistentCalls:
       m_Calls: []
@@ -9140,7 +9137,7 @@ PrefabInstance:
     - target: {fileID: 4008784220886398847, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: checkpoint
       value: 
-      objectReference: {fileID: 2146148952}
+      objectReference: {fileID: 0}
     - target: {fileID: 4082074713630544891, guid: 7b38b01cebb0c624e8ec8376e93fecf7, type: 3}
       propertyPath: m_LocalPosition.y
       value: -1
@@ -9732,7 +9729,7 @@ PrefabInstance:
     - target: {fileID: 8433616416457749387, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 385540738}
     - target: {fileID: 9075573746443302907, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -14879,5 +14876,5 @@ SceneRoots:
   - {fileID: 1338847728}
   - {fileID: 1563456264}
   - {fileID: 556204895}
-  - {fileID: 1129709068}
   - {fileID: 6369990875012750599}
+  - {fileID: 1757619626}
