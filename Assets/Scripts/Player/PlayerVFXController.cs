@@ -60,6 +60,10 @@ public class PlayerVFXController : MonoBehaviour
         if (mainCamera != null)
             _originalFOV = mainCamera.fieldOfView;
 
+        // Auto-detectar el volumen global si no está asignado (muy útil para múltiples escenas)
+        if (globalVolume == null)
+            globalVolume = Object.FindAnyObjectByType<Volume>();
+
         if (globalVolume != null && globalVolume.profile != null)
         {
             globalVolume.profile.TryGet(out _vignette);
