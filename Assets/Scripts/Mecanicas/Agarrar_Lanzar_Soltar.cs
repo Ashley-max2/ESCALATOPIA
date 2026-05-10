@@ -1,51 +1,30 @@
 using UnityEngine;
 
-
-
-
 public class AgarrarLanzarSoltar : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private Camera cam;
     [SerializeField] private Transform followPoint;
 
-    [Header("Configuracion")]
+    [Header("Configuración")]
     [SerializeField] private float distanciaMax = 3f;
     [SerializeField] private LayerMask capaAgarrable;
-    [SerializeField] private float fuerzaLanzamiento = 10f;
-
-    public void SetDistanciaMax(float val) => distanciaMax = val;
-    public void SetFuerzaLanzamiento(float val) => fuerzaLanzamiento = val;
+    [SerializeField] private float fuerzaLanzamiento = 5f; // fuerza reducida
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
-    private PlayerInputHandler _input;
-
-    /// <summary>
-    /// True si el player tiene un objeto agarrado
-    /// </summary>
-    public bool TieneObjeto => objetoActual != null;
-
-    /// <summary>
-    /// Comprueba si un GameObject especifico es el que esta agarrado
-    /// </summary>
-    public bool EsObjetoAgarrado(GameObject obj)
-    {
-        return objetoActual != null && objetoActual == obj;
-    }
 
     void Awake()
     {
         if (cam == null) cam = Camera.main;
-        _input = GetComponentInParent<PlayerInputHandler>();
     }
 
     void Update()
     {
         Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
-        // InteractPressed = agarrar / soltar
-        if (_input != null && _input.InteractPressed)
+        // R = agarrar / soltar
+        if (Input.GetKeyDown(KeyCode.R))
         {
             if (objetoActual == null)
                 IntentarAgarrar();
@@ -53,8 +32,8 @@ public class AgarrarLanzarSoltar : MonoBehaviour
                 SoltarObjeto();
         }
 
-        // HookReleasePressed = lanzar (as an alternative to mouse)
-        if (_input != null && _input.HookReleasePressed && objetoActual != null)
+        // Click izquierdo = lanzar
+        if (Input.GetMouseButtonDown(0) && objetoActual != null)
         {
             LanzarObjeto();
         }
@@ -88,10 +67,10 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             rbActual.velocity = Vector3.zero;
             rbActual.angularVelocity = Vector3.zero;
 
-            // rotaciï¿½n fija correcta
+            // rotación fija correcta
             obj.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
 
-            // bloquear rotaciï¿½n
+            // bloquear rotación
             rbActual.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
@@ -106,12 +85,12 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
         rbActual.useGravity = true;
 
-        // desbloquear fï¿½sica completa
+        // desbloquear física completa
         rbActual.constraints = RigidbodyConstraints.None;
 
         rbActual.freezeRotation = false;
 
-        // lanzamiento en arco (45ï¿½)
+        // lanzamiento en arco (45°)
         Vector3 direccion =
             (cam.transform.forward + Vector3.up).normalized;
 
@@ -120,7 +99,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             ForceMode.Impulse
         );
 
-        // activar lï¿½gica del barril
+        // activar lógica del barril
         ThrownBox thrown = objetoActual.GetComponent<ThrownBox>();
 
         if (thrown == null)

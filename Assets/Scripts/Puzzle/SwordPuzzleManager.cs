@@ -37,8 +37,6 @@ public class SwordPuzzleManager : MonoBehaviour
 
         if (totalStoneSlots <= 0)
             totalStoneSlots = FindObjectsOfType<StoneSlot>().Length;
-
-        AnalyticsManager.Instance?.SetPuzzleTotal(totalStoneSlots);
     }
 
     private void Update()
@@ -99,7 +97,6 @@ public class SwordPuzzleManager : MonoBehaviour
             if (placedStoneCount >= totalStoneSlots && puzzleDoor != null)
             {
                 puzzleDoor.OpenDoor();
-                AnalyticsManager.Instance?.RecordPuzzleCompleted("SwordPuzzle");
                 Debug.Log("Puzzle completado: puerta abierta.");
             }
         }

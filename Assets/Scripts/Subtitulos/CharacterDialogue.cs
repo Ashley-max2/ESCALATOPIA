@@ -139,9 +139,6 @@ public class CharacterDialogue : MonoBehaviour
     [Tooltip("Evento que se dispara cuando termina el diálogo de victoria.")]
     public UnityEvent onWinDialogueFinished;
 
-    [Tooltip("Evento que se dispara cuando termina el diálogo inicial (fase Initial). Úsalo para activar bosses o mecánicas.")]
-    public UnityEvent onInitialDialogueFinished;
-
     private bool playerInsideTrigger = false;
     private bool entryFrameCooldown = false;
     private bool showingSubtitle = false;
@@ -408,7 +405,6 @@ public class CharacterDialogue : MonoBehaviour
         {
             case DialoguePhaseType.Initial:
                 hasInitialIntroPlayed = true;
-                onInitialDialogueFinished?.Invoke();
                 break;
             case DialoguePhaseType.AfterCollect:
                 hasAfterCollectPlayed = true;

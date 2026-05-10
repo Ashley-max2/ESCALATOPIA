@@ -12,9 +12,6 @@ public class StaminaSystem : MonoBehaviour
     [SerializeField] private float regenRate = 15f;
     [SerializeField] private float regenDelay = 1.5f;
     
-    public void SetRegenRate(float val) => regenRate = val;
-    public void SetRegenDelay(float val) => regenDelay = val;
-    
     [Header("=== THRESHOLDS ===")]
     [SerializeField] private float warningThreshold = 25f;
     [SerializeField] private float criticalThreshold = 10f;
@@ -55,7 +52,7 @@ public class StaminaSystem : MonoBehaviour
         if (amount <= 0) return;
         
         float previousStamina = currentStamina;
-        currentStamina = Mathf.Max(-5f, currentStamina - amount);
+        currentStamina = Mathf.Max(0, currentStamina - amount);
         _lastConsumeTime = Time.time;
         
         // Trigger events

@@ -41,11 +41,6 @@ public class SceneChangeTrigger : MonoBehaviour
             if (!string.IsNullOrEmpty(sceneName))
             {
                 Debug.Log("Cargando Escena");
-                // Analytics: registrar máximo nivel alcanzado
-                if (AnalyticsManager.Instance != null && AnalyticsManager.Instance.current != null) {
-                    AnalyticsManager.Instance.SetMaxLevelReached(sceneName);
-                    AnalyticsManager.Instance.SaveLocal();
-                }
                 LoadingManager.LoadLevel(sceneName);
             }
             else

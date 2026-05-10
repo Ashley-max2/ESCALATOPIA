@@ -48,12 +48,10 @@ public class BossManager : MonoBehaviour
     {
         raceStarted = true;
 
-        AnalyticsManager.Instance?.StartBossAttempt(GetBossAnalyticsId());
-
         ApplyBossPhysicsForCurrentPhase();
 
         // "cuando se acabe de pasar todos los mensajes el NPC Interactable se desactive y empieze a correr."
-        // Se desactiva el COMPONENTE NPC, NO EL GAMEOBJECT.
+        // Se desactiva el COMPONENTE NPC, NO EL GAMEOBJECT. 
         // ¡Así el Boss no desaparece si pusiste el script en el mismo jefe!
         if (npcInteractable != null)
         {
@@ -71,7 +69,7 @@ public class BossManager : MonoBehaviour
         // "Aquí se activara el objeto final."
         if (finalObject != null)
         {
-            finalObject.SetActive(true);
+            finalObject.SetActive(true); 
         }
     }
 
@@ -107,19 +105,11 @@ public class BossManager : MonoBehaviour
         // El Boss espera apagado a que termine el diálogo de nuevo
         if (bossAI != null)
         {
-            bossAI.enabled = false;
+            bossAI.enabled = false; 
         }
 
         // El objeto final se apaga hasta que vuelvan a correr
         SetFinalObjectActive(false);
-    }
-
-    public string GetBossAnalyticsId()
-    {
-        if (bossAI != null)
-            return bossAI.gameObject.name;
-
-        return gameObject.name;
     }
 
     private void CacheBossPhysics()
