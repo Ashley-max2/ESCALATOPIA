@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{AD2CE4B9-22B5-2823-CA38-F2EA1979BB83}</ProjectGuid>
+    <ProjectGuid>{6996A313-B50D-2650-381A-B2537DB188C3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -63,16 +63,45 @@
     <Compile Include="Assets\Scripts\Puzzle\PuzzleDoor.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
+    <Compile Include="Assets\Scripts\Props\CofreTimeline.cs" />
+    <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
+    <Compile Include="Assets\Scripts\Props\InventarioLlaves.cs" />
+    <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
+    <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
+    <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
+    <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
+    <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettingsManager.cs" />
+    <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Scripts\UI\IndicadorObjetivoUI.cs" />
+    <Compile Include="Assets\Scripts\Subtitulos\RaceResultSubtitles.cs" />
+    <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
+    <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
+    <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
+    <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
+    <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
+    <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
+    <Compile Include="Assets\Scripts\UI\punteia.cs" />
+    <Compile Include="Assets\Scripts\Mecanicas\RaceRestartController.cs" />
+    <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
+    <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
+    <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\LeafSpawner.cs" />
+    <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\Leaf3DMovement.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
+    <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
+    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
     <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoA.cs" />
+    <Compile Include="Assets\Scripts\Props\LlaveRecogible.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
     <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoB.cs" />
     <Compile Include="Assets\Scripts\Puzzle\StoneSlot.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlBindingRow.cs" />
-    <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\PanelMusic.cs" />
     <Compile Include="Assets\Scripts\Managers\MisionManager.cs" />
     <Compile Include="Assets\Scripts\Managers\CreditsManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateFactory.cs" />
+    <Compile Include="Assets\Scripts\Props\InteraccionJugadorCofres.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossAIController.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlsMenu.cs" />
     <Compile Include="Assets\Scripts\UI\HideImageOnPanel.cs" />
@@ -80,55 +109,42 @@
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerWallJumpState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerClimbState.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\MusicManager.cs" />
-    <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
+    <Compile Include="Assets\Scripts\Subtitulos\DialogueSystemInitializer.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossManager.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaUI.cs" />
     <Compile Include="Assets\Scripts\FreezeUnfreezePosition.cs" />
-    <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
+    <Compile Include="Assets\Scripts\Subtitulos\CharacterDialogue.cs" />
     <Compile Include="Assets\Scripts\BossAnimatorSpeed.cs" />
-    <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
-    <Compile Include="Assets\Scripts\Settings\BindingRow.cs" />
     <Compile Include="Assets\Scripts\Core\GameManager.cs" />
     <Compile Include="Assets\Scripts\Props\FragmentoDestruible.cs" />
-    <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettingsManager.cs" />
-    <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\Agarrar_Lanzar_Soltar.cs" />
-    <Compile Include="Assets\Scripts\UI\IndicadorObjetivoUI.cs" />
-    <Compile Include="Assets\Scripts\Subtitulos\RaceResultSubtitles.cs" />
-    <Compile Include="Assets\Scripts\Camera\OrbitCamera.cs" />
-    <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
+    <Compile Include="Assets\Scripts\Props\CollectibleItem.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPuzzleManager.cs" />
     <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
     <Compile Include="Assets\Scripts\Managers\JournalPickUo.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
-    <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
-    <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
-    <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
     <Compile Include="Assets\Scripts\Props\MuroGancho.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
-    <Compile Include="Assets\Scripts\UI\punteia.cs" />
     <Compile Include="Assets\Scripts\UI\HookAim.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
-    <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BolaGuiaTrigger.cs" />
     <Compile Include="Assets\Scripts\Props\BarrilFragmentado.cs" />
     <Compile Include="Assets\Scripts\Managers\ScreenSettingsManager.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRaceManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
+    <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\LeafSpawner.cs" />
     <Compile Include="Assets\Scripts\Core\GameEvents.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\BossRunFloatBySpeed.cs" />
     <Compile Include="Assets\Scripts\Systems\GrapplingHook.cs" />
     <Compile Include="Assets\Scripts\FMOD_Tests\AudioSettings.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressDatabase.cs" />
+    <Compile Include="Assets\Scripts\Props\HookManager.cs" />
     <Compile Include="Assets\Scripts\Props\ThrownBox.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateMachine.cs" />
+    <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\Leaf3DMovement.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\NPCInteractable.cs" />
     <Compile Include="Assets\Scripts\Managers\FadeInSceneManager.cs" />
     <Compile Include="Assets\Scripts\UI\GamepadUINavigator.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
-    <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerBaseState.cs" />
-    <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInputHandler.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -478,14 +494,6 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.45f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -1163,23 +1171,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{0B693ED3-C7D4-768B-FB18-265DCBFD6B36}</Project>
+      <Project>{E47E6847-7565-3B8E-FEF9-E47EDCB00D22}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityEditor.csproj">
-      <Project>{4A72E195-D112-DBB4-1590-A68BD4DBF5B7}</Project>
+      <Project>{1017B31C-9682-D133-D50C-13D17F2870C3}</Project>
       <Name>FMODUnityEditor</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityResonance.csproj">
-      <Project>{55E61988-F589-3B46-9E47-6442A15FE027}</Project>
+      <Project>{F0CC71A8-A61E-5F46-5171-EDB197FF7B47}</Project>
       <Name>FMODUnityResonance</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnity.csproj">
-      <Project>{45363691-E6BE-F9F3-D2F0-E25339B35872}</Project>
+      <Project>{36758F01-B77C-7899-B42F-5741DD11BF83}</Project>
       <Name>FMODUnity</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityResonanceEditor.csproj">
-      <Project>{20F2B747-81B5-9772-1C00-70FB3B467702}</Project>
+      <Project>{BF8C02FC-AB6B-0E0C-D5FE-661D43534EF4}</Project>
       <Name>FMODUnityResonanceEditor</Name>
     </ProjectReference>
   </ItemGroup>

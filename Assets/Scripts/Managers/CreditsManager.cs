@@ -24,6 +24,6 @@ public class CreditsManager : MonoBehaviour
 
     private void OnTimelineFinished(PlayableDirector pd)
     {
-        SceneManager.LoadScene(sceneToLoad);
+        LoadingManager.LoadLevel(sceneToLoad);
     }
 }

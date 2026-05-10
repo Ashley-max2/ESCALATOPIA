@@ -20,9 +20,35 @@ public class BossRaceManager : MonoBehaviour
     [Tooltip("El script/GameObject de cambio de escena que será activado")]
     public SceneChangeTrigger creditSceneChanger;
 
-    [Header("Subtítulos de Resultado")]
-    [Tooltip("Script que muestra los subtítulos de victoria y derrota")]
-    public RaceResultSubtitles raceResultSubtitles;
+    [Header("Sistema de Diálogos")]
+    [Tooltip("Script CharacterDialogue del personaje para mostrar diálogos de victoria y derrota")]
+    public CharacterDialogue characterDialogue;
+
+    [Tooltip("Teletransportador de la fogata. Solo se usa cuando el Boss gana y el jugador pierde.")]
+    public HazardTeleporter campfireTeleporter;
+
+    private Collider playerCollider;
+
+    private void Start()
+    {
+        CachePlayerCollider();
+    }
+
+    private void OnEnable()
+    {
+        if (characterDialogue != null)
+        {
+            characterDialogue.onLoseDialogueFinished.AddListener(HandleLoseDialogueFinished);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (characterDialogue != null)
+        {
+            characterDialogue.onLoseDialogueFinished.RemoveListener(HandleLoseDialogueFinished);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -50,16 +76,55 @@ public class BossRaceManager : MonoBehaviour
         // 3. Reactiva el objeto
         gameObject.SetActive(true);
 
-        // 4. Mostrar subtítulos de derrota (teletransporta al player a la fogata al acabar)
-        if (raceResultSubtitles != null)
+        // 4. Mostrar diálogo de derrota
+        if (characterDialogue != null)
         {
-            raceResultSubtitles.ShowDefeat();
+            characterDialogue.ShowLoseDialogue();
         }
+    }
 
-        // 5. Se llama a BossManager para reiniciarlo
+    private void HandleLoseDialogueFinished()
+    {
         if (bossManager != null)
         {
             bossManager.RestartRace();
+        }
+
+        if (characterDialogue != null)
+        {
+            characterDialogue.AllowRaceRetry();
+            characterDialogue.SetInteractionEnabled(true);
+        }
+
+        TeleportPlayerToCheckpoint();
+    }
+
+    private void CachePlayerCollider()
+    {
+        GameObject playerGO = GameObject.FindGameObjectWithTag(playerTag);
+        if (playerGO == null)
+            return;
+
+        playerCollider = playerGO.GetComponentInChildren<Collider>();
+        if (playerCollider == null)
+        {
+            playerCollider = playerGO.GetComponent<Collider>();
+        }
+    }
+
+    private void TeleportPlayerToCheckpoint()
+    {
+        if (campfireTeleporter == null)
+            return;
+
+        if (playerCollider == null)
+        {
+            CachePlayerCollider();
+        }
+
+        if (playerCollider != null)
+        {
+            campfireTeleporter.ForceTeleport(playerCollider);
         }
     }
 
@@ -71,8 +136,8 @@ public class BossRaceManager : MonoBehaviour
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
 
-        // 2. Desactivar el NPC de la puerta ANTES de ShowVictory
-        //    (su OnDisable oculta el PanelNPC → si lo hacemos antes, ShowVictory lo reactiva limpio)
+        // 2. Desactivar el NPC de la puerta ANTES de mostrar resultado
+        //    (su OnDisable oculta el PanelNPC → si lo hacemos antes, se reactiva limpio)
         if (creditDoorNPCInteractable != null)
         {
             creditDoorNPCInteractable.gameObject.SetActive(false);
@@ -86,15 +151,15 @@ public class BossRaceManager : MonoBehaviour
             creditSceneChanger.enabled = true;
         }
 
-        // 4. Mostrar subtítulos de victoria (ahora nada apagará el panel durante la corrutina)
-        if (raceResultSubtitles != null)
+        // 4. Mostrar diálogo de victoria
+        if (characterDialogue != null)
         {
-            Debug.Log("[BossRaceManager] Llamando ShowVictory()...");
-            raceResultSubtitles.ShowVictory();
+            Debug.Log("[BossRaceManager] Mostrando diálogo de victoria...");
+            characterDialogue.ShowWinDialogue();
         }
         else
         {
-            Debug.LogError("[BossRaceManager] raceResultSubtitles es NULL. Asígnalo en el Inspector del BossRaceManager.");
+            Debug.LogError("[BossRaceManager] No hay CharacterDialogue asignado.");
         }
 
         // 5. Hacer el diamante invisible sin desactivar el GameObject completo

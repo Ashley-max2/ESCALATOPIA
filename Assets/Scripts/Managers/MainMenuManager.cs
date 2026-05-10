@@ -71,7 +71,7 @@ public class MainMenu : MonoBehaviour
         }
 
         Debug.Log("[MainMenu] Continuando partida en escena: " + targetScene);
-        SceneManager.LoadScene(targetScene);
+        LoadingManager.LoadLevel(targetScene);
     }
 
     // ------------------------------------------------------------------ //
@@ -94,7 +94,7 @@ public class MainMenu : MonoBehaviour
         GameProgressDatabase.Save(saveNuevo);
 
         Debug.Log("[MainMenu] Nueva partida iniciada. Cargando: " + escenaInicial);
-        SceneManager.LoadScene(escenaInicial);
+        LoadingManager.LoadLevel(escenaInicial);
     }
 
     // Mantenemos PlayGame por si hay botones del Inspector que ya lo usan
@@ -108,14 +108,14 @@ public class MainMenu : MonoBehaviour
     {
         MusicManager.PlayButton();
         Debug.Log("Cargando escena: " + sceneName);
-        SceneManager.LoadScene(sceneName);
+        LoadingManager.LoadLevel(sceneName);
     }
 
     public void ChangeScene(string newScene)
     {
         MusicManager.PlayButton();
         Debug.Log("Cargando escena: " + newScene);
-        SceneManager.LoadScene(newScene);
+        LoadingManager.LoadLevel(newScene);
     }
 
     public void ExitGame()

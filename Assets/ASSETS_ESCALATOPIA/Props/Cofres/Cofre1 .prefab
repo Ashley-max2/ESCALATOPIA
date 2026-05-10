@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2375007631938090433}
   - component: {fileID: 877268844328930394}
   - component: {fileID: 2558055815728320378}
-  - component: {fileID: 8418391228794282538}
   m_Layer: 0
   m_Name: 'TapaCofre1 '
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1037038204682916432}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.21101831, z: 0.3596502}
+  m_LocalPosition: {x: -0.053, y: 0.529, z: 0.432}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037038204682916432}
-  m_Mesh: {fileID: 8258101256795184531, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
+  m_Mesh: {fileID: 1654171400157899153, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
 --- !u!23 &2558055815728320378
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -59,6 +58,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -80,32 +84,12 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8418391228794282538
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1037038204682916432}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8258101256795184531, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
 --- !u!1 &6416759772511805221
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +101,6 @@ GameObject:
   - component: {fileID: 1764832869806141099}
   - component: {fileID: 4197605477263454123}
   - component: {fileID: 7250403029898657322}
-  - component: {fileID: 6986543002599189005}
   m_Layer: 0
   m_Name: 'Cofre1 '
   m_TagString: Untagged
@@ -135,7 +118,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.4524113, y: 1.4524114, z: 1.4524114}
+  m_LocalScale: {x: 0.5537608, y: 0.5537609, z: 0.5537609}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2375007631938090433}
@@ -148,7 +131,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6416759772511805221}
-  m_Mesh: {fileID: -7901270495838132685, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
+  m_Mesh: {fileID: -6750332745869039610, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
 --- !u!23 &7250403029898657322
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -166,6 +149,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -187,29 +175,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6986543002599189005
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6416759772511805221}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7901270495838132685, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
