@@ -37,6 +37,10 @@ public class NPCInteractable : MonoBehaviour
     [Tooltip("Si está en true, el NPC ignora al player completamente (se activa cuando el boss empieza a correr).")]
     public bool isLocked = false;
 
+    [Header("Events")]
+    [Tooltip("Evento que se dispara cuando el jugador termina de leer todos los subtítulos. Úsalo para activar bosses u otras mecánicas.")]
+    public UnityEngine.Events.UnityEvent onAllDialogueFinished;
+
     // ─────────────────────────────────────────────────────────────────────────
 
     void Start()
@@ -200,6 +204,7 @@ public class NPCInteractable : MonoBehaviour
         else
         {
             hasFinishedDialogue = true;
+            onAllDialogueFinished?.Invoke();
             HideSubtitle();
         }
     }
