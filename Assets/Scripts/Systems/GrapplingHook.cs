@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 /// <summary>
 /// Sistema de gancho (Grappling Hook).
@@ -26,7 +27,12 @@ public class GrapplingHook : MonoBehaviour
     // Properties
     public float TravelSpeed => travelSpeed;
     public bool IsActive { get; private set; }
+<<<<<<< HEAD
     public Vector3 CurrentTarget { get; private set; }
+=======
+    public Vector3 CurrentTarget { get;  set; }
+    public Transform CurrentHookPoint => _currentHookPoint;
+>>>>>>> origin/Animaciones_Gold
     public bool IsPulling { get; private set; }
     public Transform PulledObject { get; private set; }
     
@@ -34,7 +40,17 @@ public class GrapplingHook : MonoBehaviour
     private float _lastFireTime;
     private Transform _currentHookPoint;
     private Transform _playerTransform;
+<<<<<<< HEAD
     
+=======
+    private float _lostTargetTime;
+    private Transform _lastValidTarget;
+    
+
+    // Referencia al sistema de agarrar para saber si tiene un objeto
+    private AgarrarLanzarSoltar _agarrarSystem;
+
+>>>>>>> origin/Animaciones_Gold
     private void Awake()
     {
         _playerTransform = GetComponentInParent<PlayerStateMachine>()?.transform ?? transform.parent;
@@ -58,6 +74,25 @@ public class GrapplingHook : MonoBehaviour
     
     private void Update()
     {
+<<<<<<< HEAD
+=======
+        Transform cam = Camera.main != null ? Camera.main.transform : null;
+        Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
+        
+        UpdateRopeVisual();
+        
+        // Dibujar rayo rojo suavizado para debug (dirección de apuntado)
+        Vector3 debugOrigin = cam != null ? cam.position : _playerTransform.position + Vector3.up;
+        Debug.DrawRay(debugOrigin, aimForward * maxRange, Color.red);
+        
+        // Cambiar modo con R
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ModoPull = !ModoPull;
+            Debug.Log($"Gancho modo: {(ModoPull ? "ATRAER OBJETOS" : "HOOKPOINT")}");
+        }
+
+>>>>>>> origin/Animaciones_Gold
         UpdateRopeVisual();
         
         // Actualizar el color de la UI
@@ -97,8 +132,16 @@ public class GrapplingHook : MonoBehaviour
         Transform cam = Camera.main != null ? Camera.main.transform : null;
         Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
         
+<<<<<<< HEAD
         // Find all potential hook points
         Collider[] colliders = Physics.OverlapSphere(_playerTransform.position, maxRange, hookableMask);
+=======
+        // Origin of detection is now the camera
+        Vector3 originPos = cam != null ? cam.position : _playerTransform.position + Vector3.up;
+
+        // Find all potential hook points
+        Collider[] colliders = Physics.OverlapSphere(originPos, maxRange, hookableMask);
+>>>>>>> origin/Animaciones_Gold
         
         foreach (var col in colliders)
         {
@@ -107,15 +150,28 @@ public class GrapplingHook : MonoBehaviour
                 continue;
             
             Vector3 targetPos = col.transform.position;
+<<<<<<< HEAD
             Vector3 directionToTarget = targetPos - _playerTransform.position;
+=======
+            Vector3 directionToTarget = targetPos - originPos;
+>>>>>>> origin/Animaciones_Gold
             
             // Must be where the camera is looking (within 30 degree cone)
             float angle = Vector3.Angle(aimForward, directionToTarget);
             if (angle > 15f) continue;
             
+<<<<<<< HEAD
             // Line of sight check
             if (Physics.Raycast(_playerTransform.position + Vector3.up, directionToTarget.normalized, 
                 directionToTarget.magnitude - 0.5f, ~hookableMask))
+=======
+            // Line of sight check (ignoramos capa Player, Ignore Raycast y lo que ya es hookable)
+            int layerMaskToIgnore = hookableMask.value | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"));
+            int obstacleMask = ~layerMaskToIgnore;
+            
+            if (Physics.Raycast(originPos, directionToTarget.normalized, 
+                directionToTarget.magnitude - 0.5f, obstacleMask))
+>>>>>>> origin/Animaciones_Gold
                 continue;
             
             // Score based on angle and distance (lower is better)
@@ -129,7 +185,30 @@ public class GrapplingHook : MonoBehaviour
             }
         }
         
+<<<<<<< HEAD
         _currentHookPoint = bestTarget;
+=======
+        if (bestTarget != null)
+        {
+            _currentHookPoint = bestTarget;
+            _lastValidTarget = bestTarget;
+            _lostTargetTime = Time.time;
+        }
+        else
+        {
+            if (Time.time - _lostTargetTime <= 0.1f && _lastValidTarget != null)
+            {
+                bestTarget = _lastValidTarget;
+                _currentHookPoint = bestTarget;
+            }
+            else
+            {
+                _currentHookPoint = null;
+                _lastValidTarget = null;
+            }
+        }
+        
+>>>>>>> origin/Animaciones_Gold
         return bestTarget != null ? bestTarget.position : Vector3.zero;
     }
     
@@ -165,6 +244,10 @@ public class GrapplingHook : MonoBehaviour
         IsActive = false;
         CurrentTarget = Vector3.zero;
         _currentHookPoint = null;
+<<<<<<< HEAD
+=======
+        _lastValidTarget = null;
+>>>>>>> origin/Animaciones_Gold
         
         // Hide rope
         ropeRenderer.enabled = false;
@@ -181,6 +264,7 @@ public class GrapplingHook : MonoBehaviour
     
     private void OnDrawGizmosSelected()
     {
+<<<<<<< HEAD
         // En edit mode _playerTransform aun no existe, usamos transform
         Transform origin = Application.isPlaying ? (_playerTransform ?? transform) : transform;
         
@@ -189,22 +273,42 @@ public class GrapplingHook : MonoBehaviour
         // Rango de deteccion
         Gizmos.color = new Color(0, 1, 1, 0.1f);
         Gizmos.DrawWireSphere(origin.position, maxRange);
+=======
+        Transform playerOrTransform = Application.isPlaying ? (_playerTransform ?? transform) : transform;
+        Transform camTransform = Camera.main != null ? Camera.main.transform : null;
+        
+        if (playerOrTransform == null) return;
+        
+        Vector3 originPos = camTransform != null ? camTransform.position : playerOrTransform.position + Vector3.up;
+        Vector3 forwardDir = camTransform != null ? camTransform.forward : playerOrTransform.forward;
+        
+        // Rango de deteccion
+        Gizmos.color = new Color(0, 1, 1, 0.1f);
+        Gizmos.DrawWireSphere(originPos, maxRange);
+>>>>>>> origin/Animaciones_Gold
         
         // Cono de deteccion
         Gizmos.color = Color.cyan;
-        Vector3 forward = origin.forward * maxRange;
+        Vector3 forward = forwardDir * maxRange;
         Vector3 leftEdge = Quaternion.Euler(0, -15, 0) * forward;
         Vector3 rightEdge = Quaternion.Euler(0, 15, 0) * forward;
         
+<<<<<<< HEAD
         Gizmos.DrawRay(origin.position + Vector3.up, leftEdge);
         Gizmos.DrawRay(origin.position + Vector3.up, rightEdge);
+=======
+        Gizmos.DrawRay(originPos, leftEdge);
+        Gizmos.DrawRay(originPos, rightEdge);
+>>>>>>> origin/Animaciones_Gold
         
         // Target actual
         if (IsActive)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(CurrentTarget, 0.5f);
-            Gizmos.DrawLine(hookOrigin?.position ?? origin.position, CurrentTarget);
+            Gizmos.DrawLine(hookOrigin?.position ?? originPos, CurrentTarget);
         }
     }
+
+
 }
