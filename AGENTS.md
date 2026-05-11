@@ -8,7 +8,7 @@
   - Layers:
     - Default, TransparentFX, Ignore Raycast, pared, Water, UI, Cofre, agarre, Player, Ground, Climbable, HookPoint, Barril, agarrable, Light
 - Active game object:
-  - Name: personajePrincipal
-  - Tag: Untagged
-  - Layer: Default
+  - Name: PlayerGold
+  - Tag: Player
+  - Layer: Player
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
