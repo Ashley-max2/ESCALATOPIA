@@ -31,7 +31,7 @@ public class BossRock : MonoBehaviour
 
     [Header("── Proyectil ──")]
     [Tooltip("Segundos antes de auto-destruirse si no golpea nada.")]
-    public float lifetime = 8f;
+    public float lifetime = 15f;
 
     [Tooltip("Activa/desactiva las trazas de movimiento si el objeto tiene TrailRenderer.")]
     public bool enableTrail = true;
@@ -56,20 +56,32 @@ public class BossRock : MonoBehaviour
     {
         if (_hasHit) return;
 
+        Debug.Log($"[BossRock] Colisión con: {collision.gameObject.name} (tag: {collision.gameObject.tag})");
+
         if (collision.gameObject.CompareTag("Player"))
         {
             _hasHit = true;
+            Debug.Log("[BossRock] ¡Golpeó al Player!");
             ApplyHitEffects(collision.gameObject);
             Destroy(gameObject);
+        }
+        else if (collision.gameObject.GetComponent<BossRock>() != null)
+        {
+            // Colisión con otra roca — ignorar completamente
+            Debug.Log("[BossRock] Colisión con otra roca, ignorada.");
+            return;
+        }
+        else if (collision.gameObject.CompareTag("BossRockIgnore"))
+        {
+            // Ignorar, seguir volando
+            Debug.Log("[BossRock] Colisión ignorada (BossRockIgnore)");
         }
         else
         {
             // Golpea el suelo u otro objeto — destruir sin efecto
-            if (!collision.gameObject.CompareTag("BossRockIgnore"))
-            {
-                _hasHit = true;
-                Destroy(gameObject);
-            }
+            _hasHit = true;
+            Debug.Log($"[BossRock] Colisión con obstáculo, destruyendo...");
+            Destroy(gameObject);
         }
     }
 

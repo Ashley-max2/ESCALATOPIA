@@ -1,11 +1,12 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
 /// Sistema de interacción con NPCs.
 /// - Muestra el prompt "{E}" SOLO cuando el Player entra en el BoxCollider (isTrigger = true)
-/// - Presionar E dentro de la zona muestra subtítulos secuencialmente
+/// - Presionar E dentro de la zona muestra subtítulos secuencialmente CON MÁQUINA DE ESCRIBIR
 /// - Los subtítulos NO se activan solos al entrar (a menos que autoPlay = true explícitamente)
 /// </summary>
 public class NPCInteractable : MonoBehaviour
@@ -15,6 +16,9 @@ public class NPCInteractable : MonoBehaviour
     [SerializeField] private TextMeshProUGUI subtitleText;
     [SerializeField] private GameObject subtitlePanel;
     [SerializeField] private float subtitleDuration = 5f;
+
+    [Header("Typewriter Effect")]
+    [SerializeField] private float typingSpeed = 0.04f;
 
     [Header("Dialogue")]
     [SerializeField] private List<string> subtitles = new List<string>();
@@ -29,6 +33,8 @@ public class NPCInteractable : MonoBehaviour
     private float subtitleTimer = 0f;
     private bool showingSubtitle = false;
     private bool dialogueStarted = false;      // true en cuanto el jugador pulsa E por primera vez
+    private bool isTyping = false;             // máquina de escribir en progreso
+    private Coroutine typewriterCoroutine;    // para detener/saltar la escritura
 
     // Públicos para que otros scripts puedan consultarlos
     public bool isPlayerNear => playerInsideTrigger;
@@ -123,6 +129,12 @@ public class NPCInteractable : MonoBehaviour
     {
         playerInsideTrigger = false;
         entryFrameCooldown = false;
+        isTyping = false;
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
         if (promptE != null)       promptE.SetActive(false);
         if (subtitlePanel != null)  subtitlePanel.SetActive(false);
         showingSubtitle = false;
@@ -152,24 +164,33 @@ public class NPCInteractable : MonoBehaviour
                 return;
             }
 
-            if (!showingSubtitle && currentSubtitleIndex < subtitles.Count)
+            // E para iniciar el diálogo (si no ha empezado)
+            if (!dialogueStarted && !showingSubtitle)
             {
                 ShowSubtitle();
+                return;
             }
-            else if (showingSubtitle && subtitleTimer > 0.5f)
+
+            // E mientras está escribiendo = completar línea instantáneamente
+            if (isTyping)
             {
-                // Skip al siguiente subtítulo si ya pasaron 0.5 s
+                CompleteTyping();
+                return;
+            }
+
+            // E después de escribir = skip a la siguiente (solo si pasaron 0.5s)
+            if (showingSubtitle && !isTyping && subtitleTimer > 0.5f)
+            {
                 NextSubtitle();
             }
         }
 
-        // ── Timer de subtítulos ──
-        if (showingSubtitle)
+        // ── Auto-avance tras subtitleDuration (sin necesidad de E) ──
+        if (showingSubtitle && !isTyping)
         {
             subtitleTimer += Time.deltaTime;
             if (subtitleTimer >= subtitleDuration)
             {
-                // Avanza solo al siguiente subtítulo (la E solo hace falta para empezar)
                 NextSubtitle();
             }
         }
@@ -184,18 +205,65 @@ public class NPCInteractable : MonoBehaviour
         dialogueStarted = true;   // marcar que el jugador ya ha empezado a leer
         if (promptE != null)       promptE.SetActive(false);
         if (subtitlePanel != null)  subtitlePanel.SetActive(true);
-        subtitleText.text = subtitles[currentSubtitleIndex];
+
         subtitleTimer = 0f;
         showingSubtitle = true;
+
+        // Detener corrutina previa si existe
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
+
+        // Iniciar máquina de escribir
+        typewriterCoroutine = StartCoroutine(TypeText(subtitles[currentSubtitleIndex]));
+    }
+
+    private IEnumerator TypeText(string text)
+    {
+        isTyping = true;
+        subtitleText.text = string.Empty;
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            subtitleText.text += text[i];
+            if (typingSpeed > 0f)
+                yield return new WaitForSeconds(typingSpeed);
+            else
+                yield return null;
+        }
+
+        isTyping = false;
+        typewriterCoroutine = null;
+    }
+
+    private void CompleteTyping()
+    {
+        if (!isTyping) return;
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
+        subtitleText.text = subtitles[currentSubtitleIndex];
+        isTyping = false;
+        subtitleTimer = 0f;
     }
 
     private void NextSubtitle()
     {
         currentSubtitleIndex++;
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
+        isTyping = false;
+
         if (currentSubtitleIndex < subtitles.Count)
         {
-            subtitleText.text = subtitles[currentSubtitleIndex];
-            subtitleTimer = 0f;
+            ShowSubtitle();
         }
         else
         {
@@ -206,6 +274,12 @@ public class NPCInteractable : MonoBehaviour
 
     private void HideSubtitle()
     {
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
+        isTyping = false;
         if (subtitlePanel != null)  subtitlePanel.SetActive(false);
         // Solo mostrar promptE al esconder si todavía hay subtítulos sin leer
         if (promptE != null && currentSubtitleIndex < subtitles.Count)
@@ -226,6 +300,12 @@ public class NPCInteractable : MonoBehaviour
         subtitleTimer = 0f;
         currentSubtitleIndex = 0;
         hasFinishedDialogue = false;
+        isTyping = false;
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
         if (promptE != null)       promptE.SetActive(false);
         if (subtitlePanel != null)  subtitlePanel.SetActive(false);
     }
