@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 38c6473fa9c56f04791ac8b43057f16a
+guid: 9c6945a0790b19047b2a733cdcf688c8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -9,17 +9,16 @@ ModelImporter:
     materialName: 0
     materialSearch: 1
     materialLocation: 1
-
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
-    motionNodeName:
-    animationImportErrors:
-    animationImportWarnings:
-    animationRetargetingWarnings:
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
@@ -30,38 +29,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-
     clipAnimations:
-    - serializedVersion: 16
-      name: ClimbIdle
-      takeName: ClimbIdle
-      internalID: 7819228553960373753
-      firstFrame: 0
-      lastFrame: 39
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: ClimbForward
       takeName: rig|ClimbForward
@@ -91,7 +59,35 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
+    - serializedVersion: 16
+      name: ClimbIdle
+      takeName: rig|ClimbIdle
+      internalID: 1904316795031044936
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: ClimbLeft
       takeName: rig|ClimbLeft
@@ -121,7 +117,6 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: ClimbRight
       takeName: rig|ClimbRight
@@ -151,11 +146,10 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Idle
-      takeName: Idle.001
-      internalID: 6517714258327031822
+      takeName: rig|Idle
+      internalID: -7361427651036151181
       firstFrame: 0
       lastFrame: 159
       wrapMode: 0
@@ -181,7 +175,6 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Jump
       takeName: rig|Jump
@@ -211,11 +204,10 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Jump_End
-      takeName: Jump_End
-      internalID: -7313218633983591571
+      takeName: rig|Jump_End
+      internalID: 2872580095441880632
       firstFrame: 0
       lastFrame: 25
       wrapMode: 0
@@ -241,7 +233,6 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Jump_Loop
       takeName: rig|Jump_Loop
@@ -271,7 +262,6 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Jump_Start
       takeName: rig|Jump_Start
@@ -301,7 +291,6 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Trote
       takeName: rig|Trote
@@ -331,7 +320,6 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     - serializedVersion: 16
       name: Walk
       takeName: rig|Walk
@@ -361,9 +349,7 @@ ModelImporter:
       maskType: 3
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
-
     isReadable: 0
-
   meshes:
     lODScreenPercentages: []
     globalScale: 1
@@ -403,7 +389,6 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     strictVertexDataChecks: 0
-
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -412,10 +397,8 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-
   referencedClips: []
   importAnimation: 1
-
   humanDescription:
     serializedVersion: 3
     human: []
@@ -428,12 +411,11 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName:
+    rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: bc60b5d37445a604c9eea671b3fc573f, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: aaf1ec7515d73794081ecdaedf3a8b60, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
@@ -442,6 +424,6 @@ ModelImporter:
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
-  userData:
-  assetBundleName:
-  assetBundleVariant:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

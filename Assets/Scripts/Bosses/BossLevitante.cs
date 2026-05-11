@@ -109,13 +109,15 @@ public class BossLevitante : MonoBehaviour
     private float _hoverTime  = 0f;
 
     private Vector3 _startPosition;
+    private Vector3 _initialPosition;
     private Animator _animator;
 
     // ─────────────────────────────────────────────────────────────────────────
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
-        _startPosition = transform.position;
+        _initialPosition = transform.position;
+        _startPosition = _initialPosition;
     }
 
     private void Update()
@@ -154,6 +156,22 @@ public class BossLevitante : MonoBehaviour
         _isFlying = false;
         StopAllCoroutines();
         SetLevitateAnim(false);
+    }
+
+    /// <summary>Detiene el boss y lo devuelve a su posición original.</summary>
+    public void ResetBoss()
+    {
+        Deactivate();
+        transform.position = _initialPosition;
+        _startPosition = _initialPosition;
+        _hasArrived = false;
+        
+        if (bossBowler != null)
+        {
+            bossBowler.Deactivate();
+        }
+        
+        Debug.Log("[BossLevitante] Reseteado a la posición inicial.");
     }
 
     // ─────────────────────────────────────────────────────────────────────────

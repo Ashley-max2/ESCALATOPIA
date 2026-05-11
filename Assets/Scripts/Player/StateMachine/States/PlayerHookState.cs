@@ -57,6 +57,13 @@ public class PlayerHookState : PlayerBaseState
 
     public override void Execute()
     {
+        // Si el gancho se desactiva externamente (o porque soltó el objeto al atraer), salimos del estado
+        if (ctx.GrapplingHook != null && !ctx.GrapplingHook.IsActive)
+        {
+            SwitchState(ctx.IsGrounded ? factory.Grounded() : factory.Airborne());
+            return;
+        }
+
         switch (_currentPhase)
         {
             case HookPhase.Traveling:
