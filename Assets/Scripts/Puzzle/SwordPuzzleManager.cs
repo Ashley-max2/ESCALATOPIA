@@ -43,7 +43,7 @@ public class SwordPuzzleManager : MonoBehaviour
     {
         UpdateLookedTargets();
 
-        if (highlightedStone != null && currentSwordPickup != null && Input.GetKeyDown(KeyCode.E))
+        if (highlightedStone != null && currentSwordPickup != null && InteractInput.PressedThisFrame())
         {
             TryPlaceSwordOnStone();
         }

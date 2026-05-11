@@ -154,8 +154,12 @@ public class CharacterDialogue : MonoBehaviour
     private bool hasAfterCollectPlayed = false;
     private bool hasRaceStartPlayed = false;
 
+    private TMP_Text promptText;
+    private string lastPromptLabel = string.Empty;
+
     private void Start()
     {
+        promptText = promptE != null ? promptE.GetComponentInChildren<TMP_Text>(true) : null;
         if (promptE != null) promptE.SetActive(false);
         if (subtitlePanel != null) subtitlePanel.SetActive(false);
     }
@@ -213,7 +217,19 @@ public class CharacterDialogue : MonoBehaviour
 
     private bool AdvancePressed()
     {
-        return Input.GetKeyDown(KeyCode.E);
+        return InteractInput.PressedThisFrame();
+    }
+
+    private void LateUpdate()
+    {
+        if (promptText == null) return;
+
+        string label = InteractInput.GetBracketedDisplayKey();
+        if (label != lastPromptLabel)
+        {
+            promptText.text = label;
+            lastPromptLabel = label;
+        }
     }
 
     public void SetInteractionEnabled(bool enabled)
@@ -333,7 +349,8 @@ public class CharacterDialogue : MonoBehaviour
             typewriterCoroutine = null;
         }
 
-        typewriterCoroutine = StartCoroutine(TypeText(currentLines[currentLineIndex]));
+        string lineToShow = InteractInput.ReplaceInteractPlaceholder(currentLines[currentLineIndex]);
+        typewriterCoroutine = StartCoroutine(TypeText(lineToShow));
     }
 
     private IEnumerator TypeText(string line)
@@ -365,7 +382,7 @@ public class CharacterDialogue : MonoBehaviour
             typewriterCoroutine = null;
         }
 
-        subtitleText.text = currentLines[currentLineIndex];
+        subtitleText.text = InteractInput.ReplaceInteractPlaceholder(currentLines[currentLineIndex]);
         isTyping = false;
         autoAdvanceTimer = 0f;
     }

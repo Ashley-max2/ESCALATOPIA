@@ -853,8 +853,33 @@ public class PlayerInputHandler : MonoBehaviour
         // Acciones (solo teclado/raton)
         AddBinding("Saltar", KeyCode.Space, KeyCode.None);
         AddBinding("Correr", KeyCode.LeftShift, KeyCode.None);
+        AddBinding("Interactuar", KeyCode.E, KeyCode.None);
         AddBinding("Gancho", KeyCode.Mouse1, KeyCode.None);
         AddBinding("LiberarGancho", KeyCode.Mouse0, KeyCode.None);
+    }
+
+    private void EnsureMissingDefaults()
+    {
+        EnsureBindingExists("Adelante", KeyCode.W, KeyCode.None);
+        EnsureBindingExists("Atras", KeyCode.S, KeyCode.None);
+        EnsureBindingExists("Izquierda", KeyCode.A, KeyCode.None);
+        EnsureBindingExists("Derecha", KeyCode.D, KeyCode.None);
+        EnsureBindingExists("Saltar", KeyCode.Space, KeyCode.None);
+        EnsureBindingExists("Correr", KeyCode.LeftShift, KeyCode.None);
+        EnsureBindingExists("Interactuar", KeyCode.E, KeyCode.None);
+        EnsureBindingExists("Gancho", KeyCode.Mouse1, KeyCode.None);
+        EnsureBindingExists("LiberarGancho", KeyCode.Mouse0, KeyCode.None);
+    }
+
+    private void EnsureBindingExists(string actionName, KeyCode keyboardDefault, KeyCode gamepadDefault)
+    {
+        for (int i = 0; i < bindings.Count; i++)
+        {
+            if (bindings[i].actionName == actionName)
+                return;
+        }
+
+        AddBinding(actionName, keyboardDefault, gamepadDefault);
     }
 
     private void AddBinding(string name, KeyCode keyboardDefault, KeyCode gamepadDefault)
@@ -915,8 +940,15 @@ public class PlayerInputHandler : MonoBehaviour
             var data = JsonUtility.FromJson<SerializableBindings>(json);
             if (data != null && data.bindings != null && data.bindings.Count > 0)
                 bindings = data.bindings;
-            CacheBindings();
         }
+
+        EnsureMissingDefaults();
+        CacheBindings();
+    }
+
+    public KeyCode GetActionKey(string action)
+    {
+        return GetBinding(action);
     }
 
     public void ResetDefaults()

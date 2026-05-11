@@ -7,24 +7,24 @@ public class PiezaMecanismo : MonoBehaviour
     // Indica si el jugador tiene esta pieza
     public bool tieneElJugador = false;
 
-    [Header("Interacción")]
-    public float distanciaInteraccion = 3f; // Distancia máxima del raycast
-    public GameObject objetoAActivar; // Objeto que se activará (estaba oculto con SetActive false)
+    [Header("Interacciï¿½n")]
+    public float distanciaInteraccion = 3f; // Distancia mï¿½xima del raycast
+    public GameObject objetoAActivar; // Objeto que se activarï¿½ (estaba oculto con SetActive false)
 
     private Camera camara;
 
     void Start()
     {
-        // Obtener la cámara principal
+        // Obtener la cï¿½mara principal
         camara = Camera.main;
     }
 
     void Update()
     {
         // Solo permite interactuar si el jugador tiene la pieza
-        if (tieneElJugador && Input.GetKeyDown(KeyCode.E))
+        if (tieneElJugador && InteractInput.PressedThisFrame())
         {
-            // Crear un rayo desde la cámara hacia delante
+            // Crear un rayo desde la cï¿½mara hacia delante
             Ray ray = new Ray(camara.transform.position, camara.transform.forward);
             RaycastHit hit;
 
@@ -65,7 +65,7 @@ public class PiezaMecanismo : MonoBehaviour
             if (rend != null)
                 rend.enabled = false;
 
-            // Desactivar el collider para evitar múltiples activaciones
+            // Desactivar el collider para evitar mï¿½ltiples activaciones
             Collider col = GetComponent<Collider>();
             if (col != null)
                 col.enabled = false;

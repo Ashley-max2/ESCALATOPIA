@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class AgarrarLanzarSoltar : MonoBehaviour
 {
@@ -6,25 +7,44 @@ public class AgarrarLanzarSoltar : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private Transform followPoint;
 
-    [Header("Configuración")]
+    [Header("Configuraciï¿½n")]
     [SerializeField] private float distanciaMax = 3f;
     [SerializeField] private LayerMask capaAgarrable;
     [SerializeField] private float fuerzaLanzamiento = 5f; // fuerza reducida
 
+    [Header("UI (Opcional)")]
+    [SerializeField] private TMP_Text interactPromptText;
+    [SerializeField] private bool useCurrentTextAsTemplate = true;
+    [SerializeField] private string interactPromptTemplate = "Pulsa [E] para agarrar/soltar";
+
+    [Header("Input")]
+    [SerializeField] private PlayerInputHandler inputHandler;
+
     private GameObject objetoActual;
     private Rigidbody rbActual;
+    private string promptTemplateResolved;
+    private string lastPromptRendered;
 
     void Awake()
     {
         if (cam == null) cam = Camera.main;
+        if (inputHandler == null) inputHandler = FindObjectOfType<PlayerInputHandler>();
+
+        promptTemplateResolved = interactPromptTemplate;
+        if (useCurrentTextAsTemplate && interactPromptText != null && !string.IsNullOrEmpty(interactPromptText.text))
+            promptTemplateResolved = interactPromptText.text;
+
+        RefreshPromptLabel();
     }
 
     void Update()
     {
         Debug.DrawRay(cam.transform.position, cam.transform.forward * distanciaMax, Color.red);
 
-        // R = agarrar / soltar
-        if (Input.GetKeyDown(KeyCode.R))
+        RefreshPromptLabel();
+
+        // Interactuar = agarrar / soltar
+        if (InteractPressed())
         {
             if (objetoActual == null)
                 IntentarAgarrar();
@@ -67,10 +87,10 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             rbActual.velocity = Vector3.zero;
             rbActual.angularVelocity = Vector3.zero;
 
-            // rotación fija correcta
+            // rotaciï¿½n fija correcta
             obj.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
 
-            // bloquear rotación
+            // bloquear rotaciï¿½n
             rbActual.constraints = RigidbodyConstraints.FreezeRotation;
         }
 
@@ -85,12 +105,12 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
         rbActual.useGravity = true;
 
-        // desbloquear física completa
+        // desbloquear fï¿½sica completa
         rbActual.constraints = RigidbodyConstraints.None;
 
         rbActual.freezeRotation = false;
 
-        // lanzamiento en arco (45°)
+        // lanzamiento en arco (45ï¿½)
         Vector3 direccion =
             (cam.transform.forward + Vector3.up).normalized;
 
@@ -99,7 +119,7 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             ForceMode.Impulse
         );
 
-        // activar lógica del barril
+        // activar lï¿½gica del barril
         ThrownBox thrown = objetoActual.GetComponent<ThrownBox>();
 
         if (thrown == null)
@@ -131,5 +151,46 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
         objetoActual = null;
         rbActual = null;
+    }
+
+    private void RefreshPromptLabel()
+    {
+        if (interactPromptText == null)
+            return;
+
+        string keyLabel = GetInteractKeyLabel();
+        string rendered = promptTemplateResolved
+            .Replace("[E]", "[" + keyLabel + "]")
+            .Replace("{INTERACT}", "[" + keyLabel + "]");
+
+        if (rendered != lastPromptRendered)
+        {
+            interactPromptText.text = rendered;
+            lastPromptRendered = rendered;
+        }
+    }
+
+    private bool InteractPressed()
+    {
+        if (inputHandler != null)
+        {
+            KeyCode interactKey = inputHandler.GetActionKey(InteractInput.ActionName);
+            if (interactKey != KeyCode.None)
+                return Input.GetKeyDown(interactKey);
+        }
+
+        return InteractInput.PressedThisFrame();
+    }
+
+    private string GetInteractKeyLabel()
+    {
+        if (inputHandler != null)
+        {
+            string label = inputHandler.GetDisplayName(InteractInput.ActionName);
+            if (!string.IsNullOrEmpty(label))
+                return label;
+        }
+
+        return InteractInput.GetDisplayKey();
     }
 }

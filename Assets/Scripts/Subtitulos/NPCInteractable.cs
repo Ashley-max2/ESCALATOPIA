@@ -43,10 +43,14 @@ public class NPCInteractable : MonoBehaviour
     [Tooltip("Si está en true, el NPC ignora al player completamente (se activa cuando el boss empieza a correr).")]
     public bool isLocked = false;
 
+    private TMP_Text promptText;
+    private string lastPromptLabel = string.Empty;
+
     // ─────────────────────────────────────────────────────────────────────────
 
     void Start()
     {
+        promptText = promptE != null ? promptE.GetComponentInChildren<TMP_Text>(true) : null;
         if (promptE != null)      promptE.SetActive(false);
         if (subtitlePanel != null) subtitlePanel.SetActive(false);
     }
@@ -78,7 +82,7 @@ public class NPCInteractable : MonoBehaviour
                 // Volver a mostrar el subtítulo actual directamente
                 if (promptE != null) promptE.SetActive(false);
                 if (subtitlePanel != null) subtitlePanel.SetActive(true);
-                if (subtitleText != null) subtitleText.text = subtitles[currentSubtitleIndex];
+                if (subtitleText != null) subtitleText.text = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
                 showingSubtitle = true;
                 // Mantenemos subtitleTimer tal cual — el tiempo ya consumido se conserva
             }
@@ -144,6 +148,8 @@ public class NPCInteractable : MonoBehaviour
 
     void Update()
     {
+        UpdatePromptKeyLabel();
+
         // Si el player no está dentro del trigger según Unity Physics → nada que hacer
         if (!playerInsideTrigger) return;
 
@@ -155,7 +161,7 @@ public class NPCInteractable : MonoBehaviour
         }
 
         // ── Tecla E (solo si NO es autoPlay) ──
-        if (!autoPlay && Input.GetKeyDown(KeyCode.E))
+        if (!autoPlay && InteractInput.PressedThisFrame())
         {
             if (subtitles == null || subtitles.Count == 0)
             {
@@ -196,6 +202,18 @@ public class NPCInteractable : MonoBehaviour
         }
     }
 
+    private void UpdatePromptKeyLabel()
+    {
+        if (promptText == null) return;
+
+        string label = InteractInput.GetBracketedDisplayKey();
+        if (label != lastPromptLabel)
+        {
+            promptText.text = label;
+            lastPromptLabel = label;
+        }
+    }
+
     // ─── HELPERS ─────────────────────────────────────────────────────────────
 
     private void ShowSubtitle()
@@ -217,7 +235,8 @@ public class NPCInteractable : MonoBehaviour
         }
 
         // Iniciar máquina de escribir
-        typewriterCoroutine = StartCoroutine(TypeText(subtitles[currentSubtitleIndex]));
+        string lineToShow = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
+        typewriterCoroutine = StartCoroutine(TypeText(lineToShow));
     }
 
     private IEnumerator TypeText(string text)
@@ -246,7 +265,7 @@ public class NPCInteractable : MonoBehaviour
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
         }
-        subtitleText.text = subtitles[currentSubtitleIndex];
+        subtitleText.text = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
         isTyping = false;
         subtitleTimer = 0f;
     }
