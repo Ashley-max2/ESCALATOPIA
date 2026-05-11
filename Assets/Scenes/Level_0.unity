@@ -652,8 +652,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111d12096f919e34eb3521a98bb3cdaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextObjective: 
-  objectsToDestroy: []
+  nextObjective: 'Objetivo actual: abrir el cofre'
+  objectsToDestroy:
+  - {fileID: 2049981312}
+  - {fileID: 994387578}
 --- !u!1001 &373917288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5179,6 +5181,102 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 825921123929590902, guid: 50232f408725cfc45b5201a26040af25, type: 3}
   m_PrefabInstance: {fileID: 944466340}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &994387577
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.12478646
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.13721895
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 565.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 12.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 131.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7134116
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0028046574
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0036941147
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7007299
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0.067
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0.527
+      objectReference: {fileID: 0}
+    - target: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -88.972
+      objectReference: {fileID: 0}
+    - target: {fileID: 456247664847917683, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 3344934816709645670}
+    - target: {fileID: 1048496224165677390, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      propertyPath: m_Name
+      value: FirstMisionTrigger
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 456247664847917683, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1048496224165677390, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 994387579}
+  m_SourcePrefab: {fileID: 100100000, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+--- !u!1 &994387578 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1048496224165677390, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
+  m_PrefabInstance: {fileID: 994387577}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &994387579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994387578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d79778dd2456b334fbb120c7e1e04e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveText: 'Objetivo actual: explora la zona y encuentra una fogata'
+  objectsToDestroy: []
 --- !u!1001 &996443415
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6053,8 +6151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be68afb8c58ff447b34b2b78a165a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeline: {fileID: 0}
-  objectiveText: 
+  timeline: {fileID: 1380869148}
+  objectiveText: 'Objetivo actual: buscar la llave para el cofre del mecanismo'
   objectsToDestroy: []
 --- !u!20 &1438938464 stripped
 Camera:
@@ -6100,9 +6198,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be68afb8c58ff447b34b2b78a165a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeline: {fileID: 0}
-  objectiveText: 
+  timeline: {fileID: 1450915393}
+  objectiveText: 'Objetivo actual: reparar el mecanismo'
   objectsToDestroy: []
+--- !u!320 &1450915393 stripped
+PlayableDirector:
+  m_CorrespondingSourceObject: {fileID: 3186872652325440629, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+  m_PrefabInstance: {fileID: 3019571767691838825}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1549766833 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1055775751489250455, guid: 21042d6b10f2a8e4280ed4611335eaaa, type: 3}
@@ -6217,7 +6320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111d12096f919e34eb3521a98bb3cdaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextObjective: 
+  nextObjective: 'Objetivo actual: abrir el cofre del mecanismo'
   objectsToDestroy: []
 --- !u!4 &1869055435 stripped
 Transform:
@@ -6410,8 +6513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79778dd2456b334fbb120c7e1e04e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectiveText: Busca la llave para el cofre
-  objectsToDestroy: []
+  objectiveText: 'Objetivo actual: busca la llave para el cofre'
+  objectsToDestroy:
+  - {fileID: 994387578}
 --- !u!4 &2049981314 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 210016545192397776, guid: 1b4887c2e30708a428a761eb6a5676e5, type: 3}
@@ -7283,9 +7387,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be68afb8c58ff447b34b2b78a165a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeline: {fileID: 0}
-  objectiveText: 
+  timeline: {fileID: 3019571767691838844}
+  objectiveText: "Objetivo actual: escala la monta\xF1a"
   objectsToDestroy: []
+--- !u!320 &3019571767691838844 stripped
+PlayableDirector:
+  m_CorrespondingSourceObject: {fileID: 1539699967380907206, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+  m_PrefabInstance: {fileID: 3019571767691838825}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3344934816709645670 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6825832527937427898, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
@@ -8024,6 +8133,7 @@ SceneRoots:
   - {fileID: 1141036488}
   - {fileID: 1580326562}
   - {fileID: 8567855870310917259}
+  - {fileID: 994387577}
   - {fileID: 8166188022907492339}
   - {fileID: 321691904}
   - {fileID: 269492054}
