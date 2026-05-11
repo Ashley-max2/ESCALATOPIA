@@ -351,6 +351,7 @@ GameObject:
   - component: {fileID: 4391129737054516638}
   - component: {fileID: 584357320435747190}
   - component: {fileID: 3845762610502800007}
+  - component: {fileID: 4680089672675499131}
   m_Layer: 5
   m_Name: R
   m_TagString: Untagged
@@ -405,7 +406,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: R
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cc0ec86a6a819ab43a132c2e57453501, type: 2}
   m_sharedMaterial: {fileID: 1169714034494720167, guid: cc0ec86a6a819ab43a132c2e57453501, type: 2}
@@ -474,3 +475,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4680089672675499131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8678286037731969845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa477fd00c36cae4da82c4ad571f0d06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetText: {fileID: 3845762610502800007}
+  inputHandler: {fileID: 0}
+  actionName: CambiarGancho
+  useCurrentTextAsTemplate: 1
+  templateText: Pulsa [R]
+  replaceAnyBracketToken: 1

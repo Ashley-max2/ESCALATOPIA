@@ -853,6 +853,7 @@ public class PlayerInputHandler : MonoBehaviour
         // Acciones (solo teclado/raton)
         AddBinding("Saltar", KeyCode.Space, KeyCode.None);
         AddBinding("Correr", KeyCode.LeftShift, KeyCode.None);
+        AddBinding("CambiarGancho", KeyCode.R, KeyCode.None);
         AddBinding("Interactuar", KeyCode.E, KeyCode.None);
         AddBinding("Gancho", KeyCode.Mouse1, KeyCode.None);
         AddBinding("LiberarGancho", KeyCode.Mouse0, KeyCode.None);
@@ -866,6 +867,7 @@ public class PlayerInputHandler : MonoBehaviour
         EnsureBindingExists("Derecha", KeyCode.D, KeyCode.None);
         EnsureBindingExists("Saltar", KeyCode.Space, KeyCode.None);
         EnsureBindingExists("Correr", KeyCode.LeftShift, KeyCode.None);
+        EnsureBindingExists("CambiarGancho", KeyCode.R, KeyCode.None);
         EnsureBindingExists("Interactuar", KeyCode.E, KeyCode.None);
         EnsureBindingExists("Gancho", KeyCode.Mouse1, KeyCode.None);
         EnsureBindingExists("LiberarGancho", KeyCode.Mouse0, KeyCode.None);

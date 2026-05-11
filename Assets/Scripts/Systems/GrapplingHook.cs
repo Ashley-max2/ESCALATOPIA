@@ -15,17 +15,17 @@ public class GrapplingHook : MonoBehaviour
     [SerializeField] private LayerMask hookableMask;
     [SerializeField] private LayerMask pullableMask; // Capa para objetos que se pueden atraer
     [SerializeField] private string hookPointTag = "HookPoint";
-    
+
     [Header("=== TRAVEL ===")]
     [SerializeField] private float travelSpeed = 20f;
     [SerializeField] private float cooldown = 1f;
     [SerializeField] private float pullSpeed = 15f; // Velocidad para atraer objetos
-    
+
     [Header("=== VISUALS ===")]
     [SerializeField] private LineRenderer ropeRenderer;
     [SerializeField] private Transform hookOrigin;
     [SerializeField] private punteia uiPunteia;
-    
+
     // Properties
     public float TravelSpeed => travelSpeed;
     public bool IsActive { get; private set; }
@@ -34,25 +34,27 @@ public class GrapplingHook : MonoBehaviour
     public bool IsPulling { get; private set; }
     public Transform PulledObject { get; private set; }
     public bool ModoPull { get; private set; }
-    
+
     // Runtime
     private float _lastFireTime;
     private Transform _currentHookPoint;
     private Transform _playerTransform;
     private float _lostTargetTime;
     private Transform _lastValidTarget;
-    
+
     // Pull mode timers
     private float _pullStuckTimer;
     private float _pullDurationTimer;
+    private PlayerInputHandler _inputHandler;
 
     private void Awake()
     {
         _playerTransform = GetComponentInParent<PlayerStateMachine>()?.transform ?? transform.parent;
+        _inputHandler = GetComponentInParent<PlayerInputHandler>();
 
         if (hookOrigin == null)
             hookOrigin = transform;
-        
+
         // Setup line renderer if not assigned
         if (ropeRenderer == null)
         {
@@ -63,23 +65,23 @@ public class GrapplingHook : MonoBehaviour
             ropeRenderer.startColor = Color.gray;
             ropeRenderer.endColor = Color.white;
         }
-        
+
         ropeRenderer.enabled = false;
     }
-    
+
     private void Update()
     {
         Transform cam = Camera.main != null ? Camera.main.transform : null;
         Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
-        
+
         UpdateRopeVisual();
-        
+
         // Dibujar rayo rojo suavizado para debug (dirección de apuntado)
         Vector3 debugOrigin = cam != null ? cam.position : _playerTransform.position + Vector3.up;
         Debug.DrawRay(debugOrigin, aimForward * maxRange, Color.red);
-        
-        // Cambiar modo con R
-        if (Input.GetKeyDown(KeyCode.R))
+
+        // Cambiar modo con la acción rebindeable "CambiarGancho"
+        if (IsToggleModePressed())
         {
             ModoPull = !ModoPull;
             Debug.Log($"Gancho modo: {(ModoPull ? "ATRAER OBJETOS" : "HOOKPOINT")}");
@@ -111,9 +113,9 @@ public class GrapplingHook : MonoBehaviour
             {
                 Vector3 targetPos = hookOrigin.position;
                 float distBefore = Vector3.Distance(PulledObject.position, targetPos);
-                
+
                 PulledObject.position = Vector3.MoveTowards(PulledObject.position, targetPos, pullSpeed * Time.deltaTime);
-                
+
                 float distAfter = Vector3.Distance(PulledObject.position, targetPos);
                 _pullDurationTimer += Time.deltaTime;
 
@@ -135,20 +137,32 @@ public class GrapplingHook : MonoBehaviour
             }
         }
     }
-    
+
+    private bool IsToggleModePressed()
+    {
+        if (_inputHandler != null)
+        {
+            KeyCode toggleKey = _inputHandler.GetActionKey("CambiarGancho");
+            if (toggleKey != KeyCode.None)
+                return Input.GetKeyDown(toggleKey);
+        }
+
+        return Input.GetKeyDown(KeyCode.R);
+    }
+
     public bool CanFire()
     {
         if (IsActive) return false;
         if (Time.time - _lastFireTime < cooldown) return false;
-        
+
         return true;
     }
-    
+
     public Vector3 FindBestTarget()
     {
         Transform bestTarget = null;
         float bestScore = float.MaxValue;
-        
+
         Transform cam = Camera.main != null ? Camera.main.transform : null;
         Vector3 aimForward = cam != null ? cam.forward : _playerTransform.forward;
         Vector3 originPos = cam != null ? cam.position : _playerTransform.position + Vector3.up;
@@ -157,7 +171,7 @@ public class GrapplingHook : MonoBehaviour
         LayerMask maskToUse = ModoPull ? (pullableMask != 0 ? pullableMask : hookableMask) : hookableMask;
 
         Collider[] colliders = Physics.OverlapSphere(originPos, maxRange, maskToUse);
-        
+
         foreach (var col in colliders)
         {
             if (!ModoPull)
@@ -170,34 +184,34 @@ public class GrapplingHook : MonoBehaviour
                 // En modo pull, necesitamos un rigidbody (o algo agarrable)
                 if (col.GetComponent<Rigidbody>() == null)
                     continue;
-                
+
                 // No intentar atraer partes del player
                 if (col.CompareTag("Player") || col.gameObject.layer == LayerMask.NameToLayer("Player"))
                     continue;
             }
-            
+
             Vector3 targetPos = col.transform.position;
             Vector3 directionToTarget = targetPos - originPos;
-            
+
             float angle = Vector3.Angle(aimForward, directionToTarget);
             if (angle > 15f) continue;
-            
+
             int layerMaskToIgnore = maskToUse.value | (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Raycast"));
             int obstacleMask = ~layerMaskToIgnore;
-            
+
             if (Physics.Raycast(originPos, directionToTarget.normalized, directionToTarget.magnitude - 0.5f, obstacleMask))
                 continue;
-            
+
             float distance = directionToTarget.magnitude;
             float score = angle + (distance * 0.5f);
-            
+
             if (score < bestScore)
             {
                 bestScore = score;
                 bestTarget = col.transform;
             }
         }
-        
+
         if (bestTarget != null)
         {
             _currentHookPoint = bestTarget;
@@ -217,31 +231,31 @@ public class GrapplingHook : MonoBehaviour
                 _lastValidTarget = null;
             }
         }
-        
+
         return bestTarget != null ? bestTarget.position : Vector3.zero;
     }
-    
+
     public Vector3 Fire()
     {
         Vector3 target = FindBestTarget();
-        
+
         if (target == Vector3.zero)
         {
             Debug.Log("No valid hook/pull target found");
             return Vector3.zero;
         }
-        
+
         IsActive = true;
         CurrentTarget = target;
         _lastFireTime = Time.time;
-        
+
         if (ModoPull)
         {
             IsPulling = true;
             PulledObject = _currentHookPoint;
             _pullStuckTimer = 0f;
             _pullDurationTimer = 0f;
-            
+
             // Deshabilitar gravedad temporalmente
             Rigidbody rb = PulledObject.GetComponent<Rigidbody>();
             if (rb != null)
@@ -254,13 +268,13 @@ public class GrapplingHook : MonoBehaviour
             IsPulling = false;
             PulledObject = null;
         }
-        
+
         ropeRenderer.enabled = true;
-        
+
         Debug.Log($"Hook fired to {target}");
         return target;
     }
-    
+
     public void Release()
     {
         if (IsPulling && PulledObject != null)
@@ -278,40 +292,40 @@ public class GrapplingHook : MonoBehaviour
         _lastValidTarget = null;
         IsPulling = false;
         PulledObject = null;
-        
+
         ropeRenderer.enabled = false;
     }
-    
+
     private void UpdateRopeVisual()
     {
         if (!IsActive || ropeRenderer == null) return;
-        
+
         ropeRenderer.positionCount = 2;
         ropeRenderer.SetPosition(0, hookOrigin.position);
         ropeRenderer.SetPosition(1, IsPulling && PulledObject != null ? PulledObject.position : CurrentTarget);
     }
-    
+
     private void OnDrawGizmosSelected()
     {
         Transform playerOrTransform = Application.isPlaying ? (_playerTransform ?? transform) : transform;
         Transform camTransform = Camera.main != null ? Camera.main.transform : null;
-        
+
         if (playerOrTransform == null) return;
-        
+
         Vector3 originPos = camTransform != null ? camTransform.position : playerOrTransform.position + Vector3.up;
         Vector3 forwardDir = camTransform != null ? camTransform.forward : playerOrTransform.forward;
-        
+
         Gizmos.color = new Color(0, 1, 1, 0.1f);
         Gizmos.DrawWireSphere(originPos, maxRange);
-        
+
         Gizmos.color = Color.cyan;
         Vector3 forward = forwardDir * maxRange;
         Vector3 leftEdge = Quaternion.Euler(0, -15, 0) * forward;
         Vector3 rightEdge = Quaternion.Euler(0, 15, 0) * forward;
-        
+
         Gizmos.DrawRay(originPos, leftEdge);
         Gizmos.DrawRay(originPos, rightEdge);
-        
+
         if (IsActive)
         {
             Gizmos.color = Color.green;
