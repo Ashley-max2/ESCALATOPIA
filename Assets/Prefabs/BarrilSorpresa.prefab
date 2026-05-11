@@ -73,9 +73,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3188932147502140474, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
   m_PrefabInstance: {fileID: 3531674647720518776}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &3133800384757719738 stripped
+--- !u!198 &4814904018499912245 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 1909097130980869826, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
+  m_CorrespondingSourceObject: {fileID: 8346013231561287245, guid: fd47db13dab04ad4bbac9e1d52860fcd, type: 3}
   m_PrefabInstance: {fileID: 3531674647720518776}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7275293162181328064
@@ -90,10 +90,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Llave1
       objectReference: {fileID: 0}
-    - target: {fileID: 3951229050827077764, guid: 2a622c7719b5d344caedfa0125399dcb, type: 3}
-      propertyPath: particulasLuz
-      value: 
-      objectReference: {fileID: 3133800384757719738}
     - target: {fileID: 4327361042023269191, guid: 2a622c7719b5d344caedfa0125399dcb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -137,10 +133,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 61852181391573390, guid: 2a622c7719b5d344caedfa0125399dcb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8110937547200163117}
   m_SourcePrefab: {fileID: 100100000, guid: 2a622c7719b5d344caedfa0125399dcb, type: 3}
 --- !u!4 &6411673848374902663 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4327361042023269191, guid: 2a622c7719b5d344caedfa0125399dcb, type: 3}
   m_PrefabInstance: {fileID: 7275293162181328064}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7218345163570609486 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 61852181391573390, guid: 2a622c7719b5d344caedfa0125399dcb, type: 3}
+  m_PrefabInstance: {fileID: 7275293162181328064}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8110937547200163117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7218345163570609486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b10a9edb4bc09b4ab3a1558317c2b97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idLlave: 
+  particulasLuz: {fileID: 4814904018499912245}
