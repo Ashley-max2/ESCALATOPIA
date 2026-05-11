@@ -11,6 +11,10 @@ public class PlayerDeathHandler : MonoBehaviour
 {
     public static PlayerDeathHandler Instance { get; private set; }
 
+    [Header("Death Screen")]
+    [Tooltip("Desactivado por defecto: la muerte se maneja con HazardTeleporter (fade + checkpoint).")]
+    [SerializeField] private bool useDeathScreen = false;
+
     // ── Estado interno ──
     private PlayerStateMachine _psm;
     private StaminaSystem _stamina;
@@ -45,7 +49,8 @@ public class PlayerDeathHandler : MonoBehaviour
 
     private void Start()
     {
-        CreateDeathScreenUI();
+        if (useDeathScreen)
+            CreateDeathScreenUI();
     }
 
     // ───────────────────────────────────────────────────────────────────────────
@@ -90,6 +95,9 @@ public class PlayerDeathHandler : MonoBehaviour
     /// <summary>Muestra la pantalla de muerte (llamado desde PlayerDeadState.Enter).</summary>
     public void ShowDeathScreen()
     {
+        if (!useDeathScreen)
+            return;
+
         _deathTimer = 0f;
 
         if (_deathCanvasObj != null)
@@ -117,6 +125,12 @@ public class PlayerDeathHandler : MonoBehaviour
         Cursor.visible = false;
 
         if (_psm != null) _psm.Respawn();
+    }
+
+    public void ClearDeathFlag()
+    {
+        _isDead = false;
+        DeathManager.LastDeathCause = DeathCause.None;
     }
 
     public bool IsDead => _isDead;

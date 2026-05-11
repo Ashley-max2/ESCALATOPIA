@@ -14688,6 +14688,7 @@ GameObject:
   - component: {fileID: 5457009002486873683}
   - component: {fileID: 2220677867364616749}
   - component: {fileID: 3943290712357648987}
+  - component: {fileID: 1675347322412413866}
   m_Layer: 8
   m_Name: PlayerGold
   m_TagString: Player
@@ -15007,6 +15008,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b97e13849ebab40b55d3b85f04c711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1675347322412413866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389546477085994539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoint: {fileID: 0}
+  playerTag: Player
+  timeBeforeFade: 0.5
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
+  fadeImage: {fileID: 0}
+  isPlayerDeathTeleporter: 1
 --- !u!1 &5771029953877517713
 GameObject:
   m_ObjectHideFlags: 0

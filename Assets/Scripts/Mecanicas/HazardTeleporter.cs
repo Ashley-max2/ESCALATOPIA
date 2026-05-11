@@ -8,14 +8,14 @@ public class HazardTeleporter : MonoBehaviour
     [Header("Configuración de Teletransporte")]
     [Tooltip("El checkpoint a donde el jugador será teletransportado.")]
     public Transform checkpoint;
-    
+
     [Tooltip("El tag que debe tener el jugador para activar esto.")]
     public string playerTag = "Player";
 
     [Header("Tiempos (Segundos)")]
     [Tooltip("Tiempo de espera desde que choca hasta que empieza el fade out.")]
     public float timeBeforeFade = 0.5f;
-    
+
     [Tooltip("Duración del efecto de fundido a negro (Fade Out).")]
     public float fadeDuration = 0.5f;
 
@@ -65,7 +65,7 @@ public class HazardTeleporter : MonoBehaviour
     {
         if (isPlayerDeathTeleporter && _playerStateMachine != null && !isHandlingTeleport)
         {
-            if (_playerStateMachine.CurrentState != null && 
+            if (_playerStateMachine.CurrentState != null &&
                 _playerStateMachine.CurrentState.GetType().Name == "PlayerDeadState")
             {
                 StartCoroutine(TeleportRoutine(_playerStateMachine.Collider));
@@ -140,7 +140,7 @@ public class HazardTeleporter : MonoBehaviour
 
         // Mover una sola vez el master transform
         targetTransform.position = destination;
-        if (checkpoint != null) 
+        if (checkpoint != null)
         {
             targetTransform.rotation = checkpoint.rotation; // Copiar rotación del checkpoint
         }
@@ -155,6 +155,10 @@ public class HazardTeleporter : MonoBehaviour
         {
             psm.TransitionToState(psm.States.Grounded());
             psm.LastGroundedPosition = destination;
+
+            // Si veníamos de muerte sin DeathScreen, liberar flag para permitir muertes futuras.
+            if (PlayerDeathHandler.Instance != null)
+                PlayerDeathHandler.Instance.ClearDeathFlag();
         }
     }
 
@@ -188,7 +192,7 @@ public class HazardTeleporter : MonoBehaviour
         GameObject canvasObj = new GameObject("HazardFadeCanvas_Procedural");
         Canvas canvas = canvasObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 999; 
+        canvas.sortingOrder = 999;
 
         CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -197,8 +201,8 @@ public class HazardTeleporter : MonoBehaviour
         GameObject imageObj = new GameObject("FadeScreen");
         imageObj.transform.SetParent(canvasObj.transform, false);
         Image newFadeImage = imageObj.AddComponent<Image>();
-        newFadeImage.color = new Color(0, 0, 0, 0); 
-        newFadeImage.raycastTarget = false; 
+        newFadeImage.color = new Color(0, 0, 0, 0);
+        newFadeImage.raycastTarget = false;
 
         RectTransform rt = newFadeImage.rectTransform;
         rt.anchorMin = Vector2.zero;
