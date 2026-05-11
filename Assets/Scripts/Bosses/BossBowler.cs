@@ -163,21 +163,35 @@ public class BossBowler : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
     private IEnumerator ThrowLoop()
     {
+        Debug.Log("[BossBowler] ThrowLoop iniciado. Esperando cada " + throwInterval + " segundos.");
         while (_isActive)
         {
             yield return new WaitForSeconds(throwInterval);
             if (_isActive && playerTransform != null)
+            {
+                Debug.Log("[BossBowler] Preparando para lanzar roca...");
                 ThrowRock();
+            }
+            else
+            {
+                if (!_isActive)
+                    Debug.Log("[BossBowler] ThrowLoop: _isActive es false");
+                if (playerTransform == null)
+                    Debug.Log("[BossBowler] ThrowLoop: playerTransform es null");
+            }
         }
+        Debug.Log("[BossBowler] ThrowLoop finalizado.");
     }
 
     private void ThrowRock()
     {
         if (rockPrefab == null)
         {
-            Debug.LogWarning("[BossBowler] rockPrefab no asignado.");
+            Debug.LogError("[BossBowler] ERROR: rockPrefab no asignado.");
             return;
         }
+
+        Debug.Log("[BossBowler] Lanzando roca desde: " + (throwPoint != null ? throwPoint.position.ToString() : "posición del boss"));
 
         // Punto de origen
         Vector3 origin = throwPoint != null ? throwPoint.position : transform.position + Vector3.up * 1.5f;
