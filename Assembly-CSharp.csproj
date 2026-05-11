@@ -92,14 +92,17 @@
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
     <Compile Include="Assets\Scripts\UI\punteia.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\RaceRestartController.cs" />
+    <Compile Include="Assets\Scripts\Managers\Misiones\MissionManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerVFXController.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\Text3D.cs" />
     <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
     <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\LeafSpawner.cs" />
+    <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\TimelineMission.cs" />
     <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\Leaf3DMovement.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
     <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerHookState.cs" />
+    <Compile Include="Assets\Scripts\Props\InspectableImageItem.cs" />
     <Compile Include="Assets\Scripts\Props\Pieza mecanismos\PiezaMecanismoA.cs" />
     <Compile Include="Assets\Scripts\Props\LlaveRecogible.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerJumpState.cs" />
@@ -152,10 +155,12 @@
     <Compile Include="Assets\Scripts\Systems\GameProgressDatabase.cs" />
     <Compile Include="Assets\Scripts\Props\HookManager.cs" />
     <Compile Include="Assets\Scripts\Props\ThrownBox.cs" />
+    <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\DestroyMissionObjective.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerStateMachine.cs" />
     <Compile Include="Assets\Scripts\Subtitulos\NPCInteractable.cs" />
     <Compile Include="Assets\Scripts\Managers\FadeInSceneManager.cs" />
     <Compile Include="Assets\Scripts\UI\GamepadUINavigator.cs" />
+    <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\MissionTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerBaseState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInputHandler.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossBowler.cs" />
@@ -528,6 +533,10 @@
     </Reference>
     <Reference Include="System.IO.Abstractions.TestingHelpers">
       <HintPath>Library\PackageCache\com.unity.ml-agents@2.0.2\Plugins\System.IO.Abstractions.TestingHelpers.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -1094,6 +1103,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MCPForUnity.Editor">
+      <HintPath>Library\ScriptAssemblies\MCPForUnity.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1112,6 +1125,10 @@
     </Reference>
     <Reference Include="Unity.Sysroot.Linux_x86_64">
       <HintPath>Library\ScriptAssemblies\Unity.Sysroot.Linux_x86_64.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MCPForUnity.Runtime">
+      <HintPath>Library\ScriptAssemblies\MCPForUnity.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.EditorCoroutines.Editor">

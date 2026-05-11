@@ -681,33 +681,6 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
---- !u!114 &-1412941645829328391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Path: 
-  Guid:
-    Data1: -917930404
-    Data2: 1105629750
-    Data3: 1560455588
-    Data4: -1898613545
-  Banks:
-  - {fileID: -1175692767077851220}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 19032
 --- !u!114 &-1175692767077851220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,10 +696,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639140734875987765
+  lastModified: 639140878422495555
   FileSizes:
   - Name: Desktop
-    Value: 3119872
+    Value: 2908832
   Exists: 1
 --- !u!114 &-1050860975983575395
 MonoBehaviour:
@@ -918,7 +891,6 @@ MonoBehaviour:
   - {fileID: 711824237226555570}
   - {fileID: 2187073776674571386}
   - {fileID: -2621232731304196593}
-  - {fileID: -1412941645829328391}
   - {fileID: 5681820386625136825}
   EditorParameters: []
   MasterBanks:
@@ -926,7 +898,7 @@ MonoBehaviour:
   StringsBanks:
   - {fileID: 5001032251235893549}
   cacheVersion: 131858
-  cacheTime: 639140734875987765
+  cacheTime: 639140878422512583
   SerializableEventsDict:
   - key: event:/SFX/TrowBarill
     index: 0
@@ -966,6 +938,8 @@ MonoBehaviour:
     index: 17
   - key: event:/SFX/Fogata
     index: 18
+  - key: event:/Ambient/OpenDoor
+    index: 19
 --- !u!114 &255524153501840099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1541,7 +1515,7 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639140692366893525
+  lastModified: 639140878422512583
   FileSizes:
   - Name: Desktop
     Value: 1902
