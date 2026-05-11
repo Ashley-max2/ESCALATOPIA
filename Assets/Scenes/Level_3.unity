@@ -130,6 +130,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1628452395509906301, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628452395509906301, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628452395509906301, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628452395509906301, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628452395509906301, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 4643735325699565132, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -211,7 +231,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1323125051}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4643735325699565132, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
@@ -1545,6 +1566,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3983063591393173388, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
+--- !u!1 &526165642 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6476851558615301084, guid: 82f92230ad407b54f8e27b8448073d9b, type: 3}
+  m_PrefabInstance: {fileID: 7443975}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &531011701
 GameObject:
   m_ObjectHideFlags: 0
@@ -7757,6 +7783,7 @@ MonoBehaviour:
   - A por la gema
   - EEEERIKA
   autoPlay: 0
+  missionChangeManager: {fileID: 0}
   hasFinishedDialogue: 0
   isLocked: 0
 --- !u!65 &1495863464
@@ -10991,7 +11018,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1618740887075457261, guid: 985d88b68f3ffb5449a60b35a61e2412, type: 3}
       propertyPath: hudPanelsToHideOnPause.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1618740887075457261, guid: 985d88b68f3ffb5449a60b35a61e2412, type: 3}
       propertyPath: hudPanelsToHideOnPause.Array.data[0]
@@ -11001,6 +11028,14 @@ PrefabInstance:
       propertyPath: hudPanelsToHideOnPause.Array.data[1]
       value: 
       objectReference: {fileID: 298061858}
+    - target: {fileID: 1618740887075457261, guid: 985d88b68f3ffb5449a60b35a61e2412, type: 3}
+      propertyPath: hudPanelsToHideOnPause.Array.data[2]
+      value: 
+      objectReference: {fileID: 526165642}
+    - target: {fileID: 1618740887075457261, guid: 985d88b68f3ffb5449a60b35a61e2412, type: 3}
+      propertyPath: hudPanelsToHideOnPause.Array.data[3]
+      value: 
+      objectReference: {fileID: 1323125051}
     - target: {fileID: 5393126858105964497, guid: 985d88b68f3ffb5449a60b35a61e2412, type: 3}
       propertyPath: m_LocalPosition.x
       value: 960
