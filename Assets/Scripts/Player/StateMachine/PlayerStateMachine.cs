@@ -39,6 +39,8 @@ public class PlayerStateMachine : MonoBehaviour
     
     public float WalkSpeed => walkSpeed;
     public float RunSpeed => runSpeed;
+    public void SetWalkSpeed(float speed) => walkSpeed = speed;
+    public void SetRunSpeed(float speed) => runSpeed = speed;
     public float RotationSpeed => rotationSpeed;
     public float Acceleration => acceleration;
     public float Deceleration => deceleration;
@@ -227,7 +229,8 @@ public class PlayerStateMachine : MonoBehaviour
                 break;
 
             case PlayerAirborneState:
-                Animator.Play("JumpLoop");
+                // El Animator Controller transiciona automáticamente a Jump_Loop
+                // después de Jump_Start (cuando Jump=false). No es necesario Play().
                 break;
 
             case PlayerHookState:
@@ -241,6 +244,15 @@ public class PlayerStateMachine : MonoBehaviour
                     Animator.SetFloat("ClimbSpeed", 1f);
                 else
                     Animator.SetFloat("ClimbSpeed", 0f);
+
+                // MoveX/MoveZ para ClimbLeft, ClimbRight y ClimbForward.
+                // Dead zone de 0.2 para evitar que valores residuales de un frame
+                // disparen ClimbForward/Left/Right cuando no hay input real.
+                const float CLIMB_INPUT_DEADZONE = 0.2f;
+                float climbMoveX = Mathf.Abs(Input.MoveX) > CLIMB_INPUT_DEADZONE ? Input.MoveX : 0f;
+                float climbMoveZ = Mathf.Abs(Input.MoveZ) > CLIMB_INPUT_DEADZONE ? Input.MoveZ : 0f;
+                Animator.SetFloat("MoveX", climbMoveX);
+                Animator.SetFloat("MoveZ", climbMoveZ);
                 break;
         }
     }
@@ -398,17 +410,12 @@ public class PlayerStateMachine : MonoBehaviour
         // Apply horizontal velocity, preserve vertical
         Rb.velocity = new Vector3(CurrentVelocity.x, Rb.velocity.y, CurrentVelocity.z);
         
-        // Rotate towards movement direction (estilo Zelda BotW)
+        // Rotar siempre hacia la dirección del movimiento (estilo Honkai Star Rail / vista libre)
         if (moveDirection.magnitude > 0.1f)
         {
-            float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
-            float angle = Mathf.SmoothDampAngle(
-                transform.eulerAngles.y, 
-                targetAngle, 
-                ref _currentRotationVelocity, 
-                1f / rotationSpeed
-            );
-            transform.rotation = Quaternion.Euler(0, angle, 0);
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+            // Usamos Slerp para una rotación suave y fluida que gire completamente al personaje
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
         }
     }
     
@@ -470,8 +477,28 @@ public class PlayerStateMachine : MonoBehaviour
     
     public void Respawn()
     {
-        transform.position = LastGroundedPosition;
-        Rb.velocity = Vector3.zero;
+        // Prioridad: posición guardada en el último checkpoint (JSON).
+        // Si no hay save o no tiene posición, cae al LastGroundedPosition.
+        Vector3 spawnPos = LastGroundedPosition;
+
+        if (GameProgressDatabase.HasSave())
+        {
+            GameProgressData save = GameProgressDatabase.Load();
+            if (save != null && save.HasSpawnPosition)
+                spawnPos = save.GetSpawnPosition();
+        }
+
+        // Usar rb.position para evitar snap-back con Rigidbody.Interpolate
+        Rb.isKinematic = true;
+        Rb.velocity        = Vector3.zero;
+        Rb.angularVelocity = Vector3.zero;
+        Rb.position        = spawnPos;
+        Rb.isKinematic     = false;
+
+        transform.position  = spawnPos;
+        LastGroundedPosition = spawnPos;
+        Physics.SyncTransforms();
+
         TransitionToState(States.Grounded());
         GameEvents.PlayerRespawn(transform.position);
     }

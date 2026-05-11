@@ -52,6 +52,13 @@ public class PlayerHookState : PlayerBaseState
     
     public override void Execute()
     {
+        // Si el gancho se desactiva externamente (o porque soltó el objeto al atraer), salimos del estado
+        if (ctx.GrapplingHook != null && !ctx.GrapplingHook.IsActive)
+        {
+            SwitchState(ctx.IsGrounded ? factory.Grounded() : factory.Airborne());
+            return;
+        }
+
         switch (_currentPhase)
         {
             case HookPhase.Traveling:
@@ -94,6 +101,7 @@ public class PlayerHookState : PlayerBaseState
     private void TravelToTarget()
     {
         if (ctx.GrapplingHook == null) return;
+        if (ctx.GrapplingHook.ModoPull) return; // Do not travel if pulling an object
         
         Vector3 direction = (_hookTarget - ctx.transform.position).normalized;
         float travelSpeed = ctx.GrapplingHook.TravelSpeed;
@@ -112,7 +120,13 @@ public class PlayerHookState : PlayerBaseState
     
     private void CheckArrival()
     {
-        float distanceToTarget = Vector3.Distance(ctx.transform.position, _hookTarget);
+        Vector3 targetPos = _hookTarget;
+        if (ctx.GrapplingHook != null && ctx.GrapplingHook.ModoPull && ctx.GrapplingHook.PulledObject != null)
+        {
+            targetPos = ctx.GrapplingHook.PulledObject.position;
+        }
+
+        float distanceToTarget = Vector3.Distance(ctx.transform.position, targetPos);
         
         if (distanceToTarget < 1.5f)
         {
