@@ -606,7 +606,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309168090}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -19.379997}
+  m_LocalPosition: {x: 0, y: 0, z: 0.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -614,7 +614,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 52.92, y: -17.939995}
+  m_AnchoredPosition: {x: -0.179, y: 2.065}
   m_SizeDelta: {x: 3, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &350901060
@@ -686,6 +686,72 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4298130956448038797, guid: cb87449058ef8af40aa4ee3c8d862ed8, type: 3}
   m_PrefabInstance: {fileID: 350901060}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &424912467
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1721597913}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.91
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_Name
+      value: boss3_Afro
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b7514907d2c99c749aebaacbe404b220, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+--- !u!4 &424912468 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
+  m_PrefabInstance: {fileID: 424912467}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &478964877
 PrefabInstance:
@@ -1118,6 +1184,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8290772404149150699, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
+--- !u!4 &608335586 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4238804419739918444, guid: 7a761c34f671b4742b67f74dd07b2890, type: 3}
+  m_PrefabInstance: {fileID: 2107900271}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &648687283
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6133,6 +6204,7 @@ GameObject:
   - component: {fileID: 1495863461}
   - component: {fileID: 1495863462}
   - component: {fileID: 1495863463}
+  - component: {fileID: 1495863464}
   m_Layer: 0
   m_Name: BossLevitante
   m_TagString: Boss
@@ -6343,6 +6415,27 @@ MonoBehaviour:
   autoPlay: 0
   hasFinishedDialogue: 0
   isLocked: 0
+--- !u!65 &1495863464
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495863455}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.9591675, y: 0.43428802, z: 5.309372}
+  m_Center: {x: 0.4997635, y: -0.782856, z: -0.1453476}
 --- !u!1001 &1525665996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8578,7 +8671,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1721597909}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -8633,7 +8726,8 @@ Transform:
   m_LocalPosition: {x: 76.08, y: 93.17, z: 49.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 424912468}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1721597914
@@ -8649,10 +8743,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rockPrefab: {fileID: 1765281609126774420, guid: 506516c5ae9f8934695fe52cd9a5381c, type: 3}
-  throwPoint: {fileID: 0}
-  playerTransform: {fileID: 0}
+  throwPoint: {fileID: 1721597913}
+  playerTransform: {fileID: 608335586}
   throwInterval: 2.5
-  throwForce: 14
+  throwForce: 50
   aimHeightOffset: 1
   spreadAngle: 5
   knockdownDistance: 1
