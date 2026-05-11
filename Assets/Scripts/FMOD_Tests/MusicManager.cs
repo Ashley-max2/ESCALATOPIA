@@ -24,8 +24,15 @@ public class MusicManager : MonoBehaviour
         Instance = this;
         // NO usamos DontDestroyOnLoad: cada escena tiene su propia musica
 
-        forestInstance = RuntimeManager.CreateInstance(forestMusicPath);
-        forestInstance.start();
+        try
+        {
+            forestInstance = RuntimeManager.CreateInstance(forestMusicPath);
+            forestInstance.start();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"[MusicManager] No se pudo crear evento FMOD '{forestMusicPath}': {e.Message}. ¿Están los banks buildeados?");
+        }
     }
 
     void OnDestroy()

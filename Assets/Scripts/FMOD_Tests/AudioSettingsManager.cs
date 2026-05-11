@@ -123,7 +123,7 @@ public class AudioSettingsManager : MonoBehaviour
         FMOD.RESULT result = RuntimeManager.StudioSystem.getVCA(path, out vca);
         if (result != FMOD.RESULT.OK || !vca.isValid())
         {
-            Debug.LogError($"[FMOD] VCA no encontrado: {path} -> {result}. Verifica el path en FMOD.");
+            Debug.LogWarning($"[FMOD] VCA no encontrado: {path} -> {result}. Se ignorará hasta que los banks estén buildeados.");
         }
 
         return vca;

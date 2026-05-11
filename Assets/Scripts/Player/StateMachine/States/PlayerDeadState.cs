@@ -2,12 +2,12 @@ using UnityEngine;
 
 /// <summary>
 /// Estado de muerte del jugador.
-/// Gestiona la muerte por caída y el respawn.
+/// Muestra la pantalla de muerte vía PlayerDeathHandler y espera input para respawnear.
 /// </summary>
 public class PlayerDeadState : PlayerBaseState
 {
     private float _deathTimer;
-    private const float RESPAWN_DELAY = 2f;
+    private const float INPUT_DELAY = 1.5f; // Segundos antes de aceptar input (evita skips)
     private bool _respawnTriggered;
     
     public PlayerDeadState(PlayerStateMachine context, PlayerStateFactory factory) 
@@ -25,18 +25,38 @@ public class PlayerDeadState : PlayerBaseState
         // Notify death
         GameEvents.PlayerDeath(ctx.transform.position);
         
-        Debug.Log("Player died!");
+        // Mostrar pantalla de muerte (pausa el juego con timeScale = 0)
+        if (PlayerDeathHandler.Instance != null)
+        {
+            PlayerDeathHandler.Instance.ShowDeathScreen();
+        }
+        
+        Debug.Log("[PlayerDeadState] Player died!");
     }
     
     public override void Execute()
     {
-        _deathTimer += Time.deltaTime;
+        // Usar unscaledDeltaTime porque el juego está pausado (timeScale = 0)
+        _deathTimer += Time.unscaledDeltaTime;
         
-        // Auto respawn after delay, or on input
-        if (!_respawnTriggered && (_deathTimer >= RESPAWN_DELAY || ctx.Input.JumpPressed))
+        // Esperar un poco antes de aceptar input
+        if (_deathTimer < INPUT_DELAY) return;
+        
+        // Cualquier tecla → respawn
+        if (!_respawnTriggered && Input.anyKeyDown)
         {
             _respawnTriggered = true;
-            ctx.Respawn();
+            
+            if (PlayerDeathHandler.Instance != null)
+            {
+                PlayerDeathHandler.Instance.HideAndRespawn();
+            }
+            else
+            {
+                // Fallback si no hay handler
+                Time.timeScale = 1f;
+                ctx.Respawn();
+            }
         }
     }
     

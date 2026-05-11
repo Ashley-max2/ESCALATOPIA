@@ -36,6 +36,12 @@ public class BossRock : MonoBehaviour
     [Tooltip("Activa/desactiva las trazas de movimiento si el objeto tiene TrailRenderer.")]
     public bool enableTrail = true;
 
+[Tooltip("Fuerza de empuje aplicada al player en horizontal cuando es golpeado (metros aproximados).")]
+public float pushForce = 6f;
+
+[Tooltip("Segundos que pasan desde la colisión hasta destruir la roca.")]
+public float collisionDestroyDelay = 5f;
+
     // ─────────────────────────────────────────────────────────────────────────
     //  PRIVADOS
     // ─────────────────────────────────────────────────────────────────────────
@@ -46,7 +52,9 @@ public class BossRock : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-        Destroy(gameObject, lifetime);
+        // Desactivar gravedad para vuelo recto → rango infinito
+        _rb.useGravity = false;
+        // No auto-destruir: rocas tienen alcance infinito hasta colisión. Se destruirán tras colisión en DestroyAfterDelayCoroutine.
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -58,31 +66,42 @@ public class BossRock : MonoBehaviour
 
         Debug.Log($"[BossRock] Colisión con: {collision.gameObject.name} (tag: {collision.gameObject.tag})");
 
-        if (collision.gameObject.CompareTag("Player"))
+        // Ignorar colisiones con otras rocas
+        if (collision.gameObject.GetComponent<BossRock>() != null)
         {
-            _hasHit = true;
-            Debug.Log("[BossRock] ¡Golpeó al Player!");
-            ApplyHitEffects(collision.gameObject);
-            Destroy(gameObject);
-        }
-        else if (collision.gameObject.GetComponent<BossRock>() != null)
-        {
-            // Colisión con otra roca — ignorar completamente
             Debug.Log("[BossRock] Colisión con otra roca, ignorada.");
             return;
         }
-        else if (collision.gameObject.CompareTag("BossRockIgnore"))
+
+        _hasHit = true;
+
+        if (collision.gameObject.CompareTag("Player"))
         {
-            // Ignorar, seguir volando
-            Debug.Log("[BossRock] Colisión ignorada (BossRockIgnore)");
+            Debug.Log("[BossRock] ¡Golpeó al Player!");
+            ApplyHitEffects(collision.gameObject);
         }
         else
         {
-            // Golpea el suelo u otro objeto — destruir sin efecto
-            _hasHit = true;
-            Debug.Log($"[BossRock] Colisión con obstáculo, destruyendo...");
-            Destroy(gameObject);
+            Debug.Log($"[BossRock] Colisión con obstáculo: {collision.gameObject.name}");
         }
+
+        // Desactivar collider y física para que la roca quede quieta
+        var col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+        if (_rb != null)
+        {
+            _rb.velocity = Vector3.zero;
+            _rb.isKinematic = true;
+        }
+
+        // Destruir la roca pasado un tiempo fijo tras la colisión
+        StartCoroutine(DestroyAfterDelayCoroutine(collisionDestroyDelay));
+    }
+
+    private IEnumerator DestroyAfterDelayCoroutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -95,11 +114,13 @@ public class BossRock : MonoBehaviour
 
         if (rb != null)
         {
-            // Cancelar velocidad vertical actual y aplicar impulso hacia abajo
-            Vector3 vel = rb.velocity;
-            vel.y = 0f;
-            rb.velocity = vel;
-            rb.AddForce(Vector3.down * knockdownImpulse, ForceMode.Impulse);
+            // Empuje horizontal hacia fuera desde la roca (unos metros)
+            Vector3 pushDir = playerObj.transform.position - transform.position;
+            pushDir.y = 0f;
+            if (pushDir.sqrMagnitude < 0.01f)
+                pushDir = playerObj.transform.forward;
+            pushDir.Normalize();
+            rb.AddForce(pushDir * pushForce, ForceMode.Impulse);
         }
 
         if (sm != null)
