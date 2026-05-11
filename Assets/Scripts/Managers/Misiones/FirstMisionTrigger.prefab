@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8766532725475294443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6263870505972596161}
+  - component: {fileID: 1532609061817229429}
+  - component: {fileID: 7969077948471793354}
+  m_Layer: 0
+  m_Name: FirstMisionTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6263870505972596161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766532725475294443}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.0028046574, y: 0.0036941147, z: -0.7007299, w: 0.7134116}
+  m_LocalPosition: {x: 565.17, y: 12.71, z: 131.87}
+  m_LocalScale: {x: 1, y: 0.12478646, z: 0.13721895}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0.067, y: 0.527, z: -88.972}
+--- !u!65 &1532609061817229429
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766532725475294443}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.9399874, y: 79.94851, z: 87.424706}
+  m_Center: {x: 6.204839, y: 3.0494545, z: 5.0906744}
+--- !u!114 &7969077948471793354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766532725475294443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d79778dd2456b334fbb120c7e1e04e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveText: 'Objetivo actual: explora la zona y encuentra una fogata'
+  objectsToDestroy: []
