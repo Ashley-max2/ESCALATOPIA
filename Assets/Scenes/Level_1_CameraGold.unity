@@ -3741,14 +3741,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc0318ba0332694d8eabaa595997d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fondo: {fileID: 0}
-  iconoEnganchar: {fileID: 0}
-  iconoAtraer: {fileID: 0}
-  colorFondoInactivo: {r: 0.2, g: 0.2, b: 0.2, a: 0.6}
-  colorFondoEnganchar: {r: 0, g: 1, b: 0.5, a: 0.8}
-  colorFondoAtraer: {r: 1, g: 0.6, b: 0, a: 0.8}
-  colorIconoActivo: {r: 1, g: 1, b: 1, a: 1}
-  colorIconoInactivo: {r: 1, g: 1, b: 1, a: 0.25}
+  imagen: {fileID: 0}
+  colorEnganchable: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &943105347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5072,7 +5066,6 @@ MonoBehaviour:
   pausePanel: {fileID: 1168180518}
   pauseBlockedScenes:
   - Creditos
-  hudPanelsToHideOnPause: []
 --- !u!1001 &1345440170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10755,7 +10748,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bindings: []
-  IsAI: 0
   mouseSensitivity: 2
   gamepadCameraSensitivity: 0.5
   gamepadDeadzone: 0.25
@@ -29977,18 +29969,16 @@ MonoBehaviour:
   hookableMask:
     serializedVersion: 2
     m_Bits: 2048
-  hookPointTag: HookPoint
-  travelSpeed: 20
-  cooldown: 1
   pullableMask:
     serializedVersion: 2
     m_Bits: 0
+  hookPointTag: HookPoint
+  travelSpeed: 20
+  cooldown: 1
   pullSpeed: 15
-  pullStopDistance: 1.5
   ropeRenderer: {fileID: 0}
   hookOrigin: {fileID: 2313725669163319317}
   uiPunteia: {fileID: 943105346}
-  usarRendererInterno: 1
 --- !u!4 &6365282856820258602
 Transform:
   m_ObjectHideFlags: 0
@@ -30086,10 +30076,10 @@ MonoBehaviour:
   rotationSpeed: 12
   acceleration: 10
   deceleration: 8
-  runStaminaCost: 5
   jumpForce: 10
   airControl: 0.5
   fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   climbSpeed: 6
@@ -30103,7 +30093,6 @@ MonoBehaviour:
   mantleExtraHeight: 0.6
   minClimbAngle: 45
   maxClimbAngle: 135
-  hookAccelerationTime: 0.3
   groundCheck: {fileID: 2982179756555498549}
   groundCheckRadius: 0.3
   groundMask:
@@ -38241,7 +38230,7 @@ Animator:
   m_GameObject: {fileID: 3741824985851744810}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: aaf1ec7515d73794081ecdaedf3a8b60, type: 3}
-  m_Controller: {fileID: 9100000, guid: 50e8599d929302547b2844d36d9fd972, type: 2}
+  m_Controller: {fileID: 9100000, guid: 16ff0912d9616a540be88849a9587faa, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
