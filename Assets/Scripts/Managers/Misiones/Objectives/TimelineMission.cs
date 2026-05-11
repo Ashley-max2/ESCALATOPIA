@@ -1,34 +1,27 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class TimelineMission : MonoBehaviour
+public class TimelineMissionSimple : MonoBehaviour
 {
-    [Header("Timeline")]
     [SerializeField] private PlayableDirector timeline;
 
-    [Header("Mission")]
     [TextArea]
-    [SerializeField] private string objectiveText;
+    public string objectiveText;
 
-    [Header("Objects to destroy")]
     [SerializeField] private GameObject[] objectsToDestroy;
 
-    private bool triggered = false;
+    private bool triggered;
 
     private void OnEnable()
     {
         if (timeline != null)
-        {
             timeline.stopped += OnTimelineFinished;
-        }
     }
 
     private void OnDisable()
     {
         if (timeline != null)
-        {
             timeline.stopped -= OnTimelineFinished;
-        }
     }
 
     private void OnTimelineFinished(PlayableDirector pd)
@@ -37,16 +30,12 @@ public class TimelineMission : MonoBehaviour
 
         triggered = true;
 
-        // Cambiar misión
         MissionManager.Instance.SetObjective(objectiveText);
 
-        // Destruir objetos
         foreach (GameObject obj in objectsToDestroy)
         {
             if (obj != null)
-            {
                 Destroy(obj);
-            }
         }
     }
 }

@@ -8,7 +8,7 @@ public class MissionTrigger : MonoBehaviour
     [Header("Objects to destroy")]
     [SerializeField] private GameObject[] objectsToDestroy;
 
-    private bool triggered = false;
+    private bool triggered;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,16 +17,12 @@ public class MissionTrigger : MonoBehaviour
 
         triggered = true;
 
-        // Cambiar objetivo
         MissionManager.Instance.SetObjective(objectiveText);
 
-        // Destruir otros objetos
         foreach (GameObject obj in objectsToDestroy)
         {
             if (obj != null)
-            {
                 Destroy(obj);
-            }
         }
     }
 }

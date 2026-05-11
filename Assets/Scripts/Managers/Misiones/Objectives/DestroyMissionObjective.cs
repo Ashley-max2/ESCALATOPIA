@@ -5,7 +5,6 @@ public class DestroyMissionObjective : MonoBehaviour
     [TextArea]
     [SerializeField] private string nextObjective;
 
-    [Header("Objects to destroy")]
     [SerializeField] private GameObject[] objectsToDestroy;
 
     private void OnDestroy()
@@ -20,9 +19,7 @@ public class DestroyMissionObjective : MonoBehaviour
         foreach (GameObject obj in objectsToDestroy)
         {
             if (obj != null)
-            {
                 Destroy(obj);
-            }
         }
     }
 }

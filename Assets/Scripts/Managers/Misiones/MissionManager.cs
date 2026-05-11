@@ -5,19 +5,15 @@ public class MissionManager : MonoBehaviour
 {
     public static MissionManager Instance;
 
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI objectiveText;
-
-    [Header("Current Mission")]
-    [TextArea]
-    [SerializeField] private string currentObjective;
+    private string currentObjective;
+    private TextMeshProUGUI objectiveText;
 
     private void Awake()
     {
-        // Singleton
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -27,13 +23,13 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateObjectiveUI();
+        UpdateUI();
     }
 
     public void SetObjective(string newObjective)
     {
         currentObjective = newObjective;
-        UpdateObjectiveUI();
+        UpdateUI();
     }
 
     public string GetCurrentObjective()
@@ -41,8 +37,15 @@ public class MissionManager : MonoBehaviour
         return currentObjective;
     }
 
-    private void UpdateObjectiveUI()
+    public void BindUI(TextMeshProUGUI uiText)
     {
-        objectiveText.text = currentObjective;
+        objectiveText = uiText;
+        UpdateUI(); // clave para que funcione al cambiar escena
+    }
+
+    private void UpdateUI()
+    {
+        if (objectiveText != null)
+            objectiveText.text = currentObjective;
     }
 }
