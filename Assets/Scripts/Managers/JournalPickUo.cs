@@ -10,14 +10,14 @@ public class JournalPickUp : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
+        if (isPlayerNear && InteractInput.PressedThisFrame())
         {
-            
+
             Pickup();
-            
+
         }
     }
-    
+
     private void Pickup()
     {
         if (missionManager != null)
@@ -25,7 +25,7 @@ public class JournalPickUp : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-    
+
 
     private void OnTriggerEnter(Collider other)
     {

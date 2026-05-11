@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7009208139010638106}
   - component: {fileID: 2591687891815527770}
   - component: {fileID: 5547440914529233354}
+  - component: {fileID: 5575416787264935985}
   m_Layer: 0
   m_Name: PanelNPC
   m_TagString: Untagged
@@ -77,6 +78,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5575416787264935985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275933859777991591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6bb09db99a34e14c8881169daa114e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetText: {fileID: 4804014775564727170}
+  useCurrentTextAsTemplate: 1
+  templateText: 
+  replaceAnyBracketToken: 1
 --- !u!1 &1358353152862973759
 GameObject:
   m_ObjectHideFlags: 0

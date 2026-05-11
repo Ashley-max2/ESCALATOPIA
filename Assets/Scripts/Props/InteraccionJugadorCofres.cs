@@ -14,7 +14,7 @@ public class InteraccionJugador : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (InteractInput.PressedThisFrame())
         {
             Ray ray = new Ray(camaraJugador.transform.position, camaraJugador.transform.forward);
 

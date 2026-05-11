@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// Permite al jugador interactuar con un objeto usando la tecla E para mostrar una imagen a pantalla completa.
@@ -9,10 +10,10 @@ public class InspectableImageItem : MonoBehaviour
     [Header("UI References")]
     [Tooltip("El GameObject que contiene la 'E' que flota sobre el objeto. Debe estar asignado en la escena.")]
     [SerializeField] private GameObject promptE;
-    
+
     [Tooltip("El panel de UI que cubrirá toda la pantalla.")]
     [SerializeField] private GameObject fullscreenImagePanel;
-    
+
     [Tooltip("El componente Image de UI donde se mostrará la imagen del objeto.")]
     [SerializeField] private Image fullscreenImageUI;
 
@@ -25,12 +26,15 @@ public class InspectableImageItem : MonoBehaviour
 
     private bool playerInsideTrigger = false;
     private bool isViewingImage = false;
+    private TMP_Text promptText;
+    private string lastPromptLabel = string.Empty;
 
     // Cooldown para evitar que el mismo frame en el que se abre la imagen se cierre por detectar una pulsación
     private bool frameCooldown = false;
 
     private void Start()
     {
+        promptText = promptE != null ? promptE.GetComponentInChildren<TMP_Text>(true) : null;
         if (promptE != null) promptE.SetActive(false);
         if (fullscreenImagePanel != null) fullscreenImagePanel.SetActive(false);
     }
@@ -38,7 +42,7 @@ public class InspectableImageItem : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!enabled) return;
-        
+
         // Verifica que sea el jugador
         if (other.CompareTag("Player"))
         {
@@ -58,9 +62,9 @@ public class InspectableImageItem : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInsideTrigger = false;
-            
+
             if (promptE != null) promptE.SetActive(false);
-            
+
             // Si por alguna razón el jugador sale del área mientras ve la imagen (por ej, si no pausas el juego), la cerramos
             if (isViewingImage && !pauseGameWhenViewing)
             {
@@ -71,6 +75,8 @@ public class InspectableImageItem : MonoBehaviour
 
     private void Update()
     {
+        UpdatePromptKeyLabel();
+
         // Consumimos el cooldown de 1 frame para no detectar input en el mismo frame que se abrió
         if (frameCooldown)
         {
@@ -88,11 +94,23 @@ public class InspectableImageItem : MonoBehaviour
         }
         else if (playerInsideTrigger)
         {
-            // Si está cerca del objeto y pulsa E, abrimos la imagen
-            if (Input.GetKeyDown(KeyCode.E))
+                // Si está cerca del objeto y pulsa la acción de interacción, abrimos la imagen
+                if (InteractInput.PressedThisFrame())
             {
                 OpenImage();
             }
+        }
+    }
+
+    private void UpdatePromptKeyLabel()
+    {
+        if (promptText == null) return;
+
+        string label = InteractInput.GetBracketedDisplayKey();
+        if (label != lastPromptLabel)
+        {
+            promptText.text = label;
+            lastPromptLabel = label;
         }
     }
 

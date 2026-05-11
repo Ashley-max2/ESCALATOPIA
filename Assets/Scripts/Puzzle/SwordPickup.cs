@@ -3,7 +3,7 @@ using FMODUnity;
 
 public class SwordPickup : MonoBehaviour
 {
-    [Header("Símbolo")] 
+    [Header("Símbolo")]
     public string swordSymbol;
 
     [Header("Resaltar al mirar")]
@@ -64,7 +64,7 @@ public class SwordPickup : MonoBehaviour
 
     private void Update()
     {
-        if (isHighlighted && Input.GetKeyDown(KeyCode.E))
+        if (isHighlighted && InteractInput.PressedThisFrame())
         {
             TryPickup();
         }
