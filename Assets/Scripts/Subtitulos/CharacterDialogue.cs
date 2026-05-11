@@ -40,6 +40,10 @@ public class CharacterDialogue : MonoBehaviour
     [SerializeField] private TextMeshProUGUI subtitleText;
     [SerializeField] private float typingSpeed = 0.04f;
 
+    [Header("Prompt Billboard")]
+    [SerializeField] private bool billboardPrompt = true;
+    [SerializeField] private bool billboardOnlyOnY = true;
+
     [Header("Dialogue Behaviour")]
     [SerializeField] private float autoAdvanceDelay = 1.25f;
 
@@ -230,6 +234,38 @@ public class CharacterDialogue : MonoBehaviour
             promptText.text = label;
             lastPromptLabel = label;
         }
+
+        UpdatePromptBillboard();
+    }
+
+    private void UpdatePromptBillboard()
+    {
+        if (!billboardPrompt || promptE == null || !promptE.activeSelf)
+            return;
+
+        Transform targetTransform = null;
+
+        if (Camera.main != null)
+            targetTransform = Camera.main.transform;
+        else
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+                targetTransform = player.transform;
+        }
+
+        if (targetTransform == null)
+            return;
+
+        Vector3 direction = targetTransform.position - promptE.transform.position;
+
+        if (billboardOnlyOnY)
+            direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        promptE.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
     }
 
     public void SetInteractionEnabled(bool enabled)

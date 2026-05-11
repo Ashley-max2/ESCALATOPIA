@@ -20,11 +20,18 @@ public class NPCInteractable : MonoBehaviour
     [Header("Typewriter Effect")]
     [SerializeField] private float typingSpeed = 0.04f;
 
+    [Header("Prompt Billboard")]
+    [SerializeField] private bool billboardPrompt = true;
+    [SerializeField] private bool billboardOnlyOnY = true;
+
     [Header("Dialogue")]
     [SerializeField] private List<string> subtitles = new List<string>();
 
     [Tooltip("Si está activado, los subtítulos empiezan y avanzan solos al entrar (sin pulsar E). Dejar en FALSE para la zona del NPC normal.")]
     [SerializeField] private bool autoPlay = false;
+    [Tooltip("Si se pulsa E para empezar, activar modo auto-advance (las líneas avanzan solas).")]
+    [SerializeField] private bool startWithAutoAdvanceOnPress = true;
+    [SerializeField] private float autoAdvanceDelay = 1.25f;
 
     // 🔥 AÑADIDO
     [Header("Mission Change (optional)")]
@@ -39,6 +46,13 @@ public class NPCInteractable : MonoBehaviour
     private bool dialogueStarted = false;      // true en cuanto el jugador pulsa E por primera vez
     private bool isTyping = false;             // máquina de escribir en progreso
     private Coroutine typewriterCoroutine;     // para detener/saltar la escritura
+    private bool autoAdvanceMode = false;
+    // Player freeze state (para bloquear movimiento durante diálogos)
+    private Rigidbody _playerRb = null;
+    private bool _savedPlayerIsKinematic = false;
+    private bool _savedPlayerUseGravity = true;
+    private Vector3 _savedPlayerVelocity = Vector3.zero;
+    private bool _playerFrozen = false;
 
     // Públicos para que otros scripts puedan consultarlos
     public bool isPlayerNear => playerInsideTrigger;
@@ -177,8 +191,6 @@ public class NPCInteractable : MonoBehaviour
 
     void Update()
     {
-        UpdatePromptKeyLabel();
-
         // Si el player no está dentro del trigger según Unity Physics → nada que hacer
         if (!playerInsideTrigger) return;
 
@@ -208,6 +220,10 @@ public class NPCInteractable : MonoBehaviour
             // E para iniciar el diálogo (si no ha empezado)
             if (!dialogueStarted && !showingSubtitle)
             {
+                // Si queremos que pulsar E ponga el diálogo en modo auto-advance, activarlo
+                if (startWithAutoAdvanceOnPress)
+                    autoAdvanceMode = true;
+
                 ShowSubtitle();
                 return;
             }
@@ -231,11 +247,18 @@ public class NPCInteractable : MonoBehaviour
         {
             subtitleTimer += Time.deltaTime;
 
-            if (subtitleTimer >= subtitleDuration)
+            float delay = autoAdvanceMode ? autoAdvanceDelay : subtitleDuration;
+            if (subtitleTimer >= delay)
             {
                 NextSubtitle();
             }
         }
+    }
+
+    private void LateUpdate()
+    {
+        UpdatePromptKeyLabel();
+        UpdatePromptBillboard();
     }
 
     private void UpdatePromptKeyLabel()
@@ -251,12 +274,45 @@ public class NPCInteractable : MonoBehaviour
         }
     }
 
+    private void UpdatePromptBillboard()
+    {
+        if (!billboardPrompt || promptE == null || !promptE.activeSelf)
+            return;
+
+        Transform targetTransform = null;
+
+        if (Camera.main != null)
+            targetTransform = Camera.main.transform;
+        else
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+                targetTransform = player.transform;
+        }
+
+        if (targetTransform == null)
+            return;
+
+        Vector3 direction = targetTransform.position - promptE.transform.position;
+
+        if (billboardOnlyOnY)
+            direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        promptE.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+    }
+
     // ─── HELPERS ─────────────────────────────────────────────────────────
 
     private void ShowSubtitle()
     {
         if (currentSubtitleIndex >= subtitles.Count)
             return;
+
+        // marcar que el diálogo se ha iniciado por input o por autoplay
+        dialogueStarted = true;
 
         dialogueStarted = true;
 
@@ -279,6 +335,9 @@ public class NPCInteractable : MonoBehaviour
         // Iniciar máquina de escribir
         string lineToShow = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
         typewriterCoroutine = StartCoroutine(TypeText(lineToShow));
+
+        // Bloquear movimiento del jugador mientras mostramos subtítulos
+        FreezePlayerMovement();
     }
 
     private IEnumerator TypeText(string text)
@@ -336,6 +395,7 @@ public class NPCInteractable : MonoBehaviour
         {
             hasFinishedDialogue = true;
             HideSubtitle();
+            autoAdvanceMode = false;
         }
     }
 
@@ -358,6 +418,49 @@ public class NPCInteractable : MonoBehaviour
 
         showingSubtitle = false;
         subtitleTimer = 0f;
+        autoAdvanceMode = false;
+
+        // Restaurar movimiento del jugador
+        UnfreezePlayerMovement();
+    }
+
+    private void FreezePlayerMovement()
+    {
+        if (_playerFrozen) return;
+
+        // Intentar obtener player desde GameManager si existe, si no, buscar en escena
+        PlayerStateMachine psm = null;
+        if (GameManager.Instance != null)
+            psm = GameManager.Instance.Player;
+
+        if (psm == null)
+            psm = Object.FindObjectOfType<PlayerStateMachine>();
+
+        if (psm == null || psm.Rb == null) return;
+
+        _playerRb = psm.Rb;
+        _savedPlayerIsKinematic = _playerRb.isKinematic;
+        _savedPlayerUseGravity = _playerRb.useGravity;
+        _savedPlayerVelocity = _playerRb.velocity;
+
+        _playerRb.velocity = Vector3.zero;
+        _playerRb.useGravity = false;
+        _playerRb.isKinematic = true;
+
+        _playerFrozen = true;
+    }
+
+    private void UnfreezePlayerMovement()
+    {
+        if (!_playerFrozen) return;
+        if (_playerRb == null) { _playerFrozen = false; return; }
+
+        _playerRb.isKinematic = _savedPlayerIsKinematic;
+        _playerRb.useGravity = _savedPlayerUseGravity;
+        _playerRb.velocity = _savedPlayerVelocity;
+
+        _playerFrozen = false;
+        _playerRb = null;
     }
 
     /// <summary>
@@ -385,5 +488,8 @@ public class NPCInteractable : MonoBehaviour
 
         if (subtitlePanel != null)
             subtitlePanel.SetActive(false);
+
+        // Asegurar restauración del player si estaba congelado
+        UnfreezePlayerMovement();
     }
 }

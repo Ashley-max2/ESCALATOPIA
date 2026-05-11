@@ -39,6 +39,11 @@ public class InspectableImageItem : MonoBehaviour
         if (fullscreenImagePanel != null) fullscreenImagePanel.SetActive(false);
     }
 
+    private void LateUpdate()
+    {
+        UpdatePromptBillboard();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!enabled) return;
@@ -112,6 +117,34 @@ public class InspectableImageItem : MonoBehaviour
             promptText.text = label;
             lastPromptLabel = label;
         }
+    }
+
+    private void UpdatePromptBillboard()
+    {
+        if (promptE == null || !promptE.activeSelf)
+            return;
+
+        Transform billboardTarget = null;
+
+        if (Camera.main != null)
+            billboardTarget = Camera.main.transform;
+        else
+        {
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+                billboardTarget = player.transform;
+        }
+
+        if (billboardTarget == null)
+            return;
+
+        Vector3 direction = billboardTarget.position - promptE.transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
+        promptE.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
     }
 
     private void OpenImage()
