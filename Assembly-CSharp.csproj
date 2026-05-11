@@ -64,9 +64,11 @@
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
     <Compile Include="Assets\Scripts\Props\CofreTimeline.cs" />
+    <Compile Include="Assets\Scripts\Systems\PlayerDeathHandler.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\PinchosTrigger.cs" />
     <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossLevitante.cs" />
+    <Compile Include="Assets\Scripts\Bosses\NPCPatroller.cs" />
     <Compile Include="Assets\Scripts\Props\InventarioLlaves.cs" />
     <Compile Include="Assets\Scripts\Systems\DeathManager.cs" />
     <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
     <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
     <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
+    <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\MissionChangeCaller.cs" />
     <Compile Include="Assets\Scripts\Systems\StaminaSystem.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerAirborneState.cs" />
     <Compile Include="Assets\Scripts\UI\punteia.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Assets\Scripts\Managers\LoadingManager.cs" />
     <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\LeafSpawner.cs" />
     <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\TimelineMission.cs" />
+    <Compile Include="Assets\Scripts\Props\SceneChangerGema.cs" />
     <Compile Include="Assets\ASSETS_ESCALATOPIA\Effects\Hojas\Leaf3DMovement.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerDeadState.cs" />
     <Compile Include="Assets\Scripts\Managers\InteractuableHighlighter.cs" />
@@ -122,6 +126,7 @@
     <Compile Include="Assets\Scripts\Mecanicas\BossAIController.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlsMenu.cs" />
     <Compile Include="Assets\Scripts\UI\HideImageOnPanel.cs" />
+    <Compile Include="Assets\Scripts\Managers\Misiones\MissionUIBinder.cs" />
     <Compile Include="Assets\Scripts\Core\IState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerWallJumpState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerClimbState.cs" />
@@ -536,10 +541,6 @@
     </Reference>
     <Reference Include="System.IO.Abstractions.TestingHelpers">
       <HintPath>Library\PackageCache\com.unity.ml-agents@2.0.2\Plugins\System.IO.Abstractions.TestingHelpers.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -1106,10 +1107,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MCPForUnity.Editor">
-      <HintPath>Library\ScriptAssemblies\MCPForUnity.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1128,10 +1125,6 @@
     </Reference>
     <Reference Include="Unity.Sysroot.Linux_x86_64">
       <HintPath>Library\ScriptAssemblies\Unity.Sysroot.Linux_x86_64.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MCPForUnity.Runtime">
-      <HintPath>Library\ScriptAssemblies\MCPForUnity.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.EditorCoroutines.Editor">
