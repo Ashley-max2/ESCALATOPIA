@@ -315,10 +315,18 @@ public class PlayerStateMachine : MonoBehaviour
         if (string.IsNullOrEmpty(eventPath))
             return;
 
-        _movementEventInstance = RuntimeManager.CreateInstance(eventPath);
-        RuntimeManager.AttachInstanceToGameObject(_movementEventInstance, transform, Rb);
-        _movementEventInstance.start();
-        _activeMovementEventPath = eventPath;
+        try
+        {
+            _movementEventInstance = RuntimeManager.CreateInstance(eventPath);
+            RuntimeManager.AttachInstanceToGameObject(_movementEventInstance, transform, Rb);
+            _movementEventInstance.start();
+            _activeMovementEventPath = eventPath;
+        }
+        catch (System.Exception e)
+        {
+            UnityEngine.Debug.LogWarning($"[PlayerStateMachine] FMOD event no disponible: {eventPath}. {e.Message}");
+            _activeMovementEventPath = null;
+        }
     }
 
     private void StopMovementEvent()

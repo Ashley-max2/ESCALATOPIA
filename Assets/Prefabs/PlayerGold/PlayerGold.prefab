@@ -14687,6 +14687,7 @@ GameObject:
   - component: {fileID: 622057648719624731}
   - component: {fileID: 5457009002486873683}
   - component: {fileID: 2220677867364616749}
+  - component: {fileID: 3943290712357648987}
   m_Layer: 8
   m_Name: PlayerGold
   m_TagString: Player
@@ -14841,7 +14842,7 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.1
   climbSpeed: 6
-  climbStaminaCost: 10
+  climbStaminaCost: 4
   wallJumpForce: 8
   wallJumpUpwardForce: 12
   climbCheckDistance: 0.6
@@ -14931,6 +14932,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   fuerzaLanzamiento: 100
+  interactPromptText: {fileID: 0}
+  useCurrentTextAsTemplate: 1
+  interactPromptTemplate: Pulsa [E] para agarrar/soltar
+  inputHandler: {fileID: 0}
 --- !u!114 &8725259313225057789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14988,6 +14993,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbfd423e5271cc843bb55457fe8e6ff5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3943290712357648987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5389546477085994539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b97e13849ebab40b55d3b85f04c711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5771029953877517713

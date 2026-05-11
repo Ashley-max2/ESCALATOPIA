@@ -90,7 +90,14 @@ public class PlayerGroundedState : PlayerBaseState
         // Check for lethal fall
         if (fallDistance >= ctx.LethalFallHeight)
         {
-            ctx.Die();
+            // Usar el handler singleton para establecer la causa y morir
+            if (PlayerDeathHandler.Instance != null)
+                PlayerDeathHandler.Instance.Die(DeathCause.Fall);
+            else
+            {
+                DeathManager.LastDeathCause = DeathCause.Fall;
+                ctx.Die();
+            }
         }
         else if (fallDistance >= ctx.SafeFallHeight)
         {

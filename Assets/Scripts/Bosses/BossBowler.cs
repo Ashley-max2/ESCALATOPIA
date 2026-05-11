@@ -31,7 +31,7 @@ public class BossBowler : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
     [Header("── Lanzamiento ──")]
     [Tooltip("Segundos entre lanzamientos.")]
-    public float throwInterval = 2.5f;
+    public float throwInterval = 5f;
 
     [Tooltip("Fuerza con la que sale la roca.")]
     public float throwForce = 14f;
