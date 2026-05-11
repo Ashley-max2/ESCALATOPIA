@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 2583726562450046528}
   - component: {fileID: 4082952254415298384}
   - component: {fileID: 8988970597300712144}
-  m_Layer: 0
+  - component: {fileID: 7455096920445793701}
+  - component: {fileID: 8865197818034944940}
+  m_Layer: 6
   m_Name: 'Cofre2 '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,6 +109,45 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3717699344052123903, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
+--- !u!114 &7455096920445793701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204628156051395334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49052e4a6f90f3541a34f55e4b17858c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idLlaveRequerida: Llave2
+  timelineObject: {fileID: 204628156051395334}
+--- !u!320 &8865197818034944940
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204628156051395334}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 685caccfa52148c4ab2fac49b0471a4c, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 5668259899787001277, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 6122694494705790046, guid: 67f3987c038800d418261f34b97f699a, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 5693895730347711511, guid: 685caccfa52148c4ab2fac49b0471a4c, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4691596545127726088, guid: 685caccfa52148c4ab2fac49b0471a4c, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &2125745111432504676
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +160,7 @@ GameObject:
   - component: {fileID: 7511650718898485473}
   - component: {fileID: 3096288877187278940}
   - component: {fileID: 3318970889407976320}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: 'TapaCofre2 '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
