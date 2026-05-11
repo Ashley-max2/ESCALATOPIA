@@ -8,22 +8,29 @@ public class MissionManager : MonoBehaviour
     private string currentObjective;
     private TextMeshProUGUI objectiveText;
 
+    // Auto creación si no existe
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Init()
+    {
+        if (Instance == null)
+        {
+            GameObject go = new GameObject("MissionManager");
+            go.AddComponent<MissionManager>();
+        }
+    }
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            Debug.Log("MissionManager creado y persistente");
         }
         else
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        UpdateUI();
     }
 
     public void SetObjective(string newObjective)
@@ -32,15 +39,10 @@ public class MissionManager : MonoBehaviour
         UpdateUI();
     }
 
-    public string GetCurrentObjective()
-    {
-        return currentObjective;
-    }
-
     public void BindUI(TextMeshProUGUI uiText)
     {
         objectiveText = uiText;
-        UpdateUI(); // clave para que funcione al cambiar escena
+        UpdateUI();
     }
 
     private void UpdateUI()

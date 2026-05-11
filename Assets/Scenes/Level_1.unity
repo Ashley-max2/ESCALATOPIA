@@ -9439,15 +9439,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6263870505972596161, guid: 71cba4eba84064f4cbccab20c6d32856, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 107.47
+      value: 106.19
       objectReference: {fileID: 0}
     - target: {fileID: 6263870505972596161, guid: 71cba4eba84064f4cbccab20c6d32856, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 54.46
+      value: 54.43
       objectReference: {fileID: 0}
     - target: {fileID: 6263870505972596161, guid: 71cba4eba84064f4cbccab20c6d32856, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 57.16
+      value: 59.44
       objectReference: {fileID: 0}
     - target: {fileID: 6263870505972596161, guid: 71cba4eba84064f4cbccab20c6d32856, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9562,6 +9562,51 @@ Transform:
   - {fileID: 831126318}
   m_Father: {fileID: 1354558676}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2118830768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2118830769}
+  - component: {fileID: 2118830770}
+  m_Layer: 0
+  m_Name: MissionChangeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2118830769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118830768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 238.49332, y: -25.568745, z: 61.597416}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2118830770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118830768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f2807bef2d771b49b1819394d6a8502, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMission: 'Objetivo actual: busca la linterna por el mapa'
 --- !u!1 &2140573108
 GameObject:
   m_ObjectHideFlags: 0
@@ -15100,3 +15145,4 @@ SceneRoots:
   - {fileID: 631975933}
   - {fileID: 8917626257668357515}
   - {fileID: 2099373749}
+  - {fileID: 2118830769}
