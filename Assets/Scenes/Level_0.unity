@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111d12096f919e34eb3521a98bb3cdaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextObjective: Abre el cofre
+  nextObjective: 'Objetivo actual: abre el cofre'
   objectsToDestroy:
   - {fileID: 2049981312}
 --- !u!1001 &373917288
@@ -5278,6 +5278,26 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6750332745869039610, guid: 1382d9f6d697ee64989bf1323431e20f, type: 3}
+--- !u!320 &1450915387 stripped
+PlayableDirector:
+  m_CorrespondingSourceObject: {fileID: 3186872652325440629, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+  m_PrefabInstance: {fileID: 3019571767691838825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1450915391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791861363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be68afb8c58ff447b34b2b78a165a2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeline: {fileID: 1450915387}
+  objectiveText: 'Objetivo actual: repara el mecanismo'
+  objectsToDestroy: []
 --- !u!1 &1549766833 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1055775751489250455, guid: 21042d6b10f2a8e4280ed4611335eaaa, type: 3}
@@ -5567,7 +5587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79778dd2456b334fbb120c7e1e04e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectiveText: Busca una llave para el cofre
+  objectiveText: 'Objetivo actual: busca una llave para el cofre'
   objectsToDestroy: []
 --- !u!4 &2049981314 stripped
 Transform:
@@ -6383,6 +6403,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4516904567346506577, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1450915385}
+    - targetCorrespondingSourceObject: {fileID: 4516904567346506577, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1450915391}
   m_SourcePrefab: {fileID: 100100000, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
 --- !u!95 &3019571767691838826 stripped
 Animator:
