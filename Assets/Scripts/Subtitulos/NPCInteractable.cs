@@ -26,6 +26,10 @@ public class NPCInteractable : MonoBehaviour
     [Tooltip("Si está activado, los subtítulos empiezan y avanzan solos al entrar (sin pulsar E). Dejar en FALSE para la zona del NPC normal.")]
     [SerializeField] private bool autoPlay = false;
 
+    // 🔥 AÑADIDO
+    [Header("Mission Change (optional)")]
+    [SerializeField] private MissionChangeManager missionChangeManager;
+
     // Estado interno — solo se modifica via OnTriggerEnter/Exit para evitar falsos positivos
     private bool playerInsideTrigger = false;
     private bool entryFrameCooldown = false;   // evita que la E pulsada fuera se registre al entrar
@@ -34,7 +38,7 @@ public class NPCInteractable : MonoBehaviour
     private bool showingSubtitle = false;
     private bool dialogueStarted = false;      // true en cuanto el jugador pulsa E por primera vez
     private bool isTyping = false;             // máquina de escribir en progreso
-    private Coroutine typewriterCoroutine;    // para detener/saltar la escritura
+    private Coroutine typewriterCoroutine;     // para detener/saltar la escritura
 
     // Públicos para que otros scripts puedan consultarlos
     public bool isPlayerNear => playerInsideTrigger;
@@ -51,11 +55,15 @@ public class NPCInteractable : MonoBehaviour
     void Start()
     {
         promptText = promptE != null ? promptE.GetComponentInChildren<TMP_Text>(true) : null;
-        if (promptE != null)      promptE.SetActive(false);
-        if (subtitlePanel != null) subtitlePanel.SetActive(false);
+
+        if (promptE != null)
+            promptE.SetActive(false);
+
+        if (subtitlePanel != null)
+            subtitlePanel.SetActive(false);
     }
 
-    // ─── TRIGGERS (sólo el Physics de Unity puede marcar al player como "dentro") ───
+    // ─── TRIGGERS ─────────────────────────────────────────────────────────
 
     private void OnTriggerEnter(Collider other)
     {
@@ -74,17 +82,26 @@ public class NPCInteractable : MonoBehaviour
             // Reanudar: mostrar el subtítulo en el que se quedó
             if (autoPlay)
             {
-                if (promptE != null) promptE.SetActive(false);
+                if (promptE != null)
+                    promptE.SetActive(false);
+
                 ShowSubtitle();
             }
             else
             {
                 // Volver a mostrar el subtítulo actual directamente
-                if (promptE != null) promptE.SetActive(false);
-                if (subtitlePanel != null) subtitlePanel.SetActive(true);
-                if (subtitleText != null) subtitleText.text = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
+                if (promptE != null)
+                    promptE.SetActive(false);
+
+                if (subtitlePanel != null)
+                    subtitlePanel.SetActive(true);
+
+                if (subtitleText != null)
+                    subtitleText.text = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
+
                 showingSubtitle = true;
-                // Mantenemos subtitleTimer tal cual — el tiempo ya consumido se conserva
+
+                // Mantenemos subtitleTimer tal cual
             }
         }
         else
@@ -98,12 +115,15 @@ public class NPCInteractable : MonoBehaviour
 
             if (autoPlay)
             {
-                if (promptE != null) promptE.SetActive(false);
+                if (promptE != null)
+                    promptE.SetActive(false);
+
                 ShowSubtitle();
             }
             else
             {
-                if (promptE != null) promptE.SetActive(true);
+                if (promptE != null)
+                    promptE.SetActive(true);
             }
         }
     }
@@ -116,16 +136,19 @@ public class NPCInteractable : MonoBehaviour
         playerInsideTrigger = false;
         entryFrameCooldown = false;
 
-        if (promptE != null)       promptE.SetActive(false);
-        if (subtitlePanel != null)  subtitlePanel.SetActive(false);
+        if (promptE != null)
+            promptE.SetActive(false);
+
+        if (subtitlePanel != null)
+            subtitlePanel.SetActive(false);
 
         // NO resetear currentSubtitleIndex ni subtitleTimer si el diálogo estaba en curso
-        // Así al re-entrar (ej: después de pausa) se reanuda donde se dejó
         if (!dialogueStarted || hasFinishedDialogue)
         {
             currentSubtitleIndex = 0;
             subtitleTimer = 0f;
         }
+
         showingSubtitle = false;
     }
 
@@ -134,17 +157,23 @@ public class NPCInteractable : MonoBehaviour
         playerInsideTrigger = false;
         entryFrameCooldown = false;
         isTyping = false;
+
         if (typewriterCoroutine != null)
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
         }
-        if (promptE != null)       promptE.SetActive(false);
-        if (subtitlePanel != null)  subtitlePanel.SetActive(false);
+
+        if (promptE != null)
+            promptE.SetActive(false);
+
+        if (subtitlePanel != null)
+            subtitlePanel.SetActive(false);
+
         showingSubtitle = false;
     }
 
-    // ─── UPDATE ───────────────────────────────────────────────────────────────
+    // ─── UPDATE ───────────────────────────────────────────────────────────
 
     void Update()
     {
@@ -163,6 +192,12 @@ public class NPCInteractable : MonoBehaviour
         // ── Tecla E (solo si NO es autoPlay) ──
         if (!autoPlay && InteractInput.PressedThisFrame())
         {
+            // 🔥 AÑADIDO
+            if (!dialogueStarted && missionChangeManager != null)
+            {
+                missionChangeManager.ChangeMission();
+            }
+
             if (subtitles == null || subtitles.Count == 0)
             {
                 hasFinishedDialogue = true;
@@ -195,6 +230,7 @@ public class NPCInteractable : MonoBehaviour
         if (showingSubtitle && !isTyping)
         {
             subtitleTimer += Time.deltaTime;
+
             if (subtitleTimer >= subtitleDuration)
             {
                 NextSubtitle();
@@ -207,6 +243,7 @@ public class NPCInteractable : MonoBehaviour
         if (promptText == null) return;
 
         string label = InteractInput.GetBracketedDisplayKey();
+
         if (label != lastPromptLabel)
         {
             promptText.text = label;
@@ -214,15 +251,20 @@ public class NPCInteractable : MonoBehaviour
         }
     }
 
-    // ─── HELPERS ─────────────────────────────────────────────────────────────
+    // ─── HELPERS ─────────────────────────────────────────────────────────
 
     private void ShowSubtitle()
     {
-        if (currentSubtitleIndex >= subtitles.Count) return;
+        if (currentSubtitleIndex >= subtitles.Count)
+            return;
 
-        dialogueStarted = true;   // marcar que el jugador ya ha empezado a leer
-        if (promptE != null)       promptE.SetActive(false);
-        if (subtitlePanel != null)  subtitlePanel.SetActive(true);
+        dialogueStarted = true;
+
+        if (promptE != null)
+            promptE.SetActive(false);
+
+        if (subtitlePanel != null)
+            subtitlePanel.SetActive(true);
 
         subtitleTimer = 0f;
         showingSubtitle = true;
@@ -247,6 +289,7 @@ public class NPCInteractable : MonoBehaviour
         for (int i = 0; i < text.Length; i++)
         {
             subtitleText.text += text[i];
+
             if (typingSpeed > 0f)
                 yield return new WaitForSeconds(typingSpeed);
             else
@@ -260,12 +303,15 @@ public class NPCInteractable : MonoBehaviour
     private void CompleteTyping()
     {
         if (!isTyping) return;
+
         if (typewriterCoroutine != null)
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
         }
+
         subtitleText.text = InteractInput.ReplaceInteractPlaceholder(subtitles[currentSubtitleIndex]);
+
         isTyping = false;
         subtitleTimer = 0f;
     }
@@ -273,11 +319,13 @@ public class NPCInteractable : MonoBehaviour
     private void NextSubtitle()
     {
         currentSubtitleIndex++;
+
         if (typewriterCoroutine != null)
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
         }
+
         isTyping = false;
 
         if (currentSubtitleIndex < subtitles.Count)
@@ -298,11 +346,16 @@ public class NPCInteractable : MonoBehaviour
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
         }
+
         isTyping = false;
-        if (subtitlePanel != null)  subtitlePanel.SetActive(false);
+
+        if (subtitlePanel != null)
+            subtitlePanel.SetActive(false);
+
         // Solo mostrar promptE al esconder si todavía hay subtítulos sin leer
         if (promptE != null && currentSubtitleIndex < subtitles.Count)
             promptE.SetActive(true);
+
         showingSubtitle = false;
         subtitleTimer = 0f;
     }
@@ -320,12 +373,17 @@ public class NPCInteractable : MonoBehaviour
         currentSubtitleIndex = 0;
         hasFinishedDialogue = false;
         isTyping = false;
+
         if (typewriterCoroutine != null)
         {
             StopCoroutine(typewriterCoroutine);
             typewriterCoroutine = null;
         }
-        if (promptE != null)       promptE.SetActive(false);
-        if (subtitlePanel != null)  subtitlePanel.SetActive(false);
+
+        if (promptE != null)
+            promptE.SetActive(false);
+
+        if (subtitlePanel != null)
+            subtitlePanel.SetActive(false);
     }
 }

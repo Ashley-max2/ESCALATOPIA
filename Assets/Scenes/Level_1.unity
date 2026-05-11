@@ -1150,6 +1150,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5869087887781725484, guid: bd2b8e3e52e8ac34d9bb5a7d9a7b3764, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1506091665}
+    - targetCorrespondingSourceObject: {fileID: 5869087887781725484, guid: bd2b8e3e52e8ac34d9bb5a7d9a7b3764, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1506091672}
   m_SourcePrefab: {fileID: 100100000, guid: bd2b8e3e52e8ac34d9bb5a7d9a7b3764, type: 3}
 --- !u!1 &280604302 stripped
 GameObject:
@@ -5772,6 +5775,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6971973791096665470, guid: bd2b8e3e52e8ac34d9bb5a7d9a7b3764, type: 3}
   m_PrefabInstance: {fileID: 265761096}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1506091672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1506091664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d79778dd2456b334fbb120c7e1e04e31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectiveText: Gana la carrera contra Anas
+  objectsToDestroy: []
 --- !u!1001 &1513537224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5946,6 +5963,38 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -6880262858201208964, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
+--- !u!1 &1519557637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1519557638}
+  m_Layer: 0
+  m_Name: MissionChangeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1519557638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519557637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 223.48972, y: 5.3842225, z: 157.03087}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2118830769}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1523662622
 GameObject:
   m_ObjectHideFlags: 0
@@ -9479,7 +9528,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7969077948471793354, guid: 71cba4eba84064f4cbccab20c6d32856, type: 3}
       propertyPath: objectiveText
-      value: "Objetivo actual: hablar con el se\xF1or del lago"
+      value: "Objetivo actual: hablar con el se\xF1or del lago y buscar el objeto
+        que te pide"
       objectReference: {fileID: 0}
     - target: {fileID: 8766532725475294443, guid: 71cba4eba84064f4cbccab20c6d32856, type: 3}
       propertyPath: m_Name
@@ -9573,7 +9623,7 @@ GameObject:
   - component: {fileID: 2118830769}
   - component: {fileID: 2118830770}
   m_Layer: 0
-  m_Name: MissionChangeManager
+  m_Name: 1-MissionChangeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9587,12 +9637,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2118830768}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 238.49332, y: -25.568745, z: 61.597416}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 15.003601, y: -30.952967, z: -95.43346}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1519557638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2118830770
 MonoBehaviour:
@@ -9905,6 +9955,10 @@ PrefabInstance:
       propertyPath: hasFinishedDialogue
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: missionChangeManager
+      value: 
+      objectReference: {fileID: 2118830770}
     - target: {fileID: 6571802030492727744, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: subtitles.Array.size
       value: 0
@@ -15145,4 +15199,4 @@ SceneRoots:
   - {fileID: 631975933}
   - {fileID: 8917626257668357515}
   - {fileID: 2099373749}
-  - {fileID: 2118830769}
+  - {fileID: 1519557638}
