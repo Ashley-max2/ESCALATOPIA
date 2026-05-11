@@ -11,6 +11,8 @@ public class AnalyticsManager : MonoBehaviour {
   public GameSessionAnalytics current;
   private float sessionStartTime;
   private Dictionary<string, float> _bossAttemptStartTimes = new Dictionary<string, float>();
+  private bool _hasPendingSave;
+  private float _lastAutoSaveTime;
 
   [SerializeField] private bool autoStartSession = true;
   [SerializeField] private string defaultPlayerName = "Player-001";
@@ -45,8 +47,31 @@ public class AnalyticsManager : MonoBehaviour {
     }
   }
 
+  void Update()
+  {
+    if (current == null || !_hasPendingSave)
+      return;
+
+    if (Time.unscaledTime - _lastAutoSaveTime < 2f)
+      return;
+
+    SaveLocal();
+  }
+
+  private void OnApplicationPause(bool pause)
+  {
+    if (pause)
+      SaveLocal();
+  }
+
+  private void OnApplicationQuit()
+  {
+    SaveLocal();
+  }
+
   public void StartSession(string playerName){
     current = new GameSessionAnalytics();
+    current.EnsureCollections();
     current.sessionId = "SESSION_" + System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
     current.timestamp = System.DateTime.UtcNow.ToString("o");
     current.playerName = playerName;
@@ -66,12 +91,15 @@ public class AnalyticsManager : MonoBehaviour {
     current.puzzlesCompleted = 0;
     sessionStartTime = Time.time;
     _bossAttemptStartTimes.Clear();
+    _hasPendingSave = false;
+    _lastAutoSaveTime = Time.unscaledTime;
     Debug.Log("[Analytics] Sesión iniciada: " + current.sessionId);
   }
 
   public void RecordCheckpoint(){
     if(current == null) return;
     current.checkpointsReached++;
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Checkpoint registrado: " + current.checkpointsReached);
   }
@@ -79,6 +107,7 @@ public class AnalyticsManager : MonoBehaviour {
   public void RecordDeath(){
     if(current == null) return;
     current.totalDeaths++;
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Death registrado: " + current.totalDeaths);
   }
@@ -87,6 +116,7 @@ public class AnalyticsManager : MonoBehaviour {
     if(current == null) return;
     current.itemsCollected++;
     current.itemIds.Add(itemId);
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Item registrado: " + itemId);
   }
@@ -98,6 +128,7 @@ public class AnalyticsManager : MonoBehaviour {
     if (movement.y < -0.1f) IncrementMovement("down");
     if (movement.x < -0.1f) IncrementMovement("left");
     if (movement.x > 0.1f) IncrementMovement("right");
+    MarkDirty();
   }
 
   public void RecordMovementDelta(Vector3 worldDelta, Transform reference){
@@ -110,11 +141,13 @@ public class AnalyticsManager : MonoBehaviour {
     if (worldDelta.y < -0.01f) IncrementMovement("down");
     if (localDelta.x < -0.01f) IncrementMovement("left");
     if (localDelta.x > 0.01f) IncrementMovement("right");
+    MarkDirty();
   }
 
   public void RecordHookUse(){
     if (current == null) return;
     current.hookUsesCount++;
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Hook registrado: " + current.hookUsesCount);
   }
@@ -123,11 +156,13 @@ public class AnalyticsManager : MonoBehaviour {
     if (current == null) return;
     if (height > current.maxHeightReached)
       current.maxHeightReached = height;
+    MarkDirty();
   }
 
   public void SetPuzzleTotal(int total){
     if (current == null) return;
     current.puzzlesTotal = Mathf.Max(0, total);
+    MarkDirty();
     SaveLocal();
   }
 
@@ -136,6 +171,7 @@ public class AnalyticsManager : MonoBehaviour {
     current.puzzlesCompleted++;
     if (!string.IsNullOrWhiteSpace(puzzleId))
       current.notes = string.IsNullOrWhiteSpace(current.notes) ? puzzleId : current.notes + " | " + puzzleId;
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Puzzle completado: " + current.puzzlesCompleted);
   }
@@ -143,11 +179,13 @@ public class AnalyticsManager : MonoBehaviour {
   public void SetMaxLevelReached(string sceneName){
     if (current == null) return;
     current.maxLevelReached = sceneName ?? string.Empty;
+    MarkDirty();
   }
 
   public void SetSessionOutcome(string outcome){
     if (current == null) return;
     current.sessionOutcome = outcome ?? string.Empty;
+    MarkDirty();
   }
 
   public void StartBossAttempt(string bossId){
@@ -156,6 +194,7 @@ public class AnalyticsManager : MonoBehaviour {
     current.bossAttempts.TryGetValue(key, out int count);
     current.bossAttempts[key] = count + 1;
     _bossAttemptStartTimes[key] = Time.time;
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Boss attempt: " + key + " => " + current.bossAttempts[key]);
   }
@@ -172,6 +211,7 @@ public class AnalyticsManager : MonoBehaviour {
     if (completed)
       current.hasCompletedGame = true;
 
+    MarkDirty();
     SaveLocal();
     Debug.Log("[Analytics] Boss finish: " + key + " completed=" + completed);
   }
@@ -187,12 +227,17 @@ public class AnalyticsManager : MonoBehaviour {
       StartSession(defaultPlayerName);
     }
 
+    current.EnsureCollections();
+
     current.timeTotalSeconds = (int)(Time.time - sessionStartTime);
     string folder = EnsureAnalyticsFolderExists();
     string safeSessionId = string.IsNullOrWhiteSpace(current.sessionId) ? "SESSION_" + System.DateTime.UtcNow.ToString("yyyyMMdd_HHmmss") : current.sessionId;
     string path = Path.Combine(folder, safeSessionId + ".json");
     File.WriteAllText(path, BuildJson(current));
     Debug.Log("[Analytics] Guardado local: " + path);
+
+    _hasPendingSave = false;
+    _lastAutoSaveTime = Time.unscaledTime;
 
     if (autoSendToServer && !string.IsNullOrWhiteSpace(backendUrl)) {
       Debug.Log("[Analytics] Enviando automaticamente al backend: " + backendUrl);
@@ -261,10 +306,16 @@ public class AnalyticsManager : MonoBehaviour {
 
   private void IncrementMovement(string direction){
     if (current == null) return;
+    current.EnsureCollections();
     if (!current.movementStats.ContainsKey(direction))
       current.movementStats[direction] = 0;
 
     current.movementStats[direction]++;
+  }
+
+  private void MarkDirty()
+  {
+    _hasPendingSave = true;
   }
 
   private string NormalizeBossKey(string bossId){

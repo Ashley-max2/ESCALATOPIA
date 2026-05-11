@@ -44,6 +44,11 @@ public class CheckpointSaveTrigger : MonoBehaviour
 
         GameProgressDatabase.SaveSceneAndSpawn(sceneName, spawn);
 
+        if (AnalyticsManager.Instance != null)
+        {
+            AnalyticsManager.Instance.RecordCheckpoint();
+        }
+
         // Actualizar también la posición de respawn en runtime
         if (psm != null)
             psm.LastGroundedPosition = spawn;

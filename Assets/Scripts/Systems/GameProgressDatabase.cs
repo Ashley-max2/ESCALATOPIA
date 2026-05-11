@@ -55,7 +55,8 @@ public static class GameProgressDatabase
             UltimaMisionCompletada = ultimaMisionCompletada ?? string.Empty,
             MisionActual = misionActual ?? string.Empty,
             BossCompleted = bossCompleted,
-            PuzzleCompleted = puzzleCompleted
+            PuzzleCompleted = puzzleCompleted,
+            CollectedItemIds = new System.Collections.Generic.List<string>()
         };
 
         Save(data);
@@ -74,5 +75,37 @@ public static class GameProgressDatabase
         GameProgressData data = Load();
         data.Scene = sceneName ?? string.Empty;
         Save(data);
+    }
+
+    public static void AddCollectedItem(string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(itemId)) return;
+
+        GameProgressData data = Load();
+        if (data.CollectedItemIds == null)
+            data.CollectedItemIds = new System.Collections.Generic.List<string>();
+
+        if (!data.CollectedItemIds.Contains(itemId))
+        {
+            data.CollectedItemIds.Add(itemId);
+            Save(data);
+        }
+    }
+
+    public static bool HasCollectedItem(string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(itemId)) return false;
+
+        GameProgressData data = Load();
+        return data.CollectedItemIds != null && data.CollectedItemIds.Contains(itemId);
+    }
+
+    public static System.Collections.Generic.IReadOnlyList<string> GetCollectedItems()
+    {
+        GameProgressData data = Load();
+        if (data.CollectedItemIds == null)
+            data.CollectedItemIds = new System.Collections.Generic.List<string>();
+
+        return data.CollectedItemIds;
     }
 }

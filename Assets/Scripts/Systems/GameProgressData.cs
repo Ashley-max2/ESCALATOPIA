@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class GameProgressData
@@ -12,6 +13,7 @@ public class GameProgressData
     public float SpawnX;
     public float SpawnY;
     public float SpawnZ;
+    public List<string> CollectedItemIds;
 
     public void SetSpawnPosition(UnityEngine.Vector3 spawnPosition)
     {
@@ -38,7 +40,8 @@ public class GameProgressData
             HasSpawnPosition = false,
             SpawnX = 0f,
             SpawnY = 0f,
-            SpawnZ = 0f
+            SpawnZ = 0f,
+            CollectedItemIds = new List<string>()
         };
     }
 }

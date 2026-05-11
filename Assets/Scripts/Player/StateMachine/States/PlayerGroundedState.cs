@@ -8,17 +8,17 @@ using UnityEngine;
 /// </summary>
 public class PlayerGroundedState : PlayerBaseState
 {
-    public PlayerGroundedState(PlayerStateMachine context, PlayerStateFactory factory) 
+    public PlayerGroundedState(PlayerStateMachine context, PlayerStateFactory factory)
         : base(context, factory) { }
-    
+
     public override void Enter()
     {
         ctx.IsClimbing = false;
         ctx.CurrentVelocity = new Vector3(ctx.Rb.velocity.x, 0, ctx.Rb.velocity.z);
-        
+
         // Desactivar Landing después de reproducir EndJump
         ctx.Animator.SetBool("Landing", false);
-        
+
         // Check for fall damage
         if (ctx.FallStartHeight > 0)
         {
@@ -27,33 +27,38 @@ public class PlayerGroundedState : PlayerBaseState
             ctx.FallStartHeight = 0;
         }
     }
-    
+
     public override void Execute()
     {
         CheckTransitions();
     }
-    
+
     public override void FixedExecute()
     {
         HandleMovement();
     }
-    
+
     public override void Exit()
     {
     }
-    
+
     private void HandleMovement()
     {
         // Get input
         Vector3 inputDir = new Vector3(ctx.Input.MoveX, 0, ctx.Input.MoveZ).normalized;
-        
+
+        if (AnalyticsManager.Instance != null && inputDir.sqrMagnitude > 0.001f)
+        {
+            AnalyticsManager.Instance.RecordMovement(new Vector2(inputDir.x, inputDir.z));
+        }
+
         // Determine speed based on sprint
         float targetSpeed = ctx.Input.SprintHeld ? ctx.RunSpeed : ctx.WalkSpeed;
-        
+
         // Apply movement relative to camera (estilo Zelda BotW)
         ctx.MoveRelativeToCamera(inputDir, targetSpeed);
     }
-    
+
     private void CheckTransitions()
     {
         // Jump
@@ -62,14 +67,14 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(factory.Jump());
             return;
         }
-        
+
         // Not grounded - fall
         if (!ctx.IsGrounded)
         {
             SwitchState(factory.Airborne());
             return;
         }
-        
+
         // Hook
         if (ctx.Input.HookPressed && ctx.GrapplingHook != null && ctx.GrapplingHook.CanFire())
         {
@@ -77,11 +82,11 @@ public class PlayerGroundedState : PlayerBaseState
             return;
         }
     }
-    
+
     private void HandleLanding(float fallDistance)
     {
         GameEvents.PlayerLanded(fallDistance);
-        
+
         // Check for lethal fall
         if (fallDistance >= ctx.LethalFallHeight)
         {

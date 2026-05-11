@@ -12,6 +12,8 @@ public class CollectibleItem : MonoBehaviour
 {
     [Header("Item")]
     public string itemName = "Objeto de la montaña";
+    [Tooltip("Identificador único para guardar/restaurar. Si queda vacío, usa el nombre del objeto")]
+    public string itemId = string.Empty;
 
     [Header("Teleport (Opcional)")]
     [Tooltip("Si true, teleporta al jugador al lado del boss después de recoger")]
@@ -37,6 +39,26 @@ public class CollectibleItem : MonoBehaviour
 
     public bool IsCollected => isCollected;
 
+    private void Awake()
+    {
+        RestoreSavedCollectedState();
+    }
+
+    private void RestoreSavedCollectedState()
+    {
+        string idToUse = GetResolvedItemId();
+        if (GameProgressDatabase.HasCollectedItem(idToUse))
+        {
+            isCollected = true;
+            gameObject.SetActive(false);
+        }
+    }
+
+    private string GetResolvedItemId()
+    {
+        return string.IsNullOrWhiteSpace(itemId) ? gameObject.name : itemId.Trim();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
@@ -53,6 +75,8 @@ public class CollectibleItem : MonoBehaviour
         if (isCollected) return;
 
         isCollected = true;
+        string resolvedItemId = GetResolvedItemId();
+        GameProgressDatabase.AddCollectedItem(resolvedItemId);
 
         // Reproducir sonido de pickup
         if (!string.IsNullOrEmpty(pickupSound))
@@ -61,6 +85,15 @@ public class CollectibleItem : MonoBehaviour
         }
 
         onCollected?.Invoke();
+
+        try
+        {
+            if (AnalyticsManager.Instance != null)
+                AnalyticsManager.Instance.RecordItem(resolvedItemId);
+        }
+        catch
+        {
+        }
 
         // Si teleportToBoss está activado, iniciar la corrutina ANTES de desactivar
         if (teleportToBoss)
@@ -132,6 +165,12 @@ public class CollectibleItem : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void ForceMarkCollected()
+    {
+        isCollected = true;
+        gameObject.SetActive(false);
     }
 
     private IEnumerator Fade(float startAlpha, float endAlpha, float duration)

@@ -977,6 +977,72 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &861977067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 861977068}
+  - component: {fileID: 861977069}
+  m_Layer: 0
+  m_Name: AnalythicalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &861977068
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861977067}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5276977575163612179}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &861977069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861977067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac84479a535ca9343bd82f387a6c89b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  current:
+    sessionId: 
+    timestamp: 
+    playerName: 
+    timeTotalSeconds: 0
+    maxHeightReached: 0
+    checkpointsReached: 0
+    averageTimePerPuzzleSeconds: 0
+    totalDeaths: 0
+    hookUsesCount: 0
+    puzzlesCompleted: 0
+    puzzlesTotal: 0
+    itemsCollected: 0
+    itemIds: []
+    maxLevelReached: 
+    hasCompletedGame: 0
+    sessionOutcome: 
+    notes: 
+  autoStartSession: 1
+  defaultPlayerName: Player-001
+  autoSendToServer: 1
+  backendUrl: http://localhost:3000/api/sessions
 --- !u!1 &1010793467
 GameObject:
   m_ObjectHideFlags: 0
@@ -21345,7 +21411,7 @@ MonoBehaviour:
   ScreenPanel: {fileID: 51515344812636305}
   ControlsPanel: {fileID: 5136483133125032921}
   botonContinuar: {fileID: 1842188572743140286}
-  escenaInicial: Level_0
+  escenaInicial: Level_1
 --- !u!114 &3116677508921493287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31028,6 +31094,7 @@ Transform:
   - {fileID: 1048242186040988687}
   - {fileID: 1920311390175687754}
   - {fileID: 3727597859216630305}
+  - {fileID: 861977068}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &5306440826792409251

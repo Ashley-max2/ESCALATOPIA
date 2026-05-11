@@ -12,16 +12,21 @@ public class PlayerHookState : PlayerBaseState
     private Vector3 _hookTarget;
     private float _arrivalTimer;
     private const float ARRIVAL_HOLD_TIME = 0.2f;
-    
-    public PlayerHookState(PlayerStateMachine context, PlayerStateFactory factory) 
+
+    public PlayerHookState(PlayerStateMachine context, PlayerStateFactory factory)
         : base(context, factory) { }
-    
+
     public override void Enter()
     {
         ctx.IsHooking = true;
         _currentPhase = HookPhase.Firing;
         _arrivalTimer = 0;
-        
+
+        if (AnalyticsManager.Instance != null)
+        {
+            AnalyticsManager.Instance.RecordHookUse();
+        }
+
         // Fire the hook
         if (ctx.GrapplingHook != null)
         {
@@ -32,10 +37,10 @@ public class PlayerHookState : PlayerBaseState
                 RuntimeManager.PlayOneShot("event:/SFX/Gancho/UsarGancho", ctx.transform.position);
                 GameEvents.HookFired(_hookTarget);
                 GameEvents.HookConnected();
-                
+
                 // Disable gravity during hook travel
                 ctx.Rb.useGravity = false;
-                
+
                 Debug.Log($"Hook fired to {_hookTarget}");
             }
             else
@@ -49,7 +54,7 @@ public class PlayerHookState : PlayerBaseState
             SwitchState(ctx.IsGrounded ? factory.Grounded() : factory.Airborne());
         }
     }
-    
+
     public override void Execute()
     {
         switch (_currentPhase)
@@ -61,7 +66,7 @@ public class PlayerHookState : PlayerBaseState
                 HandleArrival();
                 break;
         }
-        
+
         // Manual release
         if (ctx.Input.HookReleasePressed)
         {
@@ -69,7 +74,7 @@ public class PlayerHookState : PlayerBaseState
             SwitchState(factory.Airborne());
         }
     }
-    
+
     public override void FixedExecute()
     {
         if (_currentPhase == HookPhase.Traveling)
@@ -77,31 +82,31 @@ public class PlayerHookState : PlayerBaseState
             TravelToTarget();
         }
     }
-    
+
     public override void Exit()
     {
         ctx.IsHooking = false;
         ctx.Rb.useGravity = true;
-        
+
         if (ctx.GrapplingHook != null)
         {
             ctx.GrapplingHook.Release();
         }
-        
+
         GameEvents.HookReleased();
     }
-    
+
     private void TravelToTarget()
     {
         if (ctx.GrapplingHook == null) return;
         if (ctx.GrapplingHook.ModoPull) return; // Do not travel if pulling an object
-        
+
         Vector3 direction = (_hookTarget - ctx.transform.position).normalized;
         float travelSpeed = ctx.GrapplingHook.TravelSpeed;
-        
+
         // Move towards target
         ctx.Rb.velocity = direction * travelSpeed;
-        
+
         // Rotate to face travel direction
         Vector3 horizontalDir = new Vector3(direction.x, 0, direction.z).normalized;
         if (horizontalDir.magnitude > 0.1f)
@@ -110,7 +115,7 @@ public class PlayerHookState : PlayerBaseState
             ctx.transform.rotation = Quaternion.Slerp(ctx.transform.rotation, targetRotation, Time.fixedDeltaTime * 10f);
         }
     }
-    
+
     private void CheckArrival()
     {
         Vector3 targetPos = _hookTarget;
@@ -120,27 +125,27 @@ public class PlayerHookState : PlayerBaseState
         }
 
         float distanceToTarget = Vector3.Distance(ctx.transform.position, targetPos);
-        
+
         if (distanceToTarget < 1.5f)
         {
             _currentPhase = HookPhase.Arrived;
             ctx.Rb.velocity = Vector3.zero;
-            
+
             // Update safe position
             ctx.LastGroundedPosition = ctx.transform.position;
             ctx.FallStartHeight = 0;
         }
     }
-    
+
     private void HandleArrival()
     {
         _arrivalTimer += Time.deltaTime;
-        
+
         // Brief pause at arrival point
         if (_arrivalTimer >= ARRIVAL_HOLD_TIME)
         {
             ReleaseHook();
-            
+
             // Check if there's a climbable surface and not exhausted
             RaycastHit hit;
             if (ctx.CheckClimbableSurface(out hit))
@@ -165,7 +170,7 @@ public class PlayerHookState : PlayerBaseState
             }
         }
     }
-    
+
     private void ReleaseHook()
     {
         if (ctx.GrapplingHook != null)

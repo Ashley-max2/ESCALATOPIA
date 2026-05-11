@@ -23,4 +23,19 @@ public class GameSessionAnalytics {
     public bool hasCompletedGame;
     public string sessionOutcome;
     public string notes;
+
+    public void EnsureCollections()
+    {
+        if (bossAttempts == null)
+            bossAttempts = new Dictionary<string, int>();
+
+        if (bossClearTimeSeconds == null)
+            bossClearTimeSeconds = new Dictionary<string, float>();
+
+        if (itemIds == null)
+            itemIds = new List<string>();
+
+        if (movementStats == null)
+            movementStats = new Dictionary<string, int>();
+    }
 }

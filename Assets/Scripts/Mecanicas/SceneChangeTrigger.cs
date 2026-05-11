@@ -40,6 +40,12 @@ public class SceneChangeTrigger : MonoBehaviour
 
             if (!string.IsNullOrEmpty(sceneName))
             {
+                if (AnalyticsManager.Instance != null)
+                {
+                    AnalyticsManager.Instance.SetMaxLevelReached(SceneManager.GetActiveScene().name);
+                    AnalyticsManager.Instance.SaveLocal();
+                }
+
                 Debug.Log("Cargando Escena");
                 LoadingManager.LoadLevel(sceneName);
             }
