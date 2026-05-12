@@ -25,9 +25,6 @@ public class ControlBindingRow : MonoBehaviour
 
     public string ActionName => actionName;
 
-    // Exponer el Selectable del rebind para permitir configurar navegacion desde ControlsMenu
-    public Selectable RebindSelectable => rebindButton;
-
     /// <summary>
     /// Llamado por ControlsMenu al inicializar.
     /// </summary>
