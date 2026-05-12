@@ -95,28 +95,31 @@ public class OrbitCamera : MonoBehaviour
         float padX = 0f;
         float padY = 0f;
 
-        // Determinar ejes segun tipo de mando detectado
-        string axisX = "GamepadCameraX";   // Default Xbox
-        string axisY = "GamepadCameraY";
-
-        if (_inputHandler != null && _inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
+        if (_inputHandler != null && _inputHandler.DetectedGamepad != PlayerInputHandler.GamepadType.None)
         {
-            axisX = "PSCameraX";
-            axisY = "PSCameraY";
-        }
+            // Determinar ejes segun tipo de mando detectado
+            string axisX = "GamepadCameraX";   // Default Xbox
+            string axisY = "GamepadCameraY";
 
-        try
-        {
-            float rawX = Input.GetAxisRaw(axisX);
-            float rawY = Input.GetAxisRaw(axisY);
+            if (_inputHandler.DetectedGamepad == PlayerInputHandler.GamepadType.PlayStation)
+            {
+                axisX = "PSCameraX";
+                axisY = "PSCameraY";
+            }
 
-            // Deadzone manual para evitar drift del stick
-            if (Mathf.Abs(rawX) > gamepadDeadzone) padX = rawX * gamepadSensitivity;
-            if (Mathf.Abs(rawY) > gamepadDeadzone) padY = rawY * gamepadSensitivity;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning($"[OrbitCamera] Error leyendo eje: {e.Message}");
+            try
+            {
+                float rawX = Input.GetAxisRaw(axisX);
+                float rawY = Input.GetAxisRaw(axisY);
+
+                // Deadzone manual para evitar drift del stick
+                if (Mathf.Abs(rawX) > gamepadDeadzone) padX = rawX * gamepadSensitivity;
+                if (Mathf.Abs(rawY) > gamepadDeadzone) padY = rawY * gamepadSensitivity;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"[OrbitCamera] Error leyendo eje: {e.Message}");
+            }
         }
 
         _horizontalAngle += mouseX + padX;
