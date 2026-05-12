@@ -854,7 +854,8 @@ public class PlayerInputHandler : MonoBehaviour
         AddBinding("Saltar", KeyCode.Space, KeyCode.None);
         AddBinding("Correr", KeyCode.LeftShift, KeyCode.None);
         AddBinding("CambiarGancho", KeyCode.R, KeyCode.None);
-        AddBinding("Interactuar", KeyCode.E, KeyCode.None);
+        // Por defecto también mapear Interactuar al botón X del mando (JoystickButton2)
+        AddBinding("Interactuar", KeyCode.E, KeyCode.JoystickButton2);
         AddBinding("Gancho", KeyCode.Mouse1, KeyCode.None);
         AddBinding("LiberarGancho", KeyCode.Mouse0, KeyCode.None);
     }
@@ -868,7 +869,7 @@ public class PlayerInputHandler : MonoBehaviour
         EnsureBindingExists("Saltar", KeyCode.Space, KeyCode.None);
         EnsureBindingExists("Correr", KeyCode.LeftShift, KeyCode.None);
         EnsureBindingExists("CambiarGancho", KeyCode.R, KeyCode.None);
-        EnsureBindingExists("Interactuar", KeyCode.E, KeyCode.None);
+        EnsureBindingExists("Interactuar", KeyCode.E, KeyCode.JoystickButton2);
         EnsureBindingExists("Gancho", KeyCode.Mouse1, KeyCode.None);
         EnsureBindingExists("LiberarGancho", KeyCode.Mouse0, KeyCode.None);
     }
@@ -950,6 +951,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     public KeyCode GetActionKey(string action)
     {
+        // Si el esquema activo es mando, preferimos devolver la tecla de gamepad efectiva
+        if (DetectedGamepad != GamepadType.None && CurrentInputScheme == InputScheme.Gamepad)
+        {
+            GetEffectiveGamepadBinding(action, out KeyCode key, out string axis);
+            if (key != KeyCode.None)
+                return key;
+        }
+
         return GetBinding(action);
     }
 
@@ -1017,6 +1026,7 @@ public class PlayerInputHandler : MonoBehaviour
                 "Correr" => "RB",
                 "Gancho" => "RT",
                 "LiberarGancho" => "LT",
+                "Interactuar" => "X",
                 _ => "-"
             };
         }
@@ -1029,6 +1039,7 @@ public class PlayerInputHandler : MonoBehaviour
                 "Correr" => "R1",
                 "Gancho" => "R2",
                 "LiberarGancho" => "L2",
+                "Interactuar" => "Cuadrado",
                 _ => "-"
             };
         }
@@ -1160,7 +1171,7 @@ public class PlayerInputHandler : MonoBehaviour
     private bool IsGamepadRebindableAction(string action)
     {
         // El movimiento del stick izquierdo se mantiene fijo para mando.
-        return action == "Saltar" || action == "Correr" || action == "Gancho" || action == "LiberarGancho";
+        return action == "Saltar" || action == "Correr" || action == "Gancho" || action == "LiberarGancho" || action == "Interactuar";
     }
 
     private void GetEffectiveGamepadBinding(string action, out KeyCode key, out string axis)

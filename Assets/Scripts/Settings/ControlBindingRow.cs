@@ -25,6 +25,9 @@ public class ControlBindingRow : MonoBehaviour
 
     public string ActionName => actionName;
 
+    // Exponer el Selectable del rebind para permitir configurar navegacion desde ControlsMenu
+    public Selectable RebindSelectable => rebindButton;
+
     /// <summary>
     /// Llamado por ControlsMenu al inicializar.
     /// </summary>
@@ -91,8 +94,13 @@ public class ControlBindingRow : MonoBehaviour
         // Confirmacion por mando (A / Cross) permitida cuando el esquema activo es mando.
         if (gamepadScheme)
         {
-            if (Input.GetKeyDown(KeyCode.JoystickButton0))
-                return true;
+            // Permitir cualquier boton de mando como confirmacion (no solo A).
+            foreach (KeyCode k in System.Enum.GetValues(typeof(KeyCode)))
+            {
+                string name = k.ToString();
+                if (name.Contains("JoystickButton") && Input.GetKeyDown(k))
+                    return true;
+            }
         }
 
         // Submit por teclado (espacio/enter) desactivado por defecto para evitar remapeos accidentales.

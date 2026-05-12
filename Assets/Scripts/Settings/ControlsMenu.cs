@@ -98,6 +98,41 @@ public class ControlsMenu : MonoBehaviour
             row.Init(this, inputHandler);
         }
 
+        // Configurar navegación explícita entre filas para evitar saltos inesperados
+        // Usamos el orden devuelto por GetComponentsInChildren (o FindObjectsOfType) como orden visual.
+        for (int i = 0; i < rows.Length; i++)
+        {
+            Selectable current = rows[i].RebindSelectable;
+            if (current == null) continue;
+
+            Navigation nav = new Navigation { mode = Navigation.Mode.Explicit };
+
+            // Arriba -> Volver (backButton) para la primera fila, o la fila anterior
+            if (i == 0)
+            {
+                if (backButton != null) nav.selectOnUp = backButton;
+            }
+            else
+            {
+                nav.selectOnUp = rows[i - 1].RebindSelectable;
+            }
+
+            // Abajo -> siguiente fila
+            if (i < rows.Length - 1)
+                nav.selectOnDown = rows[i + 1].RebindSelectable;
+
+            current.navigation = nav;
+        }
+
+        // Asegurar que el boton Volver baje a la primera fila
+        if (backButton != null && rows.Length > 0)
+        {
+            Navigation backNav = backButton.navigation;
+            backNav.mode = Navigation.Mode.Explicit;
+            backNav.selectOnDown = rows[0].RebindSelectable;
+            backButton.navigation = backNav;
+        }
+
         initialized = true;
     }
 
