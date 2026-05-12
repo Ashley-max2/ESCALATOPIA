@@ -270,7 +270,7 @@ public class PlayerInputHandler : MonoBehaviour
                 _activeTriggerThreshold = psTriggerThreshold;
                 _gamepadJumpKey = KeyCode.JoystickButton1;   // Cross (X)
                 _gamepadSprintKey = KeyCode.JoystickButton5;  // R1
-                _gamepadCancelKey = KeyCode.JoystickButton2;  // Circulo
+                _gamepadCancelKey = KeyCode.JoystickButton2;  // O
                 _gamepadMenuKey = KeyCode.JoystickButton9;    // Options
                 break;
 
@@ -1039,7 +1039,7 @@ public class PlayerInputHandler : MonoBehaviour
                 "Correr" => "R1",
                 "Gancho" => "R2",
                 "LiberarGancho" => "L2",
-                "Interactuar" => "Cuadrado",
+                "Interactuar" => "O",
                 _ => "-"
             };
         }
@@ -1053,10 +1053,10 @@ public class PlayerInputHandler : MonoBehaviour
         {
             return key switch
             {
-                KeyCode.JoystickButton0 => "Cuadrado",
+                KeyCode.JoystickButton0 => "□",
                 KeyCode.JoystickButton1 => "X",
-                KeyCode.JoystickButton2 => "Circulo",
-                KeyCode.JoystickButton3 => "Triangulo",
+                KeyCode.JoystickButton2 => "O",
+                KeyCode.JoystickButton3 => "▲",
                 KeyCode.JoystickButton4 => "L1",
                 KeyCode.JoystickButton5 => "R1",
                 KeyCode.JoystickButton6 => "L2",
