@@ -170,7 +170,7 @@ public class OrbitCamera : MonoBehaviour
         float maxDist = direction.magnitude;
 
         RaycastHit hit;
-        if (Physics.SphereCast(targetPos, collisionBuffer, direction.normalized, out hit, maxDist, collisionMask))
+        if (Physics.SphereCast(targetPos, collisionBuffer, direction.normalized, out hit, maxDist, collisionMask, QueryTriggerInteraction.Ignore))
         {
             // Si choca, acercar la camara
             return Mathf.Max(hit.distance - collisionBuffer, 0.5f);
