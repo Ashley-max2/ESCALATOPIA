@@ -30,6 +30,8 @@ public class OrbitCamera : MonoBehaviour
     [SerializeField] private LayerMask collisionMask = ~0;
     [SerializeField] private float collisionBuffer = 0.3f;
     [SerializeField] private float collisionRecoverSpeed = 10f;
+    [Tooltip("Distancia mínima a la que la cámara puede acercarse al personaje (evita entrar en el mesh)")]
+    [SerializeField] private float minCameraDistanceFromCharacter = 1.0f;
 
     // Runtime
     private float _currentDistance;
@@ -55,6 +57,11 @@ public class OrbitCamera : MonoBehaviour
 
         // Buscar input handler
         _inputHandler = FindObjectOfType<PlayerInputHandler>();
+
+        // Excluir el layer del jugador de la máscara de colisión para que la cámara
+        // no detecte el collider del propio personaje como obstáculo
+        if (target != null)
+            collisionMask &= ~(1 << target.gameObject.layer);
 
         _currentDistance = defaultDistance;
         _targetDistance = defaultDistance;
@@ -172,8 +179,8 @@ public class OrbitCamera : MonoBehaviour
         RaycastHit hit;
         if (Physics.SphereCast(targetPos, collisionBuffer, direction.normalized, out hit, maxDist, collisionMask))
         {
-            // Si choca, acercar la camara
-            return Mathf.Max(hit.distance - collisionBuffer, 0.5f);
+            // Si choca, acercar la cámara pero sin entrar en la geometría del personaje
+            return Mathf.Max(hit.distance - collisionBuffer, minCameraDistanceFromCharacter);
         }
 
         return maxDist;

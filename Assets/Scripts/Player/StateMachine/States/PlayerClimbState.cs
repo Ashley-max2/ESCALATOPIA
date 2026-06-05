@@ -225,38 +225,41 @@ public class PlayerClimbState : PlayerBaseState
     #region Mantle
 
     /// <summary>
-    /// Detecta si el player esta cerca del borde superior de la pared
+    /// Detecta si el player esta cerca del borde superior de la pared.
+    /// Prueba múltiples alturas y distancias hacia adelante para mayor robustez.
     /// </summary>
     private bool TryDetectLedge(out Vector3 ledgePoint)
     {
         ledgePoint = Vector3.zero;
-
-        // Altura real del collider del player
         float playerHeight = ctx.Collider != null ? ctx.Collider.height : 2f;
-
-        // 1. Comprobar a varias alturas si aun hay pared
-        // Si no hay pared a la altura del pecho o cabeza = estamos en el borde
-        float checkHeight = playerHeight * 0.85f; // cerca de la cabeza
-        Vector3 headOrigin = ctx.transform.position + Vector3.up * checkHeight;
-        float checkDist = ctx.ClimbCheckDistance * 2f;
-
-        bool wallAtHead = Physics.Raycast(headOrigin, -_wallNormal, ctx.ClimbCheckDistance * 2f, ctx.ClimbableMask);
-
-        if (wallAtHead) return false; // aun hay pared arriba, seguir escalando
-
-        // 2. Buscar suelo encima para poner al player ahi
         LayerMask combinedMask = ctx.GroundMask | ctx.ClimbableMask;
 
-        Vector3 overLedge = headOrigin + (-_wallNormal * 0.8f); // FORZADO MÁS HACIA ADELANTE (0.8m)
+        // Probar varias alturas y varios offsets hacia adelante para cubrir
+        // distintas configuraciones de geometría (paredes finas, bordes irregulares…)
+        float[] heightFactors  = { 0.85f, 0.75f, 0.95f };
+        float[] forwardOffsets = { 0.8f,  0.5f,  1.2f  };
 
-        RaycastHit groundHit;
-        if (Physics.Raycast(overLedge, Vector3.down, out groundHit, MANTLE_DOWN_DIST, combinedMask))
+        foreach (float heightFactor in heightFactors)
         {
-            float groundAngle = Vector3.Angle(Vector3.up, groundHit.normal);
-            if (groundAngle <= ctx.MaxWalkableSlope + 5f) // Si el suelo de arriba es una plataforma "pisable"
+            Vector3 headOrigin = ctx.transform.position + Vector3.up * (playerHeight * heightFactor);
+
+            // Si aún hay pared a esta altura, no estamos en el borde todavía
+            if (Physics.Raycast(headOrigin, -_wallNormal, ctx.ClimbCheckDistance * 2f, ctx.ClimbableMask))
+                continue;
+
+            foreach (float fwdOffset in forwardOffsets)
             {
-                ledgePoint = groundHit.point + Vector3.up * ctx.MantleExtraHeight;
-                return true;
+                Vector3 overLedge = headOrigin + (-_wallNormal * fwdOffset);
+                RaycastHit groundHit;
+                if (Physics.Raycast(overLedge, Vector3.down, out groundHit, MANTLE_DOWN_DIST, combinedMask))
+                {
+                    float groundAngle = Vector3.Angle(Vector3.up, groundHit.normal);
+                    if (groundAngle <= ctx.MaxWalkableSlope + 5f)
+                    {
+                        ledgePoint = groundHit.point + Vector3.up * ctx.MantleExtraHeight;
+                        return true;
+                    }
+                }
             }
         }
 
@@ -332,8 +335,12 @@ public class PlayerClimbState : PlayerBaseState
             return;
         }
 
-        // Check mantle solo si el jugador intenta ir HACIA ARRIBA o SALTAR
-        if (ctx.Input.MoveZ > 0.1f)
+        bool hasWallContact = ctx.CheckClimbableSurface(out _);
+
+        // Intentar hacer cima:
+        // - Al subir activamente (umbral bajo para mayor responsividad)
+        // - O automáticamente al perder contacto en el borde (el jugador llegó arriba)
+        if (ctx.Input.MoveZ > 0.05f || !hasWallContact)
         {
             Vector3 ledgePoint;
             if (TryDetectLedge(out ledgePoint))
@@ -343,25 +350,12 @@ public class PlayerClimbState : PlayerBaseState
             }
         }
 
-        // Perder contacto con la pared
-        if (!ctx.CheckClimbableSurface(out _))
+        // Perder contacto con la pared -> caer tras gracia de 0.5s
+        if (!hasWallContact)
         {
             _offWallTimer += Time.deltaTime;
-
-            // Intentar mantle antes de caer (en los primeros instantes)
-            if (_offWallTimer < 0.1f && ctx.Input.MoveZ > 0.1f)
-            {
-                Vector3 fallbackLedge;
-                if (TryDetectLedge(out fallbackLedge))
-                {
-                    StartMantle(fallbackLedge);
-                    return;
-                }
-            }
-
             if (_offWallTimer >= 0.5f)
             {
-                // Caer tras perder el contacto 0.5s seguidos
                 SwitchState(factory.Airborne());
                 return;
             }
