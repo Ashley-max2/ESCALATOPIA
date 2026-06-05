@@ -54,15 +54,14 @@ public class HookAim : MonoBehaviour
         else
         {
             miraRectTransform.anchoredPosition = centerPosition;
-            // Detener efecto 
+            // Detener efecto
             if (miraTween != null)
             {
                 miraTween.Kill();
                 miraTween = null;
             }
-            // Ocultar cambiando la escala a 0 en lugar de desactivar el GameObject
-            // para evitar que este mismo script deje de ejecutarse.
-            miraRectTransform.localScale = Vector3.zero;
+            // Mantener la mira visible en el centro cuando no hay HookPoint válido.
+            miraRectTransform.localScale = miraOriginalScale;
         }
     }
 }

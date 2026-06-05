@@ -18,6 +18,10 @@ public class SwordPickup : MonoBehaviour
     private bool isPicked;
     private bool isHighlighted;
 
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+    private Transform originalParent;
+
     private Material[] highlightMaterials;
     private Color[] originalEmissionColors;
     private bool[] originalEmissionEnabled;
@@ -26,6 +30,10 @@ public class SwordPickup : MonoBehaviour
     {
         if (puzzleManager == null)
             puzzleManager = SwordPuzzleManager.Instance;
+
+        originalParent = transform.parent;
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
 
         if (highlightRenderers == null || highlightRenderers.Length == 0)
             highlightRenderers = GetComponentsInChildren<Renderer>();
@@ -145,6 +153,31 @@ public class SwordPickup : MonoBehaviour
 
         RuntimeManager.PlayOneShot(pickupSound, transform.position);
         isPicked = true;
+        SetHighlighted(false);
+    }
+
+    public void RestoreOriginalPosition()
+    {
+        if (!isPicked)
+            return;
+
+        transform.SetParent(originalParent);
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+
+        Collider collider = GetComponent<Collider>();
+        if (collider != null)
+            collider.enabled = true;
+
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        if (rigidbody != null)
+        {
+            rigidbody.isKinematic = false;
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+        }
+
+        isPicked = false;
         SetHighlighted(false);
     }
 
