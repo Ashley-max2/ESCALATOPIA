@@ -221,7 +221,8 @@ public class PlayerStateMachine : MonoBehaviour
                 // Set Speed parameter based on horizontal velocity
                 // Normalized by walkSpeed for smooth transitions between Idle and Walk
                 float speedParameter = horizontalSpeed / walkSpeed;
-                Animator.SetFloat("Speed", speedParameter);
+                float currentSpeed = Animator.GetFloat("Speed");
+                Animator.SetFloat("Speed", Mathf.Lerp(currentSpeed, speedParameter, Time.deltaTime * 10f));
                 break;
 
             case PlayerJumpState:
