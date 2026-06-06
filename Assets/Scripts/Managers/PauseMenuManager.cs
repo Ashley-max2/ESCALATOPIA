@@ -106,13 +106,23 @@ public class PauseMenuManager : MonoBehaviour
     {
         MusicManager.PlayButton();
 
-        // Guardamos la escena actual manteniendo el ultimo checkpoint ya guardado.
+        // Solo actualizamos la escena guardada si el checkpoint ya pertenece a la escena actual.
+        // Si el jugador pasó a un nivel nuevo sin guardar checkpoint nuevo, conservamos
+        // la escena del último checkpoint para que Continuar vuelva al nivel correcto.
         string currentScene = SceneManager.GetActiveScene().name;
         if (!string.IsNullOrEmpty(currentScene) &&
             !string.Equals(currentScene, mainMenuSceneName, System.StringComparison.OrdinalIgnoreCase) &&
             !string.Equals(currentScene, "Creditos", System.StringComparison.OrdinalIgnoreCase))
         {
-            GameProgressDatabase.SaveSceneKeepingSpawn(currentScene);
+            GameProgressData existing = GameProgressDatabase.Load();
+            bool saveMatchesCurrentScene = existing != null &&
+                string.Equals(existing.Scene, currentScene, System.StringComparison.OrdinalIgnoreCase);
+            bool noCheckpointYet = existing == null || string.IsNullOrEmpty(existing.Scene);
+
+            if (saveMatchesCurrentScene || noCheckpointYet)
+                GameProgressDatabase.SaveSceneKeepingSpawn(currentScene);
+            // Si hay checkpoint de un nivel anterior, lo dejamos intacto
+            // para que Continuar lleve al jugador a ese checkpoint.
         }
 
         if (GameManager.Instance != null)
