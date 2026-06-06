@@ -88,6 +88,25 @@ public class BossManager : MonoBehaviour
         }
     }
 
+    public void StopBossAfterWin()
+    {
+        // Detiene el boss inmediatamente tras ganar la carrera, sin reiniciar el estado completo.
+        // RestartRace() se llamará después de que termine el diálogo de derrota.
+        if (bossLevitante != null)
+            bossLevitante.ResetBoss();
+        else if (bossAI != null)
+            bossAI.enabled = false;
+
+        if (bossBowler != null)
+            bossBowler.Deactivate();
+
+        if (bossRigidbody != null)
+        {
+            bossRigidbody.velocity = Vector3.zero;
+            bossRigidbody.angularVelocity = Vector3.zero;
+        }
+    }
+
     public void RestartRace()
     {
         // "y el Bossmanager lo reinicia."

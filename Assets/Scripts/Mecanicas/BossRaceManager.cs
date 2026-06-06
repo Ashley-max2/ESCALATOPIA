@@ -40,6 +40,9 @@ public class BossRaceManager : MonoBehaviour
         {
             characterDialogue.onLoseDialogueFinished.AddListener(HandleLoseDialogueFinished);
         }
+
+        // Restaura visibilidad cuando BossManager reactive el gadget via SetActive(true)
+        ShowGadget();
     }
 
     private void OnDisable()
@@ -64,23 +67,45 @@ public class BossRaceManager : MonoBehaviour
 
     private void HandleBossWin(Collider bossCollider)
     {
-        // 1. Hace desaparecer el objeto final temporalmente
-        gameObject.SetActive(false);
+        // Oculta collider y renderers sin desactivar el GameObject,
+        // para que BossRaceManager siga escuchando onLoseDialogueFinished.
+        HideGadget();
 
-        // 2. Teletransporta al Boss a su punto de inicio
+        // Detiene y teletransporta al Boss a su punto de inicio
+        if (bossManager != null)
+        {
+            bossManager.StopBossAfterWin();
+        }
+
         if (bossTeleporter != null)
         {
             bossTeleporter.ForceTeleport(bossCollider);
         }
 
-        // 3. Reactiva el objeto
-        gameObject.SetActive(true);
-
-        // 4. Mostrar diálogo de derrota
+        // Mostrar diálogo de derrota
+        // (HandleLoseDialogueFinished llamará a RestartRace cuando termine)
         if (characterDialogue != null)
         {
             characterDialogue.ShowLoseDialogue();
         }
+    }
+
+    private void HideGadget()
+    {
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            r.enabled = false;
+    }
+
+    private void ShowGadget()
+    {
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
+
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            r.enabled = true;
     }
 
     private void HandleLoseDialogueFinished()
