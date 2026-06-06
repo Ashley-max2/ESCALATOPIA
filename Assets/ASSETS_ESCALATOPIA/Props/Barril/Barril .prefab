@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1868003816481834391}
   - component: {fileID: 1540737468874474012}
   - component: {fileID: 5553103973646824370}
+  - component: {fileID: 6735666258170248480}
   m_Layer: 12
   m_Name: 'Barril '
   m_TagString: Barril
@@ -164,6 +165,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objetoFragmentado: {fileID: 7450025698613409693}
+--- !u!114 &6735666258170248480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821692169944533716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6442c57d719993446bb8b93b101d06bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabBarril: {fileID: 821692169944533716}
 --- !u!1001 &5146940184792565714
 PrefabInstance:
   m_ObjectHideFlags: 0
