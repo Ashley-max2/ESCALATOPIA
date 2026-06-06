@@ -36,6 +36,10 @@ public class BarrilInteractuable : MonoBehaviour, IHighlightable
         promptText.alignment = TextAlignmentOptions.Center;
         promptText.fontSize = fontSize;
         promptText.color = textColor;
+
+        TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Fonts & Materials/TextoRegular");
+        if (font != null) promptText.font = font;
+
         promptText.text = InteractInput.GetBracketedDisplayKey();
         lastPromptLabel = promptText.text;
 
