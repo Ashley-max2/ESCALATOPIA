@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AI;
 
 /// <summary>
 /// NPC que patrulla entre waypoints llevando una "linterna" (Spot Light).
@@ -13,7 +14,7 @@ using UnityEngine.SceneManagement;
 ///   3. Opcionalmente, poner un Point Light hijo en cada waypoint para las luces secuenciales.
 ///   4. El script crea automáticamente un Spot Light hijo como "linterna".
 /// </summary>
-public class NPCPatroller : MonoBehaviour
+public class NPCPatrollerBoss4 : MonoBehaviour
 {
     [Header("── Waypoints ──")]
     [Tooltip("Puntos de patrulla. El NPC irá de uno a otro en orden cíclico.")]
@@ -58,6 +59,16 @@ public class NPCPatroller : MonoBehaviour
     private Light _spotlight;
     private Transform _playerTransform;
 
+    private NavMeshAgent _agent;
+
+    [Header("── Persecución ──")]
+    public float chaseRange = 18f;
+    public float loseTargetTime = 3f;
+
+    private bool _isChasing = false;
+    private float _lastTimeSeenPlayer;
+    private Vector3 _lastKnownPlayerPosition;
+
     // ─────────────────────────────────────────────────────────────────────────
     private void Start()
     {
@@ -77,16 +88,41 @@ public class NPCPatroller : MonoBehaviour
 
         // Recoger y configurar luces de waypoints
         SetupWaypointLights();
+
+        _agent = GetComponent<NavMeshAgent>();
+
+        if (_agent != null)
+        {
+            _agent.speed = moveSpeed;
+            _agent.stoppingDistance = reachDistance;
+            _agent.updateRotation = true;
+        }
     }
 
     private void Update()
-    {
-        if (_isWaiting || waypoints.Length == 0) return;
+{
+    if (waypoints.Length == 0) return;
 
-        MoveToWaypoint();
-        UpdateWaypointLights();
-        CheckFlashlightDetection();
+    DetectPlayer();
+
+    if (_isChasing)
+    {
+        ChasePlayer();
     }
+    else
+    {
+        PatrolBehaviour();
+    }
+
+    UpdateWaypointLights();
+    CheckFlashlightDetection();
+
+    if (npcAnimator != null)
+    {
+        float speed = _agent != null ? _agent.velocity.magnitude : 0f;
+        npcAnimator.SetFloat("Speed", speed);
+    }
+}
 
     // ─────────────────────────────────────────────────────────────────────────
     //  LINTERNA
@@ -139,42 +175,43 @@ public class NPCPatroller : MonoBehaviour
     //  MOVIMIENTO
     // ─────────────────────────────────────────────────────────────────────────
 
-    private void MoveToWaypoint()
+    private void PatrolBehaviour()
+{
+    if (_isWaiting) return;
+
+    Transform target = waypoints[_currentWaypointIndex];
+
+    if (target == null)
     {
-        Transform target = waypoints[_currentWaypointIndex];
-        if (target == null) { NextWaypoint(); return; }
-
-        Vector3 direction = target.position - transform.position;
-        direction.y = 0f;
-        float distance = direction.magnitude;
-
-        if (distance <= reachDistance)
-        {
-            StartCoroutine(WaitAndAdvance());
-            return;
-        }
-
-        direction.Normalize();
-        transform.position += direction * moveSpeed * Time.deltaTime;
-
-        if (direction.sqrMagnitude > 0.01f)
-        {
-            Quaternion targetRot = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
-        }
-
-        if (npcAnimator != null)
-            npcAnimator.SetFloat("Speed", moveSpeed);
+        NextWaypoint();
+        return;
     }
+
+    _agent.SetDestination(target.position);
+
+    if (!_agent.pathPending &&
+        _agent.remainingDistance <= reachDistance)
+    {
+        StartCoroutine(WaitAndAdvance());
+    }
+}
 
     private IEnumerator WaitAndAdvance()
-    {
-        _isWaiting = true;
-        if (npcAnimator != null) npcAnimator.SetFloat("Speed", 0f);
-        yield return new WaitForSeconds(waitTimeAtWaypoint);
-        NextWaypoint();
-        _isWaiting = false;
-    }
+{
+    _isWaiting = true;
+
+    if (_agent != null)
+        _agent.isStopped = true;
+
+    yield return new WaitForSeconds(waitTimeAtWaypoint);
+
+    NextWaypoint();
+
+    if (_agent != null)
+        _agent.isStopped = false;
+
+    _isWaiting = false;
+}
 
     private void NextWaypoint()
     {
@@ -249,4 +286,63 @@ public class NPCPatroller : MonoBehaviour
                 Gizmos.DrawLine(waypoints[i].position, waypoints[next].position);
         }
     }
+
+    private void DetectPlayer()
+{
+    if (_playerTransform == null) return;
+
+    Vector3 toPlayer = _playerTransform.position - transform.position;
+    float distance = toPlayer.magnitude;
+
+    if (distance > chaseRange)
+    {
+        CheckLosePlayer();
+        return;
+    }
+
+    float angle = Vector3.Angle(transform.forward, toPlayer);
+
+    if (angle > flashlightAngle)
+    {
+        CheckLosePlayer();
+        return;
+    }
+
+    if (obstacleMask != 0)
+    {
+        if (Physics.Raycast(
+                transform.position + Vector3.up * 1.2f,
+                toPlayer.normalized,
+                distance,
+                obstacleMask))
+        {
+            CheckLosePlayer();
+            return;
+        }
+    }
+
+    _isChasing = true;
+    _lastTimeSeenPlayer = Time.time;
+    _lastKnownPlayerPosition = _playerTransform.position;
+}
+
+private void CheckLosePlayer()
+{
+    if (!_isChasing) return;
+
+    if (Time.time - _lastTimeSeenPlayer >= loseTargetTime)
+    {
+        _isChasing = false;
+    }
+}
+
+private void ChasePlayer()
+{
+    if (_agent == null) return;
+
+    if (Time.time - _lastTimeSeenPlayer <= loseTargetTime)
+    {
+        _agent.SetDestination(_lastKnownPlayerPosition);
+    }
+}
 }
