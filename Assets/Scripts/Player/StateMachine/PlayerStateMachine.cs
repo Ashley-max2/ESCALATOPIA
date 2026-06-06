@@ -21,6 +21,7 @@ public class PlayerStateMachine : MonoBehaviour
     public GrapplingHook GrapplingHook { get; private set; }
     public StaminaSystem Stamina { get; private set; }
     public Transform CameraTarget { get; private set; }
+    public HaveHookManager HaveHookManager { get; private set; }
     #endregion
 
     #region State Management
@@ -147,6 +148,8 @@ public class PlayerStateMachine : MonoBehaviour
         Animator = GetComponentInChildren<Animator>();
         GrapplingHook = GetComponentInChildren<GrapplingHook>();
         Stamina = GetComponent<StaminaSystem>();
+
+        HaveHookManager = FindFirstObjectByType<HaveHookManager>();
 
         // Setup camera target
         var cameraTargetObj = transform.Find("CameraTarget");
@@ -516,6 +519,11 @@ public class PlayerStateMachine : MonoBehaviour
         GameEvents.PlayerRespawn(transform.position);
     }
     #endregion
+
+    public void UnlockHook()
+    {
+        HaveHookManager?.SetHasHook(true);
+    }
 
     #region Gizmos
     private void OnDrawGizmosSelected()

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class HookManager : MonoBehaviour
 {
+    [SerializeField] private HaveHookManager haveHookManager;
     public MeshRenderer[] meshes;
     public GameObject objectToDelete1;
     public GameObject objectToDelete2;
@@ -19,6 +20,9 @@ public class HookManager : MonoBehaviour
             // Borrar los otros dos objetos
             Destroy(objectToDelete1);
             Destroy(objectToDelete2);
+
+            // Activar gancho
+            haveHookManager.SetHasHook(true);
         }
     }
 }
