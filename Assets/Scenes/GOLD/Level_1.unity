@@ -2319,7 +2319,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4279043666
   m_fontColor: {r: 0.32156864, g: 0.023529412, b: 0.050980393, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -3788,6 +3788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0edd50a293f345645a1014f9f69c474b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alwaysShowReticle: 1
   grapplingHook: {fileID: 604023642}
   miraRectTransform: {fileID: 943105343}
 --- !u!1 &946325650
@@ -4587,6 +4588,10 @@ PrefabInstance:
     - target: {fileID: 1966428600798258095, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_Name
       value: BossTEST
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966428600798258095, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2463213925077729618, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_Enabled
@@ -10212,6 +10217,22 @@ PrefabInstance:
       value: 0.017
       objectReference: {fileID: 0}
     - target: {fileID: 472962605164963881, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 472962605164963881, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 472962605164963881, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 472962605164963881, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 472962605164963881, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0.163
       objectReference: {fileID: 0}
@@ -10219,13 +10240,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 2.248
       objectReference: {fileID: 0}
+    - target: {fileID: 472962605164963881, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1966428600798258095, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_Name
       value: Boss1
       objectReference: {fileID: 0}
     - target: {fileID: 1966428600798258095, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2463213925077729618, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_Enabled
@@ -10385,7 +10410,7 @@ PrefabInstance:
       objectReference: {fileID: 385540738}
     - target: {fileID: 9075573746443302907, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9079517799548299494, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       propertyPath: m_Controller
@@ -10405,6 +10430,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9075573746443302907, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
       insertIndex: -1
       addedObject: {fileID: 571129343}
+    - targetCorrespondingSourceObject: {fileID: 9075573746443302907, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: bf5963dd7e78bb949b040e3cd4f4b251, type: 3}
 --- !u!114 &4726357041814826691 stripped
 MonoBehaviour:

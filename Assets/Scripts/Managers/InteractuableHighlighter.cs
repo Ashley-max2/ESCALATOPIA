@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class InteractuableHighlighter : MonoBehaviour
 {
-    [SerializeField] private List<string> interactuableTags = new List<string> { "barill" };
+    [SerializeField] private List<string> interactuableTags = new List<string> { "Barril" };
     [SerializeField] private Color highlightColor = Color.white;
     [SerializeField] private float emissionIntensity = 0.3f;
     [SerializeField] private float maxRayDistance = 10f;
@@ -28,8 +28,8 @@ public class InteractuableHighlighter : MonoBehaviour
         if (interactuableTags == null)
             interactuableTags = new List<string>();
 
-        if (!interactuableTags.Contains("barill"))
-            interactuableTags.Add("barill");
+        if (!interactuableTags.Contains("Barril"))
+            interactuableTags.Add("Barril");
     }
 
     private void Update()
@@ -43,19 +43,34 @@ public class InteractuableHighlighter : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance))
         {
-            if (interactuableTags.Contains(hit.collider.gameObject.tag))
-                newTarget = hit.collider.gameObject;
+            // Busca el tag hacia arriba en la jerarquía por si el collider está en un hijo
+            Transform t = hit.collider.transform;
+            while (t != null)
+            {
+                if (interactuableTags.Contains(t.gameObject.tag))
+                {
+                    newTarget = t.gameObject;
+                    break;
+                }
+                t = t.parent;
+            }
         }
 
         if (lastHighlightedObject != newTarget)
         {
             if (lastHighlightedObject != null)
+            {
                 SetHighlighted(lastHighlightedObject, false);
+                lastHighlightedObject.GetComponentInChildren<IHighlightable>()?.OnHighlightEnd();
+            }
 
             lastHighlightedObject = newTarget;
 
             if (lastHighlightedObject != null)
+            {
                 SetHighlighted(lastHighlightedObject, true);
+                lastHighlightedObject.GetComponentInChildren<IHighlightable>()?.OnHighlightStart();
+            }
         }
     }
 

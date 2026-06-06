@@ -13,26 +13,21 @@ public class AgarrarLanzarSoltar : MonoBehaviour
     [SerializeField] private float fuerzaLanzamiento = 5f; // fuerza reducida
 
     [Header("UI (Opcional)")]
-    [SerializeField] private TMP_Text interactPromptText;
-    [SerializeField] private bool useCurrentTextAsTemplate = true;
-    [SerializeField] private string interactPromptTemplate = "Pulsa [E] para agarrar/soltar";
+    [SerializeField] private TMP_Text holdPromptText;
+    [SerializeField] private TMP_Text launchPromptText;
+    [SerializeField] private string holdingPromptTemplate = "Pulsa [E] para soltar";
+    [SerializeField] private string launchPromptTemplate = "Pulsa Click Izq. para lanzar";
 
     [Header("Input")]
     [SerializeField] private PlayerInputHandler inputHandler;
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
-    private string promptTemplateResolved;
-    private string lastPromptRendered;
 
     void Awake()
     {
         if (cam == null) cam = Camera.main;
         if (inputHandler == null) inputHandler = FindObjectOfType<PlayerInputHandler>();
-
-        promptTemplateResolved = interactPromptTemplate;
-        if (useCurrentTextAsTemplate && interactPromptText != null && !string.IsNullOrEmpty(interactPromptText.text))
-            promptTemplateResolved = interactPromptText.text;
 
         RefreshPromptLabel();
     }
@@ -155,18 +150,30 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
     private void RefreshPromptLabel()
     {
-        if (interactPromptText == null)
-            return;
-
-        string keyLabel = GetInteractKeyLabel();
-        string rendered = promptTemplateResolved
-            .Replace("[E]", "[" + keyLabel + "]")
-            .Replace("{INTERACT}", "[" + keyLabel + "]");
-
-        if (rendered != lastPromptRendered)
+        if (holdPromptText != null)
         {
-            interactPromptText.text = rendered;
-            lastPromptRendered = rendered;
+            bool showHoldPrompt = objetoActual != null;
+            holdPromptText.gameObject.SetActive(showHoldPrompt);
+
+            if (showHoldPrompt)
+            {
+                string keyLabel = GetInteractKeyLabel();
+                string rendered = holdingPromptTemplate
+                    .Replace("[E]", "[" + keyLabel + "]")
+                    .Replace("{INTERACT}", "[" + keyLabel + "]");
+
+                holdPromptText.text = rendered;
+            }
+        }
+
+        if (launchPromptText != null)
+        {
+            bool showLaunchPrompt = objetoActual != null;
+            launchPromptText.gameObject.SetActive(showLaunchPrompt);
+            if (showLaunchPrompt)
+            {
+                launchPromptText.text = launchPromptTemplate;
+            }
         }
     }
 

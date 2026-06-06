@@ -266,6 +266,13 @@ public class CharacterDialogue : MonoBehaviour
             return;
 
         promptE.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+
+        // Si la escala X del mundo es negativa (padre invertido), compensar para que el texto no salga al revés
+        if (promptE.transform.lossyScale.x < 0f)
+        {
+            Vector3 ls = promptE.transform.localScale;
+            promptE.transform.localScale = new Vector3(-ls.x, ls.y, ls.z);
+        }
     }
 
     public void SetInteractionEnabled(bool enabled)
