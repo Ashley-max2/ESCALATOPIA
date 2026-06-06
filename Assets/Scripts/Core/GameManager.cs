@@ -90,6 +90,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Header("=== MENU SCENES (no se bloquea el cursor) ===")]
+    [SerializeField] private string[] menuScenes = { "MainMenu", "Main_Menu", "Creditos" };
+
+    private bool IsMenuScene(string sceneName)
+    {
+        if (menuScenes == null) return false;
+        foreach (string s in menuScenes)
+            if (string.Equals(sceneName, s, System.StringComparison.OrdinalIgnoreCase))
+                return true;
+        return false;
+    }
+
     /// <summary>
     /// Se llama cada vez que se carga una escena nueva.
     /// Re-busca el player porque las referencias
@@ -104,6 +116,18 @@ public class GameManager : MonoBehaviour
         // Re-buscar player
         player = FindFirstSceneObject<PlayerStateMachine>();
         _inputHandler = null; // se re-busca en Update
+
+        // Bloquear cursor en escenas de juego; liberarlo en menús
+        if (IsMenuScene(scene.name))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
         // PauseMenuManager se registrara automaticamente en su Awake()
         // No necesitamos buscarlo aqui
@@ -148,8 +172,10 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Se llama automaticamente cuando la ventana pierde/gana foco
-    /// Alt-tab, minimizar, cambiar ventana = pausa automatica
+    /// Se llama automaticamente cuando la ventana pierde/gana foco.
+    /// Al perder foco: pausa automatica.
+    /// Al recuperar foco en escena de juego sin menu abierto: bloquea cursor directamente
+    /// (evita que en el editor el raton escape al hacer clic fuera del Game view).
     /// </summary>
     private void OnApplicationFocus(bool hasFocus)
     {
@@ -159,6 +185,12 @@ public class GameManager : MonoBehaviour
         if (!hasFocus && !isPaused)
         {
             PauseGame();
+        }
+        else if (hasFocus && !isPaused && !IsMenuScene(SceneManager.GetActiveScene().name))
+        {
+            // Recuperamos foco en escena de juego sin estar pausados: re-bloquear cursor
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
