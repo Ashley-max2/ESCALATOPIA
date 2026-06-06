@@ -144,7 +144,7 @@ public class InspectableImageItem : MonoBehaviour
         if (direction.sqrMagnitude < 0.0001f)
             return;
 
-        promptE.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        promptE.transform.rotation = Quaternion.LookRotation(-direction.normalized, Vector3.up);
     }
 
     private void OpenImage()

@@ -30,6 +30,16 @@ public class SwordPuzzleManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        GameEvents.OnPlayerRespawn += HandlePlayerRespawn;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnPlayerRespawn -= HandlePlayerRespawn;
+    }
+
     private void Start()
     {
         if (playerCamera == null)
@@ -37,6 +47,15 @@ public class SwordPuzzleManager : MonoBehaviour
 
         if (totalStoneSlots <= 0)
             totalStoneSlots = FindObjectsOfType<StoneSlot>().Length;
+    }
+
+    private void HandlePlayerRespawn(Vector3 position)
+    {
+        if (currentSwordPickup != null)
+        {
+            currentSwordPickup.RestoreOriginalPosition();
+            currentSwordPickup = null;
+        }
     }
 
     private void Update()

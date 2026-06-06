@@ -3,134 +3,117 @@ using UnityEngine;
 
 public class InteractuableHighlighter : MonoBehaviour
 {
-    [SerializeField] private List<string> interactuableTags;
-    [SerializeField] private Color outlineColor = Color.white; 
-    [SerializeField] private float outlineWidth = 0.02f; 
-    [SerializeField] private float maxRayDistance = 10f; // Distancia máxima del raycast
-    [SerializeField] private Camera playerCamera; // Cámara del jugador
+    [SerializeField] private List<string> interactuableTags = new List<string> { "barill" };
+    [SerializeField] private Color highlightColor = Color.white;
+    [SerializeField] private float emissionIntensity = 0.3f;
+    [SerializeField] private float maxRayDistance = 10f;
+    [SerializeField] private Camera playerCamera;
 
     private GameObject lastHighlightedObject;
-    // Dictionary to store original materials for each renderer
-    private Dictionary<Renderer, List<Material>> originalMaterials = new Dictionary<Renderer, List<Material>>();
+
+    // Per-object material cache: stores materials + original emission state
+    private class ObjectHighlightData
+    {
+        public Material[] materials;
+        public Color[] originalEmissionColors;
+        public bool[] originalEmissionEnabled;
+    }
+    private Dictionary<GameObject, ObjectHighlightData> highlightCache = new Dictionary<GameObject, ObjectHighlightData>();
 
     private void Start()
     {
         if (playerCamera == null)
-        {
             playerCamera = Camera.main;
-        }
+
+        if (interactuableTags == null)
+            interactuableTags = new List<string>();
+
+        if (!interactuableTags.Contains("barill"))
+            interactuableTags.Add("barill");
     }
 
     private void Update()
     {
-        ApplyHighlightToInteractuables();
-    }
+        Ray ray = new Ray(
+            playerCamera != null ? playerCamera.transform.position : transform.position,
+            playerCamera != null ? playerCamera.transform.forward : transform.forward
+        );
 
-    private void ApplyHighlightToInteractuables()
-    {
-        Vector3 aimForward = playerCamera != null ? playerCamera.transform.forward : transform.forward;
-        Vector3 originPos = playerCamera != null ? playerCamera.transform.position : transform.position;
-        
-        // Realizar un raycast desde la cámara del jugador
-        Ray ray = new Ray(originPos, aimForward);
-        Debug.DrawRay(originPos, aimForward * maxRayDistance, Color.red);
+        GameObject newTarget = null;
+
         if (Physics.Raycast(ray, out RaycastHit hit, maxRayDistance))
         {
-            GameObject hitObject = hit.collider.gameObject;
+            if (interactuableTags.Contains(hit.collider.gameObject.tag))
+                newTarget = hit.collider.gameObject;
+        }
 
-            // Verificar si el objeto tiene un tag válido
-            if (interactuableTags.Contains(hitObject.tag))
+        if (lastHighlightedObject != newTarget)
+        {
+            if (lastHighlightedObject != null)
+                SetHighlighted(lastHighlightedObject, false);
+
+            lastHighlightedObject = newTarget;
+
+            if (lastHighlightedObject != null)
+                SetHighlighted(lastHighlightedObject, true);
+        }
+    }
+
+    private void SetHighlighted(GameObject obj, bool highlight)
+    {
+        if (!highlightCache.TryGetValue(obj, out ObjectHighlightData data))
+        {
+            data = BuildCache(obj);
+            highlightCache[obj] = data;
+        }
+
+        for (int i = 0; i < data.materials.Length; i++)
+        {
+            var mat = data.materials[i];
+            if (mat == null || !mat.HasProperty("_EmissionColor"))
+                continue;
+
+            if (highlight)
             {
-                // Aplicar el resaltado al objeto
-                if (lastHighlightedObject != hitObject)
-                {
-                    RemoveHighlight();
-                    HighlightObject(hitObject);
-                    lastHighlightedObject = hitObject;
-                }
+                mat.EnableKeyword("_EMISSION");
+                mat.SetColor("_EmissionColor", highlightColor * emissionIntensity);
             }
             else
             {
-                // Si el objeto no tiene un tag válido, quitar el resaltado del último objeto
-                RemoveHighlight();
-            }
-        }
-        else
-        {
-            // Si no se detecta ningún objeto, quitar el resaltado del último objeto
-            RemoveHighlight();
-        }
-    }
-
-    private void HighlightObject(GameObject obj)
-    {
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-        foreach (Renderer renderer in renderers)
-        {
-            // Guardar los materiales originales
-            Material[] materials = renderer.materials;
-            if (!originalMaterials.ContainsKey(renderer))
-            {
-                originalMaterials[renderer] = new List<Material>(materials);
-            }
-
-            // Crear nuevos materiales con efecto de outline
-            Material[] newMaterials = new Material[materials.Length];
-            for (int i = 0; i < materials.Length; i++)
-            {
-                Material outlineMat = new Material(materials[i]);
-                
-                // Establecer propiedades para outline
-                if (outlineMat.HasProperty("_OutlineWidth"))
-                {
-                    outlineMat.SetFloat("_OutlineWidth", outlineWidth);
-                }
-                if (outlineMat.HasProperty("_OutlineColor"))
-                {
-                    outlineMat.SetColor("_OutlineColor", outlineColor);
-                }
-
-                // Usar emisión blanca para el efecto de resaltado
-                if (outlineMat.HasProperty("_EmissionColor"))
-                {
-                    outlineMat.EnableKeyword("_EMISSION");
-                    outlineMat.SetColor("_EmissionColor", Color.white * 0.3f);
-                }
-                
-                newMaterials[i] = outlineMat;
-            }
-            
-            renderer.materials = newMaterials;
-        }
-    }
-
-    private void RemoveHighlight()
-    {
-        if (lastHighlightedObject != null)
-        {
-            Renderer[] renderers = lastHighlightedObject.GetComponentsInChildren<Renderer>();
-            foreach (Renderer renderer in renderers)
-            {
-                // Restaurar los materiales originales
-                if (originalMaterials.ContainsKey(renderer))
-                {
-                    Material[] originalMats = originalMaterials[renderer].ToArray();
-                    renderer.materials = originalMats;
-                    originalMaterials.Remove(renderer);
-                }
+                mat.SetColor("_EmissionColor", data.originalEmissionColors[i]);
+                if (data.originalEmissionEnabled[i])
+                    mat.EnableKeyword("_EMISSION");
                 else
-                {
-                    // Si no tenemos los originales, simplemente quitar emisión
-                    foreach (Material mat in renderer.materials)
-                    {
-                        if (mat.HasProperty("_EmissionColor"))
-                        {
-                            mat.SetColor("_EmissionColor", Color.black);
-                        }
-                    }
-                }
+                    mat.DisableKeyword("_EMISSION");
             }
-            lastHighlightedObject = null;
         }
+    }
+
+    private ObjectHighlightData BuildCache(GameObject obj)
+    {
+        var matList = new List<Material>();
+        foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
+        {
+            if (renderer != null)
+                matList.AddRange(renderer.materials);
+        }
+
+        var data = new ObjectHighlightData();
+        data.materials = matList.ToArray();
+        data.originalEmissionColors = new Color[data.materials.Length];
+        data.originalEmissionEnabled = new bool[data.materials.Length];
+
+        for (int i = 0; i < data.materials.Length; i++)
+        {
+            var mat = data.materials[i];
+            if (mat.HasProperty("_EmissionColor"))
+                data.originalEmissionColors[i] = mat.GetColor("_EmissionColor");
+            else
+                data.originalEmissionColors[i] = Color.black;
+
+            data.originalEmissionEnabled[i] = mat.IsKeywordEnabled("_EMISSION");
+        }
+
+        return data;
     }
 }
