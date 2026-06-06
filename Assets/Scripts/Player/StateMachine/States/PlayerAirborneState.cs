@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public class PlayerAirborneState : PlayerBaseState
 {
-    public PlayerAirborneState(PlayerStateMachine context, PlayerStateFactory factory) 
+    public PlayerAirborneState(PlayerStateMachine context, PlayerStateFactory factory)
         : base(context, factory) { }
-    
+
     public override void Enter()
     {
         // Record fall start if not already set
@@ -18,7 +18,7 @@ public class PlayerAirborneState : PlayerBaseState
             ctx.FallStartHeight = ctx.transform.position.y;
         }
     }
-    
+
     public override void Execute()
     {
         // Update fall height tracking if falling
@@ -26,9 +26,9 @@ public class PlayerAirborneState : PlayerBaseState
         {
             ctx.FallStartHeight = ctx.transform.position.y;
         }
-        
+
         CheckTransitions();
-        
+
         // Track fall for events
         if (ctx.Rb.velocity.y < -1f)
         {
@@ -36,21 +36,21 @@ public class PlayerAirborneState : PlayerBaseState
             GameEvents.PlayerFalling(currentFallDistance);
         }
     }
-    
+
     public override void FixedExecute()
     {
         HandleAirControl();
         ApplyBetterJumpPhysics();
     }
-    
+
     public override void Exit()
     {
     }
-    
+
     private void HandleAirControl()
     {
         Vector3 inputDir = new Vector3(ctx.Input.MoveX, 0, ctx.Input.MoveZ).normalized;
-        
+
         if (inputDir.magnitude > 0.1f)
         {
             // Apply limited air control (estilo Zelda BotW)
@@ -58,12 +58,12 @@ public class PlayerAirborneState : PlayerBaseState
             ctx.MoveRelativeToCamera(inputDir, speed, ctx.AirControl);
         }
     }
-    
+
     private void ApplyBetterJumpPhysics()
     {
         ctx.ApplyBetterJumpPhysics();
     }
-    
+
     private void CheckTransitions()
     {
         // Landed - Verificar específicamente con raycast a layer Ground
@@ -74,20 +74,20 @@ public class PlayerAirborneState : PlayerBaseState
             if (Physics.Raycast(origin, Vector3.down, ctx.GroundCheckRadius * 2.5f, ctx.GroundMask))
             {
                 // Activar parámetro Landing para reproducir EndJump inmediatamente
-                ctx.Animator.SetBool("Landing", true);
+                ctx.Animator.SetTrigger("Landing");
                 Debug.Log("Landing activado - tocando Ground layer");
                 SwitchState(factory.Grounded());
                 return;
             }
         }
-        
+
         // Coyote time jump
         if (ctx.Input.JumpPressed && IsCoyoteTimeActive())
         {
             SwitchState(factory.Jump());
             return;
         }
-        
+
         // Auto-climb: si chocamos con una superficie escalable y no estamos exhaustos
         RaycastHit hit;
         if (ctx.CheckClimbableSurface(out hit))
@@ -99,7 +99,7 @@ public class PlayerAirborneState : PlayerBaseState
                 return;
             }
         }
-        
+
         // Hook while in air
         if (ctx.Input.HookPressed && ctx.GrapplingHook != null && ctx.GrapplingHook.CanFire())
         {
