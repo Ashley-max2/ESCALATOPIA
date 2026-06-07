@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{113C18AF-0E12-7557-F989-AEBE4AD3ECBA}</ProjectGuid>
+    <ProjectGuid>{4E536470-A8C1-EA0D-C30B-C32D917BFED0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -63,11 +63,13 @@
     <Compile Include="Assets\Scripts\Puzzle\PuzzleDoor.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\SceneChangeTrigger.cs" />
     <Compile Include="Assets\Scripts\UI\ActionBindingTextSync.cs" />
+    <Compile Include="Assets\Scripts\Bosses\BossRockThrower.cs" />
     <Compile Include="Assets\Scripts\Managers\PauseMenuManager.cs" />
     <Compile Include="Assets\Scripts\Props\CofreTimeline.cs" />
     <Compile Include="Assets\Scripts\Systems\PlayerDeathHandler.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\PinchosTrigger.cs" />
     <Compile Include="Assets\Scripts\UI\SliderHandleSound.cs" />
+    <Compile Include="Assets\Scripts\Managers\HaveHookManager.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossLevitante.cs" />
     <Compile Include="Assets\Scripts\Bosses\NPCPatroller.cs" />
     <Compile Include="Assets\Scripts\Props\InventarioLlaves.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Assets\Scripts\Managers\CheckpointManager.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerGroundedState.cs" />
     <Compile Include="Assets\Scripts\UI\InteractPromptTextSync.cs" />
+    <Compile Include="Assets\Scripts\Bosses\RockProjectile.cs" />
     <Compile Include="Assets\Scripts\Puzzle\SwordPickup.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\SkiSlope.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\CheckpointSaveTrigger.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Assets\Scripts\Bosses\BossRock.cs" />
     <Compile Include="Assets\Scripts\Systems\GameProgressData.cs" />
     <Compile Include="Assets\Scripts\Camera\FirstPersonCamera.cs" />
+    <Compile Include="Assets\Scripts\Mecanicas\RespawnBarril.cs" />
     <Compile Include="Assets\Scripts\UI\BolaGuiaNPC.cs" />
     <Compile Include="Assets\Scripts\Systems\HookPoint.cs" />
     <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\MissionChangeCaller.cs" />
@@ -127,6 +131,7 @@
     <Compile Include="Assets\Scripts\Mecanicas\BossAIController.cs" />
     <Compile Include="Assets\Scripts\Settings\ControlsMenu.cs" />
     <Compile Include="Assets\Scripts\UI\HideImageOnPanel.cs" />
+    <Compile Include="Assets\Scripts\Props\EssentialPropRespawner.cs" />
     <Compile Include="Assets\Scripts\Managers\Misiones\MissionUIBinder.cs" />
     <Compile Include="Assets\Scripts\Core\IState.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\States\PlayerWallJumpState.cs" />
@@ -149,6 +154,7 @@
     <Compile Include="Assets\Scripts\Managers\JournalPickUo.cs" />
     <Compile Include="Assets\Scripts\Mecanicas\HazardTeleporter.cs" />
     <Compile Include="Assets\Scripts\Props\MuroGancho.cs" />
+    <Compile Include="Assets\Scripts\Bosses\BossGroundAI.cs" />
     <Compile Include="Assets\Scripts\UI\HookAim.cs" />
     <Compile Include="Assets\Scripts\Managers\MainMenuManager.cs" />
     <Compile Include="Assets\Scripts\Bosses\BossDialogueFull.cs" />
@@ -172,7 +178,6 @@
     <Compile Include="Assets\Scripts\Managers\Misiones\Objectives\MissionTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\StateMachine\PlayerBaseState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerInputHandler.cs" />
-    <Compile Include="Assets\Scripts\Bosses\BossBowler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shaders\OutlineShader.shader" />
@@ -1255,23 +1260,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{D9AE549E-6880-9150-2155-9F84BD83B16C}</Project>
+      <Project>{2EDEF68B-2B1F-11D6-EE07-46E94E9C5484}</Project>
       <Name>Assembly-CSharp-firstpass</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityEditor.csproj">
-      <Project>{AF32D415-EF4E-6BFD-2D61-EFC7544ACAEB}</Project>
+      <Project>{4FE5EEA4-CFC2-84DE-0052-329C79523E71}</Project>
       <Name>FMODUnityEditor</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityResonance.csproj">
-      <Project>{C627973C-072E-4A82-B7A4-55B6D7F4AE14}</Project>
+      <Project>{68D4C0C2-1B0C-8846-417D-E12DA3F8C1A3}</Project>
       <Name>FMODUnityResonance</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnity.csproj">
-      <Project>{CE621647-F480-8527-4F0E-52CB664A7EE3}</Project>
+      <Project>{0AE69F8C-C74E-946D-BC12-33302420BAF2}</Project>
       <Name>FMODUnity</Name>
     </ProjectReference>
     <ProjectReference Include="FMODUnityResonanceEditor.csproj">
-      <Project>{230A0CB2-95C8-777C-1C01-01BEDE5354BE}</Project>
+      <Project>{2AA632CB-11EC-8387-17A0-A66E9EDF512C}</Project>
       <Name>FMODUnityResonanceEditor</Name>
     </ProjectReference>
   </ItemGroup>

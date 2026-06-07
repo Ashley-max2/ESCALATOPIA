@@ -8348,6 +8348,7 @@ GameObject:
   - component: {fileID: 1495863462}
   - component: {fileID: 1495863463}
   - component: {fileID: 1495863464}
+  - component: {fileID: 1495863465}
   m_Layer: 0
   m_Name: BossLevitante
   m_TagString: Boss
@@ -8457,51 +8458,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63d226c5a0d7b49499102ca05a5666a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objetivoFinal: {fileID: 1586936291}
+  bossGroundAI: {fileID: 1495863465}
   bossRockThrower: {fileID: 1721597916}
-  flySpeed: 3
-  flyCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  minFlyDuration: 2
-  hoverAmplitude: 0.25
-  hoverFrequency: 1.2
-  swayAmplitude: 0.08
-  swayFrequency: 0.8
-  rotationSpeed: 4
-  tiltAmplitude: 4
-  tiltFrequency: 0.6
-  levitateAnimBool: IsLevitating
-  arriveAnimTrigger: Arrive
-  activationDelay: 0.5
   onActivated:
     m_PersistentCalls:
       m_Calls: []
-  onFlightStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onArrived:
+  onDeactivated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!54 &1495863462
@@ -8529,7 +8491,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &1495863463
 MonoBehaviour:
@@ -8583,6 +8545,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.9591675, y: 0.19625092, z: 5.309372}
   m_Center: {x: 0.4997635, y: -0.90187454, z: -0.1453476}
+--- !u!114 &1495863465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495863455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8463b22b14162448a45f6d7a6662b6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {fileID: 1586936291}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 512
+  climbableMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  walkSpeed: 3
+  runSpeed: 6
+  climbSpeed: 2.5
+  hookSpeed: 14
+  jumpUpForce: 9
+  jumpForwardForce: 5
+  wallDetectDist: 1.6
+  gapDetectDist: 1.2
+  groundCheckDist: 0.35
+  arrivalRadius: 1.2
+  hookRange: 25
+  maxWalkableSlope: 45
+  planInterval: 0.35
 --- !u!1001 &1524106168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11448,10 +11442,10 @@ MonoBehaviour:
   spreadAngle: 0
   facePlayer: 1
   rotationSpeed: 4
-  knockdownImpulse: 10
-  pushForce: 5
-  slowMultiplier: 0.25
-  slowDuration: 3
+  knockdownImpulse: 1
+  pushForce: 1
+  slowMultiplier: 0.1
+  slowDuration: 1
   rockLifetime: 10
   rockDestroyDelay: 3
   throwAnimTrigger: Throw
