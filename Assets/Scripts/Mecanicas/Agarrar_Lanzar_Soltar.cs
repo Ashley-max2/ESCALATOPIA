@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using FMODUnity;
 
 public class AgarrarLanzarSoltar : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class AgarrarLanzarSoltar : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private PlayerInputHandler inputHandler;
+
+    [Header("Audio")]
+    [SerializeField] private EventReference throwSound;
 
     private GameObject objetoActual;
     private Rigidbody rbActual;
@@ -113,6 +117,9 @@ public class AgarrarLanzarSoltar : MonoBehaviour
             direccion * fuerzaLanzamiento * 1.7f,
             ForceMode.Impulse
         );
+
+        if (!throwSound.IsNull)
+            RuntimeManager.PlayOneShot(throwSound, transform.position);
 
         // activar l�gica del barril
         ThrownBox thrown = objetoActual.GetComponent<ThrownBox>();
