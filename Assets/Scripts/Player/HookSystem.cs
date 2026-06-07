@@ -22,6 +22,8 @@ public class HookSystem : MonoBehaviour
 
     [SerializeField] private float hookRange = 30f;
     [SerializeField] private float hookSpeed = 40f;
+    public float HookSpeed => hookSpeed;
+    public void SetHookSpeed(float speed) => hookSpeed = speed;
     [SerializeField] private float pullObjectStopDistance = 1.5f; // distancia a la que el objeto se suelta
 
     [SerializeField] private HookMode currentMode = HookMode.PullPlayer;

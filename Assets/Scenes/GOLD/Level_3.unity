@@ -1751,6 +1751,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 49e2f66f937af3546b11277daddf6b0e, type: 3}
   m_PrefabInstance: {fileID: 424912467}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &432058465 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7193054449965769471, guid: bca367292d3e223468c4f6435ac5b2a9, type: 3}
+  m_PrefabInstance: {fileID: 1140030144}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &455726526
 GameObject:
   m_ObjectHideFlags: 0
@@ -4233,7 +4238,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1774697536499194723, guid: 2f57b399b656cbc4ab4af4b92bb88803, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1771899566}
   m_SourcePrefab: {fileID: 100100000, guid: 2f57b399b656cbc4ab4af4b92bb88803, type: 3}
 --- !u!4 &807205739 stripped
 Transform:
@@ -5920,13 +5928,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7193054449965769471, guid: bca367292d3e223468c4f6435ac5b2a9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1140030148}
   m_SourcePrefab: {fileID: 100100000, guid: bca367292d3e223468c4f6435ac5b2a9, type: 3}
 --- !u!4 &1140030145 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4924374561975938294, guid: bca367292d3e223468c4f6435ac5b2a9, type: 3}
   m_PrefabInstance: {fileID: 1140030144}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &1140030148
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432058465}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8208216923816387834, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
 --- !u!1001 &1147612886
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8425,7 +8458,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objetivoFinal: {fileID: 1586936291}
-  bossBowler: {fileID: 1721597914}
+  bossRockThrower: {fileID: 1721597916}
   flySpeed: 3
   flyCurve:
     serializedVersion: 2
@@ -8462,8 +8495,6 @@ MonoBehaviour:
   levitateAnimBool: IsLevitating
   arriveAnimTrigger: Arrive
   activationDelay: 0.5
-  activateBowlerOnStart: 1
-  activateBowlerOnArrival: 0
   onActivated:
     m_PersistentCalls:
       m_Calls: []
@@ -11271,8 +11302,8 @@ GameObject:
   - component: {fileID: 1721597912}
   - component: {fileID: 1721597911}
   - component: {fileID: 1721597910}
-  - component: {fileID: 1721597914}
   - component: {fileID: 1721597915}
+  - component: {fileID: 1721597916}
   m_Layer: 0
   m_Name: BossBowler
   m_TagString: Untagged
@@ -11369,39 +11400,6 @@ Transform:
   - {fileID: 424912468}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1721597914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1721597909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 481d69cf758678c4e85377ca19c3035d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rockPrefab: {fileID: 1765281609126774420, guid: 506516c5ae9f8934695fe52cd9a5381c, type: 3}
-  throwPoint: {fileID: 1721597913}
-  playerTransform: {fileID: 608335586}
-  throwInterval: 2.5
-  throwForce: 50
-  aimHeightOffset: 1
-  spreadAngle: 5
-  knockdownDistance: 1
-  knockdownImpulse: 8
-  slowMultiplier: 0.35
-  slowDuration: 3
-  rockLifetime: 8
-  rotationSpeed: 5
-  facePlayer: 1
-  throwAnimTrigger: Throw
-  onActivated:
-    m_PersistentCalls:
-      m_Calls: []
-  onRockThrown:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!54 &1721597915
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11429,6 +11427,43 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &1721597916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721597909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a9071063723fab42941f46c8ea1d08f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rockPrefab: {fileID: 1765281609126774420, guid: 506516c5ae9f8934695fe52cd9a5381c, type: 3}
+  throwPoint: {fileID: 1721597913}
+  playerTransform: {fileID: 608335586}
+  throwInterval: 4
+  throwForce: 120
+  aimHeightOffset: 1.5
+  spreadAngle: 0
+  facePlayer: 1
+  rotationSpeed: 4
+  knockdownImpulse: 10
+  pushForce: 5
+  slowMultiplier: 0.35
+  slowDuration: 3
+  rockLifetime: 10
+  rockDestroyDelay: 3
+  throwAnimTrigger: Throw
+  onActivated:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  onRockThrown:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1741769728
 GameObject:
   m_ObjectHideFlags: 0
@@ -11461,6 +11496,33 @@ Transform:
   - {fileID: 467247406}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1771899563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1774697536499194723, guid: 2f57b399b656cbc4ab4af4b92bb88803, type: 3}
+  m_PrefabInstance: {fileID: 807205738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1771899566
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771899563}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 9123159763824557454, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
 --- !u!1001 &1777670213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12875,7 +12937,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossAI: {fileID: 0}
   bossLevitante: {fileID: 1495863461}
-  bossBowler: {fileID: 1721597914}
   npcInteractable: {fileID: 1495863463}
   finalObject: {fileID: 1586936292}
   bossRigidbody: {fileID: 1495863462}

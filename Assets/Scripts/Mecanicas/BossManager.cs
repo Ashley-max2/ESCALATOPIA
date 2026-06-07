@@ -9,9 +9,6 @@ public class BossManager : MonoBehaviour
     [Tooltip("El Boss Levitante (asignar si la carrera es contra él en lugar de la IA terrestre).")]
     public BossLevitante bossLevitante;
 
-    [Tooltip("El Boss Bowler (asignar si hay alguien lanzando rocas en esta carrera).")]
-    public BossBowler bossBowler;
-
     [Tooltip("El NPC con el que se interactúa para iniciar la carrera.")]
     public NPCInteractable npcInteractable;
 
@@ -76,11 +73,6 @@ public class BossManager : MonoBehaviour
             bossAI.enabled = true; // Activa la IA
         }
 
-        if (bossBowler != null)
-        {
-            bossBowler.Activate();
-        }
-
         // "Aquí se activara el objeto final."
         if (finalObject != null)
         {
@@ -96,9 +88,6 @@ public class BossManager : MonoBehaviour
             bossLevitante.ResetBoss();
         else if (bossAI != null)
             bossAI.enabled = false;
-
-        if (bossBowler != null)
-            bossBowler.Deactivate();
 
         if (bossRigidbody != null)
         {
@@ -144,11 +133,6 @@ public class BossManager : MonoBehaviour
         else if (bossAI != null)
         {
             bossAI.enabled = false; 
-        }
-
-        if (bossBowler != null)
-        {
-            bossBowler.Deactivate();
         }
 
         // El objeto final se apaga hasta que vuelvan a correr

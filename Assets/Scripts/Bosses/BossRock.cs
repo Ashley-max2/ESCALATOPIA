@@ -2,17 +2,17 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Proyectil de roca lanzado por BossBowler.
+/// Proyectil de roca lanzado por BossRockThrower.
 /// Al impactar al player:
-///   · Lo empuja 1 metro hacia abajo (knockdown)
+///   · Lo empuja hacia abajo (knockdown)
 ///   · Le aplica una ralentización durante unos segundos
-/// Todos los valores son editables en el Inspector o configurables por BossBowler.
+/// Todos los valores son editables en el Inspector o configurables por BossRockThrower.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class BossRock : MonoBehaviour
 {
     // ─────────────────────────────────────────────────────────────────────────
-    //  PARÁMETROS EDITABLES (rellenados desde BossBowler al instanciar)
+    //  PARÁMETROS EDITABLES (rellenados desde BossRockThrower al instanciar)
     // ─────────────────────────────────────────────────────────────────────────
     [Header("── Knockdown ──")]
     [Tooltip("Metros que cae el player al ser golpeado.")]

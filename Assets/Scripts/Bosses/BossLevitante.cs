@@ -8,12 +8,9 @@ using UnityEngine.Events;
 ///
 /// Setup en escena:
 ///   · Asignar ObjetivoFinal (Transform vacío en la posición de llegada)
-///   · Asignar BossBowler (para activarlo junto con este boss)
+///   · Asignar BossRockThrower (opcional, se activa junto con el boss)
 ///   · En CharacterDialogue.onInitialDialogueFinished (o NPCInteractable.onAllDialogueFinished)
 ///     conectar → BossLevitante.Activate()
-///
-/// Opcionalmente también conectar → BossBowler.Activate() en el mismo evento
-/// si quieres que ambos se activen a la vez.
 /// </summary>
 public class BossLevitante : MonoBehaviour
 {
@@ -24,8 +21,8 @@ public class BossLevitante : MonoBehaviour
     [Tooltip("Transform destino al que vuela el boss. Crea un GameObject vacío en la escena y asígnalo aquí.")]
     public Transform objetivoFinal;
 
-    [Tooltip("BossBowler a activar automáticamente junto con este boss. Puede dejarse vacío si lo activas por separado desde el diálogo.")]
-    public BossBowler bossBowler;
+    [Tooltip("BossRockThrower a activar automáticamente junto con este boss. Puede dejarse vacío si no hay lanzador de rocas.")]
+    public BossRockThrower bossRockThrower;
 
     // ─────────────────────────────────────────────────────────────────────────
     //  MOVIMIENTO
@@ -86,12 +83,6 @@ public class BossLevitante : MonoBehaviour
     [Tooltip("Segundos de retraso entre el fin del diálogo y el inicio del vuelo.")]
     public float activationDelay = 0.5f;
 
-    [Tooltip("Si es true, activa el BossBowler automáticamente al empezar a volar.")]
-    public bool activateBowlerOnStart = true;
-
-    [Tooltip("Si es true, el BossBowler también se activa cuando el Levitante llega a ObjetivoFinal.")]
-    public bool activateBowlerOnArrival = false;
-
     // ─────────────────────────────────────────────────────────────────────────
     //  EVENTOS
     // ─────────────────────────────────────────────────────────────────────────
@@ -142,8 +133,8 @@ public class BossLevitante : MonoBehaviour
         _isActive = true;
         onActivated?.Invoke();
 
-        if (activateBowlerOnStart && bossBowler != null)
-            bossBowler.Activate();
+        if (bossRockThrower != null)
+            bossRockThrower.Activate();
 
         StartCoroutine(ActivationSequence());
         Debug.Log("[BossLevitante] Activado.");
@@ -166,10 +157,8 @@ public class BossLevitante : MonoBehaviour
         _startPosition = _initialPosition;
         _hasArrived = false;
         
-        if (bossBowler != null)
-        {
-            bossBowler.Deactivate();
-        }
+        if (bossRockThrower != null)
+            bossRockThrower.Deactivate();
         
         Debug.Log("[BossLevitante] Reseteado a la posición inicial.");
     }
@@ -239,9 +228,6 @@ public class BossLevitante : MonoBehaviour
             _animator.SetTrigger(arriveAnimTrigger);
 
         onArrived?.Invoke();
-
-        if (activateBowlerOnArrival && bossBowler != null)
-            bossBowler.Activate();
 
         Debug.Log("[BossLevitante] Llegó a ObjetivoFinal.");
     }

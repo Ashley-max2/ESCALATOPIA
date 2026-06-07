@@ -3,81 +3,87 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Boss que lanza rocas al jugador de forma periódica.
-/// Se activa llamando a Activate() desde el UnityEvent de CharacterDialogue / NPCInteractable.
+/// Boss estático que lanza rocas periódicamente hacia el jugador.
+/// Al impactar, la roca hace caer al player y lo ralentiza.
 ///
-/// Setup en escena:
-///   · Asignar rockPrefab (debe tener BossRock + Rigidbody + Collider)
-///   · Asignar throwPoint (Transform hijo desde donde salen las rocas)
-///   · Asignar playerTransform (o dejar vacío para buscarlo por tag al activar)
+/// Setup mínimo en Inspector:
+///   · rockPrefab  → Prefab con RockProjectile + Rigidbody + Collider esférico
+///   · throwPoint  → Transform hijo desde donde salen las rocas (ej. mano/hombro)
+///
+/// Activación:
+///   · Llama a Activate() desde un UnityEvent, NPCInteractable, BossManager, etc.
+///   · Llama a Deactivate() para detenerlo (al reiniciar carrera, etc.)
 /// </summary>
-public class BossBowler : MonoBehaviour
+public class BossRockThrower : MonoBehaviour
 {
     // ─────────────────────────────────────────────────────────────────────────
     //  REFERENCIAS
     // ─────────────────────────────────────────────────────────────────────────
     [Header("── Referencias ──")]
-    [Tooltip("Prefab de roca a lanzar. Necesita el componente BossRock.")]
+    [Tooltip("Prefab de la roca. Debe tener el componente RockProjectile.")]
     public GameObject rockPrefab;
 
-    [Tooltip("Punto de origen del lanzamiento (hijo del boss). Si no se asigna, usa la posición del boss.")]
+    [Tooltip("Punto de origen del lanzamiento (Transform hijo del boss, ej. mano).")]
     public Transform throwPoint;
 
-    [Tooltip("Transform del jugador. Si no se asigna, se busca automáticamente por tag 'Player' al activarse.")]
+    [Tooltip("Transform del jugador. Si no se asigna se busca automáticamente por tag 'Player'.")]
     public Transform playerTransform;
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  PARÁMETROS DE LANZAMIENTO
+    //  LANZAMIENTO
     // ─────────────────────────────────────────────────────────────────────────
     [Header("── Lanzamiento ──")]
-    [Tooltip("Segundos entre lanzamientos.")]
-    public float throwInterval = 5f;
+    [Tooltip("Segundos entre cada lanzamiento.")]
+    public float throwInterval = 4f;
 
-    [Tooltip("Fuerza con la que sale la roca.")]
-    public float throwForce = 14f;
+    [Tooltip("Fuerza de lanzamiento de la roca.")]
+    public float throwForce = 16f;
 
     [Tooltip("Offset de altura sobre el jugador para apuntar (evita disparar al suelo).")]
-    public float aimHeightOffset = 1f;
+    public float aimHeightOffset = 1.2f;
 
-    [Tooltip("Ángulo de dispersión aleatoria (grados). 0 = apunta exacto.")]
+    [Tooltip("Ángulo de dispersión aleatoria (grados). 0 = apunta exacto al player.")]
     [Range(0f, 45f)]
-    public float spreadAngle = 5f;
+    public float spreadAngle = 8f;
+
+    [Tooltip("Si es true, el boss rota para mirar al jugador mientras está activo.")]
+    public bool facePlayer = true;
+
+    [Tooltip("Velocidad de rotación hacia el jugador (grados/seg).")]
+    public float rotationSpeed = 4f;
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  PARÁMETROS DEL PROYECTIL (se copian a BossRock al instanciar)
+    //  EFECTO EN EL PLAYER
     // ─────────────────────────────────────────────────────────────────────────
-    [Header("── Efecto en el player ──")]
-    [Tooltip("Metros que cae el jugador al recibir el impacto.")]
-    public float knockdownDistance = 1f;
+    [Header("── Efecto en el Player ──")]
+    [Tooltip("Impulso hacia abajo al recibir el impacto (hace que caiga).")]
+    public float knockdownImpulse = 10f;
 
-    [Tooltip("Fuerza de impulso hacia abajo al recibir el impacto.")]
-    public float knockdownImpulse = 8f;
+    [Tooltip("Fuerza de empuje horizontal al recibir la roca.")]
+    public float pushForce = 5f;
 
-    [Tooltip("Multiplicador de velocidad durante el slow (0.35 = 35% de velocidad).")]
+    [Tooltip("Multiplicador de velocidad del slow (0.35 = 35% de la velocidad normal).")]
     [Range(0.05f, 1f)]
     public float slowMultiplier = 0.35f;
 
     [Tooltip("Duración del efecto de ralentización en segundos.")]
     public float slowDuration = 3f;
 
-    [Tooltip("Tiempo en segundos antes de que la roca se destruya si no impacta nada.")]
-    public float rockLifetime = 8f;
-
     // ─────────────────────────────────────────────────────────────────────────
-    //  ROTACIÓN HACIA EL PLAYER
+    //  PROYECTIL
     // ─────────────────────────────────────────────────────────────────────────
-    [Header("── Comportamiento ──")]
-    [Tooltip("Velocidad a la que el boss rota para mirar al jugador (grados/seg).")]
-    public float rotationSpeed = 5f;
+    [Header("── Proyectil ──")]
+    [Tooltip("Segundos hasta que la roca se destruye si no golpea nada.")]
+    public float rockLifetime = 10f;
 
-    [Tooltip("Si está activo, el boss gira para encarar al jugador mientras lanza.")]
-    public bool facePlayer = true;
+    [Tooltip("Segundos hasta que la roca desaparece tras colisionar.")]
+    public float rockDestroyDelay = 3f;
 
     // ─────────────────────────────────────────────────────────────────────────
     //  ANIMACIÓN
     // ─────────────────────────────────────────────────────────────────────────
     [Header("── Animación ──")]
-    [Tooltip("Nombre del trigger de animación de lanzamiento (opcional).")]
+    [Tooltip("Nombre del trigger de lanzamiento en el Animator (dejar vacío para ignorar).")]
     public string throwAnimTrigger = "Throw";
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -85,14 +91,15 @@ public class BossBowler : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
     [Header("── Eventos ──")]
     public UnityEvent onActivated;
+    public UnityEvent onDeactivated;
     public UnityEvent onRockThrown;
 
     // ─────────────────────────────────────────────────────────────────────────
     //  PRIVADOS
     // ─────────────────────────────────────────────────────────────────────────
-    private bool _isActive = false;
-    private Animator _animator;
+    private bool      _isActive    = false;
     private Coroutine _throwRoutine;
+    private Animator  _animator;
 
     // ─────────────────────────────────────────────────────────────────────────
     private void Awake()
@@ -102,52 +109,51 @@ public class BossBowler : MonoBehaviour
 
     private void Update()
     {
-        if (!_isActive || playerTransform == null) return;
+        if (!_isActive || !facePlayer || playerTransform == null) return;
 
-        if (facePlayer)
+        Vector3 dir = playerTransform.position - transform.position;
+        dir.y = 0f;
+        if (dir.sqrMagnitude > 0.01f)
         {
-            Vector3 dir = playerTransform.position - transform.position;
-            dir.y = 0f;
-            if (dir.sqrMagnitude > 0.01f)
-            {
-                Quaternion target = Quaternion.LookRotation(dir);
-                transform.rotation = Quaternion.Slerp(transform.rotation, target,
-                    rotationSpeed * Time.deltaTime);
-            }
+            Quaternion target = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target,
+                rotationSpeed * Time.deltaTime);
         }
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  ACTIVACIÓN (llamar desde UnityEvent del diálogo)
+    //  API PÚBLICA
     // ─────────────────────────────────────────────────────────────────────────
+
     /// <summary>
-    /// Activa el boss. Llámalo desde CharacterDialogue.onInitialDialogueFinished
-    /// o NPCInteractable.onAllDialogueFinished en el Inspector.
+    /// Activa el lanzador. Llámalo desde un UnityEvent, BossManager, etc.
     /// </summary>
     public void Activate()
     {
         if (_isActive) return;
 
-        // Auto-buscar el player si no se asignó
+        // Auto-buscar player si no se asignó
         if (playerTransform == null)
         {
-            var playerObj = GameObject.FindGameObjectWithTag("Player");
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
             if (playerObj != null)
                 playerTransform = playerObj.transform;
             else
             {
-                Debug.LogWarning("[BossBowler] No se encontró el Player en la escena. Asigna playerTransform manualmente.");
+                Debug.LogWarning("[BossRockThrower] No se encontró el Player. Asigna playerTransform en el Inspector.");
                 return;
             }
         }
 
         _isActive = true;
-        onActivated?.Invoke();
         _throwRoutine = StartCoroutine(ThrowLoop());
-        Debug.Log("[BossBowler] Activado. Empezando a lanzar rocas.");
+        onActivated?.Invoke();
+        Debug.Log("[BossRockThrower] Activado.");
     }
 
-    /// <summary>Desactiva el boss y detiene el bucle de lanzamiento.</summary>
+    /// <summary>
+    /// Desactiva el lanzador y detiene el bucle de rocas.
+    /// </summary>
     public void Deactivate()
     {
         _isActive = false;
@@ -156,6 +162,8 @@ public class BossBowler : MonoBehaviour
             StopCoroutine(_throwRoutine);
             _throwRoutine = null;
         }
+        onDeactivated?.Invoke();
+        Debug.Log("[BossRockThrower] Desactivado.");
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -163,61 +171,49 @@ public class BossBowler : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
     private IEnumerator ThrowLoop()
     {
-        Debug.Log("[BossBowler] ThrowLoop iniciado. Esperando cada " + throwInterval + " segundos.");
         while (_isActive)
         {
             yield return new WaitForSeconds(throwInterval);
+
             if (_isActive && playerTransform != null)
-            {
-                Debug.Log("[BossBowler] Preparando para lanzar roca...");
                 ThrowRock();
-            }
-            else
-            {
-                if (!_isActive)
-                    Debug.Log("[BossBowler] ThrowLoop: _isActive es false");
-                if (playerTransform == null)
-                    Debug.Log("[BossBowler] ThrowLoop: playerTransform es null");
-            }
         }
-        Debug.Log("[BossBowler] ThrowLoop finalizado.");
     }
 
     private void ThrowRock()
     {
         if (rockPrefab == null)
         {
-            Debug.LogError("[BossBowler] ERROR: rockPrefab no asignado.");
+            Debug.LogError("[BossRockThrower] rockPrefab no asignado.");
             return;
         }
 
-        Debug.Log("[BossBowler] Lanzando roca desde: " + (throwPoint != null ? throwPoint.position.ToString() : "posición del boss"));
+        // Origen del lanzamiento
+        Vector3 origin = throwPoint != null
+            ? throwPoint.position
+            : transform.position + Vector3.up * 1.5f;
 
-        // Punto de origen
-        Vector3 origin = throwPoint != null ? throwPoint.position : transform.position + Vector3.up * 1.5f;
+        // Dirección hacia el player con offset de altura y dispersión
+        Vector3 aimTarget = playerTransform.position + Vector3.up * aimHeightOffset;
+        Vector3 baseDir   = (aimTarget - origin).normalized;
+        Vector3 dir       = ApplySpread(baseDir, spreadAngle);
 
-        // Dirección base hacia el player (con offset de altura)
-        Vector3 target  = playerTransform.position + Vector3.up * aimHeightOffset;
-        Vector3 baseDir = (target - origin).normalized;
-
-        // Aplicar dispersión aleatoria
-        Vector3 dir = ApplySpread(baseDir, spreadAngle);
-
-        // Instanciar roca
+        // Instanciar la roca
         GameObject rockObj = Instantiate(rockPrefab, origin, Quaternion.LookRotation(dir));
 
-        // Configurar parámetros en BossRock
-        BossRock rock = rockObj.GetComponent<BossRock>();
+        // Configurar parámetros del proyectil
+        RockProjectile rock = rockObj.GetComponent<RockProjectile>();
         if (rock != null)
         {
-            rock.knockdownDistance = knockdownDistance;
             rock.knockdownImpulse  = knockdownImpulse;
+            rock.pushForce         = pushForce;
             rock.slowMultiplier    = slowMultiplier;
             rock.slowDuration      = slowDuration;
             rock.lifetime          = rockLifetime;
+            rock.destroyDelay      = rockDestroyDelay;
         }
 
-        // Aplicar fuerza
+        // Aplicar fuerza a la roca
         Rigidbody rb = rockObj.GetComponent<Rigidbody>();
         if (rb != null)
             rb.AddForce(dir * throwForce, ForceMode.Impulse);
@@ -227,15 +223,17 @@ public class BossBowler : MonoBehaviour
             _animator.SetTrigger(throwAnimTrigger);
 
         onRockThrown?.Invoke();
-        Debug.Log($"[BossBowler] Roca lanzada hacia {playerTransform.name}.");
+        Debug.Log($"[BossRockThrower] Roca lanzada hacia {playerTransform.name}.");
     }
 
-    /// <summary>Añade dispersión aleatoria a una dirección.</summary>
     private Vector3 ApplySpread(Vector3 baseDir, float maxAngle)
     {
         if (maxAngle <= 0f) return baseDir;
-        float angle = Random.Range(-maxAngle, maxAngle);
-        return Quaternion.AngleAxis(angle, Vector3.up) * baseDir;
+
+        // Dispersión aleatoria en yaw y pitch
+        float yaw   = Random.Range(-maxAngle, maxAngle);
+        float pitch = Random.Range(-maxAngle * 0.5f, maxAngle * 0.5f);
+        return Quaternion.Euler(pitch, yaw, 0f) * baseDir;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -243,12 +241,16 @@ public class BossBowler : MonoBehaviour
     // ─────────────────────────────────────────────────────────────────────────
     private void OnDrawGizmosSelected()
     {
+        Vector3 origin = throwPoint != null
+            ? throwPoint.position
+            : transform.position + Vector3.up * 1.5f;
+
         Gizmos.color = Color.red;
-        Vector3 origin = throwPoint != null ? throwPoint.position : transform.position + Vector3.up * 1.5f;
-        Gizmos.DrawWireSphere(origin, 0.2f);
+        Gizmos.DrawWireSphere(origin, 0.25f);
 
         if (playerTransform != null)
         {
+            Gizmos.color = new Color(1f, 0.4f, 0f);
             Gizmos.DrawLine(origin, playerTransform.position + Vector3.up * aimHeightOffset);
         }
     }

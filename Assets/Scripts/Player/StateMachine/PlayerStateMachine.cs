@@ -42,6 +42,7 @@ public class PlayerStateMachine : MonoBehaviour
     public float RunSpeed => runSpeed;
     public void SetWalkSpeed(float speed) => walkSpeed = speed;
     public void SetRunSpeed(float speed) => runSpeed = speed;
+    public void SetClimbSpeed(float speed) => climbSpeed = speed;
     public float RotationSpeed => rotationSpeed;
     public float Acceleration => acceleration;
     public float Deceleration => deceleration;

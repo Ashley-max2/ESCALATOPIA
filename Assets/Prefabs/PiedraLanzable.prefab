@@ -13,13 +13,13 @@ GameObject:
   - component: {fileID: 6715095607322401696}
   - component: {fileID: 8459874812634619070}
   - component: {fileID: 1145908818368221614}
-  - component: {fileID: 5040663065674912079}
+  - component: {fileID: 8637880771474278886}
   m_Layer: 0
   m_Name: PiedraLanzable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &364711130600105435
 Transform:
@@ -134,7 +134,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5040663065674912079
+--- !u!114 &8637880771474278886
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,14 +143,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1765281609126774420}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c49aed5662d2a6c4bad684c5dd03e489, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f4b43e51b4e65f489b918e5a0393823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockdownDistance: 1
-  knockdownImpulse: 8
+  knockdownImpulse: 10
+  pushForce: 5
   slowMultiplier: 0.35
   slowDuration: 3
-  lifetime: 8
-  enableTrail: 1
-  pushForce: 6
-  collisionDestroyDelay: 5
+  lifetime: 10
+  destroyDelay: 3
