@@ -12,6 +12,9 @@ public class BossManager : MonoBehaviour
     [Tooltip("El NPC con el que se interactúa para iniciar la carrera (Boss1).")]
     public NPCInteractable npcInteractable;
 
+    [Tooltip("CharacterDialogue del Boss1. Usar junto a npcInteractable para resetear diálogos.")]
+    public CharacterDialogue characterDialogue;
+
     [Tooltip("Diálogo del Boss2. Usar en vez de npcInteractable si no hay NPCInteractable.")]
     public Boss2Dialogue boss2Dialogue;
 
@@ -65,6 +68,10 @@ public class BossManager : MonoBehaviour
             npcInteractable.isLocked = true;
             npcInteractable.ForceReset();
             npcInteractable.enabled = false;
+        }
+        if (characterDialogue != null)
+        {
+            characterDialogue.SetInteractionEnabled(false);
         }
         if (boss2Dialogue != null)
         {
@@ -130,6 +137,11 @@ public class BossManager : MonoBehaviour
             npcInteractable.isLocked = false;
             npcInteractable.hasFinishedDialogue = false;
             npcInteractable.enabled = true;
+        }
+        if (characterDialogue != null)
+        {
+            characterDialogue.AllowRaceRetry();
+            characterDialogue.SetInteractionEnabled(true);
         }
         if (boss2Dialogue != null)
         {

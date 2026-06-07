@@ -293,7 +293,7 @@ public class NPCInteractable : MonoBehaviour
         if (targetTransform == null)
             return;
 
-        Vector3 direction = targetTransform.position - promptE.transform.position;
+        Vector3 direction = promptE.transform.position - targetTransform.position;
 
         if (billboardOnlyOnY)
             direction.y = 0f;

@@ -43,6 +43,8 @@ public class CharacterDialogue : MonoBehaviour
     [Header("Prompt Billboard")]
     [SerializeField] private bool billboardPrompt = true;
     [SerializeField] private bool billboardOnlyOnY = true;
+    [Tooltip("Activar si el prompt [E] aparece invertido/al revés en la escena.")]
+    [SerializeField] private bool flipBillboard = false;
 
     [Header("Dialogue Behaviour")]
     [SerializeField] private float autoAdvanceDelay = 1.25f;
@@ -257,7 +259,7 @@ public class CharacterDialogue : MonoBehaviour
         if (targetTransform == null)
             return;
 
-        Vector3 direction = targetTransform.position - promptE.transform.position;
+        Vector3 direction = promptE.transform.position - targetTransform.position;
 
         if (billboardOnlyOnY)
             direction.y = 0f;
@@ -265,7 +267,8 @@ public class CharacterDialogue : MonoBehaviour
         if (direction.sqrMagnitude < 0.0001f)
             return;
 
-        promptE.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        Vector3 billboardDir = flipBillboard ? -direction.normalized : direction.normalized;
+        promptE.transform.rotation = Quaternion.LookRotation(billboardDir, Vector3.up);
 
         // Si la escala X del mundo es negativa (padre invertido), compensar para que el texto no salga al revés
         if (promptE.transform.lossyScale.x < 0f)

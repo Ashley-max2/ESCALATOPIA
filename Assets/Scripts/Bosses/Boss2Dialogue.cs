@@ -27,6 +27,9 @@ public class Boss2Dialogue : MonoBehaviour
     [SerializeField] private float        typingSpeed      = 0.04f;
     [SerializeField] private float        autoAdvanceDelay = 1.25f;
     [SerializeField] private bool         billboardPrompt  = true;
+    [SerializeField] private bool         billboardOnlyY   = true;
+    [Tooltip("Activar si el prompt [E] aparece invertido/al revés.")]
+    [SerializeField] private bool         flipBillboard    = false;
 
     // ── Diálogos ────────────────────────────────────────────────────
     [Header("Diálogos")]
@@ -326,8 +329,12 @@ public class Boss2Dialogue : MonoBehaviour
         if (!billboardPrompt || promptE == null || !promptE.activeSelf) return;
         Transform cam = Camera.main != null ? Camera.main.transform : null;
         if (cam == null) return;
-        Vector3 dir = cam.position - promptE.transform.position;
-        dir.y = 0f;
+
+        Vector3 dir = flipBillboard
+            ? promptE.transform.position - cam.position
+            : cam.position - promptE.transform.position;
+
+        if (billboardOnlyY) dir.y = 0f;
         if (dir.sqrMagnitude > 0.0001f)
             promptE.transform.rotation = Quaternion.LookRotation(dir.normalized, Vector3.up);
     }
