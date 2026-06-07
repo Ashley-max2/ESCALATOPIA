@@ -3,6 +3,10 @@ using DG.Tweening;
 
 public class HookAim : MonoBehaviour
 {
+    [Header("=== SETTINGS ===")]
+    [Tooltip("Si está activo, la mira siempre estará visible en el centro cuando no haya HookPoint.")]
+    public bool alwaysShowReticle = true;
+
     public GrapplingHook grapplingHook;
     public RectTransform miraRectTransform; // Asignar el RectTransform de la mira (punteia)
     private Vector2 centerPosition;
@@ -60,8 +64,16 @@ public class HookAim : MonoBehaviour
                 miraTween.Kill();
                 miraTween = null;
             }
-            // Mantener la mira visible en el centro cuando no hay HookPoint válido.
-            miraRectTransform.localScale = miraOriginalScale;
+
+            if (alwaysShowReticle)
+            {
+                // Mantener la mira visible en el centro cuando no hay HookPoint válido.
+                miraRectTransform.localScale = miraOriginalScale;
+            }
+            else
+            {
+                miraRectTransform.localScale = Vector3.zero;
+            }
         }
     }
 }
