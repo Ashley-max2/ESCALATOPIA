@@ -1,8 +1,12 @@
 using UnityEngine;
+using FMODUnity;
 
 public class LlaveRecogible : MonoBehaviour
 {
     [SerializeField] private string idLlave;
+
+    [Header("Audio")]
+    [SerializeField] private EventReference pickupSound;
 
     [SerializeField] private ParticleSystem particulasLuz;
 
@@ -24,6 +28,10 @@ public class LlaveRecogible : MonoBehaviour
             {
                 InventarioLlaves.instancia.AgregarLlave(idLlave);
             }
+
+            // Sonido de pickup
+            if (!pickupSound.IsNull)
+                RuntimeManager.PlayOneShot(pickupSound, transform.position);
 
             // Desaparecer visualmente
             foreach (Renderer r in renderers)

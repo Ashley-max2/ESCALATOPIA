@@ -1911,6 +1911,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BarrilSorpresa (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4814904018499912245, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5918465993006711876, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
       propertyPath: idLlave
       value: Llave2
@@ -1942,6 +1946,26 @@ PrefabInstance:
     - target: {fileID: 8110937547200163117, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
       propertyPath: idLlave
       value: Llave2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110937547200163117, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: pickupSound.Path
+      value: event:/SFX/PickUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110937547200163117, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: pickupSound.Guid.Data1
+      value: -131535698
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110937547200163117, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: pickupSound.Guid.Data2
+      value: 1232105282
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110937547200163117, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: pickupSound.Guid.Data3
+      value: 1303938720
+      objectReference: {fileID: 0}
+    - target: {fileID: 8110937547200163117, guid: 7605ace590b0c584ea9914c5fb6571f4, type: 3}
+      propertyPath: pickupSound.Guid.Data4
+      value: -1791557098
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2230,6 +2254,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   haveHookManager: {fileID: 841340534}
+  pickupSound:
+    Guid:
+      Data1: -131535698
+      Data2: 1232105282
+      Data3: 1303938720
+      Data4: -1791557098
+    Path: event:/SFX/PickUp
   meshes:
   - {fileID: 1974301965}
   - {fileID: 1215640035}
@@ -5182,6 +5213,26 @@ PrefabInstance:
       propertyPath: objetoAActivar
       value: 
       objectReference: {fileID: 432561922}
+    - target: {fileID: 2711779733564664482, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: pickupSound.Path
+      value: event:/SFX/PickUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2711779733564664482, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: pickupSound.Guid.Data1
+      value: -131535698
+      objectReference: {fileID: 0}
+    - target: {fileID: 2711779733564664482, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: pickupSound.Guid.Data2
+      value: 1232105282
+      objectReference: {fileID: 0}
+    - target: {fileID: 2711779733564664482, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: pickupSound.Guid.Data3
+      value: 1303938720
+      objectReference: {fileID: 0}
+    - target: {fileID: 2711779733564664482, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
+      propertyPath: pickupSound.Guid.Data4
+      value: -1791557098
+      objectReference: {fileID: 0}
     - target: {fileID: 5926126324586821445, guid: 8f970da4eb540e5459dd98929eaee4cf, type: 3}
       propertyPath: m_Name
       value: PiezaMecanismoB
@@ -7665,6 +7716,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 267.51
       objectReference: {fileID: 0}
+    - target: {fileID: 6583741724612954070, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: looping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6624907220104392167, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       propertyPath: m_LocalPosition.y
       value: 15.146437
@@ -7680,6 +7735,26 @@ PrefabInstance:
     - target: {fileID: 7566057541882259662, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       propertyPath: idLlave
       value: Llave1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566057541882259662, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: pickupSound.Path
+      value: event:/SFX/PickUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566057541882259662, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: pickupSound.Guid.Data1
+      value: -131535698
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566057541882259662, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: pickupSound.Guid.Data2
+      value: 1232105282
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566057541882259662, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: pickupSound.Guid.Data3
+      value: 1303938720
+      objectReference: {fileID: 0}
+    - target: {fileID: 7566057541882259662, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+      propertyPath: pickupSound.Guid.Data4
+      value: -1791557098
       objectReference: {fileID: 0}
     - target: {fileID: 7583426696719732548, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       propertyPath: m_LocalScale.x
@@ -7938,6 +8013,25 @@ PrefabInstance:
     - {fileID: 9174238741146334279, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
     - {fileID: 2391475890729221618, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
     - {fileID: 1762111354313427338, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 2278079889121172283, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 883661701404466965, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 4454800037671428454, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 7806437847131457508, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 332160231738937777, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 2249647602853267614, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 1164175483251182445, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 6650665071221600125, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 1540469006382334447, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 5567274156848007492, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 7137590952131120934, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 7447881166993481327, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 7946203051722992326, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 7528996439819328294, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 4379550685309225320, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 3665282558351176846, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 3029910463951652960, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 640944021744313629, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
+    - {fileID: 5435152311285556392, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8831870831287300300, guid: ac6704dc4eb22a446b5ae90fdc25c479, type: 3}
       insertIndex: 5

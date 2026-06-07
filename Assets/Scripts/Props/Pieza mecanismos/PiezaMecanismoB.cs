@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 public class PiezaMecanismo : MonoBehaviour
 {
     // Indica si el jugador tiene esta pieza
     public bool tieneElJugador = false;
+
+    [Header("Audio")]
+    [SerializeField] private EventReference pickupSound;
 
     [Header("Interacci�n")]
     public float distanciaInteraccion = 3f; // Distancia m�xima del raycast
@@ -55,6 +59,10 @@ public class PiezaMecanismo : MonoBehaviour
         {
             // Marcar que el jugador tiene la pieza
             tieneElJugador = true;
+
+            // Sonido de recogida
+            if (!pickupSound.IsNull)
+                RuntimeManager.PlayOneShot(pickupSound, transform.position);
 
             // Hacer este objeto hijo del jugador
             transform.SetParent(other.transform);

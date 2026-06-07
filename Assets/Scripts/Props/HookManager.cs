@@ -1,8 +1,13 @@
 using UnityEngine;
+using FMODUnity;
 
 public class HookManager : MonoBehaviour
 {
     [SerializeField] private HaveHookManager haveHookManager;
+
+    [Header("Audio")]
+    [SerializeField] private EventReference pickupSound;
+
     public MeshRenderer[] meshes;
     public GameObject objectToDelete1;
     public GameObject objectToDelete2;
@@ -20,6 +25,10 @@ public class HookManager : MonoBehaviour
             // Borrar los otros dos objetos
             Destroy(objectToDelete1);
             Destroy(objectToDelete2);
+
+            // Sonido de recogida
+            if (!pickupSound.IsNull)
+                RuntimeManager.PlayOneShot(pickupSound, transform.position);
 
             // Activar gancho
             haveHookManager.SetHasHook(true);
