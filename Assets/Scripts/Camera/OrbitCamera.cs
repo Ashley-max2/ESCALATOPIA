@@ -33,12 +33,23 @@ public class OrbitCamera : MonoBehaviour
     [Tooltip("Distancia mínima a la que la cámara puede acercarse al personaje (evita entrar en el mesh)")]
     [SerializeField] private float minCameraDistanceFromCharacter = 1.0f;
 
+    [Header("=== CHARACTER VISIBILITY ===")]
+    [Tooltip("Si la distancia real cámara-personaje es menor que esto, se ocultan los renderers del personaje para evitar ver el interior del mesh.")]
+    [SerializeField] private float hideCharacterDistance = 1.8f;
+    [Tooltip("Velocidad de fade al ocultar/mostrar el personaje (alfa del material, si usa shader compatible). Deja a 0 para ocultar instantáneo.")]
+    [SerializeField] private float characterFadeSpeed = 8f;
+
     // Runtime
     private float _currentDistance;
     private float _targetDistance;
     private float _horizontalAngle;
     private float _verticalAngle;
     private Vector3 _smoothedTargetPos;
+
+    // Renderers del personaje que se ocultan cuando la cámara está muy cerca
+    // Solo los que estaban activos al inicio (no reactiva los que ya estaban ocultos)
+    private Renderer[] _characterRenderers;
+    private bool _characterHidden = false;
 
     // Referencia al input handler para saber tipo de mando
     private PlayerInputHandler _inputHandler;
@@ -61,7 +72,18 @@ public class OrbitCamera : MonoBehaviour
         // Excluir el layer del jugador de la máscara de colisión para que la cámara
         // no detecte el collider del propio personaje como obstáculo
         if (target != null)
+        {
             collisionMask &= ~(1 << target.gameObject.layer);
+
+            // Recoger SOLO los renderers que ya estaban activos al inicio
+            // (no tocar los que estaban desactivados, como meshes de debug o colliders visibles)
+            var allRenderers = target.GetComponentsInChildren<Renderer>(includeInactive: true);
+            var activeOnly = new System.Collections.Generic.List<Renderer>();
+            foreach (var r in allRenderers)
+                if (r.enabled && r.gameObject.activeInHierarchy)
+                    activeOnly.Add(r);
+            _characterRenderers = activeOnly.ToArray();
+        }
 
         _currentDistance = defaultDistance;
         _targetDistance = defaultDistance;
@@ -164,6 +186,26 @@ public class OrbitCamera : MonoBehaviour
 
         // Mirar al target
         transform.LookAt(_smoothedTargetPos);
+
+        // Ocultar el personaje si la cámara está demasiado cerca para evitar ver el interior del mesh
+        UpdateCharacterVisibility(actualDistance);
+    }
+
+    private void UpdateCharacterVisibility(float actualDistance)
+    {
+        if (_characterRenderers == null || _characterRenderers.Length == 0) return;
+
+        bool shouldHide = actualDistance < hideCharacterDistance;
+
+        if (shouldHide != _characterHidden)
+        {
+            _characterHidden = shouldHide;
+            foreach (Renderer r in _characterRenderers)
+            {
+                if (r != null)
+                    r.enabled = !shouldHide;
+            }
+        }
     }
 
     private Vector3 GetTargetPosition()
@@ -184,6 +226,18 @@ public class OrbitCamera : MonoBehaviour
         }
 
         return maxDist;
+    }
+
+    private void OnDestroy()
+    {
+        // Al destruir la cámara, asegurarse de que el personaje sea visible
+        if (_characterRenderers != null)
+        {
+            foreach (Renderer r in _characterRenderers)
+            {
+                if (r != null) r.enabled = true;
+            }
+        }
     }
 
     /// <summary>
