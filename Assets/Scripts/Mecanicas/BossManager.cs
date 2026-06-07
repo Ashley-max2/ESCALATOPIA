@@ -9,8 +9,11 @@ public class BossManager : MonoBehaviour
     [Tooltip("El Boss Levitante (asignar si la carrera es contra él en lugar de la IA terrestre).")]
     public BossLevitante bossLevitante;
 
-    [Tooltip("El NPC con el que se interactúa para iniciar la carrera.")]
+    [Tooltip("El NPC con el que se interactúa para iniciar la carrera (Boss1).")]
     public NPCInteractable npcInteractable;
+
+    [Tooltip("Diálogo del Boss2. Usar en vez de npcInteractable si no hay NPCInteractable.")]
+    public Boss2Dialogue boss2Dialogue;
 
     [Tooltip("El objeto final que se activará cuando comience la carrera.")]
     public GameObject finalObject;
@@ -40,10 +43,11 @@ public class BossManager : MonoBehaviour
 
     private void Update()
     {
-        // "hasta que no haya pasado los mensajes del canvas de NPC Interactable el Boss AI Controller este desactivado"
-        if (!raceStarted && npcInteractable != null && npcInteractable.hasFinishedDialogue)
+        if (!raceStarted)
         {
-            StartRace();
+            bool dialogueDone = (npcInteractable != null && npcInteractable.hasFinishedDialogue)
+                             || (boss2Dialogue   != null && boss2Dialogue.hasFinishedDialogue);
+            if (dialogueDone) StartRace();
         }
     }
 
@@ -58,10 +62,14 @@ public class BossManager : MonoBehaviour
         // ¡Así el Boss no desaparece si pusiste el script en el mismo jefe!
         if (npcInteractable != null)
         {
-            // Bloquear permanentemente: ya no responde al player aunque entre en la zona
             npcInteractable.isLocked = true;
             npcInteractable.ForceReset();
             npcInteractable.enabled = false;
+        }
+        if (boss2Dialogue != null)
+        {
+            boss2Dialogue.isLocked = true;
+            boss2Dialogue.SetInteractionEnabled(false);
         }
 
         if (bossLevitante != null)
@@ -117,12 +125,17 @@ public class BossManager : MonoBehaviour
         ApplyBossPhysicsForCurrentPhase();
 
         // Reactivamos el NPC de inicio y reiniciamos sus diálogos
-        // Reactivamos el COMPONENTE NPC de inicio
         if (npcInteractable != null)
         {
-            npcInteractable.isLocked = false;          // permite volver a interactuar
+            npcInteractable.isLocked = false;
             npcInteractable.hasFinishedDialogue = false;
             npcInteractable.enabled = true;
+        }
+        if (boss2Dialogue != null)
+        {
+            boss2Dialogue.isLocked = false;
+            boss2Dialogue.AllowRaceRetry();
+            boss2Dialogue.SetInteractionEnabled(true);
         }
 
         // El Boss espera apagado a que termine el diálogo de nuevo

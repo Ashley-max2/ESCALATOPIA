@@ -21,8 +21,11 @@ public class BossRaceManager : MonoBehaviour
     public SceneChangeTrigger creditSceneChanger;
 
     [Header("Sistema de Diálogos")]
-    [Tooltip("Script CharacterDialogue del personaje para mostrar diálogos de victoria y derrota")]
+    [Tooltip("Script CharacterDialogue del personaje (Boss1).")]
     public CharacterDialogue characterDialogue;
+
+    [Tooltip("Script Boss2Dialogue (Boss2). Usar en vez de characterDialogue.")]
+    public Boss2Dialogue boss2Dialogue;
 
     [Tooltip("Teletransportador de la fogata. Solo se usa cuando el Boss gana y el jugador pierde.")]
     public HazardTeleporter campfireTeleporter;
@@ -37,20 +40,19 @@ public class BossRaceManager : MonoBehaviour
     private void OnEnable()
     {
         if (characterDialogue != null)
-        {
             characterDialogue.onLoseDialogueFinished.AddListener(HandleLoseDialogueFinished);
-        }
+        if (boss2Dialogue != null)
+            boss2Dialogue.onLoseDialogueFinished.AddListener(HandleLoseDialogueFinished);
 
-        // Restaura visibilidad cuando BossManager reactive el gadget via SetActive(true)
         ShowGadget();
     }
 
     private void OnDisable()
     {
         if (characterDialogue != null)
-        {
             characterDialogue.onLoseDialogueFinished.RemoveListener(HandleLoseDialogueFinished);
-        }
+        if (boss2Dialogue != null)
+            boss2Dialogue.onLoseDialogueFinished.RemoveListener(HandleLoseDialogueFinished);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -82,12 +84,8 @@ public class BossRaceManager : MonoBehaviour
             bossTeleporter.ForceTeleport(bossCollider);
         }
 
-        // Mostrar diálogo de derrota
-        // (HandleLoseDialogueFinished llamará a RestartRace cuando termine)
-        if (characterDialogue != null)
-        {
-            characterDialogue.ShowLoseDialogue();
-        }
+        if (characterDialogue != null) characterDialogue.ShowLoseDialogue();
+        else if (boss2Dialogue != null) boss2Dialogue.ShowLoseDialogue();
     }
 
     private void HideGadget()
@@ -119,6 +117,11 @@ public class BossRaceManager : MonoBehaviour
         {
             characterDialogue.AllowRaceRetry();
             characterDialogue.SetInteractionEnabled(true);
+        }
+        if (boss2Dialogue != null)
+        {
+            boss2Dialogue.AllowRaceRetry();
+            boss2Dialogue.SetInteractionEnabled(true);
         }
 
         TeleportPlayerToCheckpoint();
@@ -177,15 +180,9 @@ public class BossRaceManager : MonoBehaviour
         }
 
         // 4. Mostrar diálogo de victoria
-        if (characterDialogue != null)
-        {
-            Debug.Log("[BossRaceManager] Mostrando diálogo de victoria...");
-            characterDialogue.ShowWinDialogue();
-        }
-        else
-        {
-            Debug.LogError("[BossRaceManager] No hay CharacterDialogue asignado.");
-        }
+        if (characterDialogue != null)       characterDialogue.ShowWinDialogue();
+        else if (boss2Dialogue != null)      boss2Dialogue.ShowWinDialogue();
+        else Debug.LogError("[BossRaceManager] No hay CharacterDialogue ni Boss2Dialogue asignado.");
 
         // 5. Hacer el diamante invisible sin desactivar el GameObject completo
         foreach (Renderer r in GetComponentsInChildren<Renderer>())

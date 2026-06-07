@@ -3791,6 +3791,59 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 66.9, y: 65.1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &763114681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 763114682}
+  - component: {fileID: 763114684}
+  m_Layer: 0
+  m_Name: Bossinicial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &763114682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763114681}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 76.08, y: 69.94, z: 82.38}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &763114684
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763114681}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &777026163
 GameObject:
   m_ObjectHideFlags: 0
@@ -7276,6 +7329,79 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 9123159763824557454, guid: c17616b16dfde1343897a553bbf1daca, type: 3}
+--- !u!1 &1256892287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1256892288}
+  - component: {fileID: 1256892290}
+  - component: {fileID: 1256892289}
+  m_Layer: 0
+  m_Name: Tpplayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1256892288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256892287}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 81.07, y: 69.94, z: 82.23465}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1256892289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256892287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoint: {fileID: 1256892288}
+  playerTag: Player
+  timeBeforeFade: 0.5
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
+  fadeImage: {fileID: 0}
+  isPlayerDeathTeleporter: 0
+--- !u!65 &1256892290
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256892287}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1275657696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8349,6 +8475,9 @@ GameObject:
   - component: {fileID: 1495863463}
   - component: {fileID: 1495863464}
   - component: {fileID: 1495863465}
+  - component: {fileID: 1495863466}
+  - component: {fileID: 1495863467}
+  - component: {fileID: 1495863468}
   m_Layer: 0
   m_Name: BossLevitante
   m_TagString: Boss
@@ -8500,7 +8629,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495863455}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b73f8687d864b44783d8be8d99fe6cf, type: 3}
   m_Name: 
@@ -8513,11 +8642,11 @@ MonoBehaviour:
   billboardPrompt: 1
   billboardOnlyOnY: 1
   subtitles:
-  - Venga a correr
-  - Mi hermano te va a fusilar
-  - "Sus piedras son ca\xF1ones"
+  - Hola...
+  - No esperabamos que llegaras tan lejos
+  - Mi hermano y yo no te dejaremos pasar
   - A por la gema
-  - EEEERIKA
+  - Cuidado con las rocas...
   autoPlay: 0
   startWithAutoAdvanceOnPress: 1
   autoAdvanceDelay: 1.25
@@ -8564,9 +8693,9 @@ MonoBehaviour:
   climbableMask:
     serializedVersion: 2
     m_Bits: 1024
-  walkSpeed: 3
-  runSpeed: 6
-  climbSpeed: 2.5
+  walkSpeed: 5
+  runSpeed: 9
+  climbSpeed: 7
   hookSpeed: 14
   jumpUpForce: 9
   jumpForwardForce: 5
@@ -8577,6 +8706,88 @@ MonoBehaviour:
   hookRange: 25
   maxWalkableSlope: 45
   planInterval: 0.35
+--- !u!114 &1495863466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495863455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoint: {fileID: 763114682}
+  playerTag: Boss
+  timeBeforeFade: 0.5
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
+  fadeImage: {fileID: 0}
+  isPlayerDeathTeleporter: 0
+--- !u!114 &1495863467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495863455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ce0b692bae687b4db1fab0f6b3d25a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  promptE: {fileID: 309168090}
+  subtitlePanel: {fileID: 1135544660}
+  subtitleText: {fileID: 1135544661}
+  typingSpeed: 0.04
+  autoAdvanceDelay: 1.25
+  billboardPrompt: 1
+  linesInitial:
+  - "As\xED que has llegado hasta aqu\xED..."
+  - "Si quieres pasar tendr\xE1s que ganarme en una carrera."
+  - "Av\xEDsame cuando est\xE9s listo."
+  linesStartRace:
+  - "\xA1Muy bien! Empecemos."
+  - 3
+  - 2
+  - 1
+  - "\xA1YA!"
+  linesLose:
+  - "\xBFEso es todo lo que tienes?"
+  - Puedes intentarlo de nuevo cuando quieras.
+  linesWin:
+  - "Incre\xEDble... te lo has ganado."
+  - Pasa.
+  bossManager: {fileID: 2084875123}
+  onLoseDialogueFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onWinDialogueFinished:
+    m_PersistentCalls:
+      m_Calls: []
+  onReadyToStartRace:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1495863468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495863455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 846085dfeff04704c80fe736e46328c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoint: {fileID: 763114682}
+  playerTag: Boss
+  timeBeforeFade: 0.5
+  fadeDuration: 0.5
+  unfadeDuration: 0.5
+  fadeImage: {fileID: 0}
+  isPlayerDeathTeleporter: 0
 --- !u!1001 &1524106168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9010,12 +9221,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTag: Player
   bossTag: Boss
-  bossTeleporter: {fileID: 0}
+  bossTeleporter: {fileID: 1495863466}
   bossManager: {fileID: 2084875123}
   creditDoorNPCInteractable: {fileID: 0}
   creditSceneChanger: {fileID: 0}
   characterDialogue: {fileID: 0}
-  campfireTeleporter: {fileID: 1652144887}
+  boss2Dialogue: {fileID: 1495863467}
+  campfireTeleporter: {fileID: 1256892289}
 --- !u!114 &1586936296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12931,7 +13143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossAI: {fileID: 0}
   bossLevitante: {fileID: 1495863461}
-  npcInteractable: {fileID: 1495863463}
+  npcInteractable: {fileID: 0}
+  boss2Dialogue: {fileID: 1495863467}
   finalObject: {fileID: 1586936292}
   bossRigidbody: {fileID: 1495863462}
   lockBossBeforeRace: 1
@@ -13302,3 +13515,5 @@ SceneRoots:
   - {fileID: 1802102620}
   - {fileID: 606747118}
   - {fileID: 1741769729}
+  - {fileID: 763114682}
+  - {fileID: 1256892288}

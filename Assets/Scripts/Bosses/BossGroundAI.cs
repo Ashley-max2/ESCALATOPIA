@@ -255,9 +255,29 @@ public class BossGroundAI : MonoBehaviour
     {
         _isActive   = false;
         _isMantling = false;
+        _wallNormal = Vector3.zero;
         StopAllCoroutines();
-        if (_rb != null) { _rb.useGravity = true; _rb.velocity = Vector3.zero; }
-        _action = GOAPAction.Idle; // directo, sin SetAction para evitar logs falsos
+        if (_rb != null)
+        {
+            _rb.useGravity  = true;
+            _rb.isKinematic = false;
+            _rb.velocity    = Vector3.zero;
+        }
+        _action = GOAPAction.Idle;
+        // Resetear el animator aunque estemos inactivos (evita congelarse en ClimbForward)
+        ResetAnimator();
+    }
+
+    private void ResetAnimator()
+    {
+        if (_anim == null) return;
+        _anim.SetFloat("Speed",      0f);
+        _anim.SetFloat("ClimbH",     0f);
+        _anim.SetBool ("IsClimbing", false);
+        _anim.SetBool ("IsGrounded", true);
+        // Forzar salto inmediato al estado Idle sin esperar transiciones
+        _anim.Play("Idle", 0, 0f);
+        _anim.Update(0f);
     }
 
     public void ResetToPosition(Vector3 pos)
@@ -507,10 +527,21 @@ public class BossGroundAI : MonoBehaviour
         }
         else
         {
-            // Pared desapareció: seguir empujando hacia arriba con la normal guardada
-            // hasta que el timer confirme que realmente llegamos arriba (no es un falso negativo)
             _lostWallTimer += Time.fixedDeltaTime;
 
+            // Si ya estamos en el suelo sin pared → salir de Climb inmediatamente
+            // (evita la animación rara cuando el boss cae/baja de la pared)
+            if (_isGrounded)
+            {
+                _lostWallTimer = 0f;
+                _wallNormal    = Vector3.zero;
+                if (_rb != null) { _rb.useGravity = true; _rb.isKinematic = false; }
+                _action    = GOAPAction.Run;
+                _planTimer = 0f;
+                return;
+            }
+
+            // Seguir empujando hacia arriba mientras acumulamos timer
             if (_wallNormal != Vector3.zero)
             {
                 Vector3 wallRight = Vector3.Cross(_wallNormal, Vector3.up).normalized;
@@ -519,8 +550,8 @@ public class BossGroundAI : MonoBehaviour
                                  (wallUp * climbSpeed - _wallNormal * 0.05f) * Time.fixedDeltaTime);
             }
 
-            // Tras 0.8s sin pared = realmente llegamos arriba → mantle
-            if (_lostWallTimer > 0.8f)
+            // 0.4s sin pared y en el aire → llegamos arriba → mantle
+            if (_lostWallTimer > 0.4f)
             {
                 _lostWallTimer = 0f;
                 StartCoroutine(MantleRoutine());
@@ -537,14 +568,13 @@ public class BossGroundAI : MonoBehaviour
         if (_wallNormal == Vector3.zero) return false;
 
         LayerMask mask = climbableMask | groundMask;
-        float[] heightFactors  = { 0.85f, 0.75f, 0.95f };
-        float[] forwardOffsets = { 0.8f,  0.5f,  1.2f  };
+        float[] heightFactors  = { 0.95f, 0.85f, 0.75f, 1.05f };
+        float[] forwardOffsets = { 1.2f, 1.8f, 2.5f, 0.7f, 3.0f };
 
         foreach (float hf in heightFactors)
         {
             Vector3 headOrigin = transform.position + Vector3.up * (1.8f * hf);
 
-            // Si sigue habiendo pared a esta altura, aún no estamos en el borde
             if (Physics.Raycast(headOrigin, -_wallNormal, wallDetectDist * 2f, climbableMask | groundMask))
                 continue;
 
@@ -552,18 +582,22 @@ public class BossGroundAI : MonoBehaviour
             {
                 Vector3 overLedge = headOrigin + (-_wallNormal * fwd);
                 RaycastHit groundHit;
-                if (Physics.Raycast(overLedge, Vector3.down, out groundHit, 3f, mask))
+                if (Physics.Raycast(overLedge, Vector3.down, out groundHit, 4f, mask))
                 {
                     float angle = Vector3.Angle(Vector3.up, groundHit.normal);
-                    if (angle <= maxWalkableSlope + 5f)
+                    if (angle <= maxWalkableSlope + 10f)
                     {
-                        ledgePoint = groundHit.point + Vector3.up * 0.1f;
+                        ledgePoint = groundHit.point + Vector3.up * 0.15f;
                         return true;
                     }
                 }
             }
         }
-        return false;
+
+        // Fallback garantizado: 2.5m adelante + 1m arriba
+        Vector3 fallbackFwd = -_wallNormal; fallbackFwd.y = 0f; fallbackFwd.Normalize();
+        ledgePoint = transform.position + fallbackFwd * 2.5f + Vector3.up * 1.0f;
+        return true;
     }
 
     /// <summary>
@@ -577,15 +611,9 @@ public class BossGroundAI : MonoBehaviour
         _isMantling = true;
         Debug.Log("[BossGroundAI] Mantle iniciado.");
 
-        // Buscar el punto de aterrizaje encima del borde
+        // TryDetectLedge siempre devuelve true (tiene fallback garantizado)
         Vector3 ledgePoint;
-        if (!TryDetectLedge(out ledgePoint))
-        {
-            // Fallback: si no detecta borde, avanzar hacia delante + arriba
-            Vector3 fwd = -_wallNormal; fwd.y = 0f; fwd.Normalize();
-            ledgePoint = transform.position + fwd * 1.2f + Vector3.up * 0.5f;
-            Debug.Log("[BossGroundAI] Mantle: ledge no detectado, usando fallback.");
-        }
+        TryDetectLedge(out ledgePoint);
 
         Vector3 startPos = transform.position;
 
@@ -602,7 +630,7 @@ public class BossGroundAI : MonoBehaviour
         while (t < 1f && _isActive)
         {
             yield return new WaitForFixedUpdate();
-            t = Mathf.Clamp01(t + Time.fixedDeltaTime * 3.5f); // misma velocidad que el player
+            t = Mathf.Clamp01(t + Time.fixedDeltaTime * 5f); // más rápido para no pillarse en bordes
 
             float tY  = Mathf.Sin(t * Mathf.PI * 0.5f); // sube rápido al inicio
             float tXZ = t;                               // avanza linealmente
@@ -615,7 +643,7 @@ public class BossGroundAI : MonoBehaviour
             if (_rb != null) _rb.MovePosition(newPos);
         }
 
-        // Restaurar física igual que el player al completar mantle
+        // Restaurar física
         if (_rb != null)
         {
             _rb.isKinematic = false;
@@ -623,6 +651,13 @@ public class BossGroundAI : MonoBehaviour
             _rb.velocity    = Vector3.zero;
         }
         if (_isActive) transform.position = ledgePoint;
+
+        // Empuje extra hacia adelante para no quedarse en el borde
+        if (_rb != null && _wallNormal != Vector3.zero)
+        {
+            Vector3 pushFwd = -_wallNormal; pushFwd.y = 0f; pushFwd.Normalize();
+            _rb.AddForce(pushFwd * 4f, ForceMode.VelocityChange);
+        }
 
         _isMantling = false;
         _wallNormal = Vector3.zero;
