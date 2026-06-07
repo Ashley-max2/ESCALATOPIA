@@ -144,7 +144,7 @@ public class FirstPersonCamera : MonoBehaviour
         if (dist > 0.01f)
         {
             // SphereCast hacia la cabeza para detectar colisiones con el entorno
-            if (Physics.SphereCast(startPos, collisionRadius, dir.normalized, out RaycastHit hit, dist, collisionMask))
+            if (Physics.SphereCast(startPos, collisionRadius, dir.normalized, out RaycastHit hit, dist, collisionMask, QueryTriggerInteraction.Ignore))
             {
                 headPos = startPos + dir.normalized * hit.distance;
             }
