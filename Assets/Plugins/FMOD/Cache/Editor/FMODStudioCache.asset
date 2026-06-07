@@ -324,6 +324,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 0
+--- !u!114 &-557260247582714498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Mecanimso1
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Mecanimso1
+  Guid:
+    Data1: 524803841
+    Data2: 1281074828
+    Data3: -475467628
+    Data4: 881601014
+  Banks:
+  - {fileID: 283211919940878224}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 10
+  Length: 1100
 --- !u!114 &-499713009028932401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,13 +415,15 @@ MonoBehaviour:
   - {fileID: 1828764859548421153}
   - {fileID: -2091887946020320909}
   - {fileID: -499713009028932401}
+  - {fileID: -557260247582714498}
+  - {fileID: 4264521728134331041}
   EditorParameters: []
   MasterBanks:
   - {fileID: 283211919940878224}
   StringsBanks:
   - {fileID: 3301020068077610574}
   cacheVersion: 131859
-  cacheTime: 639164337357668017
+  cacheTime: 639164342738207118
   SerializableEventsDict:
   - key: event:/SFX/TrowBarill
     index: 0
@@ -438,6 +467,10 @@ MonoBehaviour:
     index: 19
   - key: event:/SFX/Fogata
     index: 20
+  - key: event:/SFX/Mecanimso1
+    index: 21
+  - key: event:/SFX/Mecanismo2
+    index: 22
 --- !u!114 &283211919940878224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,10 +486,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639164337357647889
+  lastModified: 639164342738192077
   FileSizes:
   - Name: Desktop
-    Value: 3119712
+    Value: 3121600
   Exists: 1
 --- !u!114 &402671922229258695
 MonoBehaviour:
@@ -554,10 +587,10 @@ MonoBehaviour:
   Path: FMOD_Escalatopia/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639164337357668017
+  lastModified: 639164342738207118
   FileSizes:
   - Name: Desktop
-    Value: 1932
+    Value: 2020
   Exists: 1
 --- !u!114 &3460941313987004285
 MonoBehaviour:
@@ -640,6 +673,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 31294
+--- !u!114 &4264521728134331041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Mecanismo2
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Mecanismo2
+  Guid:
+    Data1: 1583002874
+    Data2: 1220239585
+    Data3: 488954789
+    Data4: -466888399
+  Banks:
+  - {fileID: 283211919940878224}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 10
+  Length: 2000
 --- !u!114 &7512453927906319828
 MonoBehaviour:
   m_ObjectHideFlags: 0

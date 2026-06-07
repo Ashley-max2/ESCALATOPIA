@@ -23361,7 +23361,7 @@ MonoBehaviour:
   openDirection: {x: 1, y: 0, z: 0}
   openDistance: 5
   openDuration: 1
-  openDoorEvent: event:/Ambient/OpenDoor
+  openDoorEvent: event:/SFX/OpenDoor
 --- !u!64 &825594328
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -44420,8 +44420,8 @@ MonoBehaviour:
   - Barril
   - Cofre
   - Sword
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 0.02
+  highlightColor: {r: 1, g: 1, b: 1, a: 1}
+  emissionIntensity: 0.3
   maxRayDistance: 5
   playerCamera: {fileID: 2016368640}
 --- !u!114 &1467807744
@@ -44449,6 +44449,10 @@ MonoBehaviour:
   pauseBlockedScenes:
   - Creditos
   - Main_Menu
+  menuScenes:
+  - MainMenu
+  - Main_Menu
+  - Creditos
 --- !u!4 &1467807745
 Transform:
   m_ObjectHideFlags: 0

@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.Playables;
+using FMODUnity;
 
 public class CofreTimeline : MonoBehaviour
 {
     [SerializeField] private string idLlaveRequerida;
     [SerializeField] private GameObject timelineObject;
+    [SerializeField] private EventReference sonidoAbrirCofre;
 
     private bool activado = false;
 
@@ -25,6 +27,9 @@ public class CofreTimeline : MonoBehaviour
 
         if (director != null)
         {
+            if (!sonidoAbrirCofre.IsNull)
+                RuntimeManager.PlayOneShot(sonidoAbrirCofre, transform.position);
+
             director.Play();
             activado = true;
             Debug.Log("Timeline activada");
